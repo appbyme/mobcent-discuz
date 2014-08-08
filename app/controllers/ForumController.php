@@ -25,6 +25,8 @@ class ForumController extends MobcentController  {
             'photogallery' => 'application.controllers.forum.PhotoGalleryAction',
             'atuserlist' => 'application.controllers.forum.AtUserListAction',
             'announcement' => 'application.controllers.forum.AnnouncementAction',
+            'support' => 'application.controllers.forum.SupportAction',
+
         );
     }
 
@@ -43,6 +45,7 @@ class ForumController extends MobcentController  {
             'photogallery' => false,
             'atuserlist' => true,
             'announcement' => false,
+            'support' => true,
         );
     }
 }
