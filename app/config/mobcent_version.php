@@ -1,0 +1,5 @@
+<?php
+
+defined('MOBCENT_VERSION') or define('MOBCENT_VERSION', '2.2.0.1');
+defined('MOBCENT_RELEASE') or define('MOBCENT_RELEASE', '2014072901');
+defined('MOBCENT_RELEASE_DEBUG') or define('MOBCENT_RELEASE_DEBUG', '2014080601');

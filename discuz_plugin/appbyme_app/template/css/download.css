@@ -1,0 +1,25 @@
+#appbyme_wrap{width:960px;overflow:hidden;margin:0 auto;text-align:center;}
+.appbyme_header{width:960px;height:500px;overflow:hidden;background:url(../images/d_1.png) no-repeat 50% 0;margin:0 auto;position:relative;}
+.appbyme_iphone_img{width:167px;height:290px;position:absolute;top:124px;left:203px;}
+.appbyme_iphone_img img{width:167px;height:290px;}
+.appbyme_text{width:400px;height:auto;position:absolute;top:62px;left:462px;}
+.appbyme_text h1,.appbyme_text p{text-align:left;color:#fff;}
+.appbyme_text h1{margin-bottom:20px;width:450px;font-size:35px;}
+.appbyme_text p a{line-height:18px;display: block;width:356px;font-family:"Hei"}
+.appbyme_text a{color:#fff;}
+
+.appbyme_download{position:absolute;top:263px;left:462px;}
+.appbyme_download a{width:152px;height:48px;float:left;margin-right:52px;background:#29dbb8;font-size:16px;color:#fff;line-height:48px;border-radius:2px;font-family:"Hei"}
+.appbyme_download .appbyme_spec{background:#38aaf6;}
+
+.appbyme_qrcode{width:450px;height:142px;position:absolute;top:335px;left:462px;}
+.appbyme_qrcode div{width:152px;height:142px;float:left;margin-right:52px;border-radius:2px;color:#fff;font-size:10px;}
+.appbyme_qrcode img{width:153px;height:142px;}
+
+.appbyme_item{width:758px;padding:0 122px;margin-top:35px;}
+.appbyme_item li{width:252px;float:left;height:66px;margin-bottom:45px;}
+.appbyme_item li a{width:252px;float:left;height:66px;color:#999;}
+.appbyme_item img{float:left;}
+.appbyme_item span{float:left;padding-left:25px;}
+.appbyme_item i{display:block;font-size:16px;color:#000;margin-bottom:8px;margin-top:6px;text-align:left;}
+.appbyme_item em{display:block;line-height:18px;}
