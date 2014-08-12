@@ -14,8 +14,13 @@ class TestController extends MobcentController {
     
     protected function beforeAction($action) {
         // parent::beforeAction($action);
+        $accessActions = array('siteinfo', 'plugininfo');
+        if (in_array($action->id, $accessActions)) {
+            return true;
+        }
+        
         global $_G;
-        $action->id != 'siteinfo' && $_G['uid'] != 1 && exit('Access Denied');
+        $_G['uid'] != 1 && exit('Access Denied');
         
         return true;
     }

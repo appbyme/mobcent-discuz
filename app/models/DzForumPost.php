@@ -176,6 +176,11 @@ class DzForumPost extends DiscuzAR {
             $postlist[$pid]['message'] = $thread['freemessage'];
         }
 
+        // 处理屏蔽
+        if (!$_G['forum']['ismoderator'] && $postlist[$pid]['status'] & 1) {
+            $postlist[$pid]['message'] = WebUtils::t('该帖被管理员或版主屏蔽');
+        }
+
         return $postlist[$post['pid']];
     }
 
