@@ -113,7 +113,7 @@ class PostListAction extends MobcentAction {
             MobcentDiscuz::getMobcentDiscuzVersion()
         ));
         viewthread_updateviews($_G['forum_thread']['threadtableid']);
-
+        // print_r($res);die;
         return $res;
     }
 
@@ -187,10 +187,22 @@ class PostListAction extends MobcentAction {
                 $manageItems = ForumUtils::getPostManagePanel();
                 foreach ($manageItems['topic'] as $key => $item) {
                     $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'topic'));
-                    $manageItems['topic'][$key] = $item;
+                    $manageItems['topic'][$key] = $item;                        
                 }
-                $topicInfo['managePanel'] = $manageItems['topic'];
 
+                $extraItems = ForumUtils::getPostExtraPanel();
+                foreach ($extraItems['topic'] as $key => $item) {
+                    $item['extParams'] = array('beforeAction' => '');
+                    $item['actionId'] = $item['action'];
+                    $item['action'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'view'));
+                    if ($item['actionId'] == 'rate') {
+                        $item['extParams']['beforeAction'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'check'));
+                    }
+                    $extraItems['topic'][$key] = $item;         
+                }
+                
+                $topicInfo['managePanel'] = $manageItems['topic'];
+                $topicInfo['extraPanel'] = $extraItems['topic'];
                 $topicInfo['mobileSign'] = ForumUtils::getMobileSign($post['status']);
                 
                 // if (empty($topic['author']) && !empty($topic['authorid'])){
@@ -205,7 +217,9 @@ class PostListAction extends MobcentAction {
 
                 $topicInfo['flag'] = 0;
                 $topicInfo['gender'] = 1;
-                $topicInfo['reply_posts_id'] = 0;
+                $topicInfo['reply_posts_id'] = 0;                
+                $topicInfo['rateList'] = ForumUtils::topicRateList($post['pid']);
+                // $topicInfo['rateList'] = ForumUtils::topicRateList(1);
             }
         }
 
@@ -402,8 +416,14 @@ class PostListAction extends MobcentAction {
 
                 $manageItems = ForumUtils::getPostManagePanel();
                 foreach ($manageItems['post'] as $key => $item) {
-                    $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'post'));
-                    $manageItems['post'][$key] = $item;
+
+                    if ($item['action'] == 'topicrate') {
+                        $item['action'] = '';
+                        $manageItems['post'][$key] = $item;
+                    } else {
+                        $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'post'));
+                        $manageItems['post'][$key] = $item;
+                    }
                 }
                 $postInfo['managePanel'] = $manageItems['post'];
 

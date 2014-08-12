@@ -490,8 +490,21 @@ class ForumUtils {
                 }
             }
         }
-
+        
         return $manageItems;
+    }
+
+    // 获取帖子附加的面板信息
+    public static function getPostExtraPanel()
+    {
+        $panels = array('topic' => array(), 'post' => array());
+        global $_G;
+        // 评分
+        if ($_G['group']['raterange']) {
+            $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+            $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+        }
+        return $panels;
     }
 
     private static function _transPostMessage($post) {
@@ -782,4 +795,126 @@ class ForumUtils {
         }
         return WebUtils::emptyHtml($postSign);
     }
+
+    public static function topicRateList($pid, $column=2, $row=3)
+    {
+        global $_G;
+        $rateItem = $postlist = array();
+        foreach(C::t('forum_postcache')->fetch_all($pid) as $postcache) {
+            if($postcache['rate']) {
+                $postcache['rate'] = dunserialize($postcache['rate']);
+                $postlist[$postcache['pid']]['ratelog'] = $postcache['rate']['ratelogs'];
+                $postlist[$postcache['pid']]['ratelogextcredits'] = $postcache['rate']['extcredits'];
+                $postlist[$postcache['pid']]['totalrate'] = $postcache['rate']['totalrate'];
+            }            
+        }
+
+        if(empty($postlist)) {
+            return $postlist;
+        }
+
+        // 评分人数和评分栏目的控制
+        $totalRate = count($postlist[$pid]['totalrate']);
+        $rateItem = $postlist[$pid]['ratelogextcredits'];
+        ksort($rateItem);
+
+        $i = 1;
+        // $t['total'] = WebUtils::t('已有') . $total . WebUtils::t('人评分');
+        // $t['total'] = WebUtils::t('参与人数');
+        $t["field$i"] = WebUtils::t('参与人数');
+        $i++;
+        $rateItem = array_slice($rateItem, 0, $column, true);
+        foreach ($rateItem as $id => $score) {
+            $t["field$i"] = (string)$_G['setting']['extcredits'][$id]['title'];
+            $i++;
+        }
+        if ($i == 3) {
+            $t['field3'] = '';
+            $i++;
+        }
+        $t["field$i"] = (string)WebUtils::t('理由');
+
+        // 评分具体内容
+        $rate = array();
+        $postlist[$pid]['ratelog'] = array_slice($postlist[$pid]['ratelog'], 0, $row, true);
+        foreach($postlist[$pid]['ratelog'] as $uid => $ratelog) {
+            $i = 1;
+            $temp["field$i"] = (string)$ratelog['username'];
+            $i++;
+            foreach($rateItem as $id=>$score) {
+                $temp["field$i"] = isset($ratelog['score'][$id]) ? '+'.$ratelog['score'][$id] : '';
+                $i++;
+            }
+            if ($i == 3) {
+                $temp['field3'] = '';
+                $i++;
+            }            
+            $temp["field$i"] = (string)$ratelog['reason'];
+            $rate[] = $temp;
+        }
+
+        // 评分总数
+        $i = 1;
+        $total = array();
+        $total["field$i"] = (string)$totalRate;
+        $i++;
+        foreach ($rateItem as $id => $score) {
+            // $count['total'][$_G['setting']['extcredits'][$id]['title']] = $score;
+            // $count .= $_G['setting']['extcredits'][$id]['title'] . '+' .$score . "&nbsp";
+            $total["field$i"] = (string)$score;
+            $i++;
+        }
+        if ($i == 3) {
+            $total['field3'] = '';
+            $i++;
+        }       
+        $total["field$i"] = '';
+
+        $tabList = array();
+        $tabList['head'] = $t;
+        $tabList['total'] = $total;
+        $tabList['body'] = $rate;
+        
+        return $tabList;
+    }
+
+
+    // 评分列表
+    public static function rateList($tid, $pid, $page=1, $pageSize=3) 
+    {   
+        global $_G;
+        $loglist = $logcount = array();
+        $post = C::t('forum_post')->fetch('tid:'.$tid, $pid);
+        if($post['invisible'] != 0) {
+            $post = array();
+        }
+
+        if($post) {
+            $loglist = C::t('forum_ratelog')->fetch_all_by_pid($pid);
+        }
+
+        if($_G['setting']['bannedmessages']) {
+            $postmember = getuserbyuid($post['authorid']);
+            $post['groupid'] = $postmember['groupid'];
+        }
+
+        foreach($loglist as $k => $log) {
+            $logcount[$log['extcredits']] += $log['score'];
+            $log['dateline'] = dgmdate($log['dateline'], 'u');
+            // $log['dateline'] = $log['dateline'];
+            $log['score'] = $log['score'] > 0 ? '+'.$log['score'] : $log['score'];
+            $log['reason'] = dhtmlspecialchars($log['reason']);
+            $loglist[$k] = $log;
+        }
+
+        // {$_G['setting']['extcredits'][$log[extcredits]][title]} $log[score] {$_G['setting']['extcredits'][$log[extcredits]][unit]}
+        // print_r($_G['setting']['extcredits'][$log['extcredits']]['title']);die;
+        // print_r($loglist);die('123');
+        // return $loglist;
+        $res['loglist'] = $loglist;
+        $res['logcount'] = $logcount;
+        return $res;
+    }
+
+
 }
