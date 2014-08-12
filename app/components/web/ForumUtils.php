@@ -490,15 +490,21 @@ class ForumUtils {
                 }
             }
         }
+        
+        return $manageItems;
+    }
 
+    // 获取帖子附加的面板信息
+    public static function getPostExtraPanel()
+    {
+        $panels = array('topic' => array(), 'post' => array());
+        global $_G;
         // 评分
         if ($_G['group']['raterange']) {
-            $manageItems['topic'][] = array('action' => 'topicrate', 'title' => WebUtils::t('评分'));
-            $manageItems['post'][] = array('action' => 'topicrate', 'title' => WebUtils::t('评分'));
+            $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+            $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
         }
-        
-
-        return $manageItems;
+        return $panels;
     }
 
     private static function _transPostMessage($post) {

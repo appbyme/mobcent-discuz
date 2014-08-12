@@ -186,17 +186,23 @@ class PostListAction extends MobcentAction {
                 
                 $manageItems = ForumUtils::getPostManagePanel();
                 foreach ($manageItems['topic'] as $key => $item) {
-                    if ($item['action'] == 'topicrate') {
-                        $item['action'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'view'));
-                        $manageItems['topic'][$key] = $item;
-                        // listview
-                    } else {
-                        $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'topic'));
-                        $manageItems['topic'][$key] = $item;                        
-                    }   
+                    $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'topic'));
+                    $manageItems['topic'][$key] = $item;                        
                 }
-                $topicInfo['managePanel'] = $manageItems['topic'];
 
+                $extraItems = ForumUtils::getPostExtraPanel();
+                foreach ($extraItems['topic'] as $key => $item) {
+                    $item['extParams'] = array('beforeAction' => '');
+                    $item['actionId'] = $item['action'];
+                    $item['action'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'view'));
+                    if ($item['actionId'] == 'rate') {
+                        $item['extParams']['beforeAction'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'check'));
+                    }
+                    $extraItems['topic'][$key] = $item;         
+                }
+                
+                $topicInfo['managePanel'] = $manageItems['topic'];
+                $topicInfo['extraPanel'] = $extraItems['topic'];
                 $topicInfo['mobileSign'] = ForumUtils::getMobileSign($post['status']);
                 
                 // if (empty($topic['author']) && !empty($topic['authorid'])){
