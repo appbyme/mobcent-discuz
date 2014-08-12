@@ -113,7 +113,7 @@ class PostListAction extends MobcentAction {
             MobcentDiscuz::getMobcentDiscuzVersion()
         ));
         viewthread_updateviews($_G['forum_thread']['threadtableid']);
-
+        // print_r($res);die;
         return $res;
     }
 
@@ -186,8 +186,14 @@ class PostListAction extends MobcentAction {
                 
                 $manageItems = ForumUtils::getPostManagePanel();
                 foreach ($manageItems['topic'] as $key => $item) {
-                    $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'topic'));
-                    $manageItems['topic'][$key] = $item;
+                    if ($item['action'] == 'topicrate') {
+                        $item['action'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'view'));
+                        $manageItems['topic'][$key] = $item;
+                        // listview
+                    } else {
+                        $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'topic'));
+                        $manageItems['topic'][$key] = $item;                        
+                    }   
                 }
                 $topicInfo['managePanel'] = $manageItems['topic'];
 
@@ -205,7 +211,9 @@ class PostListAction extends MobcentAction {
 
                 $topicInfo['flag'] = 0;
                 $topicInfo['gender'] = 1;
-                $topicInfo['reply_posts_id'] = 0;
+                $topicInfo['reply_posts_id'] = 0;                
+                $topicInfo['rateList'] = ForumUtils::topicRateList($post['pid']);
+                // $topicInfo['rateList'] = ForumUtils::topicRateList(1);
             }
         }
 
@@ -402,8 +410,14 @@ class PostListAction extends MobcentAction {
 
                 $manageItems = ForumUtils::getPostManagePanel();
                 foreach ($manageItems['post'] as $key => $item) {
-                    $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'post'));
-                    $manageItems['post'][$key] = $item;
+
+                    if ($item['action'] == 'topicrate') {
+                        $item['action'] = '';
+                        $manageItems['post'][$key] = $item;
+                    } else {
+                        $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'post'));
+                        $manageItems['post'][$key] = $item;
+                    }
                 }
                 $postInfo['managePanel'] = $manageItems['post'];
 
