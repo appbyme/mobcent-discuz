@@ -121,17 +121,28 @@ class ForumListAction extends MobcentAction {
         //     $dateline !== false or $dateline = '0';
         // }
 
+        $forumSubList = ForumUtils::getForumSubList($fid);
+
         $forumInfo = array();
-        $forumInfo['board_id'] = $fid;
+        $forumInfo['board_id'] = (int)$fid;
         $forumInfo['board_name'] = WebUtils::emptyHtml($forum['name']);
-        $forumInfo['board_child'] = count(ForumUtils::getForumSubList($fid)) > 0 ? 1 : 0;
+        $forumInfo['board_child'] = count($forumSubList) > 0 ? 1 : 0;
         $forumInfo['board_img'] = WebUtils::getHttpFileName($image);
-        $forumInfo['topic_total_num'] = (int)$forum['threads'];
-        $forumInfo['posts_total_num'] = (int)$forum['posts'];
-        $forumInfo['td_posts_num'] = (int)$forum['todayposts'];
         $forumInfo['last_posts_date'] = !empty($dateline) ? $dateline . '000' : '';
         $forumInfo['board_content'] = $forum['threads'] != 0 ? 1 : 0;
         $forumInfo['forumRedirect'] = $forum['redirect'];
+
+        $todayPosts = (int)$forum['todayposts'];
+        $threads = (int)$forum['threads'];
+        $posts = (int)$forum['posts'];
+        foreach ($forumSubList as $value) {
+            $todayPosts += $value['todayposts'];
+            $threads += $value['threads'];
+            $posts += $value['posts'];
+        }
+        $forumInfo['td_posts_num'] = $todayPosts;
+        $forumInfo['topic_total_num'] = $threads;
+        $forumInfo['posts_total_num'] = $posts;
 
         return $forumInfo;
     }
