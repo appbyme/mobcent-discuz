@@ -36,32 +36,16 @@ class ImageUtils {
         if (empty($image)) return $res;
 
         $config = self::_getThumbConfig();
-        if (!$force && !$config['isThumb']) {
+        $allowDiscuzThumb = WebUtils::getDzPluginAppbymeAppConfig('image_thumb_allow_discuz');
+        if (!$force && !$config['isThumb'] && $allowDiscuzThumb < 0) {
             return $res;
         }
         
         $thumbImage = $image;
 
-        // 获取缩略图文件名
-        $savePath = sprintf('%s/%s', MOBCENT_THUMB_PATH, self::_getThumbTempPath($image));
-        $tempFileName = self::_getThumbTempFile($image);
-
-        $smallFileName = $savePath . '/mobcentSmallPreview_' . $tempFileName;
-        $bigFileName = $savePath . '/mobcentBigPreview_' . $tempFileName;
-        
-        if (file_exists($smallFileName) && file_exists($bigFileName)) {
-            $res['image'] = self::_getThumbUrlFile($image, $tempFileName);
-            if ($getImageInfo) {
-                $imageInfo = ImageUtils::getImageInfo($smallFileName);
-                $res['ratio'] = $imageInfo['ratio'];
-            }
-            return $res;
-        }
-
         global $_G;
         $attachFile = '';
         // 是否用discuz生成的缩略图
-        $allowDiscuzThumb = WebUtils::getDzPluginAppbymeAppConfig('image_thumb_allow_discuz');
         if ($allowDiscuzThumb === false || $allowDiscuzThumb > 0) {
             if ($_G['setting']['ftp']['on'] == 0) {
                 $attachUrl = self::getAttachUrl();
@@ -77,6 +61,26 @@ class ImageUtils {
                     return $res;
                 }
             }
+        }
+
+        if (!$force && !$config['isThumb']) {
+            return $res;
+        }
+
+        // 获取缩略图文件名
+        $savePath = sprintf('%s/%s', MOBCENT_THUMB_PATH, self::_getThumbTempPath($image));
+        $tempFileName = self::_getThumbTempFile($image);
+
+        $smallFileName = $savePath . '/mobcentSmallPreview_' . $tempFileName;
+        $bigFileName = $savePath . '/mobcentBigPreview_' . $tempFileName;
+        
+        if (file_exists($smallFileName) && file_exists($bigFileName)) {
+            $res['image'] = self::_getThumbUrlFile($image, $tempFileName);
+            if ($getImageInfo) {
+                $imageInfo = ImageUtils::getImageInfo($smallFileName);
+                $res['ratio'] = $imageInfo['ratio'];
+            }
+            return $res;
         }
 
         if ($inBackgroud) {
