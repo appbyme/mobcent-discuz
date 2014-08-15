@@ -64,11 +64,14 @@ class NewsViewAction extends MobcentAction {
         $aid = $article['aid'];
         $articleUrl = $this->_fetchArticleUrl($aid);
 
+        // 门户静态化,暂时去掉这个跳转,因为有些用户不支持wap版的门户页面
+        /*
         if(!empty($_G['setting']['makehtml']['flag']) && $article['htmlmade'] && !isset($_G['makehtml']) && empty($_GET['diy']) && empty($article['url'])) {
             // dheader('location:'. fetch_article_url($article));
             $newsInfo['redirectUrl'] = $articleUrl;
             return $newsInfo;
         }
+        */
 
         $article_count = C::t('portal_article_count')->fetch($aid);
         if($article_count) $article = array_merge($article_count, $article);
