@@ -126,5 +126,25 @@ return array(
     'report_succeed' => WebUtils::t('04000002:举报成功'),
 
     // 公告 errcode: 050xxxxx
-    'announcement_nonexistence' => WebUtils::t('05000001:抱歉，目前没有公告供查看'),    
+    'announcement_nonexistence' => WebUtils::t('05000001:抱歉，目前没有公告供查看'),  
+
+    // 投票 errcode: 060xxxxx
+    'group_nopermission' => WebUtils::t('06000001:抱歉，您所在的用户组 {grouptitle} 无法进行此操作'),
+    'thread_poll_closed' => WebUtils::t('06000002:抱歉，本主题已关闭，无法继续投票'),
+    'thread_poll_invalid' => WebUtils::t('06000003:抱歉，您没有选择投票选项'),
+    'poll_not_found' => WebUtils::t('06000004:投票未找到'),
+    'poll_overdue' => WebUtils::t('06000005:抱歉，投票已过期'),
+    'poll_choose_most' => WebUtils::t('06000006:抱歉，此投票最多只能选择 {maxchoices} 项'),
+    'thread_poll_voted' => WebUtils::t('06000007:抱歉，您已参与过这个投票'),
+    'parameters_error' => WebUtils::t('06000008:参数错误'),
+    'thread_poll_succeed' => WebUtils::t('06000009:投票成功'),
+
+    // 赞 errcode: 070xxxxx
+    'no_privilege_recommend' => WebUtils::t('07000001:抱歉，您目前没有权限评价此主题'),
+    'recommend_self_disallow' => WebUtils::t('07000002:评价指数 {recommendc} 您不能评价自己的帖子'),
+    'recommend_duplicate' => WebUtils::t('07000003:评价指数 {recommendc} 您已评价过本主题'),
+    'recommend_outoftimes' => WebUtils::t('07000004:评价指数 {recommendc} 今日评价机会已用完'),
+    'recommend_succed' => WebUtils::t('07000005:评价指数 {recommendc} {recommendv}'),
+    'noreply_yourself_error' => WebUtils::t('07000006:您不能对自己的回帖进行投票'),
+    'noreply_voted_error' => WebUtils::t('07000007:您已经对此回帖投过票了'),
 );

@@ -190,15 +190,22 @@ class PostListAction extends MobcentAction {
                     $manageItems['topic'][$key] = $item;                        
                 }
 
+                $topicInfo['managePanel'] = $manageItems['topic'];
+
                 $extraItems = ForumUtils::getPostExtraPanel();
+
                 foreach ($extraItems['topic'] as $key => $item) {
                     $item['extParams'] = array('beforeAction' => '');
-                    $item['actionId'] = $item['action'];
-                    $item['action'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'view'));
-                    if ($item['actionId'] == 'rate') {
+                    $item['type'] = $item['action'];
+                    $item['action'] = '';
+                    if ($item['type'] == 'rate') {
+                        $item['action'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'view'));
                         $item['extParams']['beforeAction'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'check'));
+                    } elseif ($item['type'] == 'support') {
+                        $item['action'] = WebUtils::createUrl_oldVersion('forum/support', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'thread'));
                     }
-                    $extraItems['topic'][$key] = $item;         
+                    $extraItems['topic'][$key] = $item;
+                    $extraItems['topic'][0]['recommendAdd'] = (int)$_G['thread']['recommend_add'];         
                 }
                 
                 $topicInfo['managePanel'] = $manageItems['topic'];
@@ -425,7 +432,28 @@ class PostListAction extends MobcentAction {
                         $manageItems['post'][$key] = $item;
                     }
                 }
+
+                $extraItems = ForumUtils::getPostExtraPanel();
+
+                foreach ($extraItems['post'] as $key => $item) {
+                    
+                    $hotreply = C::t('forum_hotreply_number')->fetch_by_pid($post['pid']);                    
+                    $item['extParams'] = array('beforeAction' => '');
+                    $item['type'] = $item['action'];
+                    $item['action'] = '';
+                    if ($item['type'] == 'rate') {
+                        $item['action'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'view'));
+                        $item['extParams']['beforeAction'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'check'));
+                    } elseif ($item['type'] == 'support') {
+                        $item['action'] = WebUtils::createUrl_oldVersion('forum/support', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'post'));
+                        // $item['extParams']['beforeAction'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'check'));
+                    }
+                    $extraItems['post'][$key] = $item;
+                    $extraItems['post'][0]['recommendAdd'] = (int)$hotreply['total'];
+                }
+
                 $postInfo['managePanel'] = $manageItems['post'];
+                $postInfo['extraPanel'] = $extraItems['post'];
 
                 $postInfos[] = $postInfo;
             }

@@ -504,6 +504,21 @@ class ForumUtils {
             $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
             $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
         }
+        // 赞
+        // $topicConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topic_recommend');
+        // $postConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_post_recommend');
+        $topicConfig = $postConfig = 1;
+
+        $support = $_G['setting']['recommendthread'];
+        if ($support['status'] && $topicConfig == 1) {
+            $panels['topic'][] = array('action' => 'support', 'title' => WebUtils::emptyHtml($support['addtext']));
+        }
+
+        $supportPost = $_G['setting']['repliesrank'];
+        if ($supportPost && $postConfig == 1) {
+            // var_dump($_G['group']);exit;
+            $panels['post'][] = array('action' => 'support', 'title' => WebUtils::emptyHtml(WebUtils::t('支持')), 'recommendAdd'=> '');
+        }
         return $panels;
     }
 
