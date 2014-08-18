@@ -508,7 +508,7 @@ class ForumUtils {
         // 赞
         $topicConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topic_recommend');
         $postConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_post_recommend');
-        // $topicConfig = $postConfig = 1;
+        $topicConfig = $postConfig = 1;
 
         $support = $_G['setting']['recommendthread'];
         if ($support['status'] && $topicConfig == 1) {
