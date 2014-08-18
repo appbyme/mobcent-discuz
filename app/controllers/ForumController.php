@@ -48,7 +48,7 @@ class ForumController extends MobcentController  {
             'announcement' => false,
             'topicrate' => false,
             'topicratelistview' => false,
-            'support' => false,
+            'support' => true,
         );
     }
 }

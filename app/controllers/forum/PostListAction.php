@@ -190,10 +190,7 @@ class PostListAction extends MobcentAction {
                     $manageItems['topic'][$key] = $item;                        
                 }
 
-                $topicInfo['managePanel'] = $manageItems['topic'];
-
                 $extraItems = ForumUtils::getPostExtraPanel();
-
                 foreach ($extraItems['topic'] as $key => $item) {
                     $item['extParams'] = array('beforeAction' => '');
                     $item['type'] = $item['action'];
@@ -203,9 +200,9 @@ class PostListAction extends MobcentAction {
                         $item['extParams']['beforeAction'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'check'));
                     } elseif ($item['type'] == 'support') {
                         $item['action'] = WebUtils::createUrl_oldVersion('forum/support', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'thread'));
+                        $item['extParams']['recommendAdd'] = (int)$_G['thread']['recommend_add'];
                     }
                     $extraItems['topic'][$key] = $item;
-                    $extraItems['topic'][0]['recommendAdd'] = (int)$_G['thread']['recommend_add'];         
                 }
                 
                 $topicInfo['managePanel'] = $manageItems['topic'];
@@ -375,6 +372,20 @@ class PostListAction extends MobcentAction {
             $position = $order ? 
                 $postCount + 1 - $pageSize*($page-1) : 
                 $pageSize*($page-1) + 2;
+                       
+            if($_G['setting']['repliesrank'] && $postList) {
+                if($postList) {
+                    $tempPids = array();
+                    $tempPostRecommends = array();
+                    foreach ($postList as $post) {
+                        $tempPids[] = (int)$post['pid'];
+                    }
+                    foreach(C::t('forum_hotreply_number')->fetch_all_by_pids(array_values($tempPids)) as $pid => $post) {
+                        $tempPostRecommends[$pid]['support'] = dintval($post['support']);
+                        // $tempPostRecommends[$pid]['against'] = dintval($post['against']);
+                    }
+                }
+            }
             
             foreach($postList as $post) {
                 $pid = (int)$post['pid'];
@@ -434,22 +445,15 @@ class PostListAction extends MobcentAction {
                 }
 
                 $extraItems = ForumUtils::getPostExtraPanel();
-
                 foreach ($extraItems['post'] as $key => $item) {
-                    
-                    $hotreply = C::t('forum_hotreply_number')->fetch_by_pid($post['pid']);                    
                     $item['extParams'] = array('beforeAction' => '');
                     $item['type'] = $item['action'];
                     $item['action'] = '';
-                    if ($item['type'] == 'rate') {
-                        $item['action'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'view'));
-                        $item['extParams']['beforeAction'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'check'));
-                    } elseif ($item['type'] == 'support') {
+                    if ($item['type'] == 'support') {
                         $item['action'] = WebUtils::createUrl_oldVersion('forum/support', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'post'));
-                        // $item['extParams']['beforeAction'] = WebUtils::createUrl_oldVersion('forum/topicrate', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'check'));
+                        $item['extParams']['recommendAdd'] =  (int)$tempPostRecommends[$post['pid']]['support'];
                     }
                     $extraItems['post'][$key] = $item;
-                    $extraItems['post'][0]['recommendAdd'] = (int)$hotreply['total'];
                 }
 
                 $postInfo['managePanel'] = $manageItems['post'];
