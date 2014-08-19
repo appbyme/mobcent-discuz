@@ -201,6 +201,8 @@ class PostListAction extends MobcentAction {
                     } elseif ($item['type'] == 'support') {
                         $item['action'] = WebUtils::createUrl_oldVersion('forum/support', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'thread'));
                         $item['extParams']['recommendAdd'] = (int)$_G['thread']['recommend_add'];
+                        $recommendAdd = DzSupportInfo::getSupportTopicByUidAndTid($_G['uid'], $tid);
+                        $item['extParams']['isHasRecommendAdd'] = !empty($recommendAdd) ? 1 : 0;
                     }
                     $extraItems['topic'][$key] = $item;
                 }
@@ -384,9 +386,10 @@ class PostListAction extends MobcentAction {
                         $tempPostRecommends[$pid]['support'] = dintval($post['support']);
                         // $tempPostRecommends[$pid]['against'] = dintval($post['against']);
                     }
+                    $isSupport = DzSupportInfo::getSupportPostByUidAndTid($_G['uid'], $tid);
                 }
             }
-            
+
             foreach($postList as $post) {
                 $pid = (int)$post['pid'];
                 $content = ForumUtils::getPostContent($tid, $pid, $post);
@@ -452,6 +455,8 @@ class PostListAction extends MobcentAction {
                     if ($item['type'] == 'support') {
                         $item['action'] = WebUtils::createUrl_oldVersion('forum/support', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'post'));
                         $item['extParams']['recommendAdd'] =  (int)$tempPostRecommends[$post['pid']]['support'];
+                        $isRecommendAdd = in_array($post['pid'], $isSupport)? 1 : 0;
+                        $item['extParams']['isHasRecommendAdd'] = (int)$isRecommendAdd;
                     }
                     $extraItems['post'][$key] = $item;
                 }
@@ -509,5 +514,33 @@ class PostListAction extends MobcentAction {
     private function _getUserLevel($uid) {
         $icon = UserUtils::getUserLevelIcon($uid);
         return $icon['sun'] * 4 + $icon['moon'] * 2 + $icon['star'] * 1;
+    }
+}
+
+class DzSupportInfo extends DiscuzAR
+{
+    public static function getSupportPostsByUidAndTid($uid, $tid)
+    {
+        return DbUtils::getDzDbUtils(true)->queryColumn('
+            SELECT pid
+            FROM %t 
+            WHERE uid = %d
+            AND tid = %d
+            AND attitude = %d
+            ',
+            array('forum_hotreply_member', $uid, $tid, 1)
+        );
+    }
+
+    public static function getSupportTopicByUidAndTid($uid, $tid)
+    {
+        return DbUtils::getDzDbUtils(true)->queryAll('
+            SELECT dateline
+            FROM %t 
+            WHERE recommenduid = %d
+            AND tid = %d
+            ',
+            array('forum_memberrecommend', $uid, $tid)
+        );
     }
 }
