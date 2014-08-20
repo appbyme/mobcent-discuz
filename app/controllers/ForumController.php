@@ -28,7 +28,7 @@ class ForumController extends MobcentController  {
             'topicrate' => 'application.controllers.forum.TopicRateAction',
             'topicratelistview' => 'application.controllers.forum.TopicRateListViewAction',
             'support' => 'application.controllers.forum.SupportAction',
-            'vote' => 'application.controllers.user.VoteAction',
+            'vote' => 'application.controllers.forum.VoteAction',
         );
     }
 
