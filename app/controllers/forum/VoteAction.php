@@ -10,7 +10,7 @@
 if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     exit('Access Denied');
 }
-
+// Mobcent::setErrors();
 class VoteAction extends MobcentAction
 {
     public function run($tid, $options)
@@ -101,6 +101,17 @@ class VoteAction extends MobcentAction
             $feed['idtype'] = 'tid';
             postfeed($feed);
         }
+
+        // $userVoteInfo = DzUserVote::getUserVoteTotalNum($tid);
+        $polloption_query = DB::query("SELECT polloption as name,polloptionid as pollItemId,votes as totalNum FROM ".DB::table('forum_polloption')." where tid=".$tid);
+        while ($polloption_rst = DB::fetch($polloption_query)) {
+            $polloption_arr[] = $polloption_rst;
+        }
+        for($di=0;$di<count($polloption_arr);$di++){
+            $polloption_arr[$di][pollItemId]=(int)$polloption_arr[$di][pollItemId];
+            $polloption_arr[$di][totalNum]=(int)$polloption_arr[$di][totalNum];
+        }
+        $res['list'] = $polloption_arr;
         $params['noError'] = 1;
         $res = $this->makeErrorInfo($res, 'thread_poll_succeed', $params);
         return $res;
@@ -129,6 +140,17 @@ class DzUserVote extends DiscuzAR
             WHERE polloptionid in (%n)
             ',
             array('forum_polloption', $user, $pollanswers)
+        );
+    }
+
+    public static function getUserVoteTotalNum($tid) 
+    {
+        return DbUtils::getDzDbUtils(true)->queryRow('
+            SELECT polloption,polloptionid,votes 
+            FROM %t 
+            WHERE tid = %d 
+            ',
+            array('forum_polloption', $tid)
         );
     }
 }
