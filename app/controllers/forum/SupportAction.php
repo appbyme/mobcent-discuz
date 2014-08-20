@@ -79,8 +79,8 @@ class SupportAction extends MobcentAction
             $daycount = $_G['setting']['recommendthread']['daycount'] - $recommendcount;
             return $this->makeErrorInfo($res, array('{recommendv}' => $recommendv, '{recommendc}' => $thread['recommends'], '{daycount}' => $daycount));
         } else {
-            $params['noError'] = 1;
-            return $this->makeErrorInfo($res, 'recommend_succed', array('{recommendv}' => $recommendv, '{recommendc}' => $thread['recommends']), $params);
+            $params = array('noError' => 1, '{recommendv}' => $recommendv, '{recommendc}' => $thread['recommends']);
+            return $this->makeErrorInfo($res, 'recommend_succed', $params);
         }
     }
 
