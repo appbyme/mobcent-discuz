@@ -13,7 +13,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
 class SupportAction extends MobcentAction 
 {
-    public function run($tid, $pid, $type, $action = 'support')
+    public function run($tid, $pid = 0, $type = 'topic', $action = 'support')
     {
         $res = $this->initWebApiArray();
 
@@ -24,7 +24,7 @@ class SupportAction extends MobcentAction
 
     private function _setSupport($res, $tid, $pid, $type, $action)
     {
-        if ($type == 'thread') {
+        if ($type == 'thread' || $type == 'topic') {
             $res = $this->_setThreadSupport($res, $tid, $action);
         } elseif($type == 'post') {
             $res = $this->_setPostSupport($res, $tid, $pid, $action);
