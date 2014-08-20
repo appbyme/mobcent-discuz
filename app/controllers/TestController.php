@@ -232,6 +232,11 @@ class TestController extends MobcentController {
                 'params' => array('getSetting' => "{'body': {'postInfo': {'forumIds': '0'}}}"),
             ),
             array(
+                'title' => 'api/user: 投票',
+                'route' => 'user/vote',
+                'params' => array('tid'=>101, 'options'=>61),
+            ),
+            array(
                 'title' => 'api/user: 登陆',
                 'route' => 'user/login',
                 'params' => array('type' => 'login', 'username' => 'admin', 'password'=>'admin'),
