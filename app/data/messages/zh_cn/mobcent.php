@@ -137,7 +137,7 @@ return array(
     'poll_choose_most' => WebUtils::t('06000006:抱歉，此投票最多只能选择 {maxchoices} 项'),
     'thread_poll_voted' => WebUtils::t('06000007:抱歉，您已参与过这个投票'),
     'parameters_error' => WebUtils::t('06000008:参数错误'),
-    'thread_poll_succeed' => WebUtils::t('06000009:投票成功'),
+    'thread_poll_succeed' => WebUtils::t('00000000:投票成功'),
 
     // 赞 errcode: 070xxxxx
     'no_privilege_recommend' => WebUtils::t('07000001:抱歉，您目前没有权限评价此主题'),
