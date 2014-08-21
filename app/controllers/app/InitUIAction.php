@@ -38,7 +38,7 @@ class InitUIAction extends MobcentAction
                             'id' => 1,
                             'type' => 'weather',
                             'title' => WebUtils::t('天气'),
-                            'icon' => '',
+                            'icon' => 'mc_forum_top_bar_button5',
                             'style' => 'default',
                             'extParams' => array(
                                 'padding' => '',
@@ -50,7 +50,7 @@ class InitUIAction extends MobcentAction
                             'id' => 1,
                             'type' => 'userinfo',
                             'title' => WebUtils::t('用户中心'),
-                            'icon' => '',
+                            'icon' => 'mc_forum_top_bar_button6',
                             'style' => 'default',
                             'extParams' => array(
                                 'padding' => '',
@@ -105,7 +105,7 @@ class InitUIAction extends MobcentAction
                             'type' => 'search',
                             'title' => WebUtils::t('搜索'),
                             'desc' => '',
-                            'icon' => '',
+                            'icon' => 'mc_forum_top_bar_button10',
                             'style' => 'default',
                             'extParams' => array(
                                 'padding' => '',
