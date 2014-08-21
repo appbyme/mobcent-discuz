@@ -111,7 +111,7 @@ class VoteAction extends MobcentAction
             $polloption_arr[$di][pollItemId]=(int)$polloption_arr[$di][pollItemId];
             $polloption_arr[$di][totalNum]=(int)$polloption_arr[$di][totalNum];
         }
-        $res['list'] = $polloption_arr;
+        $res['vote_rs'] = $polloption_arr;
         $params['noError'] = 1;
         $res = $this->makeErrorInfo($res, 'thread_poll_succeed', $params);
         return $res;
