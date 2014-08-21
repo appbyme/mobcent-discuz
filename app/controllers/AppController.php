@@ -15,6 +15,7 @@ class AppController extends MobcentController
     {
         return array(
             'initui' => 'application.controllers.app.InitUIAction',
+            'servernotify' => 'application.controllers.app.ServerNotifyAction',
         );
     }
 
@@ -22,6 +23,7 @@ class AppController extends MobcentController
     {
         return array(
             'initui' => false,
+            'servernotify' => false,
         );
     }
 }
