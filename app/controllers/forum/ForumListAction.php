@@ -129,7 +129,7 @@ class ForumListAction extends MobcentAction {
         $forumInfo['board_child'] = count($forumSubList) > 0 ? 1 : 0;
         $forumInfo['board_img'] = WebUtils::getHttpFileName($image);
         $forumInfo['last_posts_date'] = !empty($dateline) ? $dateline . '000' : '';
-        $forumInfo['board_content'] = $forum['threads'] != 0 ? 1 : 0;
+        $forumInfo['board_content'] = $forum['threads'] != 0 && !$forum['simple'] ? 1 : 0;
         $forumInfo['forumRedirect'] = $forum['redirect'];
 
         $todayPosts = (int)$forum['todayposts'];
