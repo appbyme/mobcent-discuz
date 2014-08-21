@@ -70,7 +70,7 @@ class InitUIAction extends MobcentAction
                                     'icon' => 'http://news.png',
                                     'style' => 'flat',
                                     'extParams' => array(
-                                        'padding' => '',
+                                        'newsModuleId' => 1,
                                     ),
                                 ),
                                 array(
@@ -81,13 +81,16 @@ class InitUIAction extends MobcentAction
                                     'icon' => 'http://news.png',
                                     'style' => 'flat',
                                     'extParams' => array(
-                                        'padding' => '',
+                                        'newsModuleId' => 2,
                                     ),
                                 ),
                             ),
                         ),
                     ),
-                    'extParams' => array('padding' => ''),
+                    'extParams' => array(
+                        'padding' => '',
+                        'subnavType' => 'card',
+                    ),
                 ),
                 array(
                     'type' => 'subnav',
@@ -133,7 +136,7 @@ class InitUIAction extends MobcentAction
                                     'icon' => 'http://news.png',
                                     'style' => 'card',
                                     'extParams' => array(
-                                        'padding' => '',
+                                        'newsModuleId' => 3,
                                     ),
                                 ),
                                 array(
@@ -144,22 +147,26 @@ class InitUIAction extends MobcentAction
                                     'icon' => 'http://news.png',
                                     'style' => 'flat',
                                     'extParams' => array(
-                                        'padding' => '',
+                                        'newsModuleId' => 4,
                                     ),
                                 ),
                                 array(
                                     'id' => 6,
-                                    'type' => 'newslist',
+                                    'type' => 'topiclist',
                                     'title' => WebUtils::t('图片'),
                                     'desc' => '',
                                     'icon' => 'http://news.png',
                                     'style' => 'image',
                                     'extParams' => array(
-                                        'padding' => '',
+                                        'forumId' => 2,
                                     ),
                                 ),
                             ),
                         ),
+                    ),
+                    'extParams' => array(
+                        'padding' => '',
+                        'subnavType' => 'flat',
                     ),
                 ),
                 array(
