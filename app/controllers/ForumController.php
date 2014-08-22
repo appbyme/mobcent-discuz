@@ -26,7 +26,7 @@ class ForumController extends MobcentController  {
             'atuserlist' => 'application.controllers.forum.AtUserListAction',
             'announcement' => 'application.controllers.forum.AnnouncementAction',
             'topicrate' => 'application.controllers.forum.TopicRateAction',
-            'topicratelistview' => 'application.controllers.forum.TopicRateListViewAction',
+            'ratelistview' => 'application.controllers.forum.RateListViewAction',
         );
     }
 
@@ -45,8 +45,8 @@ class ForumController extends MobcentController  {
             'photogallery' => false,
             'atuserlist' => true,
             'announcement' => false,
-            'topicrate' => false,
-            'topicratelistview' => false,
+            'topicrate' => true,
+            'ratelistview' => false,
         );
     }
 }
