@@ -66,40 +66,42 @@ class VoteAction extends MobcentAction
             unset($polloptionid[$key]);
             $polloptionids[] = $id;
         }
-
-        $_GET['pollanswers'] = str_replace(',', '    ', $options);
         
+        // $_GET['pollanswers'] = str_replace(',', '    ', $options);
+        $_GET['pollanswers'] = explode(',', $options);
         // DB::query("UPDATE ".DB::table('forum_poll')." SET voters=voters+1 where tid=".$_G['tid']);
         // DB::query("UPDATE ".DB::table('forum_polloption')." SET votes=votes+1,voterids=CONCAT(voterids,'".$_G['uid']."') where polloptionid in (".$_GET['pollanswers'].")"); 
-        
-        DzUserVote::updateUserVoteByTid($_G['tid']);
-        DzUserVote::updateUserVotePolloption($_G['uid'], $_GET['pollanswers']);
+        foreach ($_GET['pollanswers'] as $key => $value) {
 
-        // C::t('forum_polloption')->update_vote($polloptionids, $voterids."\t", 1);
-        C::t('forum_thread')->update($_G['tid'], array('lastpost'=>$_G['timestamp']), true);
-        // C::t('forum_poll')->update_vote($_G['tid']);
-        C::t('forum_pollvoter')->insert(array(
-            'tid' => $_G['tid'],
-            'uid' => $_G['uid'],
-            'username' => $_G['username'],
-            'options' => $_GET['pollanswers'],
-            'dateline' => $_G['timestamp'],
-            ));
-        updatecreditbyaction('joinpoll');
-        $space = array();
-        space_merge($space, 'field_home');
+            DzUserVote::updateUserVoteByTid($_G['tid']);
+            DzUserVote::updateUserVotePolloption($_G['uid'], $value);
 
-        if($overt && !empty($space['privacy']['feed']['newreply'])) {
-            $feed['icon'] = 'poll';
-            $feed['title_template'] = 'feed_thread_votepoll_title';
-            $feed['title_data'] = array(
-                'subject' => "<a href=\"forum.php?mod=viewthread&tid=$_G[tid]\">$thread[subject]</a>",
-                'author' => "<a href=\"home.php?mod=space&uid=$thread[authorid]\">$thread[author]</a>",
-                'hash_data' => "tid{$_G[tid]}"
-            );
-            $feed['id'] = $_G['tid'];
-            $feed['idtype'] = 'tid';
-            postfeed($feed);
+            // C::t('forum_polloption')->update_vote($polloptionids, $voterids."\t", 1);
+            C::t('forum_thread')->update($_G['tid'], array('lastpost'=>$_G['timestamp']), true);
+            // C::t('forum_poll')->update_vote($_G['tid']);
+            C::t('forum_pollvoter')->insert(array(
+                'tid' => $_G['tid'],
+                'uid' => $_G['uid'],
+                'username' => $_G['username'],
+                'options' => $value,
+                'dateline' => $_G['timestamp'],
+                ));
+            updatecreditbyaction('joinpoll');
+            $space = array();
+            space_merge($space, 'field_home');
+
+            if($overt && !empty($space['privacy']['feed']['newreply'])) {
+                $feed['icon'] = 'poll';
+                $feed['title_template'] = 'feed_thread_votepoll_title';
+                $feed['title_data'] = array(
+                    'subject' => "<a href=\"forum.php?mod=viewthread&tid=$_G[tid]\">$thread[subject]</a>",
+                    'author' => "<a href=\"home.php?mod=space&uid=$thread[authorid]\">$thread[author]</a>",
+                    'hash_data' => "tid{$_G[tid]}"
+                );
+                $feed['id'] = $_G['tid'];
+                $feed['idtype'] = 'tid';
+                postfeed($feed);
+            }
         }
 
         // $userVoteInfo = DzUserVote::getUserVoteTotalNum($tid);
