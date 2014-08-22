@@ -25,10 +25,10 @@ class ForumController extends MobcentController  {
             'photogallery' => 'application.controllers.forum.PhotoGalleryAction',
             'atuserlist' => 'application.controllers.forum.AtUserListAction',
             'announcement' => 'application.controllers.forum.AnnouncementAction',
-            'topicrate' => 'application.controllers.forum.TopicRateAction',
-            'topicratelistview' => 'application.controllers.forum.TopicRateListViewAction',
             'support' => 'application.controllers.forum.SupportAction',
             'vote' => 'application.controllers.forum.VoteAction',
+            'topicrate' => 'application.controllers.forum.TopicRateAction',
+            'ratelistview' => 'application.controllers.forum.RateListViewAction',
         );
     }
 
@@ -47,10 +47,10 @@ class ForumController extends MobcentController  {
             'photogallery' => false,
             'atuserlist' => true,
             'announcement' => false,
-            'topicrate' => false,
-            'topicratelistview' => false,
             'support' => true,
             'vote' => false,
+            'topicrate' => true,
+            'ratelistview' => false,
         );
     }
 }

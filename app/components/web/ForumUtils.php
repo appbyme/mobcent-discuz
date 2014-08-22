@@ -501,10 +501,10 @@ class ForumUtils {
         global $_G;
         
         // 评分
-        if ($_G['group']['raterange']) {
-            $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
-            $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
-        }
+        // if ($_G['group']['raterange']) {
+        //     $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+        //     $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+        // }
         // 赞
         $topicConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topic_recommend');
         $postConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_post_recommend');
@@ -812,6 +812,15 @@ class ForumUtils {
         return WebUtils::emptyHtml($postSign);
     }
 
+    /**
+     * 帖子内容页需要返回的数据
+     * 
+     * @param int $pid    帖子id.
+     * @param int $column 评分栏目显示几个.
+     * @param int $row    显示几行评分数据.
+     *
+     * @return array $tabList 帖子内容页需要返回的数据.
+     */
     public static function topicRateList($pid, $column=2, $row=3)
     {
         global $_G;
@@ -835,8 +844,6 @@ class ForumUtils {
         ksort($rateItem);
 
         $i = 1;
-        // $t['total'] = WebUtils::t('已有') . $total . WebUtils::t('人评分');
-        // $t['total'] = WebUtils::t('参与人数');
         $t["field$i"] = WebUtils::t('参与人数');
         $i++;
         $rateItem = array_slice($rateItem, 0, $column, true);
@@ -875,8 +882,6 @@ class ForumUtils {
         $total["field$i"] = (string)$totalRate;
         $i++;
         foreach ($rateItem as $id => $score) {
-            // $count['total'][$_G['setting']['extcredits'][$id]['title']] = $score;
-            // $count .= $_G['setting']['extcredits'][$id]['title'] . '+' .$score . "&nbsp";
             $total["field$i"] = (string)$score;
             $i++;
         }
@@ -890,12 +895,12 @@ class ForumUtils {
         $tabList['head'] = $t;
         $tabList['total'] = $total;
         $tabList['body'] = $rate;
-        
+
         return $tabList;
     }
 
 
-    // 评分列表
+    // 全部评分列表
     public static function rateList($tid, $pid, $page=1, $pageSize=3) 
     {   
         global $_G;
@@ -916,21 +921,16 @@ class ForumUtils {
 
         foreach($loglist as $k => $log) {
             $logcount[$log['extcredits']] += $log['score'];
-            $log['dateline'] = dgmdate($log['dateline'], 'u');
-            // $log['dateline'] = $log['dateline'];
+            // $log['dateline'] = dgmdate($log['dateline'], 'u');
+            $log['dateline'] = $log['dateline'];
             $log['score'] = $log['score'] > 0 ? '+'.$log['score'] : $log['score'];
             $log['reason'] = dhtmlspecialchars($log['reason']);
             $loglist[$k] = $log;
         }
 
-        // {$_G['setting']['extcredits'][$log[extcredits]][title]} $log[score] {$_G['setting']['extcredits'][$log[extcredits]][unit]}
-        // print_r($_G['setting']['extcredits'][$log['extcredits']]['title']);die;
-        // print_r($loglist);die('123');
-        // return $loglist;
         $res['loglist'] = $loglist;
         $res['logcount'] = $logcount;
         return $res;
     }
-
 
 }
