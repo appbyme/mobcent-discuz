@@ -642,7 +642,7 @@ class UserUtils {
         }
 
         $_G['username'] = $username;
-
+        $password = md5(random(10));
         if($setregip !== null) {
             if($setregip == 1) {
                 C::t('common_regip')->update_count_by_ip($_G['clientip']);
