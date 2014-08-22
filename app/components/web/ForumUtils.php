@@ -500,10 +500,10 @@ class ForumUtils {
         $panels = array('topic' => array(), 'post' => array());
         global $_G;
         // 评分
-        if ($_G['group']['raterange']) {
-            $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
-            $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
-        }
+        // if ($_G['group']['raterange']) {
+        //     $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+        //     $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+        // }
         return $panels;
     }
 
