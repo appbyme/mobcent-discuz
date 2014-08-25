@@ -495,17 +495,30 @@ class PostListAction extends MobcentAction {
         foreach ($content as $key => $value) {
             $newContent[$key]['infor'] = $value['content'];
             $newContent[$key]['type'] = $typeMaps[$value['type']];
-            if ($value['type'] == 'image') {
-                $newContent[$key]['originalInfo'] = $value['content'];
-                $newContent[$key]['aid'] = isset($value['extraInfo']['aid']) ? $value['extraInfo']['aid'] : 0;
-                $newContent[$key]['infor'] = ImageUtils::getThumbImage($value['content']);
-            } else if ($value['type'] == 'url') {
-                $newContent[$key]['infor'] = $value['content'];
-                $newContent[$key]['url'] = $value['extraInfo']['url'];
-            } else if ($value['type'] == 'attachment') {
-                $newContent[$key]['infor'] = $value['content'];
-                $newContent[$key]['url'] = $value['extraInfo']['url'];  
-                $newContent[$key]['desc'] = $value['extraInfo']['desc'];  
+            switch ($value['type']) {
+                case 'image':
+                    $newContent[$key]['originalInfo'] = $value['content'];
+                    $newContent[$key]['aid'] = isset($value['extraInfo']['aid']) ? $value['extraInfo']['aid'] : 0;
+                    $newContent[$key]['infor'] = ImageUtils::getThumbImage($value['content']);    
+                    break;
+                case 'url':
+                    $newContent[$key]['infor'] = $value['content'];
+                    $newContent[$key]['url'] = $value['extraInfo']['url'];
+                    break;
+                case 'attachment':
+                    $newContent[$key]['infor'] = $value['content'];
+                    $newContent[$key]['url'] = $value['extraInfo']['url'];  
+                    $newContent[$key]['desc'] = $value['extraInfo']['desc'];
+                    break;
+                case 'video':
+                    $videoInfo = ForumUtils::parseVideoUrl($value['content']);
+                    $newContent[$key]['extParams'] = array(
+                        'videoType' => $videoInfo['type'],
+                        'videoId' => $videoInfo['vid'],
+                    );
+                    break;
+                default:
+                    break;
             }
         }
         return $newContent;

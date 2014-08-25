@@ -536,28 +536,7 @@ class ForumUtils {
                             break;
                         case "media":
                         case "flash":
-                            $videoUrl = $matches[2];
-
-                            // 转换优酷 .swf
-                            $tempMatches = array();
-                            preg_match("#^http://player\.youku\.com/player\.php/sid/(\w+?)/v\.swf$#s", $matches[2], $tempMatches);
-                            if (!empty($tempMatches)) {
-                                $videoUrl = "http://v.youku.com/v_show/id_{$tempMatches[1]}.html";
-                            }
-                            if (WebUtils::getDzPluginAppbymeAppConfig("forum_allow_app_play_video")) {
-                                preg_match("#^http://v\.youku\.com/v_show/id_(\w+?)\.html$#s", $matches[2], $tempMatches);
-                                if (!empty($tempMatches)) {
-                                    $videoUrl = "http://v.youku.com/player/getM3U8/vid/{$tempMatches[1]}/type/flv/video.m3u8";
-                                }
-                            }
-
-                            // 转换56 .swf
-                            $tempMatches = array();
-                            preg_match("#^http://player\.56\.com/(\w+?)\.swf#s", $matches[2], $tempMatches);
-                            if (!empty($tempMatches)) {
-                                $videoUrl = "http://www.56.com/u/{$tempMatches[1]}.html";
-                            }
-
+                            $videoUrl = ForumUtils::transVideoUrl($matches[2]);
                             $string = "[mobcent_video={$videoUrl}]";
                             break;
                         default:
@@ -810,6 +789,84 @@ class ForumUtils {
             $postSign = '';
         }
         return WebUtils::emptyHtml($postSign);
+    }
+
+    /**
+     * 转换视频地址为html5地址
+     * 
+     * @param string $video 视频地址
+     *
+     * @access public
+     * @static
+     *
+     * @return string
+     */
+    public static function transVideoUrl($video)
+    {
+        $videoUrl = $video;
+
+        // 转换优酷 .swf
+        $tempMatches = array();
+        preg_match("#^http://player\.youku\.com/player\.php/sid/(\w+?)/v\.swf#s", $video, $tempMatches);
+        if (!empty($tempMatches)) {
+            $videoUrl = "http://v.youku.com/v_show/id_{$tempMatches[1]}.html";
+        }
+
+        // 转换56 .swf
+        $tempMatches = array();
+        preg_match("#^http://player\.56\.com/\w+?_(\w+?)\.swf#s", $video, $tempMatches);
+        if (!empty($tempMatches)) {
+            $videoUrl = "http://www.56.com/u/v_{$tempMatches[1]}.html";
+        }
+
+        // 转换爱奇艺 .swf
+        $tempMatches = array();
+        preg_match("#^http://player\.video\.qiyi\.com/.+?_(\w+?)\.swf#s", $video, $tempMatches);
+        if (!empty($tempMatches)) {
+            $videoUrl = "http://www.iqiyi.com/v_{$tempMatches[1]}.html";
+        }
+
+        return $videoUrl;
+    }
+
+    /**
+     * 解析视频html5地址
+     * 
+     * @param string $video 视频地址
+     *
+     * @access public
+     * @static
+     *
+     * @return array 解析后的信息
+     */
+    public static function parseVideoUrl($video)
+    {
+        $videoInfo = array('type' => 'unkown', 'vid' => '');
+
+        $tempMatches = array();
+        do {
+            // 解析优酷
+            preg_match("#http://v\.youku\.com/v_show/id_(\w+?)\.html#s", $video, $tempMatches);
+            if (!empty($tempMatches)) {
+                $videoInfo['type'] = 'youku';
+                break;
+            }
+            // 解析56
+            preg_match("#http://www\.56\.com/u/v_(\w+?)\.html#s", $video, $tempMatches);
+            if (!empty($tempMatches)) {
+                $videoInfo['type'] = '56';
+                break;
+            }
+            // 解析爱奇艺
+            preg_match("#http://www\.iqiyi\.com/v_(\w+?)\.html#s", $video, $tempMatches);
+            if (!empty($tempMatches)) {
+                $videoInfo['type'] = 'iqiyi';
+                break;
+            }
+        } while (false);
+        !empty($tempMatches) && $videoInfo['vid'] = $tempMatches[1];
+
+        return $videoInfo;
     }
 
     public static function topicRateList($pid, $column=2, $row=3)

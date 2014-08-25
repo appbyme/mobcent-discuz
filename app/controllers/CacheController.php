@@ -56,8 +56,8 @@ class CacheController extends MobcentController  {
 
     public function actionUpdate($fid = 0, $gid = 0, $sort = '') {
         $timer = new CountTimer;
-        // $cacheToken = 'cache-update';
-        // Yii::beginProfile($cacheToken);
+        $cacheToken = 'cache-update';
+        Yii::beginProfile($cacheToken);
 
         ob_start();
         // 生成版块列表缓存
@@ -83,7 +83,7 @@ class CacheController extends MobcentController  {
         ob_end_clean();
 
         var_dump($timer->stop());
-        // Yii::endProfile($cacheToken);
+        Yii::endProfile($cacheToken);
     }
 
     public function actionCleanThumb($id = 0, $type = 'post') {
