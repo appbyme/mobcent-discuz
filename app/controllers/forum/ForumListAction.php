@@ -21,7 +21,7 @@ class ForumListAction extends MobcentAction {
 
     protected function getCacheInfo() {
         $cacheInfo = array('enable' => 1, 'expire' => HOUR_SECONDS * 1);
-        
+
         if (($cache = WebUtils::getDzPluginAppbymeAppConfig('cache_forumlist')) > 0) {
             $cacheInfo['expire'] = $cache;
         } else {
@@ -31,7 +31,7 @@ class ForumListAction extends MobcentAction {
         return $cacheInfo;
     }
 
-    protected function getResult($params=array()) {        
+    protected function getResult($params=array()) {
         $res = $this->initWebApiArray();
 
         $fid = (int)$params['fid'];
@@ -51,7 +51,7 @@ class ForumListAction extends MobcentAction {
         // 子版块
         if ($fid > 0) {
             $tempForum = array();
-            $tempForum['board_category_id'] = $fid; 
+            $tempForum['board_category_id'] = $fid;
             $tempForum['board_category_name'] = WebUtils::emptyHtml(DzForumForum::getNameByFid($fid));
             $tempForum['board_category_type'] = 1;
             $forums = ForumUtils::getForumSubList($fid);
@@ -65,8 +65,8 @@ class ForumListAction extends MobcentAction {
             foreach ($groups as $group) {
                 $gid = (int)$group['fid'];
                 $tempGroup = array();
-                $tempGroup['board_category_id'] = $gid; 
-                $tempGroup['board_category_name'] = WebUtils::emptyHtml($group['name']); 
+                $tempGroup['board_category_id'] = $gid;
+                $tempGroup['board_category_name'] = WebUtils::emptyHtml($group['name']);
                 $tempGroup['board_category_type'] = isset($forumColumnStyle[$gid]) ? (int)$forumColumnStyle[$gid] : 2;
 
                 $forums = ForumUtils::getForumList($group['fid']);
@@ -79,7 +79,7 @@ class ForumListAction extends MobcentAction {
 
         $fidList = ForumUtils::getForumShowFids();
         $imgFidList = ForumUtils::getForumImageShowFids();
-        
+
         $tempGroupList = array();
         foreach ($forumList as $key => $group) {
             $tempForumList = array();
@@ -108,7 +108,10 @@ class ForumListAction extends MobcentAction {
 
         $dateline = $this->_getDateLine($forum);
 
-        forum($forum);
+        if (!forum($forum))  {
+            return array();
+        }
+
         $matches = array();
         preg_match('/<img src="(.+?)"/', $forum['icon'], $matches);
         $image = !empty($matches[1]) ? $matches[1] : '';
@@ -152,7 +155,7 @@ class ForumListAction extends MobcentAction {
         $forum['lastpost'] = is_string($forum['lastpost']) ? explode("\t", $forum['lastpost']) : $forum['lastpost'];
         $forum['lastpost'] = count($forum['lastpost']) != 4 ? $lastpost : $forum['lastpost'];
         list($lastpost['tid'], $lastpost['subject'], $lastpost['dateline'], $lastpost['author']) = $forum['lastpost'];
-        return $lastpost['dateline'];        
+        return $lastpost['dateline'];
     }
 
 }

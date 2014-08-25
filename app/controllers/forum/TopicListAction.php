@@ -30,7 +30,7 @@ class TopicListAction extends MobcentAction {
 
         global $_G;
         $key = CacheUtils::getTopicListKey(array($fid, $_G['groupid'], $page, $pageSize, $sort, $filterType, $filterId));
-        
+
         $this->runWithCache($key, array('fid' => $fid, 'page' => $page, 'pageSize' => $pageSize, 'sort' => $sort, 'filterType' => $filterType, 'filterId' => $filterId));
         // Mobcent::dumpSql();
     }
@@ -65,31 +65,31 @@ class TopicListAction extends MobcentAction {
                     Yii::app()->cache->set($key, $res, $cache['expire'], $dep);
                 }
             }
-        } 
+        }
 
         echo $res;
     }
 
     protected function getCacheInfo() {
         $cacheInfo = array('enable' => 1, 'expire' => DAY_SECONDS * 1);
-        
+
         if (($cache = WebUtils::getDzPluginAppbymeAppConfig('cache_topiclist')) > 0) {
             $cacheInfo['expire'] = $cache;
         } else {
             $cacheInfo['enable'] = 0;
         }
-        
+
         return $cacheInfo;
     }
 
     protected function getResult($params=array()) {
         extract($params);
 
-        $res = WebUtils::initWebApiArray_oldVersion(); 
+        $res = WebUtils::initWebApiArray_oldVersion();
 
         if ($fid != 0) {
             ForumUtils::initForum($fid);
-            
+
             // check permisson
             global $_G;
             if (empty($_G['forum']['fid'])) {
@@ -132,11 +132,11 @@ class TopicListAction extends MobcentAction {
         // 获取公告列表
         $hasAnnouncements = $fid != 0 && $page == 1;
         $res['anno_list'] =  !$hasAnnouncements ? array() : $this->_getAnnouncementList($sort);
-        
+
         $topicInfos = $this->_getTopicInfos($fid, $page, $pageSize, $sort, $filterType, $filterId);
         $list = $topicInfos['list'];
         $count = $topicInfos['count'];
-        
+
         $res['list'] = $list;
         $res = array_merge($res, WebUtils::getWebApiArrayWithPage_oldVersion($page, $pageSize, $count));
 
@@ -157,7 +157,7 @@ class TopicListAction extends MobcentAction {
         $announcementShow = WebUtils::getDzPluginAppbymeAppConfig('forum_announcement_show');
         $announcementShow = dunserialize($announcementShow);
         !is_array($announcementShow) && $announcementShow = array();
-        
+
         $sortMaps = array('new' => 2, 'marrow' => 3, 'top' => 4);
         $index = isset($sortMaps[$sort]) ? $sortMaps[$sort] : 1;
         if (in_array(0, $announcementShow) || !in_array($index, $announcementShow)) {
@@ -180,16 +180,16 @@ class TopicListAction extends MobcentAction {
         return $list;
     }
 
-    private function _getTopicInfos($fid, $page, $pageSize, $sort, $filterType='', $filterId='') { 
+    private function _getTopicInfos($fid, $page, $pageSize, $sort, $filterType='', $filterId='') {
 
         $infos = array('count' => 0, 'list' => array());
 
         global $_G;
         $forum = $_G['forum'];
-        
+
         $count = $this->_getTopicCount($fid, $sort, $filterType, $filterId);
         $topicList = $this->_getTopicList($fid, $page, $pageSize, $sort, $filterType, $filterId);
-        
+
         $list = array();
         foreach($topicList as $topic) {
             // 该主题是由别的版块移动过来的
@@ -207,7 +207,7 @@ class TopicListAction extends MobcentAction {
             // 主题分类标题
             $typeTitle = '';
             if (WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topictype_prefix')) {
-                if (isset($forum['threadtypes']['prefix']) && 
+                if (isset($forum['threadtypes']['prefix']) &&
                     $forum['threadtypes']['prefix'] == 1 &&
                     isset($forum['threadtypes']['types'][$topic['typeid']])) {
                     $typeTitle = '['.$forum['threadtypes']['types'][$topic['typeid']].']';
@@ -216,7 +216,7 @@ class TopicListAction extends MobcentAction {
             // 分类信息标题
             $sortTitle = '';
             if (WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topicsort_prefix')) {
-                if (!empty($forum['threadsorts']['prefix']) && 
+                if (!empty($forum['threadsorts']['prefix']) &&
                     isset($forum['threadsorts']['types'][$topic['sortid']])) {
                     $sortTitle = '['.$forum['threadsorts']['types'][$topic['sortid']].']';
                 }
@@ -231,9 +231,9 @@ class TopicListAction extends MobcentAction {
             $topicInfo['type'] = ForumUtils::getTopicType($topic);
             $topicInfo['title'] = $movedTitle . $typeTitle . $sortTitle . $topic['subject'];
             $topicInfo['title'] = WebUtils::emptyHtml($topicInfo['title']);
-            
+
             // 修正帖子查看数
-            if (isset($_G['forum_thread']['views']) && 
+            if (isset($_G['forum_thread']['views']) &&
                 $_G['forum_thread']['tid'] == $topic['tid'] &&
                 $_G['forum_thread']['views'] > $topic['views']) {
                 $topic['views'] = $_G['forum_thread']['views'];
