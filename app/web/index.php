@@ -18,7 +18,10 @@ $discuz = dirname(__FILE__).'/../components/discuz/discuz.php';
 // defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 
 require_once($yii);
+
 require_once($mobcent);
+Mobcent::setErrors(0, 0);
+
 require_once($discuz);
 
 $config=dirname(__FILE__).'/../config/main.php';
