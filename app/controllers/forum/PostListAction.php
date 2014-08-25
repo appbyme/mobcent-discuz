@@ -386,7 +386,7 @@ class PostListAction extends MobcentAction {
                         $tempPostRecommends[$pid]['support'] = dintval($post['support']);
                         // $tempPostRecommends[$pid]['against'] = dintval($post['against']);
                     }
-                    $isSupport = DzSupportInfo::getSupportPostByUidAndTid($_G['uid'], $tid);
+                    $isSupport = DzSupportInfo::getSupportPostsByUidAndTid($_G['uid'], $tid);
                 }
             }
 
