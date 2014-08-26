@@ -447,7 +447,17 @@ class PostListAction extends MobcentAction {
                     }
                 }
 
-                $extraItems = ForumUtils::getPostExtraPanel();
+                $count = mb_strlen($postInfo['reply_content'][0]['infor'], $_G['charset']);
+                if ($count < $_G['setting']['threadfilternum']) {
+                    $isWater = true;
+                }
+
+                if($isWater && $_G['setting']['filterednovote']) {
+                    $extraItems['post'] = array();
+                } else {
+                    $extraItems = ForumUtils::getPostExtraPanel();
+                }
+
                 foreach ($extraItems['post'] as $key => $item) {
                     $item['extParams'] = array('beforeAction' => '');
                     $item['type'] = $item['action'];
@@ -462,27 +472,9 @@ class PostListAction extends MobcentAction {
                 }
 
                 $postInfo['managePanel'] = $manageItems['post'];
-                
-                $isWater = '';
-                if ($_G['charset'] == 'utf-8') {
-                    $count = iconv_strlen($postInfo['reply_content'][0]['infor'],"UTF-8");
-                    if ($count < $_G['setting']['threadfilternum']) {
-                        $isWater = true;
-                    }
-                } else {
-                    $count = iconv_strlen($postInfo['reply_content'][0]['infor'],"GBK");
-                    if ($count < $_G['setting']['threadfilternum']) {
-                        $isWater = true;
-                    }
-                }
-
-                if($isWater && $_G['setting']['filterednovote']) {
-                    $postInfo['extraPanel'] = array();
-                } else {
-                    $postInfo['extraPanel'] = $extraItems['post'];
-                }
-
+                $postInfo['extraPanel'] = $extraItems['post'];
                 $postInfos[] = $postInfo;
+                unset($isWater);
             }
         }
 
