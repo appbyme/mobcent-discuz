@@ -466,12 +466,12 @@ class PostListAction extends MobcentAction {
                 $isWater = '';
                 if ($_G['charset'] == 'utf-8') {
                     $count = iconv_strlen($postInfo['reply_content'][0]['infor'],"UTF-8");
-                    if ($count<$_G['setting']['threadfilternum']) {
-                        $isWater= true;
+                    if ($count < $_G['setting']['threadfilternum']) {
+                        $isWater = true;
                     }
                 } else {
                     $count = iconv_strlen($postInfo['reply_content'][0]['infor'],"GBK");
-                    if ($count<$_G['setting']['threadfilternum']) {
+                    if ($count < $_G['setting']['threadfilternum']) {
                         $isWater = true;
                     }
                 }
