@@ -180,7 +180,7 @@ class PortalUtils {
                 $string = "";
                 $matches[1] = WebUtils::getHttpFileName($matches[1]);
                 // 处理是图片的链接
-                if (strpos($matches[2], "<img") !== false) {
+                if (stripos($matches[2], "<img") !== false) {
                     $string = $matches[2];
                 } else {
                     $string = sprintf("[mobcent_url=%s]%s[/mobcent_url]", $matches[1], $matches[2]);
