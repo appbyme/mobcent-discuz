@@ -462,7 +462,25 @@ class PostListAction extends MobcentAction {
                 }
 
                 $postInfo['managePanel'] = $manageItems['post'];
-                $postInfo['extraPanel'] = $extraItems['post'];
+                
+                $isWater = '';
+                if ($_G['charset'] == 'utf-8') {
+                    $count = iconv_strlen($postInfo['reply_content'][0]['infor'],"UTF-8");
+                    if ($count < $_G['setting']['threadfilternum']) {
+                        $isWater = true;
+                    }
+                } else {
+                    $count = iconv_strlen($postInfo['reply_content'][0]['infor'],"GBK");
+                    if ($count < $_G['setting']['threadfilternum']) {
+                        $isWater = true;
+                    }
+                }
+
+                if($isWater && $_G['setting']['filterednovote']) {
+                    $postInfo['extraPanel'] = array();
+                } else {
+                    $postInfo['extraPanel'] = $extraItems['post'];
+                }
 
                 $postInfos[] = $postInfo;
             }
