@@ -452,29 +452,32 @@ class PostListAction extends MobcentAction {
                     $isWater = true;
                 }
 
-                if($isWater && $_G['setting']['filterednovote']) {
-                    $extraItems['post'] = array();
-                } else {
-                    $extraItems = ForumUtils::getPostExtraPanel();
+                $isWater = false;
+                $count = mb_strlen($postInfo['reply_content'][0]['infor'], $_G['charset']);
+                if ($_G['setting']['filterednovote'] && $count < $_G['setting']['threadfilternum']) {
+                    $isWater = true;
                 }
 
-                foreach ($extraItems['post'] as $key => $item) {
+                $extraItems = array();
+                $tempExtraItems = ForumUtils::getPostExtraPanel();
+                foreach ($tempExtraItems['post'] as $key => $item) {
                     $item['extParams'] = array('beforeAction' => '');
                     $item['type'] = $item['action'];
                     $item['action'] = '';
-                    if ($item['type'] == 'support') {
+                    if ($item['type'] == 'support' && !$isWater) {
                         $item['action'] = WebUtils::createUrl_oldVersion('forum/support', array('tid' => $tid, 'pid' => $post['pid'], 'type' => 'post'));
                         $item['extParams']['recommendAdd'] =  (int)$tempPostRecommends[$post['pid']]['support'];
                         $isRecommendAdd = in_array($post['pid'], $isSupport)? 1 : 0;
                         $item['extParams']['isHasRecommendAdd'] = (int)$isRecommendAdd;
                     }
-                    $extraItems['post'][$key] = $item;
+                    if ($item['type'] != 'support' || !$isWater) {
+                        $extraItems[] = $item;
+                    }
                 }
 
                 $postInfo['managePanel'] = $manageItems['post'];
-                $postInfo['extraPanel'] = $extraItems['post'];
+                $postInfo['extraPanel'] = $extraItems;
                 $postInfos[] = $postInfo;
-                unset($isWater);
             }
         }
 
