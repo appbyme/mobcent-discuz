@@ -21,7 +21,7 @@ class PostListAction extends MobcentAction {
         $key = "{$this->id}_{$_G['groupid']}_{$tid}_{$authorId}_{$order}_{$page}_{$pageSize}";
 
         $this->runWithCache($key, array('tid' => $tid, 'page' => $page, 'pageSize' => $pageSize, 'order' => $order, 'authorId' => $authorId));
-        
+
         // Mobcent::dumpSql();
     }
 
@@ -34,12 +34,12 @@ class PostListAction extends MobcentAction {
 
         $res = WebUtils::initWebApiArray();
         $res = array_merge(array('rs' => 1, 'errcode' => ''), $res);
-        
+
         $topic = ForumUtils::getTopicInfo($tid);
         if (empty($topic)) {
             return $this->_makeErrorInfo($res, 'thread_nonexistence');
         }
-        
+
         // 该主题是由别的版块移动过来的
         if($topic['closed'] > 1) {
             $tid = $topic['closed'];
@@ -48,7 +48,7 @@ class PostListAction extends MobcentAction {
 
         $app = Yii::app()->getController()->mobcentDiscuzApp;
         $app->loadForum($topic['fid'], $topic['tid']);
-        
+
         // 检查权限
         global $_G;
         if(empty($_G['forum']['allowview'])) {
@@ -99,7 +99,7 @@ class PostListAction extends MobcentAction {
                 return $this->_makeErrorInfo($res, 'post_not_found');
             }
         }
-    
+
         $res = $this->_getPostInfos($res, $topic, $page, $pageSize, $order, $authorId);
 
         $res['forumName'] = WebUtils::emptyHtml($_G['forum']['name']);
@@ -108,8 +108,8 @@ class PostListAction extends MobcentAction {
         $res['icon_url'] = '';
 
         Mobcent::import(sprintf(
-            '%s/forum_viewthread_%s.php', 
-            MOBCENT_APP_ROOT . '/components/discuz/forum', 
+            '%s/forum_viewthread_%s.php',
+            MOBCENT_APP_ROOT . '/components/discuz/forum',
             MobcentDiscuz::getMobcentDiscuzVersion()
         ));
         viewthread_updateviews($_G['forum_thread']['threadtableid']);
@@ -133,22 +133,22 @@ class PostListAction extends MobcentAction {
 
                 global $_G;
                 $typeTitle = $sortTitle = '';
-                if($_G['forum_thread']['typeid'] && $_G['forum']['threadtypes']['types'][$_G['forum_thread']['typeid']]) { 
+                if($_G['forum_thread']['typeid'] && $_G['forum']['threadtypes']['types'][$_G['forum_thread']['typeid']]) {
                     if(!IS_ROBOT && ($_G['forum']['threadtypes']['listable'] || $_G['forum']['status'] == 3)) {
                         $typeTitle = "[{$_G['forum']['threadtypes']['types'][$_G['forum_thread']['typeid']]}]";
                     } else {
                         $typeTitle = "[{$_G['forum']['threadtypes']['types'][$_G['forum_thread']['typeid']]}]";
-                    } 
-                } 
+                    }
+                }
                 if(!empty($sort['title'])) {
                     $sortTitle = "[{$sort['title']}]";
                 }
                 $topicInfo['topic_id'] = $tid;
                 $topicInfo['title'] = $typeTitle . $sortTitle . $topic['subject'];
                 $topicInfo['title'] = WebUtils::emptyHtml($topicInfo['title']);
-                
+
                 // 修正帖子查看数
-                if (isset($_G['forum_thread']['views']) && 
+                if (isset($_G['forum_thread']['views']) &&
                     $_G['forum_thread']['tid'] == $topic['tid'] &&
                     $_G['forum_thread']['views'] > $topic['views']) {
                     $topic['views'] = $_G['forum_thread']['views'];
@@ -175,7 +175,7 @@ class PostListAction extends MobcentAction {
                     array_unshift($postContent, $this->_transSortInfo($sort));
                 }
                 $topicInfo['content'] = $postContent;
-                
+
                 if ($topicInfo['type'] == 'normal') {
                     $this->_isComplexContent($topicInfo['content']) && $topicInfo['type'] = 'normal_complex';
                 }
@@ -183,11 +183,11 @@ class PostListAction extends MobcentAction {
                 $topicInfo['poll_info'] = ForumUtils::isVoteTopic($topic) ? $this->_getVoteInfo($topic) : null;
                 $topicInfo['activityInfo'] = ForumUtils::isActivityTopic($topic) ? TopicUtils::getActivityInfo($topic) : null;
                 $topicInfo['location'] = ForumUtils::getTopicLocation($tid);
-                
+
                 $manageItems = ForumUtils::getPostManagePanel();
                 foreach ($manageItems['topic'] as $key => $item) {
                     $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'topic'));
-                    $manageItems['topic'][$key] = $item;                        
+                    $manageItems['topic'][$key] = $item;
                 }
 
                 $extraItems = ForumUtils::getPostExtraPanel();
@@ -206,11 +206,11 @@ class PostListAction extends MobcentAction {
                     }
                     $extraItems['topic'][$key] = $item;
                 }
-                
+
                 $topicInfo['managePanel'] = $manageItems['topic'];
                 $topicInfo['extraPanel'] = $extraItems['topic'];
                 $topicInfo['mobileSign'] = ForumUtils::getMobileSign($post['status']);
-                
+
                 // if (empty($topic['author']) && !empty($topic['authorid'])){
                 //     $topicInfo['reply_status'] = -1;
                 // } else if(empty($topic['author']) && empty($topic['authorid'])){
@@ -223,7 +223,7 @@ class PostListAction extends MobcentAction {
 
                 $topicInfo['flag'] = 0;
                 $topicInfo['gender'] = 1;
-                $topicInfo['reply_posts_id'] = 0;                
+                $topicInfo['reply_posts_id'] = 0;
                 $topicInfo['rateList'] = ForumUtils::topicRateList($post['pid']);
                 // $topicInfo['rateList'] = ForumUtils::topicRateList(1);
             }
@@ -263,7 +263,7 @@ class PostListAction extends MobcentAction {
             $voteItem['poll_item_id'] = (int)$option['polloptionid'];
             $voteItem['total_num'] = (int)$option['votes'];
             $voteItem['percent'] = $option['percent'] . '%';
-            $vote['poll_item_list'][] = $voteItem; 
+            $vote['poll_item_list'][] = $voteItem;
         }
 
         return $vote;
@@ -280,7 +280,7 @@ class PostListAction extends MobcentAction {
             require_once libfile('function/threadsort');
             $threadsortshow = threadsortshow($thread['sortid'], $_G['tid']);
         }
-        
+
         if($threadsort && $threadsortshow) {
             if($threadsortshow['typetemplate']) {
                 //echo $threadsortshow['typetemplate'];
@@ -291,10 +291,10 @@ class PostListAction extends MobcentAction {
                 } else {
                     $sort['title'] = $_G['forum']['threadsorts']['types'][$_G['forum_thread']['sortid']];
                     if (is_array($threadsortshow['optionlist'])) {
-                        foreach($threadsortshow['optionlist'] as $option) { 
+                        foreach($threadsortshow['optionlist'] as $option) {
                             if($option['type'] != 'info') {
                                 $sort['summary'] .= sprintf("%s :\t", $option['title']);
-                                if ($option['value'] || ($option['type'] == 'number' && $option['value'] !== '')) { 
+                                if ($option['value'] || ($option['type'] == 'number' && $option['value'] !== '')) {
                                     $matches = array();
                                     preg_match('/action=protectsort.+?optionid=(\d+)/', $option['value'], $matches);
                                     if (!empty($matches)) {
@@ -313,12 +313,12 @@ class PostListAction extends MobcentAction {
         }
 
         return $sort;
-    } 
+    }
 
     // 获取分类信息保护字段的值
     private function _getProtectSortOptionListValue($tid, $optionid) {
         $value = '';
-        
+
         $typeoptionvarvalue = C::t('forum_typeoptionvar')->fetch_all_by_tid_optionid($tid, $optionid);
         $typeoptionvarvalue[0]['expiration'] = $typeoptionvarvalue[0]['expiration'] && $typeoptionvarvalue[0]['expiration'] <= TIMESTAMP ? 1 : 0;
         $option = C::t('forum_typeoption')->fetch($optionid);
@@ -365,16 +365,16 @@ class PostListAction extends MobcentAction {
         if (!empty($topic)) {
             global $_G;
             $isOnlyAuthorTopic = ForumUtils::isOnlyAuthorTopic($topic);
-            $postList = ForumUtils::getPostList($tid, $page, $pageSize, 
+            $postList = ForumUtils::getPostList($tid, $page, $pageSize,
                 array(
-                    'order' => $order ? 'dateline DESC' : 'dateline ASC', 
+                    'order' => $order ? 'dateline DESC' : 'dateline ASC',
                     'authorId' => $authorId
                 )
             );
-            $position = $order ? 
-                $postCount + 1 - $pageSize*($page-1) : 
+            $position = $order ?
+                $postCount + 1 - $pageSize*($page-1) :
                 $pageSize*($page-1) + 2;
-                       
+
             if($_G['setting']['repliesrank'] && $postList) {
                 if($postList) {
                     $tempPids = array();
@@ -406,13 +406,13 @@ class PostListAction extends MobcentAction {
 
                 // 抢楼帖时采用原楼层
                 if (getstatus($topic['status'], 3)) {
-                    $postInfo['position'] = $post['position'];    
+                    $postInfo['position'] = $post['position'];
                 } else {
                     $postInfo['position'] = $order ? $position-- : $position++;
                 }
-                
+
                 $postInfo['posts_date'] = $post['dateline'] . '000';
-                
+
                 $postInfo['icon'] = UserUtils::getUserAvatar($postInfo['reply_id']);
 
                 $postInfo['level'] = $this->_getUserLevel($postInfo['reply_id']);
@@ -433,11 +433,10 @@ class PostListAction extends MobcentAction {
                 $postInfo['role_num'] = 1;
                 $postInfo['title'] = '';
 
-                $postInfo = array_merge($postInfo, $this->_getPostQuoteInfo($content));
+                $postInfo = array_merge($postInfo, $this->_getPostQuoteInfo($content, $isOnlyAuthorPost));
 
                 $manageItems = ForumUtils::getPostManagePanel();
                 foreach ($manageItems['post'] as $key => $item) {
-
                     if ($item['action'] == 'topicrate') {
                         $item['action'] = '';
                         $manageItems['post'][$key] = $item;
@@ -494,10 +493,10 @@ class PostListAction extends MobcentAction {
         return !empty($content['main']) ? $this->_filterContent($content['main']) : array();
     }
 
-    private function _getPostQuoteInfo($content) {
+    private function _getPostQuoteInfo($content, $isOnlyAuthorPost=false) {
         $postInfo['is_quote'] = !empty($content['quote']) ? 1 : 0;
         $postInfo['quote_pid'] = 0;
-        $postInfo['quote_content'] = !empty($content['quote']) ? $content['quote']['who']."\n".$content['quote']['msg']: '';
+        $postInfo['quote_content'] = !empty($content['quote']) && !$isOnlyAuthorPost ? $content['quote']['who']."\n".$content['quote']['msg']: '';
         $postInfo['quote_user_name'] = '';
         return $postInfo;
     }
@@ -512,7 +511,7 @@ class PostListAction extends MobcentAction {
                 case 'image':
                     $newContent[$key]['originalInfo'] = $value['content'];
                     $newContent[$key]['aid'] = isset($value['extraInfo']['aid']) ? $value['extraInfo']['aid'] : 0;
-                    $newContent[$key]['infor'] = ImageUtils::getThumbImage($value['content']);    
+                    $newContent[$key]['infor'] = ImageUtils::getThumbImage($value['content']);
                     break;
                 case 'url':
                     $newContent[$key]['infor'] = $value['content'];
@@ -520,7 +519,7 @@ class PostListAction extends MobcentAction {
                     break;
                 case 'attachment':
                     $newContent[$key]['infor'] = $value['content'];
-                    $newContent[$key]['url'] = $value['extraInfo']['url'];  
+                    $newContent[$key]['url'] = $value['extraInfo']['url'];
                     $newContent[$key]['desc'] = $value['extraInfo']['desc'];
                     break;
                 case 'video':
@@ -549,7 +548,7 @@ class DzSupportInfo extends DiscuzAR
     {
         return DbUtils::getDzDbUtils(true)->queryColumn('
             SELECT pid
-            FROM %t 
+            FROM %t
             WHERE uid = %d
             AND tid = %d
             AND attitude = %d
@@ -562,7 +561,7 @@ class DzSupportInfo extends DiscuzAR
     {
         return DbUtils::getDzDbUtils(true)->queryAll('
             SELECT dateline
-            FROM %t 
+            FROM %t
             WHERE recommenduid = %d
             AND tid = %d
             ',

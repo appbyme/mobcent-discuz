@@ -25,7 +25,13 @@ class InitUIAction extends MobcentAction
         return array(
             'navigation' => array(
                 'type' => 'bottom',
-                'moduleList' => array(1, 2, 3, 4, 5),
+                'navItemList' => array(
+                    array('moduleId' => 1, 'title' => WebUtils::t('首页'), 'icon' => 'mc_forum_main_bar_button1'),
+                    array('moduleId' => 2, 'title' => WebUtils::t('社区'), 'icon' => 'mc_forum_main_bar_button1'),
+                    array('moduleId' => 3, 'title' => WebUtils::t(''), 'icon' => 'mc_forum_main_bar_button1'),
+                    array('moduleId' => 4, 'title' => WebUtils::t('消息'), 'icon' => 'mc_forum_main_bar_button1'),
+                    array('moduleId' => 5, 'title' => WebUtils::t('发现'), 'icon' => 'mc_forum_main_bar_button1'),
+                )
             ),
             'moduleList' => array(
                 array(
@@ -55,7 +61,7 @@ class InitUIAction extends MobcentAction
                             'extParams' => array(
                                 'padding' => '',
                             ),
-                        )  
+                        )
                     ),
                     'layoutList' => array(
                         array(
@@ -110,7 +116,7 @@ class InitUIAction extends MobcentAction
                             'extParams' => array(
                                 'padding' => '',
                             ),
-                        )  
+                        )
                     ),
                     'layoutList' => array(
                         array(

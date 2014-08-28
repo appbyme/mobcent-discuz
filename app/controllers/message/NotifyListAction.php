@@ -13,104 +13,104 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
 class NotifyListAction extends CAction {
 
-	public function run($type = 'post', $page = 1, $pageSize = 20) {
+    public function run($type = 'post', $page = 1, $pageSize = 20) {
         $res = WebUtils::initWebApiArray_oldVersion();
 
-		$uid = $this->getController()->uid;
+        $uid = $this->getController()->uid;
 
-		$notifyInfo = $this->_getNotifyInfo($uid, $type, $page, $pageSize);
-		$list = $notifyInfo['list'];
-		$count = $notifyInfo['count'];
-		
+        $notifyInfo = $this->_getNotifyInfo($uid, $type, $page, $pageSize);
+        $list = $notifyInfo['list'];
+        $count = $notifyInfo['count'];
+
         $res = array_merge($res, WebUtils::getWebApiArrayWithPage_oldVersion(
             $page, $pageSize, $count));
-		$res['list'] = $list;
-        
-		// $transaction = Yii::app()->dbDz->beginTransaction();
-		// try {
+        $res['list'] = $list;
+
+        // $transaction = Yii::app()->dbDz->beginTransaction();
+        // try {
             echo WebUtils::outputWebApi($res, '', false);
 
-			$this->_updateReadStatus($uid, $type);
-			
-		// 	$transaction->commit();
-		// } catch(Exception $e) {
-		// 	var_dump($e);
-		//     $transaction->rollback();
-		// }
+            $this->_updateReadStatus($uid, $type);
 
-		Yii::app()->end();
-	}
+        //  $transaction->commit();
+        // } catch(Exception $e) {
+        //  var_dump($e);
+        //     $transaction->rollback();
+        // }
 
-	private function _getNotifyInfo($uid, $type, $page, $pageSize) {
-		$info = array(
-			'count' => 0,
-			'list' => array(),
-		);
+        Yii::app()->end();
+    }
 
-		$count = DzHomeNotification::getCountByUid($uid, $type);
+    private function _getNotifyInfo($uid, $type, $page, $pageSize) {
+        $info = array(
+            'count' => 0,
+            'list' => array(),
+        );
+
+        $count = DzHomeNotification::getCountByUid($uid, $type);
         $notifyData = DzHomeNotification::getAllNotifyByUid($uid, $type, $page, $pageSize);
         foreach ($notifyData as $data) {
-        	$matches = array();
-        	preg_match_all('/&ptid=(\d+?)&pid=(\d+?)"/i', $data['note'], $matches);
-        	$ptid = $matches[1][0];
+            $matches = array();
+            preg_match_all('/&ptid=(\d+?)&pid=(\d+?)"/i', $data['note'], $matches);
+            $ptid = $matches[1][0];
             $pid = $matches[2][0];
-        	$postInfo = $this->_getPostInfo($ptid, $pid);
-        	if (!empty($postInfo)) {
-	        	$info['list'][] = $postInfo;
-        	} else {
-        		--$count;
-        	}
+            $postInfo = $this->_getPostInfo($ptid, $pid);
+            if (!empty($postInfo)) {
+                $info['list'][] = $postInfo;
+            } else {
+                --$count;
+            }
         }
-		$info['count'] = $count;
+        $info['count'] = $count;
 
-		return $info;
-	}
+        return $info;
+    }
 
-	private function _getPostInfo($tid, $pid) {
-		$info = array();
+    private function _getPostInfo($tid, $pid) {
+        $info = array();
 
         $post = ForumUtils::getPostInfo($tid, $pid);
         if (!empty($post)) {
             $forumName = ForumUtils::getForumName($post['fid']);
-        	$threadPost = ForumUtils::getTopicPostInfo($tid);
+            $threadPost = ForumUtils::getTopicPostInfo($tid);
 
             $topicContent = ForumUtils::getTopicContent($tid, $threadPost);
             $postContent = ForumUtils::getPostContent($tid, $pid, $post);
 
             $content = $this->_getContent($postContent, $topicContent);
 
-        	$info['board_name'] = $forumName;
+            $info['board_name'] = $forumName;
             $info['board_id'] = (int)$post['fid'];
-            
-        	$info['topic_id'] = (int)$tid;
-        	$info['topic_subject'] = $threadPost['subject'];
-        	$info['topic_content'] = $content['topic'];
-        	$info['topic_url'] = '';
 
-        	$info['reply_content'] = $content['reply'];
-        	$info['reply_url'] = '';
-        	$info['reply_remind_id'] = (int)$pid;
-        	$info['reply_nick_name'] = $post['author'];
-        	$info['user_id'] = (int)$post['authorid'];
-        	$info['icon'] = UserUtils::getUserAvatar($post['authorid']);
-        	$info['is_read'] = 1;
-        	$info['replied_date'] = $post['dateline'] . '000';
+            $info['topic_id'] = (int)$tid;
+            $info['topic_subject'] = $threadPost['subject'];
+            $info['topic_content'] = $content['topic'];
+            $info['topic_url'] = '';
+
+            $info['reply_content'] = $content['reply'];
+            $info['reply_url'] = '';
+            $info['reply_remind_id'] = (int)$pid;
+            $info['reply_nick_name'] = $post['author'];
+            $info['user_id'] = (int)$post['authorid'];
+            $info['icon'] = UserUtils::getUserAvatar($post['authorid']);
+            $info['is_read'] = 1;
+            $info['replied_date'] = $post['dateline'] . '000';
         }
 
         return $info;
-	}
+    }
 
     /**
      * copy from Discuz
      */
-	private function _updateReadStatus($uid, $type) {
+    private function _updateReadStatus($uid, $type) {
         // call_user_func(array($this, MobcentDiscuz::getFuncNameWithVersion(__FUNCTION__)), $uid, $type);
-	    DzHomeNotification::updateReadStatus($uid);
+        DzHomeNotification::updateReadStatus($uid);
         DbUtils::getDzDbUtils(true)->query('
             UPDATE %t
             SET newprompt=0
             WHERE uid=%d
-            ', 
+            ',
             array('common_member', $uid)
         );
     }
@@ -141,6 +141,6 @@ class NotifyListAction extends CAction {
             $length = Yii::app()->params['mobcent']['forum']['post']['summaryLength'];
             $msg = WebUtils::subString($msg, 0, $length);
         }
-        return $msg;  
+        return $msg;
     }
 }

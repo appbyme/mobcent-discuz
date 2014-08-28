@@ -15,11 +15,11 @@ class PMListAction extends MobcentAction {
 
     public function run($pmlist) {
         $res = $this->initWebApiArray();
-        
+
         $uid = $this->getController()->uid;
 
         // $pmlist ='{"body": {"pmInfos": [{"fromUid": 4, "startTime": "0", "stopTime": "0", "cacheCount": 0, "pmLimit": 10, }], "externInfo": {"onlyFromUid":0} } }';
-        
+
         $res['body']['userInfo'] = $this->_getUserInfo($uid);
         $res['body']['pmList'] = $this->_getPMList($uid, $pmlist);
 
@@ -54,11 +54,11 @@ class PMListAction extends MobcentAction {
                 $pmLimit = $info['pmLimit'] > 0 ? (int)$info['pmLimit'] : 15;
                 $userInfo = $this->_getUserInfo($info['fromUid']);
                 $msgList = $this->_getPMMsgList(
-                    $uid, $info['fromUid'], 
-                    $startTime, $stopTime, 
+                    $uid, $info['fromUid'],
+                    $startTime, $stopTime,
                     $cacheCount, $pmLimit, $isFilter
                 );
-                
+
                 $pmInfo['fromUid'] = (int)$userInfo['uid'];
                 $pmInfo['name'] = $userInfo['name'];
                 $pmInfo['avatar'] = $userInfo['avatar'];
@@ -80,7 +80,7 @@ class PMListAction extends MobcentAction {
         $plid = 0;
 
         loaducenter();
-        
+
         $tempMsgList = array();
         if ($stopTime == 0) { // 获取新的消息
             if ($startTime == 0) { // 获取新的消息
@@ -101,7 +101,7 @@ class PMListAction extends MobcentAction {
                     }
                     $tempMsgList = array_slice($tempMsgList, $offset);
                 }
-            }         
+            }
         } else if ($stopTime) { // 获取历史的消息
             $count = (int)uc_pm_view_num($uid, $fromUid, 0);
             $lastPage = (int)(($count-1)/$pmLimit) + 1;

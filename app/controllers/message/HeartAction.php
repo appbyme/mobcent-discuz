@@ -15,9 +15,9 @@ class HeartAction extends MobcentAction {
 
     public function run() {
         $res = WebUtils::initWebApiArray_oldVersion();
-        
+
         $uid = $this->getController()->uid;
-        
+
         // get reply info
         $res['body']['replyInfo'] = $this->_getNotifyInfo($uid, 'post');
 
@@ -33,7 +33,7 @@ class HeartAction extends MobcentAction {
         if (($pmPeriod = WebUtils::getDzPluginAppbymeAppConfig('message_pm_period')) <= 0) {
             $pmPeriod = 20;
         }
-    
+
         $res['body']['externInfo']['heartPeriod'] = $heartPeriod . '000';
         $res['body']['externInfo']['pmPeriod'] = $pmPeriod . '000';
 
@@ -46,7 +46,7 @@ class HeartAction extends MobcentAction {
             FROM %t
             WHERE uid=%d AND type=%s AND new=%d
             ORDER BY dateline DESC
-            ', 
+            ',
             array('home_notification', $uid, $type, 1)
         );
 
