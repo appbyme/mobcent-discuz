@@ -26,11 +26,11 @@ class InitUIAction extends MobcentAction
             'navigation' => array(
                 'type' => 'bottom',
                 'navItemList' => array(
-                    array('moduleId' => 1, 'title' => WebUtils::t('首页'), 'icon' => 'nav_icon_1'),
-                    array('moduleId' => 2, 'title' => WebUtils::t('社区'), 'icon' => 'nav_icon_2'),
-                    array('moduleId' => 3, 'title' => WebUtils::t(''), 'icon' => 'nav_icon_3'),
-                    array('moduleId' => 4, 'title' => WebUtils::t('消息'), 'icon' => 'nav_icon_4'),
-                    array('moduleId' => 5, 'title' => WebUtils::t('发现'), 'icon' => 'nav_icon_5'),
+                    array('moduleId' => 1, 'title' => WebUtils::t('首页'), 'icon' => 'mc_forum_main_bar_button1'),
+                    array('moduleId' => 2, 'title' => WebUtils::t('社区'), 'icon' => 'mc_forum_main_bar_button1'),
+                    array('moduleId' => 3, 'title' => WebUtils::t(''), 'icon' => 'mc_forum_main_bar_button1'),
+                    array('moduleId' => 4, 'title' => WebUtils::t('消息'), 'icon' => 'mc_forum_main_bar_button1'),
+                    array('moduleId' => 5, 'title' => WebUtils::t('发现'), 'icon' => 'mc_forum_main_bar_button1'),
                 )
             ),
             'moduleList' => array(
