@@ -58,7 +58,7 @@ class ServerNotifyAction extends MobcentAction
         );
 
         AppbymeConfig::saveDownloadOptions($appInfo);
-        AppbymeConfig::saveForumkey($temRes);
+        AppbymeConfig::saveForumkey($temRes['forumKey']);
         return $res; 
     }
 
