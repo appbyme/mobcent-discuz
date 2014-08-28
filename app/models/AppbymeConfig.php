@@ -36,4 +36,24 @@ class AppbymeConfig extends DiscuzAR {
         );
         return $data ? (array)unserialize($data) : array();
     }
+
+    public static function saveDownloadOptions($appInfo) {
+        $appDownloadOptions = array('ckey' => 'app_download_options', 'cvalue' => serialize($appInfo));
+        $tempData = DB::fetch_first("SELECT * FROM ".DB::table('appbyme_config')." WHERE ckey='app_download_options'");
+        if (empty($tempData)) {
+            DB::insert('appbyme_config', $appDownloadOptions);
+        } else {
+            DB::update('appbyme_config', $appDownloadOptions, array('ckey' => 'app_download_options'));
+        }
+    }
+
+    public static function saveForumkey($temRes) {
+        $appForumKey = array('ckey' => 'app_forumkey', 'cvalue' => $temRes['forumKey']);
+        $tempData = DB::fetch_first("SELECT * FROM ".DB::table('appbyme_config')." WHERE ckey='app_forumkey'");
+        if (empty($tempData)) {
+            DB::insert('appbyme_config', $appForumKey);
+        } else {
+            DB::update('appbyme_config', $appForumKey, array('ckey' => 'app_forumkey'));
+        }
+    }
 }
