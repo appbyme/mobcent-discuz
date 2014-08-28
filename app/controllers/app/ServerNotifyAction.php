@@ -35,7 +35,7 @@ class ServerNotifyAction extends MobcentAction
     private function _doNewApp($res, $appKey)
     {
         // $url = 'http://192.168.1.211:9797/mobcentACA/app/wAMkQjefj3HPHsrfCk/profile';
-        $url = 'http://www.appbyme.com/app/'.$appKey.'/profile';
+        $url = 'http://www.appbyme.com/mobcentACA/app/'.$appKey.'/profile';
         $temRes = WebUtils::httpRequest($url, 15);
         $temRes = WebUtils::jsonDecode($temRes);
         $appInfo = array(
@@ -59,6 +59,7 @@ class ServerNotifyAction extends MobcentAction
 
         AppbymeConfig::saveDownloadOptions($appInfo);
         AppbymeConfig::saveForumkey($temRes['forumKey']);
+        
         return $res; 
     }
 
