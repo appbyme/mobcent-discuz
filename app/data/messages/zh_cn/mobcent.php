@@ -68,6 +68,7 @@ return array(
     'post_message_toolong' => WebUtils::t('00500026:抱歉，您的帖子超过 {maxpostsize} 个字符的限制'),
     'post_reply_mod_succeed' => WebUtils::t('00500027:回复需要审核，请等待通过'),
     'replyperm_upgrade_nopermission' => WebUtils::t('00500028:抱歉，您需要升级所在的用户组后才能回帖'),
+    'postperm_upgrade_nopermission' => WebUtils::t('00500029:抱歉，您需要升级所在的用户组后才能发帖'),
     'post_not_found' => WebUtils::t('00600000:没有找到帖子'),
 
     // 文章评论 errcode: 010xxxxx
