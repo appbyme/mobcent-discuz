@@ -45,8 +45,8 @@ defined('MOBCENT_ERROR_DEFAULT') or define('MOBCENT_ERROR_DEFAULT', '11100001');
 class Mobcent {
 
     public static function setErrors($open=1, $level=E_ALL) {
-        ini_set('display_errors', $open);
-        error_reporting($level);
+        @ini_set('display_errors', $open);
+        @error_reporting($level);
     }
 
     public static function dumpSql() {
