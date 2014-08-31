@@ -15,7 +15,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 class ForumListAction extends MobcentAction {
 
     public function run($fid=0) {
-        $key = CacheUtils::getForumListKey(array($fid));
+        global $_G;
+        $key = CacheUtils::getForumListKey(array($fid, $_G['groupid']));
         $this->runWithCache($key, array('fid' => $fid));
     }
 
