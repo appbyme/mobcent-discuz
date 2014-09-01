@@ -66,7 +66,7 @@ class PortalController {
         showtableheader(Appbyme::lang('mobcent_portal_module_setting'));
         showsubtitle(array(
             '', 'display_order',
-            Appbyme::lang('mobcent_portal_module_name'), 
+            Appbyme::lang('mobcent_portal_module_name'),
         ));
 
         $moduleList = PortalModule::getModules();
@@ -75,15 +75,15 @@ class PortalController {
                 sprintf('<input type="checkbox" class="checkbox" name="delete[]" value="%d" />', $module['mid']),
                 sprintf('<input type="text" class="txt" size="2" name="displayorder_new[%d]" value="%d" />', $module['mid'], $module['displayorder']),
                 sprintf('<input type="text" size="30" name="name_new[%d]" value="%s" />', $module['mid'], $module['name']),
-                sprintf('<a href="%s?%s&anchor=source&moduleid=%d" target="_self" class="act">%s</a>', 
-                    ADMINSCRIPT, $url, $module['mid'], 
+                sprintf('<a href="%s?%s&anchor=source&moduleid=%d" target="_self" class="act">%s</a>',
+                    ADMINSCRIPT, $url, $module['mid'],
                     Appbyme::lang('mobcent_portal_module_source_edit')
                 ),
-                sprintf('<a href="%s?%s&anchor=slider&moduleid=%d" target="_self" class="act">%s</a>', 
+                sprintf('<a href="%s?%s&anchor=slider&moduleid=%d" target="_self" class="act">%s</a>',
                     ADMINSCRIPT, $url, $module['mid'],
                     Appbyme::lang('mobcent_portal_module_slider_edit')
                 ),
-                sprintf('<a href="%s?%s&anchor=module_param&moduleid=%d" target="_self" class="act">%s</a>', 
+                sprintf('<a href="%s?%s&anchor=module_param&moduleid=%d" target="_self" class="act">%s</a>',
                     ADMINSCRIPT, $url, $module['mid'],
                     Appbyme::lang('mobcent_portal_module_param_edit')
                 ),
@@ -118,7 +118,7 @@ class PortalController {
 
         $disableSourceTypeFid = PortalModule::getSourceCount($mid, PortalModule::SOURCE_TYPE_NORMAL, array('idtype' => array(PortalModule::SOURCE_TYPE_CATID))) > 0;
         $disableSourceTypeCatid = PortalModule::getSourceCount($mid, PortalModule::SOURCE_TYPE_NORMAL, array('idtype' => array(PortalModule::SOURCE_TYPE_FID))) > 0;
-        
+
         $sourceCount = PortalModule::getSourceCount($mid);
         $sourceList = PortalModule::getSources($mid, PortalModule::SOURCE_TYPE_NORMAL, $page, $pagesize);
         foreach ($sourceList as $source) {
@@ -130,6 +130,7 @@ class PortalController {
                     <select name="idtype_new[%d]">
                         <option value="%s" %s>%s</option>
                         <option value="%s" %s>%s</option>
+                        <option value="%s" %s>%s</option>
                         <option value="%s" %s %s>%s</option>
                         <option value="%s" %s %s>%s</option>
                     </select>',
@@ -137,9 +138,12 @@ class PortalController {
                     PortalModule::SOURCE_TYPE_AID,
                     $source['idtype'] == PortalModule::SOURCE_TYPE_AID ? 'selected' : '',
                     Appbyme::lang('mobcent_portal_module_source_type_aid'),
-                    PortalModule::SOURCE_TYPE_TID,                
+                    PortalModule::SOURCE_TYPE_TID,
                     $source['idtype'] == PortalModule::SOURCE_TYPE_TID ? 'selected' : '',
                     Appbyme::lang('mobcent_portal_module_source_type_tid'),
+                    PortalModule::SOURCE_TYPE_BID,
+                    $source['idtype'] == PortalModule::SOURCE_TYPE_BID ? 'selected' : '',
+                    Appbyme::lang('mobcent_portal_module_source_type_bid'),
                     PortalModule::SOURCE_TYPE_FID,
                     $source['idtype'] == PortalModule::SOURCE_TYPE_FID ? 'selected' : '',
                     $disableSourceTypeFid ? 'disabled' : '',
@@ -153,19 +157,20 @@ class PortalController {
             ));
         }
         $multipage = multi(
-            $sourceCount, $pagesize, $page, 
-            sprintf('%s?%s&pagesize=%d', ADMINSCRIPT, $url, $pagesize), 
+            $sourceCount, $pagesize, $page,
+            sprintf('%s?%s&pagesize=%d', ADMINSCRIPT, $url, $pagesize),
             0, 6
         );
 
         showtablerow('', array('class="td25"', 'class="td28"'), array(
             cplang('add_new'),
             sprintf('<input type="text" class="txt" size="2" maxlength="4" name="new_displayorder" value="" />'),
-            sprintf('<input type="text" size="40" name="new_ids" value="" />%s', 
+            sprintf('<input type="text" size="40" name="new_ids" value="" />%s',
                 Appbyme::lang('mobcent_tips_portal_module_source_add')
             ),
             sprintf('
                 <select name="new_idtype">
+                    <option value="%s">%s</option>
                     <option value="%s">%s</option>
                     <option value="%s">%s</option>
                     <option value="%s" %s>%s</option>
@@ -173,8 +178,10 @@ class PortalController {
                 </select>',
                 PortalModule::SOURCE_TYPE_AID,
                 Appbyme::lang('mobcent_portal_module_source_type_aid'),
-                PortalModule::SOURCE_TYPE_TID,                
+                PortalModule::SOURCE_TYPE_TID,
                 Appbyme::lang('mobcent_portal_module_source_type_tid'),
+                PortalModule::SOURCE_TYPE_BID,
+                Appbyme::lang('mobcent_portal_module_source_type_bid'),
                 PortalModule::SOURCE_TYPE_FID,
                 $disableSourceTypeFid ? 'disabled' : '',
                 Appbyme::lang('mobcent_portal_module_source_type_fid'),
@@ -212,6 +219,7 @@ class PortalController {
                         <option value="%s" %s>%s</option>
                         <option value="%s" %s>%s</option>
                         <option value="%s" %s>%s</option>
+                        <option value="%s" %s>%s</option>
                     </select>',
                     $slider['sid'],
                     PortalModule::SOURCE_TYPE_AID,
@@ -219,37 +227,47 @@ class PortalController {
                     Appbyme::lang('mobcent_portal_module_source_type_aid'),
                     PortalModule::SOURCE_TYPE_TID,
                     $slider['idtype'] == PortalModule::SOURCE_TYPE_TID ? 'selected' : '',
-                    Appbyme::lang('mobcent_portal_module_source_type_tid'), 
+                    Appbyme::lang('mobcent_portal_module_source_type_tid'),
                     PortalModule::SOURCE_TYPE_URL,
                     $slider['idtype'] == PortalModule::SOURCE_TYPE_URL ? 'selected' : '',
-                    'url'
+                    'url',
+                    PortalModule::SOURCE_TYPE_BID,
+                    $slider['idtype'] == PortalModule::SOURCE_TYPE_BID ? 'selected' : '',
+                    Appbyme::lang('mobcent_portal_module_source_type_bid')
                 ),
                 sprintf(
-                    '<input type="text" size="50" name="id_new[%d]" value="%s" />', 
-                    $slider['sid'], 
+                    '<input type="text" size="50" name="id_new[%d]" value="%s" />',
+                    $slider['sid'],
                     $slider['idtype'] == PortalModule::SOURCE_TYPE_URL ? $slider['url'] : $slider['id']
                 ),
                 sprintf('
-                    <select name="imgtype_new[%d]">
+                    <select name="imgtype_new[%d]" %s>
                         <option value="%s" %s>%s</option>
                         <option value="%s" %s>%s</option>
                         <option value="%s" %s>%s</option>
+                        <option value="%s" %s %s>%s</option>
                     </select>',
                     $slider['sid'],
+                    $slider['imgtype'] == PortalModule::SOURCE_TYPE_BID ? 'disabled' : '',
                     PortalModule::SOURCE_TYPE_AID,
                     $slider['imgtype'] == PortalModule::SOURCE_TYPE_AID ? 'selected' : '',
                     Appbyme::lang('mobcent_portal_module_source_type_aid'),
                     PortalModule::SOURCE_TYPE_TID,
                     $slider['imgtype'] == PortalModule::SOURCE_TYPE_TID ? 'selected' : '',
-                    Appbyme::lang('mobcent_portal_module_source_type_tid'), 
+                    Appbyme::lang('mobcent_portal_module_source_type_tid'),
                     PortalModule::SOURCE_TYPE_URL,
                     $slider['imgtype'] == PortalModule::SOURCE_TYPE_URL ? 'selected' : '',
-                    'url'
+                    'url',
+                    PortalModule::SOURCE_TYPE_BID,
+                    $slider['imgtype'] == PortalModule::SOURCE_TYPE_BID ? 'selected' : '',
+                    $slider['imgtype'] != PortalModule::SOURCE_TYPE_BID ? 'disabled' : '',
+                    Appbyme::lang('mobcent_portal_module_source_type_bid')
                 ),
                 sprintf(
-                    '<input type="text" size="50" name="imgid_new[%d]" value="%s" />', 
+                    '<input type="text" size="50" name="imgid_new[%d]" value="%s" %s />',
                     $slider['sid'],
-                    $slider['imgtype'] == PortalModule::SOURCE_TYPE_URL ? $slider['imgurl'] : $slider['imgid']
+                    $slider['imgtype'] == PortalModule::SOURCE_TYPE_URL ? $slider['imgurl'] : $slider['imgid'],
+                    $slider['imgtype'] == PortalModule::SOURCE_TYPE_BID ? 'disabled' : ''
                 ),
             ));
         }
@@ -263,13 +281,16 @@ class PortalController {
                         <option value="%s">%s</option>
                         <option value="%s">%s</option>
                         <option value="%s">%s</option>
+                        <option value="%s">%s</option>
                     </select>',
                     PortalModule::SOURCE_TYPE_AID,
                     Appbyme::lang('mobcent_portal_module_source_type_aid'),
                     PortalModule::SOURCE_TYPE_TID,
-                    Appbyme::lang('mobcent_portal_module_source_type_tid'), 
+                    Appbyme::lang('mobcent_portal_module_source_type_tid'),
                     PortalModule::SOURCE_TYPE_URL,
-                    'url'
+                    'url',
+                    PortalModule::SOURCE_TYPE_BID,
+                    Appbyme::lang('mobcent_portal_module_source_type_bid')
                 ),
                 sprintf('<input type="text" size="50" name="new_id" value="" />'),
                 sprintf('
@@ -277,13 +298,16 @@ class PortalController {
                         <option value="%s">%s</option>
                         <option value="%s">%s</option>
                         <option value="%s">%s</option>
+                        <option value="%s">%s</option>
                     </select>',
                     PortalModule::SOURCE_TYPE_AID,
                     Appbyme::lang('mobcent_portal_module_source_type_aid'),
                     PortalModule::SOURCE_TYPE_TID,
-                    Appbyme::lang('mobcent_portal_module_source_type_tid'), 
+                    Appbyme::lang('mobcent_portal_module_source_type_tid'),
                     PortalModule::SOURCE_TYPE_URL,
-                    'url'
+                    'url',
+                    PortalModule::SOURCE_TYPE_BID,
+                    Appbyme::lang('mobcent_portal_module_source_type_bid')
                 ),
                 sprintf('<input type="text" size="50" name="new_imgid" value="" />')
             ));
@@ -303,12 +327,26 @@ class PortalController {
         </style>';
         echo $style;
         showtagheader('div', 'slider_images_wrapper', true);
+        $blockSliderList = array();
         foreach ($sliderList as $slider) {
-            echo sprintf(
-                '<div class="slider_image"><a href="%s" target="_blank"><img src="%s" alt="%s"><span>%s</span><em></em></a></div>', 
+            if ($slider['idtype'] == PortalModule::SOURCE_TYPE_BID) {
+                $blockSliderList[$slider['id']] = $slider;
+            } else {
+                echo sprintf(
+                '<div class="slider_image"><a href="%s" target="_blank"><img src="%s" alt="%s"><span>%s</span><em></em></a></div>',
                 $slider['url'], $slider['imgurl'], $slider['title'], $slider['title']);
+            }
         }
         showtagfooter('div');
+
+        if (!empty($blockSliderList)) {
+            block_get(array_keys($blockSliderList));
+            echo '<div align="center">';
+            foreach ($blockSliderList as $slider) {
+                block_display($slider['id']);
+            }
+            echo '</div>';
+        }
     }
 
     public static function showModuleParamView() {
@@ -318,7 +356,7 @@ class PortalController {
         $showSourceTypeCatid = PortalModule::getSourceCount($mid, PortalModule::SOURCE_TYPE_NORMAL, array('idtype' => array(PortalModule::SOURCE_TYPE_CATID))) > 0;
 
         !$showSourceTypeFid && !$showSourceTypeCatid && cpmsg(Appbyme::lang('mobcent_error_portal_module_param'), '', 'error');
-        
+
         showtagheader('div', 'portal_module_param', true);
         showtableheader(Appbyme::lang('mobcent_portal_module_param_edit'));
 
@@ -330,11 +368,11 @@ class PortalController {
         $topicStyleLang = explode(',', Appbyme::lang('mobcent_portal_module_param_topic_style'));
 
         $articleOrderbyLang = explode(',', Appbyme::lang('mobcent_portal_module_param_article_ordby'));
-        
+
         $module = PortalModule::getModule($mid);
         $param = unserialize($module['param']);
         $param == false && $param = PortalModule::initModuleParam();
-        
+
         if ($showSourceTypeFid) {
             showsetting($digestLang[0], array('param[topic_digest]', array(
                 array(1, $digestLang[1]),
@@ -356,8 +394,8 @@ class PortalController {
                 array(5, $specialLang[5]),
                 array(0, $specialLang[6]),
             )), $param['topic_special'], 'mcheckbox', '', 0, '', '', '', true);
-            showsetting(Appbyme::lang('mobcent_portal_module_param_topic_picrequired'), 
-                'param[topic_picrequired]', $param['topic_picrequired'], 
+            showsetting(Appbyme::lang('mobcent_portal_module_param_topic_picrequired'),
+                'param[topic_picrequired]', $param['topic_picrequired'],
                 'radio', '', 0, '', '', '', true
             );
             showsetting($topicOrderbyLang[0], array('param[topic_orderby]', array(
@@ -368,13 +406,13 @@ class PortalController {
                 array('heats', $topicOrderbyLang[5]),
                 array('recommends', $topicOrderbyLang[6]),
             )), $param['topic_orderby'], 'select', '', 0, '', '', '', true);
-            showsetting(Appbyme::lang('mobcent_portal_module_param_topic_postdateline'), array('param[topic_postdateline]', array(
+            showsetting(Appbyme::lang('mobcent_portal_module_param_topic_POSTdateline'), array('param[topic_POSTdateline]', array(
                 array(0, $timeLang[0]),
                 array(3600, $timeLang[1]),
                 array(86400, $timeLang[2]),
                 array(604800, $timeLang[3]),
                 array(2592000, $timeLang[4]),
-            )), $param['topic_postdateline'], 'select', '', 0, '', '', '', true);
+            )), $param['topic_POSTdateline'], 'select', '', 0, '', '', '', true);
             showsetting(Appbyme::lang('mobcent_portal_module_param_topic_lastpost'), array('param[topic_lastpost]', array(
                 array(0, $timeLang[0]),
                 array(3600, $timeLang[1]),
@@ -394,12 +432,12 @@ class PortalController {
                 'radio', '', 0, '', '', '', true
             );
             showsetting(Appbyme::lang('mobcent_portal_module_param_article_starttime'),
-                'param[article_starttime]', 
+                'param[article_starttime]',
                 $param['article_starttime'] ? dgmdate($param['article_starttime'], 'Y-n-j H:i') : '',
                 'calendar', '', 0, '', 1, '', true
             );
             showsetting(Appbyme::lang('mobcent_portal_module_param_article_endtime'),
-                'param[article_endtime]', 
+                'param[article_endtime]',
                 $param['article_endtime'] ? dgmdate($param['article_endtime'], 'Y-n-j H:i') : '',
                 'calendar', '', 0, '', 1, '', true
             );
@@ -488,7 +526,7 @@ class PortalController {
         if (!empty($_POST['displayorder_new'])) {
             foreach ($_POST['displayorder_new'] as $id => $displayorder) {
                 $source = PortalModule::getSourceInfo(
-                    $_POST['id_new'][$id], $_POST['idtype_new'][$id], 
+                    $_POST['id_new'][$id], $_POST['idtype_new'][$id],
                     $_POST['imgid_new'][$id], $_POST['imgtype_new'][$id],
                     $_POST['title_new'][$id]
                 );
@@ -497,6 +535,10 @@ class PortalController {
             }
         }
         // 增加新幻灯片
+        if (!empty($_POST['new_id']) && $_POST['new_idtype'] == PortalModule::SOURCE_TYPE_BID) {
+            $_POST['new_imgid'] = $_POST['new_id'];
+            $_POST['new_imgtype'] = $_POST['new_idtype'];
+        }
         if (!empty($_POST['new_id']) && !empty($_POST['new_imgid'])) {
             $source = PortalModule::getSourceInfo(
                 $_POST['new_id'], $_POST['new_idtype'],
@@ -552,23 +594,24 @@ class PortalModule {
     const SOURCE_TYPE_FID = 'fid';
     const SOURCE_TYPE_CATID = 'catid';
     const SOURCE_TYPE_URL = 'url';
+    const SOURCE_TYPE_BID = 'bid';
 
     public static function getModules() {
         return DB::fetch_all('
             SELECT *
             FROM %t
             ORDER BY displayorder ASC
-            ', 
+            ',
             array('appbyme_portal_module')
         );
     }
-    
+
     public static function getModule($mid) {
         return DB::fetch_first('
             SELECT *
             FROM %t
             WHERE mid=%d
-            ', 
+            ',
             array('appbyme_portal_module', $mid)
         );
     }
@@ -580,7 +623,7 @@ class PortalModule {
             'topic_special' => '',
             'topic_picrequired' => 0,
             'topic_orderby' => 'lastpost',
-            'topic_postdateline' => 0,
+            'topic_POSTdateline' => 0,
             'topic_lastpost' => 0,
             'topic_style' => 0,
             'article_picrequired' => 0,
@@ -601,27 +644,28 @@ class PortalModule {
 
     public static function deleteModules($mids) {
         DB::delete('appbyme_portal_module', array(
-            'where' => 'mid IN (%n)', 
+            'where' => 'mid IN (%n)',
             'arg' => array($mids)
         ));
         DB::delete('appbyme_portal_module_source', array(
-            'where' => 'mid IN (%n)', 
+            'where' => 'mid IN (%n)',
             'arg' => array($mids)
         ));
     }
 
-    public static function getSourceCount($mid, $type=self::SOURCE_TYPE_NORMAL, 
+    public static function getSourceCount($mid, $type=self::SOURCE_TYPE_NORMAL,
                                         $params=array('idtype' => array(
                                             self::SOURCE_TYPE_AID,
                                             self::SOURCE_TYPE_TID,
                                             self::SOURCE_TYPE_FID,
                                             self::SOURCE_TYPE_CATID,
                                             self::SOURCE_TYPE_URL,
+                                            self::SOURCE_TYPE_BID,
                                         ))) {
         $count = DB::fetch_first('
             SELECT COUNT(*) AS count
             FROM %t
-            WHERE mid=%d AND type=%d 
+            WHERE mid=%d AND type=%d
             AND idtype IN (%n)
             ',
             array('appbyme_portal_module_source', $mid, $type, $params['idtype'])
@@ -636,7 +680,7 @@ class PortalModule {
             WHERE mid=%d AND type=%d
             ORDER BY displayorder ASC
             LIMIT %d, %d
-            ', 
+            ',
             array('appbyme_portal_module_source', $mid, $type, ($page-1)*$pagesize, $pagesize)
         );
     }
@@ -658,7 +702,7 @@ class PortalModule {
 
     public static function getSourceInfo($id, $idtype, $imgid=0, $imgtype='', $title='') {
         $source = array(
-            'id' => 0, 'url' => '', 'idtype' => $idtype, 
+            'id' => 0, 'url' => '', 'idtype' => $idtype,
             'imgid' => 0, 'imgurl' => '', 'imgtype' => $imgtype,
             'title' => '',
         );
@@ -669,7 +713,7 @@ class PortalModule {
                     FROM %t
                     WHERE aid=%d
                     ',
-                    array('portal_article_title', $id) 
+                    array('portal_article_title', $id)
                 );
                 $source['id'] = $id;
                 $source['url'] = 'portal.php?mod=view&aid='.$id;
@@ -681,7 +725,7 @@ class PortalModule {
                     FROM %t
                     WHERE tid=%d
                     ',
-                    array('forum_thread', $id) 
+                    array('forum_thread', $id)
                 );
                 $source['id'] = $id;
                 $source['url'] = 'forum.php?mod=viewthread&tid='.$id;
@@ -690,13 +734,26 @@ class PortalModule {
             case self::SOURCE_TYPE_URL:
                 $source['url'] = $id;
                 break;
+            case self::SOURCE_TYPE_BID:
+                $block = DB::fetch_first('
+                    SELECT name
+                    FROM %t
+                    WHERE bid=%d
+                    ',
+                    array('common_block', $id)
+                );
+                $source['id'] = $id;
+                $source['title'] = !empty($block['name']) ? $block['name'] : '';
+                $source['imgid'] = $id;
+                $source['imgtype'] = $idtype;
+                break;
             case self::SOURCE_TYPE_FID:
                 $forum = DB::fetch_first('
                     SELECT name
                     FROM %t
                     WHERE fid=%d
                     ',
-                    array('forum_forum', $id) 
+                    array('forum_forum', $id)
                 );
                 $source['id'] = $id;
                 $source['url'] = 'forum.php?mod=forumdisplay&fid='.$id;
@@ -708,7 +765,7 @@ class PortalModule {
                     FROM %t
                     WHERE catid=%d
                     ',
-                    array('portal_category', $id) 
+                    array('portal_category', $id)
                 );
                 $source['id'] = $id;
                 $source['url'] = 'portal.php?mod=list&catid='.$id;
@@ -754,6 +811,12 @@ class PortalModule {
                 break;
             case PortalModule::SOURCE_TYPE_URL:
                 $source['imgurl'] = $imgid;
+                break;
+            case self::SOURCE_TYPE_BID:
+                if ($source['idtype'] != PortalModule::SOURCE_TYPE_BID) {
+                    $source['imgid'] = $id;
+                    $source['imgtype'] = $idtype;
+                }
                 break;
             default:
                 break;
