@@ -14,7 +14,8 @@ $scriptlang[APPBYME_DZ_PLUGIN_ID] = array(
     'mobcent_thumb_task_length' => '当前缩略图后台任务数',
     'mobcent_tips_portal_module_source' => '
         <li>版块id与文章栏目id不能同时存在, 只能二者选一</li>
-        <li>当 文章id/帖子id 与版块id/文章栏目id 都有存在时, 文章id/帖子id 会类似置顶的效果，排在 版块id/文章栏目id 数据前面</li>
+        <li>模块id为指的通过discuz页面diy产生的模块id</li>
+        <li>当 文章id/帖子id/模块id 与版块id/文章栏目id 都有存在时, 文章id/帖子id/模块id 会类似置顶的效果，排在 版块id/文章栏目id 数据前面</li>
     ',
     'mobcent_tips_portal_module_source_add' => '(可添加多个id,用`,`隔开)',
     'mobcent_tips_extcredit_base' => '奖励基数, 客户端会在本来奖励的基础上乘以该数字, 请注意，你只能输入数字, 并且1代表0.01, 100代表1, 即该数会在设置的基础上乘以0.01',
@@ -59,6 +60,7 @@ $scriptlang[APPBYME_DZ_PLUGIN_ID] = array(
     'mobcent_portal_module_source_type_tid' => '帖子id',
     'mobcent_portal_module_source_type_fid' => '版块id',
     'mobcent_portal_module_source_type_catid' => '文章栏目id',
+    'mobcent_portal_module_source_type_bid' => 'DIY模块id',
     'mobcent_portal_module_slider_type' => '图片来源类别',
     'mobcent_portal_module_slider_title' => '幻灯片标题',
     'mobcent_infomation_appbyme' => '安米mobcent.zip转换接口包信息',
