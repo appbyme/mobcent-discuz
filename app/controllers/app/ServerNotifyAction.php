@@ -36,7 +36,7 @@ class ServerNotifyAction extends MobcentAction
     {
         // $url = 'http://192.168.1.211:9797/mobcentACA/app/wAMkQjefj3HPHsrfCk/profile';
         $url = 'http://www.appbyme.com/mobcentACA/app/'.$appKey.'/profile';
-        $temRes = WebUtils::httpRequest($url, 15);
+        $temRes = WebUtils::httpRequest($url, 30);
         $temRes = WebUtils::jsonDecode($temRes);
         $appInfo = array(
             'appName' => WebUtils::t($temRes['appName']),

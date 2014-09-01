@@ -148,4 +148,5 @@ return array(
     'recommend_succed' => WebUtils::t('00000000:评价指数 {recommendc} {recommendv}'),
     'noreply_yourself_error' => WebUtils::t('07000006:您不能对自己的回帖进行投票'),
     'noreply_voted_error' => WebUtils::t('07000007:您已经对此回帖投过票了'),
+    'recommend_daycount_succeed' => WebUtils::t('07000008:评价指数 {recommendc} {recommendv} 您今天还能评价 {daycount} 次'),
 );
