@@ -596,16 +596,20 @@ class ForumUtils {
                 $tempAttachUrlMatches = $tempAttachTitleMatches = $tempAttachDescMatches = $tempImgMatches = array();
 
                 // 处理附件下载
-                preg_match("/<strong>(.+?)<\/strong>/", $matches[0], $tempAttachTitleMatches);
-                $title = !empty($tempAttachTitleMatches) ? $tempAttachTitleMatches[1] : "";
+                // preg_match("/<strong>(.+?)<\/strong>/", $matches[0], $tempAttachTitleMatches);
+                // $title = !empty($tempAttachTitleMatches) ? $tempAttachTitleMatches[1] : "";
 
                 preg_match("/<a.*?href=\"(.+?)\".*?>(.+?)<\/a>/", $matches[0], $tempAttachUrlMatches);
                 if (!empty($tempAttachUrlMatches)) {
                     $url = WebUtils::getHttpFileName($tempAttachUrlMatches[1]);
                     preg_match("/<em.*?>(.+?)<\/em>/", $matches[0], $tempAttachDescMatches);
                     $desc = !empty($tempAttachDescMatches) ? $tempAttachDescMatches[1] : "";
-                    $title == "" && $title = $tempAttachUrlMatches[2];
-                    $attachment .= "[mobcent_br]<br />[mobcent_attachment={$url}(title={$title})(desc={$tempAttachDescMatches[1]})]<br />";
+                    $title = $tempAttachUrlMatches[2];
+                    if ($desc == "") {
+                        preg_match("/<div class=\"tip_horn\">.*?<p>(.+?)<\/p>/", $matches[0], $tempAttachDescMatches);
+                        $desc = !empty($tempAttachDescMatches) ? $tempAttachDescMatches[1] : "";
+                    }
+                    $desc != "" && $attachment .= "[mobcent_br]<br />[mobcent_attachment={$url}(title={$title})(desc={$tempAttachDescMatches[1]})]<br />";
                 }
 
                 // 处理图片附件
@@ -700,6 +704,7 @@ class ForumUtils {
                                 $msg['extraInfo']['url'] = $tempAttachMatches[1];
                                 $msg['extraInfo']['desc'] = $tempAttachMatches[3];
                             }
+                            break;
                         default: $msg['content'] = ''; break;
                     }
                 }
