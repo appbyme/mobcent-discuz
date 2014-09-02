@@ -13,7 +13,7 @@ if (!defined('IN_DISCUZ')) {
 }
 
 class Appbyme {
-    
+
     const PLUGIN_ID = 'appbyme_app';
     const APPBYME_URL = 'http://appbyme.com';
 
@@ -41,11 +41,11 @@ class Appbyme {
 
             global $_G;
             self::$config = $_G['cache']['plugin'][self::PLUGIN_ID];
-            
+
             self::$_isInit = true;
         }
     }
-    
+
     protected static function checkInstalled() {
         if (!self::isInstalled()) {
             cpmsg(self::lang('mobcent_error_not_installed'), '', 'error');
@@ -69,7 +69,7 @@ class Appbyme {
         $str = str_replace("\n", $replace, $str);
         return $str;
     }
-    
+
     public static function setErrors($open=1, $level=E_ALL) {
         ini_set('display_errors', $open);
         error_reporting($level);
@@ -99,9 +99,9 @@ class Appbyme {
             if (!empty($matches)) {
                 foreach ($matches as $matches) {
                     switch ($matches[1]) {
-                        case 'version': 
+                        case 'version':
                         case 'release':
-                            $version['mobcent_'.$matches[1]] = $matches[2]; 
+                            $version['mobcent_'.$matches[1]] = $matches[2];
                             break;
                         default: break;
                     }
@@ -124,7 +124,7 @@ class Appbyme {
         $updateTime = self::$config['cache_update_time'];
         $updateCachePeriod = self::$config['cache_update_period'];
         $lastUpdateTime = self::getDzPluginCache('cache_update_time');
-        
+
         $needUpdate = false;
         // 自动定时更新
         $matches = array();
@@ -148,7 +148,7 @@ class Appbyme {
         $thumbTaskLength = self::$config['image_thumb_task_length'];
         $lastMakeTime = self::getDzPluginCache('thumb_make_time');
         $thumbTaskList = self::getDzPluginCache('thumb_task_list');
-        if (self::$config['image_isthumb'] == 1 && 
+        if (self::$config['image_isthumb'] == 1 &&
             !empty($thumbTaskList) &&
             $makeThumbPeriod > 0 &&
             time()-$lastMakeTime > $makeThumbPeriod) {
@@ -158,7 +158,7 @@ class Appbyme {
 
     /**
      * 更新缓存
-     * 
+     *
      * @param int $fid 版块id, 0则为全部版块.
      * @param int $gid 用户组id, 0则为全部用户组.
      *
@@ -193,7 +193,7 @@ class Appbyme {
     }
 
     public static function httpRequestAppAPI($route, $params=array()) {
-        return mobcent_dfsockopen(self::createAppApiUrl($route, $params), array());
+        return appbyme_dfsockopen(self::createAppApiUrl($route, $params), array());
     }
 
     public static function getDzPluginCache($key = '') {
@@ -235,7 +235,7 @@ class Appbyme {
             return DB::update('appbyme_config', array('cvalue' => $data), array('ckey' => $key));
         }
     }
-    
+
     public static function getSeoSetting($page, $data = array(), $defset = array()) {
         global $_G;
         $searchs = array('{bbname}');
@@ -281,11 +281,11 @@ class Appbyme {
         $defPostSign = array(
             'forumdisplay_thread' => array(
                 'android' => '<img src="mobcent/app/web/images/mobile/mobile-attach-1.png" alt="android" align="absmiddle">',
-                'apple' => '<img src="mobcent/app/web/images/mobile/mobile-attach-1.png" alt="apple" align="absmiddle">',                
+                'apple' => '<img src="mobcent/app/web/images/mobile/mobile-attach-1.png" alt="apple" align="absmiddle">',
             ),
             'viewthread_post' => array(
                 'android' => sprintf('<a href="%s" target="_blank">%s</a>', $defDownUrl, self::t('来自安卓手机客户端')),
-                'apple' => sprintf('<a href="%s" target="_blank">%s</a>', $defDownUrl, self::t('来自苹果手机客户端')),                
+                'apple' => sprintf('<a href="%s" target="_blank">%s</a>', $defDownUrl, self::t('来自苹果手机客户端')),
             ),
             'viewthread_avatar' => array(
                 'android' => '<div><img style="margin: -145px 0 0 100px;" src="mobcent/app/web/images/mobile/mobile-android.png" /></div>',
@@ -321,18 +321,18 @@ class Appbyme {
     }
 }
 
-function mobcent_dfsockopen($url, $post, $encodeType = 'URLENCODE', $files = array(), 
+function appbyme_dfsockopen($url, $post, $encodeType = 'URLENCODE', $files = array(),
                             $timeout = 15, $dataLen = 0) {
-    return _mobcent_dfsockopen(
+    return _appbyme_dfsockopen(
         $url, $dataLen, $post, '', false, '', $timeout, true, $encodeType, true, 0, $files,
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36'
     );
 }
 
-function _mobcent_dfsockopen($url, $limit = 0, $post = '', $cookie = '', 
-                            $bysocket = FALSE, $ip = '', $timeout = 15, 
-                            $block = TRUE, $encodetype  = 'URLENCODE', 
-                            $allowcurl = TRUE, $position = 0, $files = array(), 
+function _appbyme_dfsockopen($url, $limit = 0, $post = '', $cookie = '',
+                            $bysocket = FALSE, $ip = '', $timeout = 15,
+                            $block = TRUE, $encodetype  = 'URLENCODE',
+                            $allowcurl = TRUE, $position = 0, $files = array(),
                             $userAgent = '') {
     $return = '';
     $matches = parse_url($url);
