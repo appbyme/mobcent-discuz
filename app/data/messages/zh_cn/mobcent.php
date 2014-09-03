@@ -68,6 +68,7 @@ return array(
     'post_message_toolong' => WebUtils::t('00500026:抱歉，您的帖子超过 {maxpostsize} 个字符的限制'),
     'post_reply_mod_succeed' => WebUtils::t('00500027:回复需要审核，请等待通过'),
     'replyperm_upgrade_nopermission' => WebUtils::t('00500028:抱歉，您需要升级所在的用户组后才能回帖'),
+    'postperm_upgrade_nopermission' => WebUtils::t('00500029:抱歉，您需要升级所在的用户组后才能发帖'),
     'post_not_found' => WebUtils::t('00600000:没有找到帖子'),
 
     // 文章评论 errcode: 010xxxxx
@@ -147,4 +148,5 @@ return array(
     'recommend_succed' => WebUtils::t('00000000:评价指数 {recommendc} {recommendv}'),
     'noreply_yourself_error' => WebUtils::t('07000006:您不能对自己的回帖进行投票'),
     'noreply_voted_error' => WebUtils::t('07000007:您已经对此回帖投过票了'),
+    'recommend_daycount_succeed' => WebUtils::t('00000000:评价指数 {recommendc} {recommendv} 您今天还能评价 {daycount} 次'),
 );

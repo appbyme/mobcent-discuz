@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author  谢建平 <jianping_xie@aliyun.com>  
+ * @author  谢建平 <jianping_xie@aliyun.com>
  * @copyright 2012-2014 Appbyme
  */
 
@@ -10,7 +10,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 }
 
 class CacheController extends MobcentController  {
-    
+
     protected function beforeAction($action) {
         // parent::beforeAction($action);
         return true;
@@ -56,8 +56,8 @@ class CacheController extends MobcentController  {
 
     public function actionUpdate($fid = 0, $gid = 0, $sort = '') {
         $timer = new CountTimer;
-        // $cacheToken = 'cache-update';
-        // Yii::beginProfile($cacheToken);
+        $cacheToken = 'cache-update';
+        Yii::beginProfile($cacheToken);
 
         ob_start();
         // 生成版块列表缓存
@@ -72,7 +72,7 @@ class CacheController extends MobcentController  {
                 foreach ($uids as $uid) {
                     $_GET = array_merge($_GET, array(
                         'hacker_uid' => $uid,
-                        'boardId' => $fid, 'page' => 1, 
+                        'boardId' => $fid, 'page' => 1,
                         'pageSize' => 10, 'sortby' => $sort,
                     ));
                     $res = $this->forward('forum/topiclist', false);
@@ -83,7 +83,7 @@ class CacheController extends MobcentController  {
         ob_end_clean();
 
         var_dump($timer->stop());
-        // Yii::endProfile($cacheToken);
+        Yii::endProfile($cacheToken);
     }
 
     public function actionCleanThumb($id = 0, $type = 'post') {
@@ -95,7 +95,7 @@ class CacheController extends MobcentController  {
     public function actionMakeThumb($count=10) {
         $thumbTaskList = CacheUtils::getDzPluginCache('thumb_task_list');
         $thumbTaskList === false && $thumbTaskList = array();
-        
+
         $count <= 0 && $count = count($thumbTaskList);
         $count = min(count($thumbTaskList), $count);
         $i = 0;
@@ -107,11 +107,11 @@ class CacheController extends MobcentController  {
             $i++;
         }
         echo WebUtils::jsonEncode($thumbTaskList);
-        
+
         array_splice($thumbTaskList, 0, $count);
         CacheUtils::setDzPluginCache('thumb_task_list', $thumbTaskList);
     }
-    
+
     // 找到需要更新的版块id
     private function _getFids($fid) {
         if ($fid == 0) {
@@ -139,10 +139,10 @@ class CacheController extends MobcentController  {
         $gids = $this->_getGids($gid);
         $uids = DbUtils::getDzDbUtils(true)->queryColumn('
             SELECT uid
-            FROM %t 
+            FROM %t
             WHERE groupid IN (%n)
             GROUP BY groupid
-            ', 
+            ',
             array(
                 'common_member',
                 $gids

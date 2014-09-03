@@ -19,8 +19,8 @@ return array(
     'charset' => $discuzParams['globals']['charset'],
 
     'preload'=>array(
-        'log', 
-        'dbDz', 
+        'log',
+        'dbDz',
         'dbDzUc',
     ),
 
@@ -30,7 +30,7 @@ return array(
         'application.components.*',
         'application.components.db.*',
         'application.components.web.*',
-        
+
         'ext.mobcent.components.*',
         'ext.mobcent.components.db.*',
         'ext.mobcent.components.utils.*',
@@ -69,7 +69,7 @@ return array(
                 '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
             ),
         ),
-        
+
         'db' => $dbConfig['default'],
         'dbDz' => $dbConfig['discuz'],
         'dbDzUc' => $dbConfig['discuzUcenter'],
@@ -86,11 +86,11 @@ return array(
                 //  'levels'=>'error, warning',
                 // ),
                 // uncomment the following to show log messages on web pages
-                
+
                 // array(
                 //  'class'=>'CWebLogRoute',
                 // ),
-                
+
                 // array(
                 //  'class' => 'CProfileLogRoute',
                 // )
@@ -100,7 +100,7 @@ return array(
             // file cache
             'class' => 'CFileCache',
             'cachePath' => MOBCENT_CACHE_PATH,
-            
+
             // memcache
             // 'class' => 'CMemCache',
             // 'servers' => array(
@@ -109,7 +109,7 @@ return array(
             //      'port' => 11211,
             //  ),
             // ),
-            
+
             // redis
             // 'class' => 'CRedisCache',
             // 'hostname' => 'localhost',

@@ -160,7 +160,7 @@ class TopicUtils {
                                 $applyInfo['options'][] = self::_makeInputElement(
                                     $option['formtype'], 'birthmonth',
                                     !empty($userFieldData['userfield']['birthmonth']) ? $userFieldData['userfield']['birthmonth'] : '', 
-                                    '', array('required' => 0), $monthElements
+                                    '', array('required' => 1), $monthElements
                                 );
                                 // 日
                                 $dayElements[] = self::_makeInputElement('selectOption', 'birthday', '', WebUtils::t('日'));
@@ -170,7 +170,7 @@ class TopicUtils {
                                 $applyInfo['options'][] = self::_makeInputElement(
                                     $option['formtype'], 'birthday',
                                     !empty($userFieldData['userfield']['birthday']) ? $userFieldData['userfield']['birthday'] : '', 
-                                    '', array('required' => 0), $dayElements
+                                    '', array('required' => 1), $dayElements
                                 );
                                 break;
                             case 'birthcity':

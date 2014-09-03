@@ -114,7 +114,7 @@ class ForumUtils {
         $fid > 0 && ForumUtils::initForum($fid);
 
         $panel = array();
-        
+
         global $_G;
 
         if (($_G['forum']['simple'] & 1) || $_G['forum']['redirect']) {
@@ -147,7 +147,7 @@ class ForumUtils {
                 'title' => WebUtils::t('发起投票'),
             );
         }
-        
+
         return $panel;
     }
 
@@ -156,7 +156,7 @@ class ForumUtils {
      */
     public static function getTopicClassificationInfos($fid=0) {
         $fid > 0 && ForumUtils::initForum($fid);
-        
+
         $infos = array('types' => array(), 'sorts' => array(), 'requireTypes' => false);
 
         // $field = DbUtils::getDzDbUtils(true)->queryRow('
@@ -278,7 +278,7 @@ class ForumUtils {
 
     /**
      * 获取主题封面
-     * 
+     *
      * @param int $tid
      */
     public static function getTopicCover($tid) {
@@ -490,7 +490,7 @@ class ForumUtils {
                 }
             }
         }
-        
+
         return $manageItems;
     }
 
@@ -499,7 +499,7 @@ class ForumUtils {
     {
         $panels = array('topic' => array(), 'post' => array());
         global $_G;
-        
+
         // 评分
         // if ($_G['group']['raterange']) {
         //     $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
@@ -508,7 +508,7 @@ class ForumUtils {
         // 赞
         $topicConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topic_recommend');
         $postConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_post_recommend');
-        $topicConfig = $postConfig = 1;
+        // $topicConfig = $postConfig = 1;
 
         $support = $_G['setting']['recommendthread'];
         if ($support['status'] && $topicConfig == 1) {
@@ -536,28 +536,7 @@ class ForumUtils {
                             break;
                         case "media":
                         case "flash":
-                            $videoUrl = $matches[2];
-
-                            // 转换优酷 .swf
-                            $tempMatches = array();
-                            preg_match("#^http://player\.youku\.com/player\.php/sid/(\w+?)/v\.swf$#s", $matches[2], $tempMatches);
-                            if (!empty($tempMatches)) {
-                                $videoUrl = "http://v.youku.com/v_show/id_{$tempMatches[1]}.html";
-                            }
-                            if (WebUtils::getDzPluginAppbymeAppConfig("forum_allow_app_play_video")) {
-                                preg_match("#^http://v\.youku\.com/v_show/id_(\w+?)\.html$#s", $matches[2], $tempMatches);
-                                if (!empty($tempMatches)) {
-                                    $videoUrl = "http://v.youku.com/player/getM3U8/vid/{$tempMatches[1]}/type/flv/video.m3u8";
-                                }
-                            }
-
-                            // 转换56 .swf
-                            $tempMatches = array();
-                            preg_match("#^http://player\.56\.com/(\w+?)\.swf#s", $matches[2], $tempMatches);
-                            if (!empty($tempMatches)) {
-                                $videoUrl = "http://www.56.com/u/{$tempMatches[1]}.html";
-                            }
-
+                            $videoUrl = ForumUtils::transVideoUrl($matches[2]);
                             $string = "[mobcent_video={$videoUrl}]";
                             break;
                         default:
@@ -617,16 +596,21 @@ class ForumUtils {
                 $tempAttachUrlMatches = $tempAttachTitleMatches = $tempAttachDescMatches = $tempImgMatches = array();
 
                 // 处理附件下载
-                preg_match("/<strong>(.+?)<\/strong>/", $matches[0], $tempAttachTitleMatches);
-                $title = !empty($tempAttachTitleMatches) ? $tempAttachTitleMatches[1] : "";
+                // preg_match("/<strong>(.+?)<\/strong>/", $matches[0], $tempAttachTitleMatches);
+                // $title = !empty($tempAttachTitleMatches) ? $tempAttachTitleMatches[1] : "";
 
                 preg_match("/<a.*?href=\"(.+?)\".*?>(.+?)<\/a>/", $matches[0], $tempAttachUrlMatches);
                 if (!empty($tempAttachUrlMatches)) {
                     $url = WebUtils::getHttpFileName($tempAttachUrlMatches[1]);
                     preg_match("/<em.*?>(.+?)<\/em>/", $matches[0], $tempAttachDescMatches);
                     $desc = !empty($tempAttachDescMatches) ? $tempAttachDescMatches[1] : "";
-                    $title == "" && $title = $tempAttachUrlMatches[2];
-                    $attachment .= "[mobcent_br]<br />[mobcent_attachment={$url}(title={$title})(desc={$tempAttachDescMatches[1]})]<br />";
+                    $title = $tempAttachUrlMatches[2];
+                    // if ($desc == "" ) {
+                    if ($desc == "" || $title == WebUtils::t("下载附件")) {
+                        preg_match("/<div class=\"tip_horn\">.*?<p>(.+?)<\/p>/", $matches[0], $tempAttachDescMatches);
+                        $desc = !empty($tempAttachDescMatches) ? $tempAttachDescMatches[1] : "";
+                    }
+                    $desc != "" && $attachment .= "[mobcent_br]<br />[mobcent_attachment={$url}(title={$title})(desc={$tempAttachDescMatches[1]})]<br />";
                 }
 
                 // 处理图片附件
@@ -721,6 +705,7 @@ class ForumUtils {
                                 $msg['extraInfo']['url'] = $tempAttachMatches[1];
                                 $msg['extraInfo']['desc'] = $tempAttachMatches[3];
                             }
+                            break;
                         default: $msg['content'] = ''; break;
                     }
                 }
@@ -813,8 +798,86 @@ class ForumUtils {
     }
 
     /**
+     * 转换视频地址为html5地址
+     *
+     * @param string $video 视频地址
+     *
+     * @access public
+     * @static
+     *
+     * @return string
+     */
+    public static function transVideoUrl($video)
+    {
+        $videoUrl = $video;
+
+        // 转换优酷 .swf
+        $tempMatches = array();
+        preg_match("#^http://player\.youku\.com/player\.php/sid/(\w+?)/v\.swf#s", $video, $tempMatches);
+        if (!empty($tempMatches)) {
+            $videoUrl = "http://v.youku.com/v_show/id_{$tempMatches[1]}.html";
+        }
+
+        // 转换56 .swf
+        $tempMatches = array();
+        preg_match("#^http://player\.56\.com/\w+?_(\w+?)\.swf#s", $video, $tempMatches);
+        if (!empty($tempMatches)) {
+            $videoUrl = "http://www.56.com/u/v_{$tempMatches[1]}.html";
+        }
+
+        // 转换爱奇艺 .swf
+        $tempMatches = array();
+        preg_match("#^http://player\.video\.qiyi\.com/.+?_(\w+?)\.swf#s", $video, $tempMatches);
+        if (!empty($tempMatches)) {
+            $videoUrl = "http://www.iqiyi.com/v_{$tempMatches[1]}.html";
+        }
+
+        return $videoUrl;
+    }
+
+    /**
+     * 解析视频html5地址
+     *
+     * @param string $video 视频地址
+     *
+     * @access public
+     * @static
+     *
+     * @return array 解析后的信息
+     */
+    public static function parseVideoUrl($video)
+    {
+        $videoInfo = array('type' => 'unkown', 'vid' => '');
+
+        $tempMatches = array();
+        do {
+            // 解析优酷
+            preg_match("#http://v\.youku\.com/v_show/id_(\w+?)\.html#s", $video, $tempMatches);
+            if (!empty($tempMatches)) {
+                $videoInfo['type'] = 'youku';
+                break;
+            }
+            // 解析56
+            preg_match("#http://www\.56\.com/u/v_(\w+?)\.html#s", $video, $tempMatches);
+            if (!empty($tempMatches)) {
+                $videoInfo['type'] = '56';
+                break;
+            }
+            // 解析爱奇艺
+            preg_match("#http://www\.iqiyi\.com/v_(\w+?)\.html#s", $video, $tempMatches);
+            if (!empty($tempMatches)) {
+                $videoInfo['type'] = 'iqiyi';
+                break;
+            }
+        } while (false);
+        !empty($tempMatches) && $videoInfo['vid'] = $tempMatches[1];
+
+        return $videoInfo;
+    }
+
+    /* *
      * 帖子内容页需要返回的数据
-     * 
+     *
      * @param int $pid    帖子id.
      * @param int $column 评分栏目显示几个.
      * @param int $row    显示几行评分数据.
@@ -831,7 +894,7 @@ class ForumUtils {
                 $postlist[$postcache['pid']]['ratelog'] = $postcache['rate']['ratelogs'];
                 $postlist[$postcache['pid']]['ratelogextcredits'] = $postcache['rate']['extcredits'];
                 $postlist[$postcache['pid']]['totalrate'] = $postcache['rate']['totalrate'];
-            }            
+            }
         }
 
         if(empty($postlist)) {
@@ -871,7 +934,7 @@ class ForumUtils {
             if ($i == 3) {
                 $temp['field3'] = '';
                 $i++;
-            }            
+            }
             $temp["field$i"] = (string)$ratelog['reason'];
             $rate[] = $temp;
         }
@@ -888,7 +951,7 @@ class ForumUtils {
         if ($i == 3) {
             $total['field3'] = '';
             $i++;
-        }       
+        }
         $total["field$i"] = '';
 
         $tabList = array();
@@ -899,10 +962,9 @@ class ForumUtils {
         return $tabList;
     }
 
-
     // 全部评分列表
-    public static function rateList($tid, $pid, $page=1, $pageSize=3) 
-    {   
+    public static function rateList($tid, $pid, $page=1, $pageSize=3)
+    {
         global $_G;
         $loglist = $logcount = array();
         $post = C::t('forum_post')->fetch('tid:'.$tid, $pid);
@@ -932,5 +994,4 @@ class ForumUtils {
         $res['logcount'] = $logcount;
         return $res;
     }
-
 }

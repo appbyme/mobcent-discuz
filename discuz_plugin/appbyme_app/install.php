@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `cdb_appbyme_user_access` (
 # 用户设置表
 # DROP TABLE IF EXISTS `cdb_appbyme_user_setting`;
 CREATE TABLE IF NOT EXISTS `cdb_appbyme_user_setting` (
-    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id', 
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
     `uid` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
     `ukey` CHAR(20) NOT NULL DEFAULT '' COMMENT '用户设置键名',
     `uvalue` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '用户设置值',

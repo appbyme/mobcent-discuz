@@ -227,6 +227,11 @@ class TestController extends MobcentController {
                 'params' => array('topicId' => 1),
             ),
             array(
+                'title' => 'api/portal: 文章详情',
+                'route' => 'portal/newsview',
+                'params' => array('json' => "{'aid': 1, 'page': 1}"),
+            ),
+            array(
                 'title' => 'api/user: 获取设置',
                 'route' => 'user/getsetting',
                 'params' => array('getSetting' => "{'body': {'postInfo': {'forumIds': '0'}}}"),

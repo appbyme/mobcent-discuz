@@ -20,7 +20,7 @@ class DzForumPost extends DiscuzAR {
 
     const STATUS_SEND_FROM_APP_ANDROID = 25165824;
     const STATUS_SEND_FROM_APP_APPLE = 20971520;
-    
+
     public static function model($className=__CLASS__) {
         return parent::model($className);
     }
@@ -89,7 +89,7 @@ class DzForumPost extends DiscuzAR {
             $pageSize * ($page-1), $pageSize
         ));
     }
-    
+
     public static function getCountByTid($tid, $params) {
         $authorSql = isset($params['authorId']) && $params['authorId'] != 0 ? 'AND authorid=' . $params['authorId'] : '';
         $sql = '
@@ -108,8 +108,8 @@ class DzForumPost extends DiscuzAR {
 
     public static function transPostContentToHtml($post) {
         Mobcent::import(sprintf(
-            '%s/forum_viewthread_%s.php', 
-            MOBCENT_APP_ROOT . '/components/discuz/forum', 
+            '%s/forum_viewthread_%s.php',
+            MOBCENT_APP_ROOT . '/components/discuz/forum',
             MobcentDiscuz::getMobcentDiscuzVersion()
         ));
 
@@ -120,7 +120,7 @@ class DzForumPost extends DiscuzAR {
         $post = array_merge($userInfo, $post);
 
         global $_G;
-        
+
         // 处理主题价格
         $_G['forum_threadpay'] = FALSE;
         if ($post['first']) {
@@ -137,12 +137,12 @@ class DzForumPost extends DiscuzAR {
                         }
                     }
                 }
-            }   
+            }
         }
-        
+
         $lastvisit = $_G['member']['lastvisit'];
         $ordertype = $maxposition = 0;
-        
+
         // 处理附件
         $_G['forum_attachpids'] = $_G['forum_attachtags'] = '';
         $_G['tid'] = $post['tid'];
@@ -167,7 +167,9 @@ class DzForumPost extends DiscuzAR {
                 // 取出没有插入的附件
                 if (!empty($post['imagelist']))
                     $postlist[$pid]['message'] .= showattach($post, 1);
-                
+                if($post['attachlist'])
+                    $postlist[$pid]['message'] .= showattach($post);
+
                 $postlist[$pid]['message'] = preg_replace("/\[attach\]\d+\[\/attach\]/i", '', $postlist[$pid]['message']);
             }
         }
