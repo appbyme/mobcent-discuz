@@ -35,7 +35,6 @@ class NewsListAction extends MobcentAction {
 
     protected function getCacheInfo() {
         $cacheInfo = array('enable' => 1, 'expire' => DAY_SECONDS * 1);
-        
         if (($cache = WebUtils::getDzPluginAppbymeAppConfig('cache_newslist')) > 0) {
             $cacheInfo['expire'] = $cache;
         } else {
@@ -48,18 +47,18 @@ class NewsListAction extends MobcentAction {
         extract($params);
 
         $res = $this->initWebApiArray();
-
         if ($page == 1) {
             $res['piclist'] = $this->_getPicList($mid);
         } else {
             $res['piclist'] = array();
         }
 
-        $portals = AppbymePortalModuleSource::getPortalByMid($mid);
-        $handCount = AppbymePortalModuleSource::getHandCount($mid);
-        $autoAdd = AppbymePortalModuleSource::getAutoAdd($mid);
-        $params = unserialize(AppbymePoralModule::getModuleParam($mid));
-        $params == false && $params = array();        
+        $portals   = AppbymePortalModuleSource::getPortalByMid($mid);
+        // $handCount = AppbymePortalModuleSource::getHandCount($mid);
+        $handCount = $this->_handCount($mid, $portals);
+        $autoAdd   = AppbymePortalModuleSource::getAutoAdd($mid);
+        $params    = unserialize(AppbymePoralModule::getModuleParam($mid));
+        $params    == false && $params = array();  
 
         // 对错误mid的处理
         if (empty($portals)) {
@@ -67,7 +66,7 @@ class NewsListAction extends MobcentAction {
             return $res;
         }
 
-        $count = 0;
+        $count = 0; // 自动添加的数目
         if (!empty($autoAdd)) {
             if ($autoAdd[0]['idtype'] == 'fid') {
                 foreach ($autoAdd as $auto) {
@@ -88,88 +87,96 @@ class NewsListAction extends MobcentAction {
             $res['list'] = array();
             return $res;
         }
+
         $pageInfo = WebUtils::getWebApiArrayWithPage_oldVersion($page, $pageSize, $total);
         $res = array_merge($res, $pageInfo);
         $offset = ($page - 1)*$pageSize;
-        
-        // 只有手动添加的
-        if (empty($autoAdd) && $handCount) {
-            $res['list'] = $this->_handData($mid, $offset, $pageSize, $params);
-            return $res;
-        }
-
-        // 只有自动添加的
-        if (!empty($autoAdd) && !$handCount) {
-            $rows = array();
-            if ($autoAdd[0]['idtype'] == 'fid') {
-                $rows = $this->_autoFidData($fids, $offset, $pageSize, $params);
-            } else {
-                $rows = $this->_autoCatidData($catids, $offset, $pageSize, $params);
+        if ($page == 1) {
+            if ($handCount <= 10) {
+                $autoData = array();
+                $handData = ($handCount != 0 && $page = 1) ? $this->_handData($mid, $offset, $handCount, $params) : array();
+                $pageInfo = WebUtils::getWebApiArrayWithPage_oldVersion($page, $handCount, $handCount);
+                $res = array_merge($res, $pageInfo);
+                if ($count != 0) {
+                    if ($autoAdd[0]['idtype'] == 'fid') {
+                        $autoData = $this->_autoFidData($fids, $offset, $pageSize, $params);
+                    } else {
+                        $autoData = $this->_autoCatidData($catids, $offset, $pageSize, $params);
+                    }
+                    $total = $count !=0 ? ($count + $handCount) : $handCount ;
+                    $pageInfo = WebUtils::getWebApiArrayWithPage_oldVersion($page, $pageSize, $total);
+                    $res = array_merge($res, $pageInfo);
+                }
+                $rows = array_merge((array)$handData, (array)$autoData);
+                $res['list'] = $rows;
+                return $res;
             }
-            $res['list'] = $rows;
+
+            $total = $count !=0 ? ($count + $handCount) : $handCount ;
+            $pageInfo = WebUtils::getWebApiArrayWithPage_oldVersion($page, $handCount, $total);
+            $res = array_merge($res, $pageInfo);
+            $res['list'] = $this->_handData($mid, $offset, $handCount);
+            // var_dump($res['list']);die;
             return $res;
         }
 
-        // 以下是混合的状况
-        if ($offset == 0) {
-            if ($handCount >= $pageSize) {
-                $rows = $this->_handData($mid, $offset, $pageSize, $params);
-            } elseif ($handCount < $pageSize) {
-                $row1 = $this->_handData($mid, $offset, $handCount, $params);
-                $limit = $pageSize - $handCount;
-                if ($autoAdd[0]['idtype'] == 'fid') {
-                    $row2 = $this->_autoFidData($fids, $offset, $limit, $params);
-                } else {
-                    $row2 = $this->_autoCatidData($catids, $offset, $limit, $params);
-                }
-                $rows = array_merge($row1, $row2);
-            }            
-        } elseif ($offset == $handCount) {
+        $page = ($handCount <= 15) ? $page : ($page - 1) ;
+        $offset = ($page - 1) * $pageSize;
+
+        if ($count != 0) {
             if ($autoAdd[0]['idtype'] == 'fid') {
-                $rows = $this->_autoFidData($fids, 0, $pageSize, $params);
+                $autoData = $this->_autoFidData($fids, $offset, $pageSize, $params);
             } else {
-                $rows = $this->_autoCatidData($catids, 0, $pageSize, $params);
-            }                
-        } elseif ($offset > $handCount) {
-            $start = $offset - $handCount;          
-            if ($autoAdd[0]['idtype'] == 'fid') {
-                $rows = $this->_autoFidData($fids, $start, $pageSize, $params);
-            } else {
-                $rows = $this->_autoCatidData($catids, $start, $pageSize, $params);
-            }   
-        } elseif ($offset < $handCount) {
-            $hCount = $handCount - $offset;
-            if ($hCount >= $pageSize) {
-                $rows = $this->_handData($mid, $offset, $pageSize, $params);
-            } elseif ($hCount < $pageSize) {
-                $row1 = $this->_handData($mid, $offset, $hCount, $params);
-                $limit = $pageSize - $hCount;
-                if ($autoAdd[0]['idtype'] == 'fid') {
-                    $row2 = $this->_autoFidData($fids, 0, $limit, $params);
-                } else {
-                    $row2 = $this->_autoCatidData($catids, 0, $limit, $params);
-                }
-                $rows = array_merge($row1, $row2);
+                $autoData = $this->_autoCatidData($catids, $offset, $pageSize, $params);
             } 
+            $pageInfo = WebUtils::getWebApiArrayWithPage_oldVersion($page, $pageSize, $count);
+            $res = array_merge($res, $pageInfo);
+            $res['list'] = $autoData;
+        } else {
+            $pageInfo = WebUtils::getWebApiArrayWithPage_oldVersion($page, $handCount, $handCount);
+            $res = array_merge($res, $pageInfo);
+            $res['list'] = array();
         }
-        $res['list'] = $rows;
         return $res;
     }
 
     // 取出手动添加的数据
     private function _handData($mid, $offset, $pageSize, $params) {
-        $handiInfos = AppbymePortalModuleSource::getHandData($mid, $offset, $pageSize);
-        foreach ($handiInfos as $hand) {
+        $rows = array();
+        $portals = AppbymePortalModuleSource::getPortalByMid($mid);
+        $handCount = $this->_handCount($mid, $portals);    // 手动添加总数
+        $forumCount = AppbymePortalModuleSource::getHandCount($mid);    // 真实手动添加的tid、aid的总数
+        $customCount = $handCount - $forumCount;    // discuz bid下面的数目        
+        $bids = $this->_handCount($mid, $portals, 'bid');
+
+        $forumCount != 0 ? $forumData = $this->getTopArtData(AppbymePortalModuleSource::getHandData($mid, $offset, $pageSize)) : array();
+        $tempCustom = $customData = array();
+        if ($customCount != 0 ) {
+            foreach($bids as $v) {
+                $tempCustom = $this->getTopArtData(AppbymePortalModuleSource::getDataByBid($v));
+                $customData = array_merge((array)$customData, (array)$tempCustom);
+            }
+        }
+        $rows = array_merge((array)$forumData, (array)$customData);
+        return $rows;
+    }
+
+    // 获取手动添加文章或者是帖子的内容
+    private function getTopArtData($handInfos) {
+        $rows = array();
+        if(empty($handInfos)) return $rows;
+        foreach ($handInfos as $hand) {
             if ($hand['idtype'] == 'tid') {
                 $topicSummary = ForumUtils::getTopicSummary($hand['id'], 'portal');
-                $rows[] = $this->_getListField(ForumUtils::getTopicInfo($hand['id']), $topicSummary, 'topic', $hand['id'], $params);
+                $rows[] = $this->_getListField(ForumUtils::getTopicInfo($hand['id']), $topicSummary, 'topic', $hand['id']);
             } else {
                 $articleSummary = PortalUtils::getArticleSummary($hand['id']);
                 $articleInfo = $this->_getArticleByAid($hand['id']);
-                $rows[] = $this->_getListField($articleInfo, $articleSummary, 'news', $hand['id'], $params);
+                $rows[] = $this->_getListField($articleInfo, $articleSummary, 'news', $hand['id']);
             }
         }
-        return $rows;        
+
+        return $rows;
     }
 
     // 通过fids来取出数据
@@ -177,10 +184,6 @@ class NewsListAction extends MobcentAction {
         $lists = DzForumThread::getByFidData($fids, $offset, $pageSize, $params);
         foreach ($lists as $list) {
             $topicSummary = ForumUtils::getTopicSummary($list['tid'], 'portal');
-            // if ($list['tid'] == 85) {
-            //     var_dump($topicSummary);
-            //     die;
-            // }
             $rows[] = $this->_getListField($list, $topicSummary, 'topic', $list['tid'], $params);
         }
         return $rows;        
@@ -189,6 +192,7 @@ class NewsListAction extends MobcentAction {
     // 通过catids来取出数据
     private function _autoCatidData($catids, $offset, $pageSize, $params) {
         $lists = DzPortalArticle::getByCatidData($catids, $offset, $pageSize, $params);
+        $rows = array();
         foreach ($lists as $list) {
             $articleSummary = PortalUtils::getArticleSummary($list['aid']);
             $rows[] = $this->_getListField($list, $articleSummary, 'news', $list['aid']);
@@ -243,6 +247,35 @@ class NewsListAction extends MobcentAction {
         return $row;
     }
 
+
+    /**
+     * 获取手动添加的总数包括tid，aid，还有bid，也可以取出bids
+     * 
+     * @param int $mid
+     * @param array  $portals 门户表信息.
+     * @param string $type 取出的类型，$type=count,取出总数。$type=bid，取出bids.
+     *
+     * @access private
+     *
+     * @return mixed Value.
+     */
+    private function _handCount($mid, $portals, $type="count") {
+        // tid、aid的数目
+        $forumCount = AppbymePortalModuleSource::getHandCount($mid);
+        // bid 下面内容的数目
+        $portalCount = 0;
+        $bids = array();
+        foreach($portals as $k => $v) {
+            if($v['idtype'] == 'bid') {
+                $bids[] = (int)$v['id'];
+                $portalCount += AppbymePortalModuleSource::getCountByBid($v['id']);
+            }
+        }
+        $count = $forumCount + $portalCount;
+        $res = $type == 'count' ? $count : $bids;
+        return $res;
+    }
+
     // 获取一个模块下面幻灯片的信息
     private function _getPicList($mid) {
         $portals = AppbymePortalModuleSource::getPortalByMid($mid, 2);
@@ -256,6 +289,8 @@ class NewsListAction extends MobcentAction {
                 $piclist[] = $this->_fieldPicList(0, 'news', $portal['id'], $portal['title'], $pic_path);
             } elseif ($portal['idtype'] == 'url') {
                 $piclist[] = $this->_fieldPicList(0, 'weblink', $portal['id'], $portal['title'], $pic_path, $portal['url']);
+            } elseif ($portal['idtype'] == 'bid') {
+                $piclist = array_merge($piclist, $this->_getPicByBid($portal['id']));
             }
         }
         return $piclist;
@@ -273,5 +308,32 @@ class NewsListAction extends MobcentAction {
             $row['pic_toUrl'] = $pic_toUrl;
         }
         return $row;
+    }
+
+    // 通过bid取出幻灯片的数据
+    private function _getPicByBid($bid) {
+        global $_G;
+        block_get($bid);
+        $itemList = $_G['block'][$bid]['itemlist'];
+        $list = array();
+        foreach ($itemList as $item) {
+            $sourceType = $item['idtype'] == 'aid' ? 'news' : 'topic';
+            $sourceId = $item['id'];
+            $title = $item['title'];
+
+            if ($item['makethumb'] == 1) {  // 生成缩略图成功
+                if ($item['picflag'] == 1) {    // 本地
+                    $picPath = $_G['setting']['attachurl'].$item['thumbpath'];                
+                } elseif($item['picflag'] == 2) {    // 远程
+                    $picPath = $_G['setting']['ftp']['attachurl'].$item['thumbpath'];
+                }
+            } elseif ($item['makethumb'] == 0) {    // 缩略图生成失败
+                $picPath = $item['pic'];
+            }
+
+            $picPath = ImageUtils::getThumbImage(WebUtils::getHttpFileName($picPath));
+            $list[] = $this->_fieldPicList(0, $sourceType, $sourceId, $title, $picPath);
+        }
+        return $list;
     }
 }
