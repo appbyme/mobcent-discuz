@@ -23,7 +23,6 @@ class NewsListAction extends MobcentAction {
         
         $res = array();
         $cache = $this->getCacheInfo();
-
         if (!$cache['enable'] || ($res = Yii::app()->cache->get($key)) === false) {
             $res = WebUtils::outputWebApi($this->getResult($params), '', false);
             if ($page == 1 && $cache['enable']) {
@@ -54,7 +53,6 @@ class NewsListAction extends MobcentAction {
         }
 
         $portals   = AppbymePortalModuleSource::getPortalByMid($mid);
-        // $handCount = AppbymePortalModuleSource::getHandCount($mid);
         $handCount = $this->_handCount($mid, $portals);
         $autoAdd   = AppbymePortalModuleSource::getAutoAdd($mid);
         $params    = unserialize(AppbymePoralModule::getModuleParam($mid));
@@ -116,7 +114,7 @@ class NewsListAction extends MobcentAction {
             $pageInfo = WebUtils::getWebApiArrayWithPage_oldVersion($page, $handCount, $total);
             $res = array_merge($res, $pageInfo);
             $res['list'] = $this->_handData($mid, $offset, $handCount);
-            // var_dump($res['list']);die;
+
             return $res;
         }
 
@@ -149,15 +147,19 @@ class NewsListAction extends MobcentAction {
         $customCount = $handCount - $forumCount;    // discuz bid下面的数目        
         $bids = $this->_handCount($mid, $portals, 'bid');
 
-        $forumCount != 0 ? $forumData = $this->getTopArtData(AppbymePortalModuleSource::getHandData($mid, $offset, $pageSize)) : array();
-        $tempCustom = $customData = array();
-        if ($customCount != 0 ) {
-            foreach($bids as $v) {
-                $tempCustom = $this->getTopArtData(AppbymePortalModuleSource::getDataByBid($v));
-                $customData = array_merge((array)$customData, (array)$tempCustom);
-            }
+        foreach($portals as $portal) {
+           if ($portal['idtype'] == 'tid') {
+                $topicSummary = ForumUtils::getTopicSummary($hand['id'], 'portal');
+                $rows[] = $this->_getListField(ForumUtils::getTopicInfo($portal['id']), $topicSummary, 'topic', $portal['id']);
+           } elseif ($portal['idtype'] == 'aid') {
+                $articleSummary = PortalUtils::getArticleSummary($portal['id']);
+                $articleInfo = $this->_getArticleByAid($portal['id']);
+                $rows[] = $this->_getListField($articleInfo, $articleSummary, 'news', $portal['id']);
+           } elseif ($portal['idtype'] == 'bid') {
+                $rows = array_merge($rows, $this->getTopArtData(AppbymePortalModuleSource::getDataByBid($portal['id'])));
+           }
         }
-        $rows = array_merge((array)$forumData, (array)$customData);
+
         return $rows;
     }
 
@@ -169,7 +171,7 @@ class NewsListAction extends MobcentAction {
             if ($hand['idtype'] == 'tid') {
                 $topicSummary = ForumUtils::getTopicSummary($hand['id'], 'portal');
                 $rows[] = $this->_getListField(ForumUtils::getTopicInfo($hand['id']), $topicSummary, 'topic', $hand['id']);
-            } else {
+            } elseif($hand['idtype'] == 'aid') {
                 $articleSummary = PortalUtils::getArticleSummary($hand['id']);
                 $articleInfo = $this->_getArticleByAid($hand['id']);
                 $rows[] = $this->_getListField($articleInfo, $articleSummary, 'news', $hand['id']);
