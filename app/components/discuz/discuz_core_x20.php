@@ -1,8 +1,10 @@
 <?php
 
 /**
+ * 目前x2.5版本以下已经废弃,不再维护!!!
+ *
  * 在 DISCUZ_ROOT/class/class_core.php 基础上进行二次开发
- * 
+ *
  * 如果你想按照你的需求修改此文件,
  * 请复制一份这个文件到相同目录，并且在原来的文件名基础上加上前缀my_,
  * 新建my_xxx.php文件不会随插件发布更新,请自行维护好！
@@ -311,7 +313,7 @@ class discuz_core {
             $_POST = dstripslashes($_POST);
             $_COOKIE = dstripslashes($_COOKIE);
         }
-        
+
         $prelength = strlen($this->config['cookie']['cookiepre']);
         foreach($_COOKIE as $key => $val) {
             if(substr($key, 0, $prelength) == $this->config['cookie']['cookiepre']) {
@@ -1535,7 +1537,7 @@ class MobcentDiscuzApp extends discuz_application {
         global $_G;
         $_G['siteurl'] = substr($_G['siteurl'], 0, -16);
         $_G['siteroot'] = substr($_G['siteroot'], 0, -16);
-        
+
         $this->_initUser();
 
         loadcache('plugin');
@@ -1547,16 +1549,16 @@ class MobcentDiscuzApp extends discuz_application {
 
         $path = Yii::getPathOfAlias('application.components.discuz.source.function');
         require_once(sprintf('%s/function_forum_%s.php', $path, MobcentDiscuz::getMobcentDiscuzVersion()));
-        
+
         $_GET['fid'] = $fid;
         $_GET['tid'] = $tid;
 
         global $_G;
         $_G['setting']['forumpicstyle'] = null;
-        
+
         loadforum();
     }
-    
+
     protected function _initUser() {
         if($this->init_user) {
             $discuz_uid = isset($_GET['hacker_uid']) && MOBCENT_HACKER_UID ? $_GET['hacker_uid'] : UserUtils::getUserIdByAccess();

@@ -605,7 +605,8 @@ class ForumUtils {
                     preg_match("/<em.*?>(.+?)<\/em>/", $matches[0], $tempAttachDescMatches);
                     $desc = !empty($tempAttachDescMatches) ? $tempAttachDescMatches[1] : "";
                     $title = $tempAttachUrlMatches[2];
-                    if ($desc == "") {
+                    // if ($desc == "" ) {
+                    if ($desc == "" || $title == WebUtils::t("下载附件")) {
                         preg_match("/<div class=\"tip_horn\">.*?<p>(.+?)<\/p>/", $matches[0], $tempAttachDescMatches);
                         $desc = !empty($tempAttachDescMatches) ? $tempAttachDescMatches[1] : "";
                     }

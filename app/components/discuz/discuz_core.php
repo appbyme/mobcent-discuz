@@ -49,12 +49,12 @@ class MobcentDiscuz {
     public static function getDiscuzCommonSetting($key='') {
         global $_G;
         $config = $_G['setting'];
-        
+
         if ($key == '') {
             return $config;
         } else {
             return isset($config[$key]) ? $config[$key] : false;
-        }   
+        }
     }
 }
 
@@ -68,6 +68,8 @@ define('DISABLEDEFENSE', 1);
 
 C::setconstant();
 C::creatapp();
+
+C::app()->init_misc = false;
 C::app()->init();
 
 $_SERVER['REQUEST_METHOD'] = $tempMethod;
