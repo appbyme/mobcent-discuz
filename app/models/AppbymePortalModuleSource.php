@@ -39,7 +39,7 @@ class AppbymePortalModuleSource extends DiscuzAR {
             ORDER BY displayorder ASC
             ',
             array('appbyme_portal_module_source', $mid, $type)
-        );      
+        );
     }
 
     // 查询手动插入条数
@@ -66,10 +66,10 @@ class AppbymePortalModuleSource extends DiscuzAR {
             ORDER BY displayorder ASC
             ',
             array('appbyme_portal_module_source', $mid, self::SOURCE_TYPE_NORMAL, array('fid','catid'))
-        );          
+        );
     }
 
-    // 获得自动插入的信息
+    // 获得手动插入的信息
     public static function getHandData($mid, $offset, $limit) {
         return DbUtils::getDzDbUtils(true)->queryAll('
             SELECT *
@@ -81,7 +81,32 @@ class AppbymePortalModuleSource extends DiscuzAR {
             LIMIT %d,%d
             ',
             array('appbyme_portal_module_source', $mid, self::SOURCE_TYPE_NORMAL, array('tid','aid'), $offset, $limit)
-        );          
+        );
+    }
+
+    // 获取添加的bid下面有多少条数据
+    public static function getCountByBid($bid) {
+        return (int)DbUtils::getDzDbUtils(true)->queryScalar('
+            SELECT count(*)
+            FROM %t
+            WHERE bid=%d
+            AND idtype IN (%n)
+            ',
+            array('common_block_item', $bid, array('tid', 'aid'))
+        );
+    }
+
+    // 获取 bid 下面的内容
+    public static function getDataByBid($bid) {
+        return DbUtils::getDzDbUtils(true)->queryAll('
+            SELECT id, idtype
+            FROM %t
+            WHERE bid=%d
+            AND idtype IN (%n)
+            ORDER BY displayorder ASC
+            ',
+            array('common_block_item', $bid, array('tid','aid'))
+        );
     }
 
 }
