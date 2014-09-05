@@ -14,7 +14,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME'))
 // Mobcent::setErrors();
 class RateListViewAction extends MobcentAction
 {
-    public function run($tid=3, $pid=8) 
+    public function run($tid, $pid) 
     {
         $res = ForumUtils::rateList($tid, $pid);
         $this->getController()->renderPartial(

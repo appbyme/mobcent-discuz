@@ -480,6 +480,9 @@ class ForumUtils {
                 if($_G['group']['allowdigestthread'] && !$_G['forum_thread']['is_archived']) {
                     $manageItems['topic'][] = array('action' => 'marrow', 'title' => WebUtils::t('精华'));
                 }
+
+                $manageItems['topic'][] = array('action' => 'topicrate', 'title' => WebUtils::t('评分'));
+
             }
         }
 
@@ -500,11 +503,14 @@ class ForumUtils {
         $panels = array('topic' => array(), 'post' => array());
         global $_G;
 
-        // 评分
-        // if ($_G['group']['raterange']) {
-        //     $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
-        //     $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
-        // }
+        // 评分的权限控制
+
+        $ratePlugConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topic_rate');
+        $ratePlugConfig = 1;
+        if ($ratePlugConfig && $_G['group']['raterange']) {
+            $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+            // $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+        }
         // 赞
         $topicConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topic_recommend');
         $postConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_post_recommend');
@@ -887,15 +893,8 @@ class ForumUtils {
     public static function topicRateList($pid, $column=2, $row=3)
     {
         global $_G;
-        $rateItem = $postlist = array();
-        foreach(C::t('forum_postcache')->fetch_all($pid) as $postcache) {
-            if($postcache['rate']) {
-                $postcache['rate'] = dunserialize($postcache['rate']);
-                $postlist[$postcache['pid']]['ratelog'] = $postcache['rate']['ratelogs'];
-                $postlist[$postcache['pid']]['ratelogextcredits'] = $postcache['rate']['extcredits'];
-                $postlist[$postcache['pid']]['totalrate'] = $postcache['rate']['totalrate'];
-            }
-        }
+        $postlist = $postcache = array();
+        $ratelogs = C::t('forum_ratelog')->fetch_postrate_by_pid(array($pid), $postlist, $postcache, $_G['setting']['ratelogrecord']);
 
         if(empty($postlist)) {
             return $postlist;
@@ -918,7 +917,7 @@ class ForumUtils {
             $t['field3'] = '';
             $i++;
         }
-        $t["field$i"] = (string)WebUtils::t('理由');
+        // $t["field$i"] = (string)WebUtils::t('理由');
 
         // 评分具体内容
         $rate = array();
@@ -935,7 +934,7 @@ class ForumUtils {
                 $temp['field3'] = '';
                 $i++;
             }
-            $temp["field$i"] = (string)$ratelog['reason'];
+            // $temp["field$i"] = (string)$ratelog['reason'];
             $rate[] = $temp;
         }
 
@@ -952,13 +951,13 @@ class ForumUtils {
             $total['field3'] = '';
             $i++;
         }
-        $total["field$i"] = '';
+        // $total["field$i"] = '';
 
         $tabList = array();
         $tabList['head'] = $t;
         $tabList['total'] = $total;
         $tabList['body'] = $rate;
-
+        $tabList['showAllUrl'] = WebUtils::createUrl_oldVersion('forum/ratelistview', array('tid' => $tid, 'pid' => $pid));
         return $tabList;
     }
 

@@ -13,15 +13,16 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 // Mobcent::setErrors();
 class TopicRateAction extends MobcentAction
 {
-    public function run($tid, $pid, $type="check")
+    public function run($tid, $pid)
     {
         $res = $this->initWebApiArray();
-        if ($type == 'check') {
-            $res = $this->_checkRate($res, $tid, $pid);
-            WebUtils::outputWebApi($res);
-        } elseif ($type == 'view') {
-            $this->_viewRate($tid, $pid);
-        }
+        // if ($type == 'check') {
+        //     $res = $this->_checkRate($res, $tid, $pid);
+        //     WebUtils::outputWebApi($res);
+        // } elseif ($type == 'view') {
+        //     $this->_viewRate($tid, $pid);
+        // }
+        $this->_viewRate($res, $tid, $pid);
     }
 
     private function _checkRate($res, $tid, $pid)
@@ -62,6 +63,7 @@ class TopicRateAction extends MobcentAction
         } elseif($post['authorid'] == $_G['uid'] || $post['tid'] != $_G['tid']) {
             // 抱歉，您不能给自己发表的帖子评分
             return $this->makeErrorInfo($res, lang('message', 'thread_rate_member_invalid'));
+            // $errorMsg = lang('message', 'thread_rate_member_invalid');
         } elseif($post['anonymous']) {
             // 抱歉，您不能对匿名帖评分
             return $this->makeErrorInfo($res, lang('message', 'thread_rate_anonymous'));
@@ -77,11 +79,26 @@ class TopicRateAction extends MobcentAction
                 return $this->makeErrorInfo($res, lang('message', 'thread_rate_duplicate'));
             }
         }
+
         return $res;
     }
 
-    private function _viewRate($tid, $pid)
+    private function _viewRate($res, $tid, $pid)
     {   
+        $res = $this->_checkRate($res, $tid, $pid);
+        $status = WebUtils::checkError($res);
+        $location = WebUtils::createUrl_oldVersion('index/returnmobileview');
+        if ($status) {
+            $str = <<<HTML
+            <script>
+                alert("{$res['head']['errInfo']}");
+                location.href = "{$location}";
+            </script>
+HTML;
+        echo $str;
+        exit;
+        }
+
         global $_G;
         require_once libfile('function/misc');
         require_once libfile('function/forum');
@@ -230,7 +247,7 @@ class TopicRateAction extends MobcentAction
                 array(
                     'tid' => $tid,
                     'pid' => $pid,
-                    'type' =>'view',
+                    // 'type' =>'check',
                     'hacker_uid' => $_G['uid']
                 )
             ),
