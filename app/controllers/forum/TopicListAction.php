@@ -88,6 +88,7 @@ class TopicListAction extends MobcentAction {
         $res = WebUtils::initWebApiArray_oldVersion();
 
         if ($fid != 0) {
+
             ForumUtils::initForum($fid);
 
             // check permisson
@@ -118,6 +119,26 @@ class TopicListAction extends MobcentAction {
                     // include template('forum/forumdisplay_passwd');
                     // exit();
                     return $this->_makeErrorInfo($res, 'mobcent_forum_passwd');
+                }
+            }
+
+            if($_G['forum']['price'] && !$_G['forum']['ismoderator']) {
+                $membercredits = C::t('common_member_forum_buylog')->get_credits($_G['uid'], $_G['fid']);
+                $paycredits = $_G['forum']['price'] - $membercredits;
+                if($paycredits > 0) {
+                    // if($_GET['action'] == 'paysubmit') {
+                    //     updatemembercount($_G['uid'], array($_G['setting']['creditstransextra'][1] => -$paycredits), 1, 'FCP', $_G['fid']);
+                    //     C::t('common_member_forum_buylog')->update_credits($_G['uid'], $_G['fid'], $_G['forum']['price']);
+                    //     showmessage('forum_pay_correct', "forum.php?mod=forumdisplay&fid=$_G[fid]");
+                    // } else {
+                        if(getuserprofile('extcredits'.$_G['setting']['creditstransextra'][1]) < $paycredits) {
+                            return $this->makeErrorInfo($res, lang('message', 'forum_pay_incorrect', array('paycredits' => $paycredits, 'credits' => $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]]['unit'].$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]]['title'], 'title' => $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]]['title'])));
+                        } else {
+                            return $this->makeErrorInfo($res, 'forum_pay_incorrect_paying', array('{paycredits}' => $paycredits, '{credits}' => $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]]['unit'].$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]]['title'], 'title' => $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]]['title']));
+                            // include template('forum/forumdisplay_pay');
+                            // exit();
+                        }
+                    // }
                 }
             }
         }
