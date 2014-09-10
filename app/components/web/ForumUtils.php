@@ -436,8 +436,15 @@ class ForumUtils {
         return DzForumPost::isAnonymous($tid, $pid);
     }
 
-    // 获取帖子管理面板信息
-    public static function getPostManagePanel() {
+    /**
+     * 获取帖子管理面板权限信息
+     * 
+     * @param array $params 获得权限所需要的信息.
+     * @return array  管理面板数据
+     *
+     */
+    public static function getPostManagePanel($params=array()) {
+        extract($params);
         global $_G;
 
         // 从DISCUZ_ROOT/source/module/forum/forum_viewthread.php复制而来
@@ -482,6 +489,23 @@ class ForumUtils {
                 }
             }
         }
+
+        // 编辑权限 author:HanPengyu |start 
+        $post['adminid'] = $userMember['adminid'];
+        $post['authorid'] = $userMember['authorid'];
+        $post['dbdateline'] = $userMember['dateline'];
+        $alloweditpost_status = $editPerm['alloweditpost_status'];
+        $edittimelimit = $editPerm['edittimelimit'];
+
+        if((($_G['forum']['ismoderator'] && $_G['group']['alloweditpost'] && (!in_array($post['adminid'], array(1, 2, 3)) || $_G['adminid'] <= $post['adminid'])) || ($_G['forum']['alloweditpost'] && $_G['uid'] && ($post['authorid'] == $_G['uid'] && $_G['forum_thread']['closed'] == 0) && !(!$alloweditpost_status && $edittimelimit && TIMESTAMP - $post['dbdateline'] > $edittimelimit)))) {
+            if($_G['forum_thread']['special'] == 2 && !$post['message']){
+                $manageItems['topic'][] = array('action' => 'edit', 'title' => WebUtils::t('添加柜台介绍'));
+            } else{
+                $manageItems['topic'][] = array('action' => 'edit', 'title' => WebUtils::t('编辑'));
+            }
+            $manageItems['post'][] = array('action' => 'edit', 'title' => WebUtils::t('编辑'));
+        }
+        // end
 
         if ($modmenu['post']) {
             if($_G['forum']['ismoderator']) {

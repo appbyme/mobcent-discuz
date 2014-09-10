@@ -20,6 +20,8 @@ return array(
 
     // 'mobcent_forum_passwd' => WebUtils::t('本版块需要密码，您必须在下面输入正确的密码才能浏览这个版块'),
     'mobcent_forum_passwd' => WebUtils::t('本版块需要密码，暂时不支持直接访问，请见谅'),
+    // 'forum_pay_incorrect' => WebUtils::t('抱歉，此版块需要支付 {paycredits} {credits}才能进入此版块，您的{title}不足'),
+    'forum_pay_incorrect_paying' => WebUtils::t('您需要支付 {paycredits} {credits}才能进入此版块'),
 
     'viewperm_none_nopermission' => WebUtils::t('00200100:抱歉，您没有权限访问该版块'),
     'viewperm_upgrade_nopermission' => WebUtils::t("00200101:抱歉，您需要升级您所在的用户组后才能访问该版块,\n有权访问的用户组或认证用户为:\n   {permgroups}"),

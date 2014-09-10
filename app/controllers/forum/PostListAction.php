@@ -93,14 +93,27 @@ class PostListAction extends MobcentAction {
             ));
         }
 
+        // 编辑权限相关 start
+        if($_G['forum']['alloweditpost'] && $_G['uid']) {
+            $alloweditpost_status = getstatus($_G['setting']['alloweditpost'], $_G['forum_thread']['special'] + 1);
+            if(!$alloweditpost_status) {
+                $edittimelimit = $_G['group']['edittimelimit'] * 60;
+            }
+        }
+        $editPerm = array();
+        $editPerm['alloweditpost_status'] = $alloweditpost_status;
+        $editPerm['edittimelimit'] = $edittimelimit;
+        // edit end
+
+        $params = array('editPerm' => $editPerm);
         if ($page <= 1 && ($authorId == 0 || $authorId == $topic['authorid'])) {
-            $res['topic'] = $this->_getTopicInfo($topic);
+            $res['topic'] = $this->_getTopicInfo($topic, $params);
             if (empty($res['topic'])) {
                 return $this->_makeErrorInfo($res, 'post_not_found');
             }
         }
 
-        $res = $this->_getPostInfos($res, $topic, $page, $pageSize, $order, $authorId);
+        $res = $this->_getPostInfos($res, $topic, $page, $pageSize, $order, $authorId, $params);
 
         $res['forumName'] = WebUtils::emptyHtml($_G['forum']['name']);
         $res['forumTopicUrl'] = Yii::app()->getController()->dzRootUrl . "/forum.php?mod=viewthread&tid=" . $tid;
@@ -121,7 +134,8 @@ class PostListAction extends MobcentAction {
         return WebUtils::makeErrorInfo_oldVersion($res, $message, $params);
     }
 
-    private function _getTopicInfo($topic) {
+    private function _getTopicInfo($topic, $params=array()) {
+        extract($params);
         $topicInfo = array();
 
         $tid = (int)$topic['tid'];
@@ -184,9 +198,19 @@ class PostListAction extends MobcentAction {
                 $topicInfo['activityInfo'] = ForumUtils::isActivityTopic($topic) ? TopicUtils::getActivityInfo($topic) : null;
                 $topicInfo['location'] = ForumUtils::getTopicLocation($tid);
 
-                $manageItems = ForumUtils::getPostManagePanel();
+                // 主题管理面板编辑 start
+                $userMember = $this->_getUserInfoByAuthorid($post['authorid']);
+                $userMember = array_merge($userMember, $post);
+                $params = array('editPerm' => $editPerm, 'userMember' => $userMember);
+                // end
+
+                $manageItems = ForumUtils::getPostManagePanel($params);
                 foreach ($manageItems['topic'] as $key => $item) {
-                    $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'topic'));
+                    if ($item['action'] == 'edit') {
+                        $item['action'] = WebUtils::getHttpFileName("forum.php?mod=post&action=edit&fid=$post[fid]&tid=$tid&pid=$post[pid]");   
+                    } else {                    
+                        $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'topic'));
+                    }
                     $manageItems['topic'][$key] = $item;
                 }
 
@@ -356,7 +380,8 @@ class PostListAction extends MobcentAction {
         return $sort;
     }
 
-    private function _getPostInfos($res, $topic, $page, $pageSize, $order, $authorId) {
+    private function _getPostInfos($res, $topic, $page, $pageSize, $order, $authorId, $params=array()) {
+        extract($params);
         $postInfos = array();
 
         $tid = (int)$topic['tid'];
@@ -371,6 +396,7 @@ class PostListAction extends MobcentAction {
                     'authorId' => $authorId
                 )
             );
+
             $position = $order ?
                 $postCount + 1 - $pageSize*($page-1) :
                 $pageSize*($page-1) + 2;
@@ -435,15 +461,20 @@ class PostListAction extends MobcentAction {
 
                 $postInfo = array_merge($postInfo, $this->_getPostQuoteInfo($content, $isOnlyAuthorPost));
 
-                $manageItems = ForumUtils::getPostManagePanel();
+                // 回帖管理面板编辑 start
+                $userMember = $this->_getUserInfoByAuthorid($post['authorid']);
+                $userMember = array_merge($userMember, $post);
+                $params = array('editPerm' => $editPerm, 'userMember' => $userMember);
+                // end
+
+                $manageItems = ForumUtils::getPostManagePanel($params);
                 foreach ($manageItems['post'] as $key => $item) {
-                    if ($item['action'] == 'topicrate') {
-                        $item['action'] = '';
-                        $manageItems['post'][$key] = $item;
+                    if ($item['action'] == 'edit') {
+                        $item['action'] = WebUtils::getHttpFileName("forum.php?mod=post&action=edit&fid=$post[fid]&tid=$post[tid]&pid=$post[pid]");   
                     } else {
                         $item['action'] = WebUtils::createUrl_oldVersion('forum/topicadminview', array('fid' => $post['fid'], 'tid' => $tid, 'pid' => $post['pid'], 'act' => $item['action'], 'type' => 'post'));
-                        $manageItems['post'][$key] = $item;
                     }
+                    $manageItems['post'][$key] = $item;
                 }
 
                 $count = mb_strlen($postInfo['reply_content'][0]['infor'], $_G['charset']);
@@ -539,6 +570,13 @@ class PostListAction extends MobcentAction {
     private function _getUserLevel($uid) {
         $icon = UserUtils::getUserLevelIcon($uid);
         return $icon['sun'] * 4 + $icon['moon'] * 2 + $icon['star'] * 1;
+    }
+
+    // 通过 authorid 获取用户信息
+    private function _getUserInfoByAuthorid($authorid) {
+        $userMember = array();
+        $userMember = DzCommonMember::getInfoByAuthorid($authorid);
+        return $userMember;
     }
 }
 

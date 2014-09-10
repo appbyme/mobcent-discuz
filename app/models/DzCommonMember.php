@@ -40,4 +40,14 @@ class DzCommonMember extends DiscuzAR {
         return DbUtils::getDzDbUtils(true)->update('common_member', $data, $condition);
     }
 
+    public static function getInfoByAuthorid($authorid) {
+        return DbUtils::getDzDbUtils(true)->queryRow('
+            SELECT *
+            FROM %t
+            WHERE uid=%d
+            ',
+            array('common_member', $authorid)
+        );        
+    }
+
 }
