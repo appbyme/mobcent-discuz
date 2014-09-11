@@ -406,13 +406,13 @@ class PortalController {
                 array('heats', $topicOrderbyLang[5]),
                 array('recommends', $topicOrderbyLang[6]),
             )), $param['topic_orderby'], 'select', '', 0, '', '', '', true);
-            showsetting(Appbyme::lang('mobcent_portal_module_param_topic_POSTdateline'), array('param[topic_POSTdateline]', array(
+            showsetting(Appbyme::lang('mobcent_portal_module_param_topic_postdateline'), array('param[topic_postdateline]', array(
                 array(0, $timeLang[0]),
                 array(3600, $timeLang[1]),
                 array(86400, $timeLang[2]),
                 array(604800, $timeLang[3]),
                 array(2592000, $timeLang[4]),
-            )), $param['topic_POSTdateline'], 'select', '', 0, '', '', '', true);
+            )), $param['topic_postdateline'], 'select', '', 0, '', '', '', true);
             showsetting(Appbyme::lang('mobcent_portal_module_param_topic_lastpost'), array('param[topic_lastpost]', array(
                 array(0, $timeLang[0]),
                 array(3600, $timeLang[1]),
@@ -623,7 +623,7 @@ class PortalModule {
             'topic_special' => '',
             'topic_picrequired' => 0,
             'topic_orderby' => 'lastpost',
-            'topic_POSTdateline' => 0,
+            'topic_postdateline' => 0,
             'topic_lastpost' => 0,
             'topic_style' => 0,
             'article_picrequired' => 0,

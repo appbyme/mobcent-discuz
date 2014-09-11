@@ -1,0 +1,73 @@
+<?php exit; ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$appName}</title>
+<link href="{$assetsBaseUrlPath}/css/download_mobile.css" type="text/css" rel="stylesheet">
+<style type="text/css">
+.right{background: url("{$assetsBaseUrlPath}/images/adorn_weixin.png") no-repeat; width:308px;height:158px; overflow:hidden;position:absolute;right:50px;top:40px;}
+</style>
+</head>
+<script type="text/javascript">
+function showWechatHint() {
+    document.getElementById('weixinbox').style.display = 'block';
+    document.getElementById('bg').style.display = 'block';
+}
+function hideWechatHint() {
+    document.getElementById('weixinbox').style.display = 'none';
+    document.getElementById('bg').style.display = 'none';
+}
+</script>
+<body>
+    <div id="all">
+        <div id="z1">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>
+                    <img src="{$appIcon}" id="z1img" />
+                    {$appName}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" id="z2">
+            <tr>
+                <td>
+                    <img src="{$appImage}" />
+                </td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0"id="z3table">
+            <tr>
+                <td width="50%" height="100%" align="left">
+                    <a <!--{eval  echo !$isFromWeixin ? 'href="'.$androidDownloadUrl.'"' : 'onclick="showWechatHint();"'; }-->>
+                        <img src="{$assetsBaseUrlPath}/images/android_download.png" alt="">
+                    </a>
+                </td>
+                <td width="50%" height="100%" align="right">
+                    <a <!--{eval  echo !$isFromWeixin ? 'href="'.$appleMobileDownloadUrl.'"' : 'onclick="showWechatHint();"'; }-->>
+                       <img src="{$assetsBaseUrlPath}/images/iphone_download.png" alt="">
+                    </a>
+                </td>
+            </tr>
+        </table>
+        <div id="z3"></div>
+    </div>
+    <div class="bg" id="bg" onclick="hideWechatHint();"></div>
+        <div class="alertdiv" id="weixinbox">
+            <div class="alertbg">
+                <div class="alertboxs clear">
+                    <h2><!--{eval  echo Appbyme::t('点击不能下载？'); }--></h2>
+                    <p><!--{eval echo Appbyme::t('请点击右上角'); }-->
+                        <span class="blue"><!--{eval echo Appbyme::t('【三个点图标】'); }--></span>
+                    </p>
+                    <p><!--{eval echo Appbyme::t('选择'); }-->
+                        <span class="red"><!--{eval echo Appbyme::t('“在浏览器（安卓版）或者Safari（ios版）中打开”'); }-->
+                        </span>
+                    </p>
+            </div>
+            <div class="right"></div>
+        </div>
+    </div>
+</body>
+</html>
