@@ -524,11 +524,14 @@ class ForumUtils {
         $panels = array('topic' => array(), 'post' => array());
         global $_G;
 
-        // 评分
-        // if ($_G['group']['raterange']) {
-        //     $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
-        //     $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
-        // }
+        // 评分的权限控制
+
+        $ratePlugConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topic_rate');
+        if ($ratePlugConfig && $_G['group']['raterange']) {
+            $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+            // $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
+        }
+        
         // 赞
         $topicConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topic_recommend');
         $postConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_post_recommend');
@@ -911,18 +914,15 @@ class ForumUtils {
     public static function topicRateList($pid, $column=2, $row=3)
     {
         global $_G;
-        $rateItem = $postlist = array();
-        foreach(C::t('forum_postcache')->fetch_all($pid) as $postcache) {
-            if($postcache['rate']) {
-                $postcache['rate'] = dunserialize($postcache['rate']);
-                $postlist[$postcache['pid']]['ratelog'] = $postcache['rate']['ratelogs'];
-                $postlist[$postcache['pid']]['ratelogextcredits'] = $postcache['rate']['extcredits'];
-                $postlist[$postcache['pid']]['totalrate'] = $postcache['rate']['totalrate'];
-            }
-        }
+        $postlist = $postcache = array();
+
+        // 2.5是引用传值，3.1是直接返回。
+        // $ratelogs = C::t('forum_ratelog')->fetch_postrate_by_pid(array($pid), $postlist, $postcache, $_G['setting']['ratelogrecord']);
+
+        list($ratelogs, $postlist, $postcache) = self::fetch_postrate_by_pid(array($pid), $postlist, $postcache, $_G['setting']['ratelogrecord']);
 
         if(empty($postlist)) {
-            return $postlist;
+            return array();
         }
 
         // 评分人数和评分栏目的控制
@@ -942,7 +942,7 @@ class ForumUtils {
             $t['field3'] = '';
             $i++;
         }
-        $t["field$i"] = (string)WebUtils::t('理由');
+        // $t["field$i"] = (string)WebUtils::t('理由');
 
         // 评分具体内容
         $rate = array();
@@ -959,7 +959,7 @@ class ForumUtils {
                 $temp['field3'] = '';
                 $i++;
             }
-            $temp["field$i"] = (string)$ratelog['reason'];
+            // $temp["field$i"] = (string)$ratelog['reason'];
             $rate[] = $temp;
         }
 
@@ -976,13 +976,13 @@ class ForumUtils {
             $total['field3'] = '';
             $i++;
         }
-        $total["field$i"] = '';
+        // $total["field$i"] = '';
 
         $tabList = array();
         $tabList['head'] = $t;
         $tabList['total'] = $total;
         $tabList['body'] = $rate;
-
+        $tabList['showAllUrl'] = WebUtils::createUrl_oldVersion('forum/ratelistview', array('tid' => $tid, 'pid' => $pid));
         return $tabList;
     }
 
@@ -1018,4 +1018,28 @@ class ForumUtils {
         $res['logcount'] = $logcount;
         return $res;
     }
+
+    // 因为版本的差异，所以使用3.1的方式来取出数据　Copy file from《table_forum_ratelog.php》
+    public static function fetch_postrate_by_pid($pids, $postlist, $postcache, $ratelogrecord) {
+        $pids = array_map('intval', (array)$pids);
+        $query = DB::query("SELECT * FROM ".DB::table('forum_ratelog')." WHERE pid IN (".dimplode($pids).") ORDER BY dateline DESC");
+        $ratelogs = array();
+        while($ratelog = DB::fetch($query)) {
+            if(count($postlist[$ratelog['pid']]['ratelog']) < $ratelogrecord) {
+                $ratelogs[$ratelog['pid']][$ratelog['uid']]['username'] = $ratelog['username'];
+                $ratelogs[$ratelog['pid']][$ratelog['uid']]['score'][$ratelog['extcredits']] += $ratelog['score'];
+                empty($ratelogs[$ratelog['pid']][$ratelog['uid']]['reason']) && $ratelogs[$ratelog['pid']][$ratelog['uid']]['reason'] = dhtmlspecialchars($ratelog['reason']);
+                $postlist[$ratelog['pid']]['ratelog'][$ratelog['uid']] = $ratelogs[$ratelog['pid']][$ratelog['uid']];
+            }
+
+            $postcache[$ratelog['pid']]['rate']['ratelogs'] = $postlist[$ratelog['pid']]['ratelog'];
+            $postcache[$ratelog['pid']]['rate']['extcredits'][$ratelog['extcredits']] = $postlist[$ratelog['pid']]['ratelogextcredits'][$ratelog['extcredits']] += $ratelog['score'];
+            if(!$postlist[$ratelog['pid']]['totalrate'] || !in_array($ratelog['uid'], $postlist[$ratelog['pid']]['totalrate'])) {
+                $postlist[$ratelog['pid']]['totalrate'][] = $ratelog['uid'];
+            }
+            $postcache[$ratelog['pid']]['rate']['totalrate'] = $postlist[$ratelog['pid']]['totalrate'];
+        }
+        return array($ratelogs, $postlist, $postcache);        
+    }
+
 }
