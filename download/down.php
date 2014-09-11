@@ -15,6 +15,6 @@ C::app()->init();
 $_SERVER['REQUEST_METHOD'] = $tempMethod;
 
 $_G['siteurl'] = substr($_G['siteurl'], 0, -18);
-$url = $_G['siteurl'].'/mobcent/app/web/index.php?r=misc/download&sdkVersion=2.0.0';
+$url = $_G['siteurl'].'/plugin.php?id=appbyme_app:download';
 header('Location: '.$url);
 ?>

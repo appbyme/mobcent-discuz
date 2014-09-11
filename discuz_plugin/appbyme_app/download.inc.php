@@ -21,9 +21,11 @@ $appInfo = Appbyme::getAppbymeConfig('app_download_options');
 !empty($appInfo['cvalue']) && $appInfo = unserialize($appInfo['cvalue']);
 $appName = $appInfo['appName'];
 $appImage = $appInfo['appImage'];
+$appIcon = $appInfo['appIcon'];
 $appDescribe = $appInfo['appDescribe'];
 $androidDownloadUrl = $appInfo['appDownloadUrl']['android'];
 $appleDownloadUrl = $appInfo['appDownloadUrl']['apple'];
+$appleMobileDownloadUrl = $appInfo['appDownloadUrl']['appleMobile'];
 $androidQRCode = $appInfo['appQRCode']['android'];
 $appleQRCode = $appInfo['appQRCode']['apple'];
 $assetsBaseUrlPath = $_G['siteurl'].'/source/plugin/'.Appbyme::PLUGIN_ID.'/template';
@@ -37,5 +39,7 @@ if(!$navtitle) {
 }
 !$metadescription && $metadescription = $navtitle;
 !$metakeywords && $metakeywords = $navtitle;
+
+$isFromWeixin = strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false;
 
 include template('appbyme_app:download');
