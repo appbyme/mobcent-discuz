@@ -20,7 +20,7 @@ class TestController extends MobcentController {
         }
         
         global $_G;
-        $_G['uid'] != 1 && exit('Access Denied');
+        $_G['adminid'] != 1 && exit('Access Denied');
         
         return true;
     }
