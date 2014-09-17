@@ -438,7 +438,7 @@ class ForumUtils {
 
     /**
      * 获取帖子管理面板权限信息
-     * 
+     *
      * @param array $params 获得权限所需要的信息.
      * @return array  管理面板数据
      *
@@ -487,10 +487,25 @@ class ForumUtils {
                 if($_G['group']['allowdigestthread'] && !$_G['forum_thread']['is_archived']) {
                     $manageItems['topic'][] = array('action' => 'marrow', 'title' => WebUtils::t('精华'));
                 }
+                //  打开/关闭
+                if($_G['group']['allowclosethread'] && !$_G['forum_thread']['is_archived'] && $_G['forum']['status'] != 3) {
+                    $manageItems['topic'][] = array(
+                        'action' => !$_G['forum_thread']['closed'] ? 'close' : 'open',
+                        'title' => WebUtils::t(!$_G['forum_thread']['closed'] ?  '关闭' : '打开'),
+                    );
+                }
+                // 移动
+                if($_G['group']['allowmovethread'] && !$_G['forum_thread']['is_archived'] && $_G['forum']['status'] != 3) {
+                    $manageItems['topic'][] = array('action' => 'move', 'title' => WebUtils::t('移动'));
+                }
+                // 屏蔽
+                if ($_G['group']['allowbanpost']) {
+                    $manageItems['topic'][] = array('action' => 'band', 'title' => WebUtils::t('屏蔽'));
+                }
             }
         }
 
-        // 编辑权限 author:HanPengyu |start 
+        // 编辑权限 author:HanPengyu |start
         $post['adminid'] = $userMember['adminid'];
         $post['authorid'] = $userMember['authorid'];
         $post['dbdateline'] = $userMember['dateline'];
@@ -509,8 +524,13 @@ class ForumUtils {
 
         if ($modmenu['post']) {
             if($_G['forum']['ismoderator']) {
+                // 删除
                 if($_G['group']['allowdelpost'] && !$rushreply) {
                     $manageItems['post'][] = array('action' => 'delete', 'title' => WebUtils::t('删除'));
+                }
+                // 屏蔽
+                if($_G['group']['allowbanpost']) {
+                    $manageItems['post'][] = array('action' => 'band', 'title' => WebUtils::t('屏蔽'));
                 }
             }
         }
@@ -531,7 +551,7 @@ class ForumUtils {
             $panels['topic'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
             // $panels['post'][] = array('action' => 'rate', 'title' => WebUtils::t('评分'));
         }
-        
+
         // 赞
         $topicConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_topic_recommend');
         $postConfig = (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_post_recommend');
@@ -1039,7 +1059,7 @@ class ForumUtils {
             }
             $postcache[$ratelog['pid']]['rate']['totalrate'] = $postlist[$ratelog['pid']]['totalrate'];
         }
-        return array($ratelogs, $postlist, $postcache);        
+        return array($ratelogs, $postlist, $postcache);
     }
 
 }
