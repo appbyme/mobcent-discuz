@@ -12,7 +12,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 }
 // Mobcent::setErrors();
 class NewsListAction extends MobcentAction {
-
+    const HANDPAGE = 10;
     public function run($moduleId, $page = 1, $pageSize = 10) {
         $key = CacheUtils::getNewsListKey(array($moduleId, $page, $pageSize));
         $this->runWithCache($key, array('mid' => $moduleId, 'page' => $page, 'pageSize' => $pageSize));
@@ -90,7 +90,7 @@ class NewsListAction extends MobcentAction {
         $res = array_merge($res, $pageInfo);
         $offset = ($page - 1)*$pageSize;
         if ($page == 1) {
-            if ($handCount <= 10) {
+            if ($handCount <= self::HANDPAGE) {
                 $autoData = array();
                 $handData = ($handCount != 0 && $page = 1) ? $this->_handData($mid, $offset, $handCount, $params) : array();
                 $pageInfo = WebUtils::getWebApiArrayWithPage_oldVersion($page, $handCount, $handCount);
@@ -118,7 +118,7 @@ class NewsListAction extends MobcentAction {
             return $res;
         }
 
-        $page = ($handCount <= 15) ? $page : ($page - 1) ;
+        $page = ($handCount <= self::HANDPAGE) ? $page : ($page - 1) ;
         $offset = ($page - 1) * $pageSize;
 
         if ($count != 0) {
