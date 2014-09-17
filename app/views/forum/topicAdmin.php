@@ -6,7 +6,8 @@
 <meta http-equiv="Cache-Control" content="no-transform" />
 <link rel="alternate" type="application/vnd.wap.xhtml+xml" media="handheld" href="target"/>
 <meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1.0,initial-scale=1.0">
-<script type="text/javascript" src="<?php echo $this->rootUrl.'/js/'; ?>jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src ="<?php echo $this->dzRootUrl; ?>/static/js/common.js"></script>
+<!-- <script type="text/javascript" src="<?php echo $this->rootUrl.'/js/'; ?>jquery-2.0.3.min.js"></script> -->
 <style type="text/css">
 /* CSS Document */
 *{
@@ -301,24 +302,6 @@ a.pn {
 }
 }
 </style>
-<script type="text/javascript">
-$(function () {
-    $('#reasonSelect').on({'change': function () {
-        var value = $(this).val();
-        if (value != '-1') {
-            if (value == '0') {
-                $('#reason').get(0).focus();
-            } else {
-                $('#reason').val(value);
-            }
-        }
-    }});
-    var errorMsg = '<?php echo $errorMsg; ?>';
-    if (errorMsg != '') {
-        alert(errorMsg);
-    }
-});
-</script>
 </head>
 <body>
 <div class="zhiding">
@@ -331,7 +314,7 @@ $(function () {
                     <em>选择了 1 篇帖子</em>
                 </h3>
                 <div class="c">
-                    <?php  if ($action == 'delete') { ?> 
+                    <?php  if ($action == 'delete') { ?>
                     <div class="tplw">
                         <ul class="llst">
                             <li><p>您确认要 <strong>删除</strong> 选择的帖子么?</p></li>
@@ -401,6 +384,63 @@ $(function () {
                                 </tr>
                             </table>
                         </li>
+                        <?php } else if ($action == 'move') {?>
+                        <p class="mbn tahfx">
+                        目标版块: <select name="moveto" id="moveto" class="ps vm" onchange="
+                        ajaxget('<?php echo $this->dzRootUrl; ?>/forum.php?mod=ajax&action=getthreadtypes&fid=' + this.value, 'threadtypes');
+                        if(this.value) {$('moveext').style.display='';} else {$('moveext').style.display='none';}">
+                        <?php echo $forumselect;?>
+                        </select>
+                        </p>
+                        <p class="mbn tahfx">
+                        目标分类: <span id="threadtypes"><select name="threadtypeid" class="ps vm"><option value="0" /></option></select></span>
+                        </p>
+                        <ul class="llst" id="moveext" style="display:none;margin:5px 0;">
+                        <li class="wide"><label><input type="radio" name="appbyme_movetype" class="pr" value="normal" checked="checked" />移动主题</label></li>
+                        <li class="wide"><label><input type="radio" name="appbyme_movetype" class="pr" value="redirect" />保留转向</label></li>
+                        </ul>
+                        <?php } else if ($action == 'open' || $action == 'close') {?>
+                        <li class="copt">
+                            <table cellspacing="0" cellpadding="5" width="100%">
+                                <tr>
+                                    <td class="hasd">
+                                        <label><input type="radio" name="act" class="pr" value="open" <?php echo $closecheck['0'];?>  />打开主题</label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </li>
+                        <li class="copt">
+                            <table cellspacing="0" cellpadding="5" width="100%">
+                                <tr>
+                                    <td class="hasd">
+                                        <label><input type="radio" name="act" class="pr" value="close" <?php echo $closecheck['1'];?> />关闭主题</label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </li>
+                        <?php } else if ($action == 'band') {?>
+                        <?php echo $banid;?>
+                        <li class="copt">
+                            <table cellspacing="0" cellpadding="5" width="100%">
+                                <tr>
+                                    <td class="hasd">
+                                        <label><input type="radio" name="banned" class="pr" value="1" <?php echo $checkban;?> />屏蔽</label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </li>
+                        <li class="copt">
+                            <table cellspacing="0" cellpadding="5" width="100%">
+                                <tr>
+                                    <td class="hasd">
+                                        <label><input type="radio" name="banned" class="pr" value="0" <?php echo $checkunban;?> />解除</label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </li>
+                        <?php if(($modpostsnum == 1 || $authorcount == 1) && $crimenum > 0) { ?>
+                        <br /><div style="clear: both; text-align: right;">用户 <?php echo $crimeauthor;?> 帖子已被屏蔽 <?php echo $crimenum;?> 次</div>
+                        <?php } ?>
                         <?php } ?>
                     </ul>
                     <?php } ?>
@@ -444,5 +484,21 @@ $(function () {
 </table>
 </form>
 </div>
+<script type="text/javascript">
+$('reasonSelect').onchange = function () {
+    var value = this.value;
+    if (value != '-1') {
+        if (value == '0') {
+            $('reason').focus();
+        } else {
+            $('reason').value = value;
+        }
+    }
+};
+var errorMsg = '<?php echo $errorMsg; ?>';
+if (errorMsg != '') {
+    alert(errorMsg);
+}
+</script>
 </body>
 </html>

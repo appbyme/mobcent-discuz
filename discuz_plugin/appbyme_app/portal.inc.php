@@ -783,7 +783,7 @@ class PortalModule {
         switch ($imgtype) {
             case PortalModule::SOURCE_TYPE_AID:
                 $article = DB::fetch_first('
-                    SELECT pic
+                    SELECT pic, remote
                     FROM %t
                     WHERE aid=%d
                     ',

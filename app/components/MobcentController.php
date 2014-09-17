@@ -25,7 +25,7 @@ class MobcentController extends Controller {
 
         $this->rootUrl = Yii::app()->getBaseUrl(true);
         $this->dzRootUrl = substr($this->rootUrl, 0, -16);
-        
+
         // $_GET['accessToken'] = '8d5478c77477933169ab8cfde10b5'; $_GET['accessSecret'] = 'a57002aab240f3ff831d868b623ff';
         // $_GET['accessToken'] = 'a4f26a1de6a3fd60e133075eecc73'; $_GET['accessSecret'] = '35394ccf5119fc6a01d2dc3c2786a';
 
