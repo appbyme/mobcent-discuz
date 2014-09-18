@@ -7,7 +7,7 @@ require_once '../model/table/x25/table_forum_typeoption.php';
 require_once '../tool/tool.php';
 define('ALLOWGUEST', 1);
 C::app ()->init();
-require_once '../public/mobcentDatabase.php';
+require_once '../tool/mobcentDatabase.php';
 
 class PostListImpl_x25 extends abstractPostList {
     public function getPostListObj() {
