@@ -1,4 +1,3 @@
-<?php exit; ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -18,6 +17,9 @@ function hideWechatHint() {
     document.getElementById('bg').style.display = 'none';
 }
 </script>
+<!--{eval
+empty($appleMobileDownloadUrl) && $appleMobileDownloadUrl = sprintf("javascript:alert('%s')", Appbyme::t('ios版应用正在发布到App store, 目前暂时无法下载, 请稍后...'));
+}-->
 <body>
     <div id="all">
         <div id="z1">

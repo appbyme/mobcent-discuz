@@ -116,8 +116,31 @@ class Appbyme {
      * 执行定时任务
      */
     public static function runCron() {
+        self::_runCronCleanCache();
+        self::_runCronCleanThumb();
+
         self::_runCronUpdateCache();
         self::_runCronMakeThumb();
+    }
+
+    private static function _runCronCleanCache() {
+        $cleanPeriod = (int)self::$config['cache_clean_period'] * 86400;
+        $lastCleanTime = self::getDzPluginCache('cache_last_clean_time');
+
+        // 自动间隔删除
+        if ($cleanPeriod > 0 && time()-$lastCleanTime > $cleanPeriod) {
+            self::cleanCache();
+        }
+    }
+
+    private static function _runCronCleanThumb() {
+        $cleanPeriod = (int)self::$config['image_thumb_clean_period'] * 86400;
+        $lastCleanTime = self::getDzPluginCache('thumb_last_clean_time');
+
+        // 自动间隔删除
+        if ($cleanPeriod > 0 && time()-$lastCleanTime > $cleanPeriod) {
+            self::cleanThumb();
+        }
     }
 
     private static function _runCronUpdateCache() {
@@ -174,6 +197,7 @@ class Appbyme {
      * 清空缓存
      */
     public static function cleanCache($fid = 0, $gid = 0) {
+        self::setDzPluginCache('cache_last_clean_time', time());
         self::httpRequestAppAPI('cache/clean', array('fid' => $fid, 'gid' => $gid));
     }
 
@@ -183,6 +207,7 @@ class Appbyme {
     }
 
     public static function cleanThumb() {
+        self::setDzPluginCache('thumb_last_clean_time', time());
         self::httpRequestAppAPI('cache/cleanthumb');
     }
 
