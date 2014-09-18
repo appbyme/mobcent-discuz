@@ -247,7 +247,7 @@ class PostListAction extends MobcentAction {
 
                 $topicInfo['flag'] = 0;
                 $topicInfo['gender'] = 1;
-                $topicInfo['reply_posts_id'] = 0;
+                $topicInfo['reply_posts_id'] = (int)$post['pid'];
                 $topicInfo['rateList'] = ForumUtils::topicRateList($post['pid']);
             }
         }
