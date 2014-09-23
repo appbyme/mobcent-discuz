@@ -972,7 +972,11 @@ class ForumUtils {
             $temp["field$i"] = (string)$ratelog['username'];
             $i++;
             foreach($rateItem as $id=>$score) {
-                $temp["field$i"] = isset($ratelog['score'][$id]) ? '+'.$ratelog['score'][$id] : '';
+                $temp["field$i"] = isset($ratelog['score'][$id]) 
+                ? 
+                ($ratelog['score'][$id] < 0 ? (string)$ratelog['score'][$id] : '+'.$ratelog['score'][$id])
+                : 
+                '';
                 $i++;
             }
             if ($i == 3) {
