@@ -26,6 +26,7 @@ class VoteAction extends MobcentAction
     {
         global $_G;
         $_G['tid'] = $tid;
+        $options = rawurldecode($options);
         $_GET['pollanswers'] = $options;
 
         if(!$_G['group']['allowvote']) {
@@ -49,15 +50,14 @@ class VoteAction extends MobcentAction
 
         $voterids = $_G['uid'] ? $_G['uid'] : $_G['clientip'];
         $polloptionid = array();
+        $pollarray = '';
         $query = C::t('forum_polloption')->fetch_all_by_tid($_G['tid']);
-
         foreach($query as $pollarray) {
             if(strexists("\t".$pollarray['voterids']."\t", "\t".$voterids."\t")) {
                 return $this->makeErrorInfo($res, 'thread_poll_voted');
             }
             $polloptionid[] = $pollarray['polloptionid'];
         }
-
         $polloptionids = '';
         foreach($_GET['pollanswers'] as $key => $id) {
             if(!in_array($id, $polloptionid)) {
@@ -72,13 +72,12 @@ class VoteAction extends MobcentAction
         // DB::query("UPDATE ".DB::table('forum_poll')." SET voters=voters+1 where tid=".$_G['tid']);
         // DB::query("UPDATE ".DB::table('forum_polloption')." SET votes=votes+1,voterids=CONCAT(voterids,'".$_G['uid']."') where polloptionid in (".$_GET['pollanswers'].")"); 
         foreach ($_GET['pollanswers'] as $key => $value) {
+            // DzUserVote::updateUserVoteByTid($_G['tid']);
+            // DzUserVote::updateUserVotePolloption($_G['uid'], $value);
 
-            DzUserVote::updateUserVoteByTid($_G['tid']);
-            DzUserVote::updateUserVotePolloption($_G['uid'], $value);
-
-            // C::t('forum_polloption')->update_vote($polloptionids, $voterids."\t", 1);
+            C::t('forum_polloption')->update_vote($value, $voterids."\t", 1);
             C::t('forum_thread')->update($_G['tid'], array('lastpost'=>$_G['timestamp']), true);
-            // C::t('forum_poll')->update_vote($_G['tid']);
+            C::t('forum_poll')->update_vote($_G['tid']);
             C::t('forum_pollvoter')->insert(array(
                 'tid' => $_G['tid'],
                 'uid' => $_G['uid'],
@@ -103,7 +102,6 @@ class VoteAction extends MobcentAction
                 postfeed($feed);
             }
         }
-
         // $userVoteInfo = DzUserVote::getUserVoteTotalNum($tid);
         $polloption_query = DB::query("SELECT polloption as name,polloptionid as pollItemId,votes as totalNum FROM ".DB::table('forum_polloption')." where tid=".$tid);
         while ($polloption_rst = DB::fetch($polloption_query)) {
