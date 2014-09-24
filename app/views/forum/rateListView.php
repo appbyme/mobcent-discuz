@@ -87,7 +87,6 @@
 				<th><?php echo WebUtils::t('时间'); ?></th>
 			</tr>
 			<?php foreach($loglist as $k => $v): ?>
-			<?php global $_G; ?>
 			<tr>
 				<td><?php echo $_G['setting']['extcredits'][$v['extcredits']]['title'].$v['score']; ?></td>
 				<td><?php echo $v['username'] ?></td>

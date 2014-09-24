@@ -10,7 +10,7 @@
 if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     exit('Access Denied');
 }
-// Mobcent::setErrors();
+//Mobcent::setErrors();
 class TopicRateAction extends MobcentAction
 {
     public function run($tid, $pid)
@@ -32,11 +32,12 @@ class TopicRateAction extends MobcentAction
         $_GET['tid'] = $_G['tid'] = $tid;
         $_GET['pid'] = $pid;
 
+        //基于DISCUZ_ROOT/source/module/forum/forum_misc.php修改
         if(!$_G['group']['raterange']) {
-            // 抱歉，您所在的用户组({grouptitle})无法进行此操作
+            //抱歉，您所在的用户组({grouptitle})无法进行此操作
             return $this->makeErrorInfo($res, lang('message', 'group_nopermission', array('grouptitle' => $_G['group']['grouptitle'])));
         } elseif($_G['setting']['modratelimit'] && $_G['adminid'] == 3 && !$_G['forum']['ismoderator']) {
-            // 抱歉，作为版主您只能在自己的管辖范围内评分
+            //抱歉，作为版主您只能在自己的管辖范围内评分
             return $this->makeErrorInfo($res, lang('message', 'thread_rate_moderator_invalid'));
         }
 
@@ -55,27 +56,27 @@ class TopicRateAction extends MobcentAction
         }
 
         if(!$post || $post['tid'] != $thread['tid'] || !$post['authorid']) {
-            // 帖子不存在或不能被推送
+            //帖子不存在或不能被推送
             return $this->makeErrorInfo($res, lang('message', 'rate_post_error'));
         } elseif(!$_G['forum']['ismoderator'] && $_G['setting']['karmaratelimit'] && TIMESTAMP - $post['dateline'] > $_G['setting']['karmaratelimit'] * 3600) {
-            // 抱歉，您不能对发表于 {karmaratelimit} 小时前的帖子进行评分
+            //抱歉，您不能对发表于 {karmaratelimit} 小时前的帖子进行评分
             return $this->makeErrorInfo($res, lang('message', 'thread_rate_timelimit', array('karmaratelimit' => $_G['setting']['karmaratelimit'])));
         } elseif($post['authorid'] == $_G['uid'] || $post['tid'] != $_G['tid']) {
-            // 抱歉，您不能给自己发表的帖子评分
+            //抱歉，您不能给自己发表的帖子评分
             return $this->makeErrorInfo($res, lang('message', 'thread_rate_member_invalid'));
-            // $errorMsg = lang('message', 'thread_rate_member_invalid');
+            //$errorMsg = lang('message', 'thread_rate_member_invalid');
         } elseif($post['anonymous']) {
-            // 抱歉，您不能对匿名帖评分
+            //抱歉，您不能对匿名帖评分
             return $this->makeErrorInfo($res, lang('message', 'thread_rate_anonymous'));
         } elseif($post['status'] & 1) {
-            // 抱歉，您不能对屏蔽帖评分
+            //抱歉，您不能对屏蔽帖评分
             return $this->makeErrorInfo($res, lang('message', 'thread_rate_banned'));
         }
 
         $allowrate = TRUE;
         if(!$_G['setting']['dupkarmarate']) {
             if(C::t('forum_ratelog')->count_by_uid_pid($_G['uid'], $_GET['pid'])) {
-                // 抱歉，您不能对同一个帖子重复评分
+                //抱歉，您不能对同一个帖子重复评分
                 return $this->makeErrorInfo($res, lang('message', 'thread_rate_duplicate'));
             }
         }
@@ -103,8 +104,8 @@ HTML;
         require_once libfile('function/misc');
         require_once libfile('function/forum');
 
-        //  今日剩余积分
-        $maxratetoday = $this->getratingleft($_G['group']['raterange']);
+        //今日剩余积分
+        $maxratetoday = $this->_getratingleft($_G['group']['raterange']);
         $post = C::t('forum_post')->fetch('tid:'.$tid, $pid);
         $thread = C::t('forum_thread')->fetch($tid);
         if (!empty($_POST)) {
@@ -117,16 +118,16 @@ HTML;
                 $score = intval($_GET['score'.$id]);
                 if(isset($_G['setting']['extcredits'][$id]) && !empty($score)) {
                     if($rating['isself'] && (intval($_G['member']['extcredits'.$id]) - $score < 0)) {
-                        // 抱歉，您的{extcreditstitle}不足，无法评分
+                        //抱歉，您的{extcreditstitle}(评分栏目)不足，无法评分
                         $errorMsg = lang('message', 'thread_rate_range_self_invalid', array('extcreditstitle' => $_G['setting']['extcredits'][$id]['title']));
-                        $this->renderTemplates($tid, $pid, $errorMsg);
+                        $this->_renderTemplates($tid, $pid, $errorMsg);
                         exit;
                     }
                     if(abs($score) <= $maxratetoday[$id]) {
                         if($score > $rating['max'] || $score < $rating['min']) {
-                            // 请输入正确的分值
+                            //请输入正确的分值
                             $errorMsg = lang('message', 'thread_rate_range_invalid');
-                            $this->renderTemplates($tid, $pid, $errorMsg);
+                            $this->_renderTemplates($tid, $pid, $errorMsg);
                             exit;
                         } else {
                             $creditsarray[$id] = $score;
@@ -137,18 +138,18 @@ HTML;
                             $ratetimes += ceil(max(abs($rating['min']), abs($rating['max'])) / 5);
                         }
                     } else {
-                        // 抱歉，24 小时评分数超过限制
+                        //抱歉，24 小时评分数超过限制
                         $errorMsg = lang('message', 'thread_rate_ctrl');
-                        $this->renderTemplates($tid, $pid, $errorMsg);
+                        $this->_renderTemplates($tid, $pid, $errorMsg);
                         exit;
                     }
                 }
             }          
 
             if(!$creditsarray) {
-                // 请输入正确的分值
+                //请输入正确的分值
                 $errorMsg = lang('message', 'thread_rate_range_invalid');
-                $this->renderTemplates($tid, $pid, $errorMsg);
+                $this->_renderTemplates($tid, $pid, $errorMsg);
                 exit;
             }
             
@@ -184,14 +185,14 @@ HTML;
             
             $reason = dhtmlspecialchars(censor(trim($reason)));
             
-            // 对是否通知作者做的一些初始工作
+            //对是否通知作者做的一些初始工作
             if(($_G['group']['resasonpm'] == 2 || $_G['group']['reasonpm'] == 3) || !empty($_GET['sendreasonpm'])) {
                 $forumname = strip_tags($_G['forum']['name']);
                 $sendreasonpm = 1;
             } else {
                 $sendreasonpm = 0;
             }
-            // *****
+
             if($sendreasonpm) {
                 $ratescore = $slash = '';
                 foreach($creditsarray as $id => $addcredits) {
@@ -216,28 +217,28 @@ HTML;
             C::t('forum_postcache')->delete($_GET['pid']);
             writelog('ratelog', $logs);
 
-            // 评分成功
+            //评分成功
             $this->getController()->redirect(WebUtils::createUrl_oldVersion('index/returnmobileview'));
 
         }
 
-        $this->renderTemplates($tid, $pid);
+        $this->_renderTemplates($tid, $pid);
     }
 
-    // 调用模版
-    private  function renderTemplates($tid, $pid, $errorMsg='') 
+    //调用模版
+    private  function _renderTemplates($tid, $pid, $errorMsg='') 
     {
         global $_G;
         require_once libfile('function/misc');
 
-        //  今日剩余积分
-        $maxratetoday = $this->getratingleft($_G['group']['raterange']);
+        //今日剩余积分
+        $maxratetoday = $this->_getratingleft($_G['group']['raterange']);
 
-        // 评分栏目列表
-        $ratelist = $this->getratelist($_G['group']['raterange']);
+        //评分栏目列表
+        $ratelist = $this->_getratelist($_G['group']['raterange']);
         $ratelist = WebUtils::emptyHtml($ratelist);
 
-        // 评分理由
+        //评分理由
         $selectreason =  explode("\n", modreasonselect(0, 'userreasons'));
         $selectreason = str_replace('</li>', '', $selectreason);
         $selectreason = explode('<li>', $selectreason[0]);
@@ -247,8 +248,6 @@ HTML;
                 array(
                     'tid' => $tid,
                     'pid' => $pid,
-                    // 'type' =>'check',
-                    // 'hacker_uid' => $_G['uid']
                 )
             ),
             'errorMsg' => $errorMsg,
@@ -258,8 +257,8 @@ HTML;
         ));         
     }
 
-    // 剩余积分
-    private function getratingleft($raterange)
+    //剩余积分
+    private function _getratingleft($raterange)
     {
         global $_G;
         $maxratetoday = array();
@@ -274,11 +273,11 @@ HTML;
         return $maxratetoday;
     }
 
-    // 评分栏目列表
-    private function getratelist($raterange)
+    //评分栏目列表
+    private function _getratelist($raterange)
     {
         global $_G;
-        $maxratetoday = $this->getratingleft($raterange);
+        $maxratetoday = $this->_getratingleft($raterange);
 
         $ratelist = array();
         foreach($raterange as $id => $rating) {
