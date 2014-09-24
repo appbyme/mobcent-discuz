@@ -1014,7 +1014,7 @@ class ForumUtils {
     public static function rateList($tid, $pid, $page=1, $pageSize=3)
     {
         global $_G;
-        $loglist = $logcount = array();
+        $loglist = $logcount = $res = array();
         $post = C::t('forum_post')->fetch('tid:'.$tid, $pid);
         if($post['invisible'] != 0) {
             $post = array();
