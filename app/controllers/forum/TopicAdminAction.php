@@ -970,8 +970,9 @@ class TopicAdminAction extends MobcentAction{
         if(!$sortid && !$special && trim($message) == '') {
             return WebUtils::makeErrorInfo_oldVersion($res, 'post_sm_isnull');
         }
+
         if($post_invalid = checkpost($subject, $message, ($special || $sortid))) {
-            return WebUtils::makeErrorInfo_oldVersion($res, $post_invalid,array('{minpostsize}'=>$_G['setting']['minpostsize']),array('{maxpostsize}'=>$_G['setting']['maxpostsize']));
+            return WebUtils::makeErrorInfo_oldVersion($res, $post_invalid, array('{minpostsize}' => $_G['setting']['minpostsize'], '{maxpostsize}' => $_G['setting']['maxpostsize']));
             //showmessage($post_invalid, '', array('minpostsize' => $_G['setting']['minpostsize'], 'maxpostsize' => $_G['setting']['maxpostsize']));
         }
 
