@@ -97,10 +97,8 @@
 		<div id="butt"><?php echo WebUtils::t('总计:'); ?>
 			<?php foreach($logcount as $id => $count): ?>
 				<?php echo $_G['setting']['extcredits'][$id]['title']; ?>
-				<?php if($count > 0): ?>
-			   +<?php echo $count.$_G['setting']['extcredits'][$id]['unit'] ?>,
-				<?php endif; ?>
-			<?php endforeach; ?>
+				<?php echo $count > 0 ? '+'.$count.$_G['setting']['extcredits'][$id]['unit'].',' : $count.$_G['setting']['extcredits'][$id]['unit'].',' ?>
+			<?php endforeach; ?> 
 		</div>
 	</div>
 </body>
