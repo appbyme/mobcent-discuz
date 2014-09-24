@@ -205,7 +205,9 @@ class PostListAction extends MobcentAction {
                 // end
 
                 $manageItems = ForumUtils::getPostManagePanel($params);
+
                 foreach ($manageItems['topic'] as $key => $item) {
+                    $item['type'] = $item['action'];
                     if ($item['action'] == 'edit') {
                         $item['action'] = WebUtils::getHttpFileName("forum.php?mod=post&action=edit&fid=$post[fid]&tid=$tid&pid=$post[pid]");   
                     } else {                    

@@ -157,14 +157,19 @@ $(function () {
                     <td><?php echo WebUtils::t('今日剩余'); ?></td>
                 </tr>
             <?php foreach( $ratelist as $id=>$options): ?>
-                <?php $options = explode('+', $options); ?>
+                <?php
+                    $reg = '/[+|-][\w]+/';
+                    preg_match_all($reg, $options, $options);
+                    $options = $options[0];
+                ?>
                 <?php if($options[$id] != ''): ?>
                     <tr>
                         <td><label class="labeltxt"><?php echo $_G['setting']['extcredits'][$id]['title'];?></label></td>
                         <td class="list">
                             <select name="score<?php echo $id ?>">
+                                    <option value="">0</option>
                                 <?php foreach($options as $key=>$value): ?>
-                                    <option value="<?php echo $value; ?>">+<?php echo $value; ?></option>
+                                    <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </td>

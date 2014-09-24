@@ -248,7 +248,7 @@ HTML;
                     'tid' => $tid,
                     'pid' => $pid,
                     // 'type' =>'check',
-                    'hacker_uid' => $_G['uid']
+                    // 'hacker_uid' => $_G['uid']
                 )
             ),
             'errorMsg' => $errorMsg,

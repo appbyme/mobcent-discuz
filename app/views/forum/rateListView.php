@@ -4,6 +4,7 @@
 <?php global $_G; ?>
 <meta charset="<?php echo $_G['charset'] ?>">
 <title><?php echo WebUtils::t('显示全部评分'); ?></title>
+<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1.0,initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="<?php echo $this->rootUrl.'/css/'; ?>bootstrap.min.css">
 <script type="text/javascript"></script>
 <style type="text/css">
@@ -33,7 +34,7 @@
     text-align: left;
     }
     #round{
-         width: 320px;
+         width: 100%;
          margin: 10px auto; 
          /*background: #e3e3e3;*/
          height: 300px;
@@ -45,8 +46,10 @@
         text-align: center;
     }
     #butt{
-        margin-top: 5px;
-        text-align: right;
+        /*width: 100%;*/
+        margin: 10px auto; 
+        /*margin-top: 5px;*/
+        text-align: center;
     }
     th{
         text-align:left;
@@ -54,7 +57,7 @@
     td{
         padding: 5px;
         margin-left: 5px;
-        width: 75px;
+        width: 37%;
         border-bottom: 1px dashed gray;
         text-align:left;
     }
@@ -92,14 +95,14 @@
 			</tr>
 			<?php endforeach; ?>
 		</table>
-		<p id="butt"><?php echo WebUtils::t('总计:'); ?>
+		<div id="butt"><?php echo WebUtils::t('总计:'); ?>
 			<?php foreach($logcount as $id => $count): ?>
 				<?php echo $_G['setting']['extcredits'][$id]['title']; ?>
 				<?php if($count > 0): ?>
 			   +<?php echo $count.$_G['setting']['extcredits'][$id]['unit'] ?>,
 				<?php endif; ?>
 			<?php endforeach; ?>
-		</p>
+		</div>
 	</div>
 </body>
 </html>
