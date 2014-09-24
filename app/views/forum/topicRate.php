@@ -167,7 +167,7 @@ $(function () {
                         <td><label class="labeltxt"><?php echo $_G['setting']['extcredits'][$id]['title'];?></label></td>
                         <td class="list">
                             <select name="score<?php echo $id ?>">
-                                    <option value=""><?php echo WebUtils::t('请选择'); ?></option>
+                                    <option value="">0</option>
                                 <?php foreach($options as $key=>$value): ?>
                                     <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
                                 <?php endforeach; ?>
