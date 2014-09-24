@@ -127,7 +127,7 @@ class TopicAdminViewAction extends CAction {
                             $stampstatus = 1;
 
                             break;
-                        case '3':
+                        case 'marrow':
                             $digestlevel = intval($_GET['digestlevel']);
                             if($digestlevel < 0 || $digestlevel > 3 || $digestlevel > $_G['group']['allowdigestthread']) {
                                 // showmessage('no_privilege_digestthread');
