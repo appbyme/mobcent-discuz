@@ -149,7 +149,7 @@ class NewsListAction extends MobcentAction {
 
         foreach($portals as $portal) {
            if ($portal['idtype'] == 'tid') {
-                $topicSummary = ForumUtils::getTopicSummary($hand['id'], 'portal');
+                $topicSummary = ForumUtils::getTopicSummary($portal['id'], 'portal');
                 $rows[] = $this->_getListField(ForumUtils::getTopicInfo($portal['id']), $topicSummary, 'topic', $portal['id']);
            } elseif ($portal['idtype'] == 'aid') {
                 $articleSummary = PortalUtils::getArticleSummary($portal['id']);
