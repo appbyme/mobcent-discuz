@@ -19,6 +19,12 @@ class MiscController extends MobcentController {
 
     protected function mobcentAccessRules() {
         return array(
+            'download' => false,
         );
+    }
+
+    public function actionDownload()
+    {
+        $this->redirect($this->dzRootUrl.'/plugin.php?id='.MOBCENT_DZ_PLUGIN_ID.':download');
     }
 }
