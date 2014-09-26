@@ -380,7 +380,8 @@ class UserUtils {
             checkfollowfeed();
 
             C::t('common_member_status')->update($_G['uid'], array('lastip' => $_G['clientip'], 'lastvisit' =>TIMESTAMP, 'lastactivity' => TIMESTAMP));
-            $ucsynlogin = $ctlObj->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
+            // uc同步登录写入cookie有问题，暂时注释，待以后修复 9.26
+            // $ucsynlogin = $ctlObj->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
 
             if($invite['id']) {
                 $result = C::t('common_invite')->count_by_uid_fuid($invite['uid'], $uid);

@@ -277,7 +277,8 @@ class MobcentDiscuzApp extends discuz_application {
         $_GET['tid'] = $tid;
 
         global $_G;
-        $_G['setting']['forumpicstyle'] = null;
+        // 生成封面图不是按照后台设置进行裁图 ：HanPengyu
+        // $_G['setting']['forumpicstyle'] = null;
 
         loadforum();
     }

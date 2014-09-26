@@ -28,6 +28,11 @@ class TopicRateAction extends MobcentAction
     private function _checkRate($res, $tid, $pid)
     {   
         global $_G;
+
+        // 9.26 通过fid获取版主的相关信息
+        $topicInfo = ForumUtils::getTopicInfo($tid);
+        ForumUtils::initForum($topicInfo['fid']);
+
         require_once libfile('function/misc');
         $_GET['tid'] = $_G['tid'] = $tid;
         $_GET['pid'] = $pid;
