@@ -402,7 +402,7 @@ class PostListAction extends MobcentAction {
                 $postCount + 1 - $pageSize*($page-1) :
                 $pageSize*($page-1) + 2;
 
-            if($_G['setting']['repliesrank'] && $postList) {
+            if((MobcentDiscuz::getMobcentDiscuzVersion() > 'x25') && $_G['setting']['repliesrank'] && $postList) {
                 if($postList) {
                     $tempPids = array();
                     $tempPostRecommends = array();
