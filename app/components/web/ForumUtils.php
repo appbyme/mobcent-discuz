@@ -563,7 +563,7 @@ class ForumUtils {
         }
 
         $supportPost = $_G['setting']['repliesrank'];
-        if ($supportPost && $postConfig == 1) {
+        if ((MobcentDiscuz::getMobcentDiscuzVersion() > 'x25') && $supportPost && $postConfig == 1) {
             $panels['post'][] = array('action' => 'support', 'title' => WebUtils::emptyHtml(WebUtils::t('支持')), 'recommendAdd'=> '');
         }
 
