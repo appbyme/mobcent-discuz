@@ -24,6 +24,9 @@ mobcentMakeWritableDir($mobcentRuntimePath);
 define('IN_APPBYME', true);
 define('MOBCENT_HACKER_UID', true);
 
+define('MOBCENT_HACKER_USER', 'MOBCENT@hacker#007');
+define('MOBCENT_HACKER_PASSWORD', 'MOBCENT@hacker#007');
+
 defined('MOBCENT_ROOT') or define('MOBCENT_ROOT', realpath(dirname(__FILE__).'/../../'));
 defined('MOBCENT_APP_ROOT') or define('MOBCENT_APP_ROOT', realpath(dirname(__FILE__).'/../'));
 defined('MOBCENT_DATA_PATH') or define('MOBCENT_DATA_PATH', realpath($mobcentDataPath));

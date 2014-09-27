@@ -22,7 +22,7 @@ class QQInfoAction extends MobcentAction {
     private function _qqInfo($res, $openId, $oauthToken, $platformId) {
         
         global $_G;
-        $password = 'mobcent123';
+        $password = MOBCENT_HACKER_PASSWORD;
         require_once libfile('function/member');
 
         if (!empty($platformId) && $platformId == 20) {

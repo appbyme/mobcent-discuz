@@ -22,7 +22,7 @@ class SaveQQInfoAction extends MobcentAction {
     private function _saveInfo($res, $username, $email, $oauthToken, $openId, $gender, $platformId) {
         $username = WebUtils::t(rawurldecode($username));
         $email = WebUtils::t(rawurldecode($email));
-        $password = 'mobcent';
+        $password = MOBCENT_HACKER_PASSWORD;
         $regInfo = UserUtils::register($username, $password, $email, 'qq');
         if ($regInfo['errcode']) {
             return $this->makeErrorInfo($res, $regInfo['message']);
