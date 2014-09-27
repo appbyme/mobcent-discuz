@@ -1,8 +1,9 @@
+<?php header("Content-Type: text/html; charset=utf-8");?>
+<?php global $_G; ?>
 <!doctype html>
 <html>
 <head>
-<?php global $_G; ?>
-<meta charset="<?php echo $_G['charset'] ?>">
+<meta charset="utf-8">
 <meta http-equiv="Cache-Control" content="no-transform" />
 <link rel="alternate" type="application/vnd.wap.xhtml+xml" media="handheld" href="target"/>
 <meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1.0,initial-scale=1.0">
@@ -138,7 +139,7 @@ $(function () {
             }
         }
     }});
-    var errorMsg = '<?php echo $errorMsg; ?>';
+    var errorMsg = '<?php echo WebUtils::u($errorMsg); ?>';
     if (errorMsg != '') {
         alert(errorMsg);
     }
@@ -146,14 +147,15 @@ $(function () {
 </script>
 </head>
 <body>
+    <?php global $_G; ?>
     <div id="div1">
         <form method="post" action="<?php echo $formUrl; ?>">
-            <h4 class="flb"><?php echo WebUtils::t('评分'); ?></h4>
+            <h4 class="flb">评分</h4>
             <table id="tab1">
                 <tr>
                     <td colspan="2"></td>
-                    <td><?php echo WebUtils::t('评分区间'); ?></td>
-                    <td><?php echo WebUtils::t('今日剩余'); ?></td>
+                    <td>评分区间</td>
+                    <td>今日剩余</td>
                 </tr>
             <?php foreach( $ratelist as $id=>$options): ?>
                 <?php
@@ -161,9 +163,10 @@ $(function () {
                     preg_match_all($reg, $options, $options);
                     $options = $options[0];
                 ?>
-                <?php if($options[$id] != ''): ?>
+                <!-- [modify]去掉对于评分今日剩余为0的判断 -->
+                <?php //if($options[$id] != ''): ?>
                     <tr>
-                        <td><label class="labeltxt"><?php echo $_G['setting']['extcredits'][$id]['title'];?></label></td>
+                        <td><label class="labeltxt"><?php echo WebUtils::u($_G['setting']['extcredits'][$id]['title']);?></label></td>
                         <td class="list">
                             <select name="score<?php echo $id ?>">
                                     <option value="">0</option>
@@ -175,25 +178,25 @@ $(function () {
                         <td><?php echo $_G['group']['raterange'][$id]['min'];?> ~ <?php echo $_G['group']['raterange'][$id]['max'];?></td>
                         <td><?php echo $maxratetoday[$id] ?></td>
                     </tr>
-                <?php endif; ?>
+                <?php //endif; ?>
             <?php endforeach; ?>
             </table>
             <br />
-            <span><?php echo WebUtils::t('可选评分理由:'); ?></span>
+            <span>可选评分理由:</span>
             <select id="reasonSelect">
                 <?php foreach($selectreason as $value): ?>
-                    <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+                    <option value="<?php echo WebUtils::u($value); ?>"><?php echo WebUtils::u($value); ?></option>
                 <?php endforeach; ?>
-                    <option value="0"><?php echo WebUtils::t('自定义'); ?></option>
+                    <option value="0">自定义</option>
             </select>
             <p><textarea id="reason" name="reason" class="pt" rows="3"></textarea></p>
             <p class="o pns">
                 <label for="sendreasonpm">
-                    <input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc" style="margin-right:5px;"><?php echo WebUTils::t('通知作者'); ?>
+                    <input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc" style="margin-right:5px;">通知作者
                 </label>
             </p>
             <p style="text-align:center">
-                <button type="submit" name="modsubmit" id="modsubmit" class="pn pnc" value="<?php echo WebUtils::t('确定'); ?>" ><span><?php echo WebUtils::t('确定'); ?></span>
+                <button type="submit" name="modsubmit" id="modsubmit" class="pn pnc" value="确定" ><span>确定</span>
                 </button>
             </p>
         </form>

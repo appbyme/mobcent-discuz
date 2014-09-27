@@ -29,7 +29,7 @@ class TopicRateAction extends MobcentAction
     {   
         global $_G;
 
-        // 9.26 通过fid获取版主的相关信息
+        // [add]通过fid获取版主的相关信息 Author:HanPengyu Data:04.09.26
         $topicInfo = ForumUtils::getTopicInfo($tid);
         ForumUtils::initForum($topicInfo['fid']);
 
@@ -103,6 +103,19 @@ class TopicRateAction extends MobcentAction
 HTML;
         echo $str;
         exit;
+        }
+
+        // [add]修复gbk编码导致的评分理由不显示。Author：HanPengyu Data：04.09.27
+        if (!empty($_POST)) {
+            // 把$_POST转成utf-8, 这是由于discuz源码会在mobile情况下把$_POST预先转码成对应的charset,
+            $_POST = array_intersect_key($_REQUEST, $_POST);
+            // 手动把转成utf-8的$_POST数据再次转成对应的charset
+            foreach ($_POST as $key => $value) {
+                if (is_string($value)) {
+                    $_POST[$key] = WebUtils::t($value);
+                }
+            }
+            $_GET = array_merge($_GET, $_POST);
         }
 
         global $_G;

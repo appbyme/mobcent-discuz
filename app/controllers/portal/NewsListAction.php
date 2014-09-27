@@ -206,6 +206,13 @@ class NewsListAction extends MobcentAction {
     private function _getArticleByAid($aid) {
         $articleCount = PortalUtils::getArticleCount($aid);
         $articleInfo = PortalUtils::getNewsInfo($aid);
+
+        // [add]考虑文章是通过帖子来发布的时候的评论数问题 Author：HanPengyu，Data：14.09.27
+        if ($articleInfo['idtype'] == 'tid') {
+            $topicInfo = ForumUtils::getTopicInfo($articleInfo['id']);
+            $articleCount['commentnum'] = (int)$topicInfo['replies'];
+        }
+
         $articleInfo = array_merge($articleCount, $articleInfo);
         return $articleInfo;
     }
