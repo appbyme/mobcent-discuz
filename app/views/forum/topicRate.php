@@ -147,7 +147,6 @@ $(function () {
 </script>
 </head>
 <body>
-    <?php global $_G; ?>
     <div id="div1">
         <form method="post" action="<?php echo $formUrl; ?>">
             <h4 class="flb">评分</h4>

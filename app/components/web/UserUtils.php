@@ -373,34 +373,13 @@ class UserUtils {
 
         if($result['status'] > 0) {
 
+            // [?]额外的文件
             if($ctlObj->extrafile && file_exists($ctlObj->extrafile)) {
                 require_once $ctlObj->extrafile;
             }
-            setloginstatus($result['member'], $_GET['cookietime'] ? 2592000 : 0);
-            checkfollowfeed();
 
-            C::t('common_member_status')->update($_G['uid'], array('lastip' => $_G['clientip'], 'lastvisit' =>TIMESTAMP, 'lastactivity' => TIMESTAMP));
-            // uc同步登录写入cookie有问题，暂时注释，待以后修复 9.26
-            // $ucsynlogin = $ctlObj->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
-
-            if($invite['id']) {
-                $result = C::t('common_invite')->count_by_uid_fuid($invite['uid'], $uid);
-                if(!$result) {
-                    C::t('common_invite')->update($invite['id'], array('fuid'=>$uid, 'fusername'=>$_G['username']));
-                    updatestat('invite');
-                } else {
-                    $invite = array();
-                }
-            }
-
-            if($invite['uid']) {
-                require_once libfile('function/friend');
-                friend_make($invite['uid'], $invite['username'], false);
-                dsetcookie('invite_auth', '');
-                if($invite['appid']) {
-                    updatestat('appinvite');
-                }
-            }
+            // [封装]把登录信息写入到cookie，并且更新登录的状态等。Author:HanPengyu,Data:04.09.28
+            self::updateCookie($result['member'], $_G['uid']);
 
             return self::errorInfo('',0);
 
@@ -729,6 +708,51 @@ class UserUtils {
             'errcode' => $errcode,
             'info' => $info
         );
+    }
+
+
+
+    /**
+     * 登录写入缓存并改变登录状态
+     * 
+     * @param array $userInfo 将要登录的用户信息.
+     * @param mixed $uid      将要登录用户的uid.
+     *
+     */
+    public static function updateCookie($userInfo=array(), $uid) {
+
+        require_once libfile('function/member');
+
+        // discuz的源码,修改有未知风险，所以采用赋值的方式.
+        $result['member'] = $userInfo;  
+        $_G['uid'] = $uid;
+
+        setloginstatus($result['member'], $_GET['cookietime'] ? 2592000 : 0);
+        checkfollowfeed();
+
+        C::t('common_member_status')->update($_G['uid'], array('lastip' => $_G['clientip'], 'lastvisit' =>TIMESTAMP, 'lastactivity' => TIMESTAMP));
+
+        // uc同步登录写入cookie有问题，暂时注释，待以后修复 9.26
+        // $ucsynlogin = $ctlObj->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
+
+        if($invite['id']) {
+            $result = C::t('common_invite')->count_by_uid_fuid($invite['uid'], $uid);
+            if(!$result) {
+                C::t('common_invite')->update($invite['id'], array('fuid'=>$uid, 'fusername'=>$_G['username']));
+                updatestat('invite');
+            } else {
+                $invite = array();
+            }
+        }
+
+        if($invite['uid']) {
+            require_once libfile('function/friend');
+            friend_make($invite['uid'], $invite['username'], false);
+            dsetcookie('invite_auth', '');
+            if($invite['appid']) {
+                updatestat('appinvite');
+            }
+        }
     }
 
 }

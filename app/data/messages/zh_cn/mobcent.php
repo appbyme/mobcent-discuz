@@ -123,6 +123,7 @@ return array(
     'user_info_avatar_error' => WebUtils::t('03000001:用户头像保存失败'),
     'user_name_null' => WebUtils::t('03000001:输入的用户名为空'),
     'location_activation' => WebUtils::t('03000001:当前用户需要激活,请到pc端激活.'),
+    'mobcent_login_status' => WebUtils::t('03000001:当前登录状态失效.'),
 
     // 用户举报 errcode: 040xxxxx
     'report_parameters_invalid' => WebUtils::t('04000001:页面参数错误，暂不能举报'),
@@ -151,4 +152,5 @@ return array(
     'noreply_yourself_error' => WebUtils::t('07000006:您不能对自己的回帖进行投票'),
     'noreply_voted_error' => WebUtils::t('07000007:您已经对此回帖投过票了'),
     'recommend_daycount_succeed' => WebUtils::t('00000000:评价指数 {recommendc} {recommendv} 您今天还能评价 {daycount} 次'),
+
 );
