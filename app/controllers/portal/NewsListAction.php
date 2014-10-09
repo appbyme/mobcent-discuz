@@ -196,6 +196,13 @@ class NewsListAction extends MobcentAction {
         $lists = DzPortalArticle::getByCatidData($catids, $offset, $pageSize, $params);
         $rows = array();
         foreach ($lists as $list) {
+
+            // // [add]考虑文章是通过帖子来发布的时候的评论数问题 Author：HanPengyu，Data：14.09.28
+            if ($list['idtype'] == 'tid') {
+                $topicInfo = ForumUtils::getTopicInfo($list['id']);
+                $list['commentnum'] = (int)$topicInfo['replies'];
+            }
+
             $articleSummary = PortalUtils::getArticleSummary($list['aid']);
             $rows[] = $this->_getListField($list, $articleSummary, 'news', $list['aid']);
         }
