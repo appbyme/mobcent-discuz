@@ -251,6 +251,12 @@ class TestController extends MobcentController {
                 'route' => 'app/initui',
                 'params' => array(),
             ),
+
+            array(
+                'title' => 'api/app: 服务器事件通知接口',
+                'route' => 'app/servernotify',
+                'params' => array('event' => 'updateApp', 'appKey' => ''),
+            ),            
         );
         $this->renderPartial('debug', array('testApiList' => $testApiList));
     } 
