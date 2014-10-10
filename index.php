@@ -1,7 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" >
+<?php header("Content-Type: text/html; charset=utf-8");?>
+<!DOCTYPE html>
+<html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta charset="UTF-8">
     <title>mobcent</title>
     <style type="text/css">
         #topHead{
@@ -45,9 +46,10 @@
             <div id="nav">
                 <a href="../" target="_blank">网站首页</a>
                 <a href="http://addon.discuz.com/?@appbyme_app.plugin.doc/install"  target="_blank">说明文档</a>
-                <a href="./download/down.php" target="_blank">应用下载</a>
+                <a href="../plugin.php?id=appbyme_app:download" target="_blank">应用下载</a>
                 <a href="./requirements/index.php" target="_blank">配置需求</a>
-                <a href="../mobcent/app/web/index.php?r=test/debug&sdkVersion=1.2.2&hacker_uid=1" target="blank" style="<?php if (!isset($_GET['hacker_uid']) || $_GET['hacker_uid'] != 1) { echo 'display:none'; } ?>">debug</a>
+                <a href="./app/web/index.php?r=admin/index" target="_blank">后台管理</a>
+                <a href="./app/web/index.php?r=test/debug&hacker_uid=1" target="blank" style="<?php if (!isset($_GET['hacker_uid']) || $_GET['hacker_uid'] != 1) { echo 'display:none'; } ?>">debug</a>
             </div> 
         </div>
     </div>
