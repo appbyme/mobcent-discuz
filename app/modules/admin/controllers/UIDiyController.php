@@ -15,6 +15,6 @@ class UIDiyController extends AdminController
 {
     public function actionIndex()
     {
-        var_dump('good!');
+        $this->renderPartial('index');
     }
 }
