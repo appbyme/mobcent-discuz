@@ -710,8 +710,6 @@ class UserUtils {
         );
     }
 
-
-
     /**
      * 登录写入缓存并改变登录状态
      * 
@@ -755,4 +753,18 @@ class UserUtils {
         }
     }
 
+    /**
+     * 判断此当前用户是否在安米后台管理允许登陆的用户组内
+     *
+     * @return bool
+     */
+    public static function isInAppbymeAdminGroup()
+    {
+        global $_G;
+        $allowUsers = ArrayUtils::explode(WebUtils::getDzPluginAppbymeAppConfig('appbyme_allow_admin_users'));
+        $allowGroupIds = unserialize(WebUtils::getDzPluginAppbymeAppConfig('appbyme_allow_admin_usergroups'));
+        $allowGroupIds || $allowGroupIds = array(1);
+        
+        return ($_G['username'] != '' && in_array($_G['username'], $allowUsers)) || in_array($_G['groupid'], $allowGroupIds);
+    }
 }

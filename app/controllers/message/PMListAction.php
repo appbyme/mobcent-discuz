@@ -19,9 +19,11 @@ class PMListAction extends MobcentAction {
         $uid = $this->getController()->uid;
 
         // $pmlist ='{"body": {"pmInfos": [{"fromUid": 4, "startTime": "0", "stopTime": "0", "cacheCount": 0, "pmLimit": 10, }], "externInfo": {"onlyFromUid":0} } }';
+        $pmlist = rawurldecode($pmlist);
+        $pmInfos = WebUtils::jsonDecode($pmlist);
 
         $res['body']['userInfo'] = $this->_getUserInfo($uid);
-        $res['body']['pmList'] = $this->_getPMList($uid, $pmlist);
+        $res['body']['pmList'] = $this->_getPMList($uid, $pmInfos);
 
         echo WebUtils::outputWebApi($res, '', false);
     }
@@ -39,10 +41,8 @@ class PMListAction extends MobcentAction {
         return $userInfo;
     }
 
-    private function _getPMList($uid, $pmlistJson) {
+    private function _getPMList($uid, $pmInfos) {
         $pmList = array();
-
-        $pmInfos = WebUtils::jsonDecode($pmlistJson);
         if (!empty($pmInfos)) {
             $externInfo = $pmInfos['body']['externInfo'];
             $isFilter = (isset($externInfo['onlyFromUid']) && $externInfo['onlyFromUid']);
