@@ -8,14 +8,9 @@
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-3.2.0.min.css">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-theme-3.2.0.min.css">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/appbyme-admin-uidiy.css">
-    <style type="text/css">
-        div{
-            height: 
-        }
-    </style>
 </head>
 <body>
-    <div class="container" id="main">
+    <div class="container" id="uidiy-main-view">
         <div class="row">
 
             <div class="col-md-4">
@@ -29,23 +24,8 @@
                 </div>
 
                 <p class="navCategory">模块管理</p>
-                <div id="moduleManage">
-                    <div class="module">
-                        <a href="#"><img title="发现" src="<?php echo $this->rootUrl; ?>/images/admin/module-default.png" class="img-thumbnail"></a>
-                        <div>发现</div>
-                        <div><span><a href="" data-toggle="modal" data-target=".foundModule" data-backdrop="">编辑</a></span></div>
-                    </div>
-                    <div class="module">
-                        <a href="#"><img title="快速发表" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-thumbnail"></a>
-                        <div>快速发表</div>
-                        <div><span><a href="">编辑</a></span><span></span></div>
-                    </div>                       
-                    <div class="module">
-                        <a href="#"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-default.png" class="img-circle"></a>
-                        <div>模块1</div>
-                        <div><span><a href="" data-toggle="modal" data-target=".moduleList" data-backdrop="" >编辑</a></span><span><a href="">删除</a></span></div>
-                    </div>
-                    <div class="module">
+                <div id="module-list">
+                    <div class="module last-module">
                         <a href="#"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
                         <div>添加模块</div>
                     </div>
@@ -57,15 +37,44 @@
             </div>
         </div>
     </div>
-
-
-<!-- 模块编辑 -->
-    <div class="modal fade bs-example-modal-lg foundModule" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <!-- 模块编辑 -->
+    <div id="module-edit-view">
+    </div>
+    <!-- 模块编辑end -->
+    <script type="text/javascript">
+    var uidiyGlobalObj = {
+        rootUrl: '<?php echo $this->rootUrl; ?>',
+        moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule()); ?>,
+        moduleInitList: <?php echo WebUtils::jsonEncode($modules); ?>,
+    };
+    </script>
+    <script src="<?php echo $this->rootUrl; ?>/js/jquery-2.0.3.min.js"></script>
+    <script src="<?php echo $this->rootUrl; ?>/js/bootstrap-3.2.0.min.js"></script>
+    <script src="<?php echo $this->rootUrl; ?>/js/underscore-1.7.0.min.js"></script>
+    <script src="<?php echo $this->rootUrl; ?>/js/backbone-1.1.2.min.js"></script>
+    <script src="<?php echo $this->rootUrl; ?>/js/admin/uidiy.js"></script>
+    <script type="text/template" id="module-template">
+    <div class="module">
+        <img title="<%- title %>" src="<%= icon %>" class="img-thumbnail">
+        <div><%- title %></div>
+        <div>
+            <button class="module-edit-btn">编辑</button>
+            <% if (type != '<?php echo AppbymeUIDiyModel::MODULE_TYPE_FASTPOST; ?>' && type != '<?php echo AppbymeUIDiyModel::MODULE_TYPE_DISCOVER; ?>') { %>
+            <button class="module-remove-btn">删除</button>
+            <% } %>
+        </div>
+    </div>
+    </script>
+    <script type="text/template" id="module-edit-template">
+    <div class="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">发现</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">发现</h4>
             </div>
             <!-- <form action="index.php" method="post" enctype="multipart/form-data"> -->
             <div class="modal-body">
@@ -82,7 +91,6 @@
                 <p>
                     <img src="" style="width:80px;height:80px;border:1px solid blue">
                 </p>
-<hr>
                 <p>
                     <span>页面样式</span>
                     <select id="">
@@ -91,7 +99,6 @@
                     </select>
                 </p>
 
-<hr>                
                 <div>
                     <p>编辑内容：</p>
                     <div>
@@ -125,8 +132,6 @@
                         </div>
                     </div>
                 </div>                
-
-<hr>
             <div>
                 <span>选择发表项：</span>
                 <select id="">
@@ -139,8 +144,6 @@
                 <button type="button" class="btn btn-primary">添 加</button>
                 <button type="button" class="btn btn-primary">取 消</button>
             </div>
-
-<hr>
 
             <div>
                 <span>模块样式</span>
@@ -170,28 +173,23 @@
                 </select>
             </div>
 
-           <div>
+            <div>
                 <span>页面样式：</span>
                 <select id="u162_input">
                     <option selected="" value="扁平样式">扁平样式</option>
                     <option value="卡片样式">卡片样式</option>
                 </select>
-           </div> 
+            </div> 
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
                 <input type="submit" class="btn btn-primary" value="确定" >  
             </div>
 
-
             <!-- </form> -->
         </div>
       </div>
     </div>
-<!-- 模块编辑end -->
-
-
-    <script src="<?php echo $this->rootUrl; ?>/js/jquery-2.0.3.min.js"></script>
-    <script src="<?php echo $this->rootUrl; ?>/js/bootstrap-3.2.0.min.js"></script>
+    </script>
 </body>
 </html>

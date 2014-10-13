@@ -29,5 +29,7 @@ class AdminController extends Controller
 
         loadcache('plugin');
         loadcache(MOBCENT_DZ_PLUGIN_ID);
+
+        DbUtils::init(false);
     }
 }

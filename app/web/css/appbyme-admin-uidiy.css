@@ -7,7 +7,7 @@ div {
     width: 90%;
 }
 
-#main {
+#uidiy-main-view {
     /*background: #e3e3e3;*/
     border-radius: 5px;
 }
@@ -36,13 +36,13 @@ div {
 }
 
 /*模块管理*/
-#moduleManage{
+#module-list {
     height: 600px;
     border: 1px solid #CCCCFF;
     border-radius: 5px;
     overflow: auto;
 }
-#moduleManage .module {
+#module-list .module {
     width: 100px;
     height: 115px;
     font-size: 12px;
@@ -50,12 +50,12 @@ div {
     text-align: center;
     float: left;
 }
-#moduleManage .module img {
+#module-list .module img {
     width: 80px;
     height: 80px;
     margin: 5px 0px 2px 2px;
 }
-#moduleManage .module span {
+#module-list .module span {
     margin: 8px;
 }
 
