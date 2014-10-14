@@ -26,7 +26,7 @@
                 <p class="navCategory">模块管理</p>
                 <div id="module-list">
                     <div class="module last-module">
-                        <a href="#"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
+                        <a href="#" data-toggle="modal" data-target=".foundModule" data-backdrop=""><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
                         <div>添加模块</div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
         <img title="<%- title %>" src="<%= icon %>" class="img-thumbnail">
         <div><%- title %></div>
         <div>
-            <button class="module-edit-btn">编辑</button>
+            <button class="module-edit-btn" data-toggle="modal" data-target=".foundModule" data-backdrop="">编辑</button>
             <% if (type != '<?php echo AppbymeUIDiyModel::MODULE_TYPE_FASTPOST; ?>' && type != '<?php echo AppbymeUIDiyModel::MODULE_TYPE_DISCOVER; ?>') { %>
             <button class="module-remove-btn">删除</button>
             <% } %>
@@ -66,7 +66,7 @@
     </div>
     </script>
     <script type="text/template" id="module-edit-template">
-    <div class="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade bs-example-modal-lg foundModule" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
