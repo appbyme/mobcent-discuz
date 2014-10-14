@@ -14,11 +14,14 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 class AppbymeUIDiyModel extends DiscuzAR
 {
     const MODULE_KEY = 'app_uidiy_modules';
+    const MODULE_ID_DISCOVER = 1;
+    const MODULE_ID_FASTPOST = 2;
+    const MODULE_ID_START = 3;
     const MODULE_TYPE_FULL = 'full';
     const MODULE_TYPE_SUBNAV = 'subnav';
     const MODULE_TYPE_NEWS = 'news';
-    const MODULE_TYPE_FASTPOST = 'fastpost';
     const MODULE_TYPE_DISCOVER = 'discover';
+    const MODULE_TYPE_FASTPOST = 'fastpost';
     const MODULE_TYPE_CUSTOM = 'custom';
 
     public static function initModule()
@@ -38,7 +41,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     public static function initDiscoverModule()
     {
         return array_merge(self::initModule(), array(
-            'id' => 1,
+            'id' => self::MODULE_ID_DISCOVER,
             'type' => self::MODULE_TYPE_DISCOVER,
             'title' => '发现',
         ));
@@ -47,7 +50,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     public static function initFastpostModule()
     {
         return array_merge(self::initModule(), array(
-            'id' => 2,
+            'id' => self::MODULE_ID_FASTPOST,
             'title' => '快速发表',
             'type' => self::MODULE_TYPE_FASTPOST,
             // 'icon' => Yii::app()->getController()->rootUrl.'/images/admin/module-fastpost.png',
@@ -69,7 +72,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     public static function saveModules($modules)
     {
         $appUIDiyModules = array('ckey' => self::MODULE_KEY, 'cvalue' => serialize($modules));
-        $config = DbUtils::getDzDbUtils(true)->row('
+        $config = DbUtils::getDzDbUtils(true)->queryRow('
             SELECT * 
             FROM %t 
             WHERE ckey=%s
@@ -81,5 +84,6 @@ class AppbymeUIDiyModel extends DiscuzAR
         } else {
             DbUtils::getDzDbUtils(true)->update('appbyme_config', $appUIDiyModules, array('ckey' => self::MODULE_KEY));
         }
+        return true;
     }
 }

@@ -50,6 +50,11 @@ class UIDiyController extends AdminController
 
     public function actionSaveModules($modules)
     {
+        $res = array('errorCode' => 0, 'errorInfo' => '');
 
+        $modules = WebUtils::jsonDecode($modules);
+        AppbymeUIDiyModel::saveModules($modules);
+
+        echo WebUtils::outputWebApi($res, '', false);
     }
 }
