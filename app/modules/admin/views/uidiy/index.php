@@ -10,6 +10,31 @@
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/appbyme-admin-uidiy.css">
 </head>
 <body>
+
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">APPbyme</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">网站首页</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">admin <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">退出</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
     <div id="uidiy-main-view">
 
     <div class="container">
@@ -84,83 +109,369 @@
                 </button>
                 <h4 class="modal-title"><%= id != 0 ? '编辑模块' : '添加模块' %></h4>
             </div>
-            <form class="module-edit-form">
+            <form class="module-edit-form form-horizontal">
             <div class="modal-body">
-                <p>
-                    <span>编辑名称：</span>
-                    <input type="text" name="moduleTitle" value="<%- title %>">
-                    <span>请输入1-4个字母、数字或汉字作为名称</span>
-                </p>
-                <p>
-                    <span>编辑图标：</span>
-                    <input type="file" name="moduleIcon" value="">
-                    <span>请上传1:1比例的JPG或PNG格式图片作为图标</span>
-                </p>
-                <p>
-                    <img src="" style="width:80px;height:80px;border:1px solid blue">
-                </p>
+
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">编辑名称：</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control sm" id="" placeholder="">
+                        <p class="help-block">请输入1-4个字母、数字或汉字作为名称</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">编辑图标：</label>
+                    <div class="col-sm-10">
+                        <input type="file" id="" >
+                        <p class="help-block">请上传1:1比例的JPG或PNG格式图片作为图标</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <img src="" style="width:100px;height:100px;" class="img-rounded">
+                    </div>
+                </div>
+
                 <% if (type == '<?php echo AppbymeUIDiyModel::MODULE_TYPE_FASTPOST; ?>') { %>
-                <div>
-                    <p>编辑内容：</p>
-                    <div>
-                        <div><img src="" style="width:80px;height:80px"></div>
-                        <div><span>发表板块：</span></div>
-                        <div>
-                            <select id="">
-                                <option selected="" value="用户自选版块">用户自选版块</option>
-                                <option value="版块一">版块一</option>
-                                <option value="版块二">版块二</option>
-                                <option value="版块三">版块三</option>
-                                <option value="版块四">版块四</option>
-                              </select>
-                              <input type="checkbox" >勾选则需用户填写标题
-                              <input type="checkbox" >勾选则显示主题分类
+                <div class="edit">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">编辑内容：</label>
+                        <div class="col-sm-2">
+                            <div class="text-center">
+                                <img src="" style="width:80px;height:80px;" class="img-rounded">
+                                <p><small>发表文字</small></p>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <div class="pull-left edit-middle">
+                                <label for="" class="">发表版块：</label>
+                            </div>
+                            <div class="pull-left edit-right">
+                                <select class="input-sm">
+                                    <option selected="" value="用户自选版块">用户自选版块</option>
+                                    <option value="版块一">版块一</option>
+                                    <option value="版块二">版块二</option>
+                                    <option value="版块三">版块三</option>
+                                    <option value="版块四">版块四</option>
+                                </select>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value=""><small>勾选则需用户填写标题</small></label>
+                                </div>                        
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value=""><small>勾选则显示主题分类</small></label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <span>选择发表项：</span>
-                    <select id="">
-                        <option selected="" value="发表文字">发表文字</option>
-                        <option value="发表图片">发表图片</option>
-                        <option value="拍照发表">拍照发表</option>
-                        <option value="发表语音">发表语音</option>
-                        <option value="签到">签到</option>
-                    </select>
-                    <button type="button" class="btn btn-primary">添 加</button>
-                    <button type="button" class="btn btn-primary">取 消</button>
+
+                    <div class="form-group">
+                        <!-- <label for="" class="col-sm-2 control-label">编辑内容：</label> -->
+                        <div class="col-sm-offset-2 col-sm-2">
+                            <div class="text-center">
+                                <img src="" style="width:80px;height:80px;" class="img-rounded">
+                                <p><small>发表文字</small></p>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-8">
+                            <div class="pull-left edit-middle">
+                                <label for="" class="">发表版块：</label>
+                            </div>
+                            <div class="pull-left edit-right">
+                                <select class="input-sm">
+                                    <option selected="" value="用户自选版块">用户自选版块</option>
+                                    <option value="版块一">版块一</option>
+                                    <option value="版块二">版块二</option>
+                                    <option value="版块三">版块三</option>
+                                    <option value="版块四">版块四</option>
+                                </select>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value=""><small>勾选则需用户填写标题</small></label>
+                                </div>                        
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value=""><small>勾选则显示主题分类</small></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-6">
+                            <label for="" class="control-label">选择发表项：</label>
+                            <select class="input-sm">
+                                <option selected="" value="发表文字">发表文字</option>
+                                <option value="发表图片">发表图片</option>
+                                <option value="拍照发表">拍照发表</option>
+                                <option value="发表语音">发表语音</option>
+                                <option value="签到">签到</option>
+                            </select>                        
+                            <button type="button" class="btn btn-primary btn-sm">添加</button>
+                            <button type="button" class="btn btn-primary btn-sm">取消</button>
+                        </div>
+                    </div>
                 </div>
                 <% } %>
                 <% if (type != '<?php echo AppbymeUIDiyModel::MODULE_TYPE_FASTPOST; ?>' && type != '<?php echo AppbymeUIDiyModel::MODULE_TYPE_DISCOVER; ?>') { %>
-                <span>模块样式</span>
-                <select id="">
-                    <option selected="" value="单页面">单页面</option>
-                    <option value="二级导航">二级导航</option>
-                    <option value="左图右文">左图右文</option>
-                    <option value="自定义页面">自定义页面</option>
-                </select> 
-                <div>
-                    <span>链接地址：</span>
-                    <select id="u165_input">
-                        <option value="版块列表">版块列表</option>
-                        <option selected="" value="资讯列表">资讯列表</option>
-                        <option value="简版帖子列表">简版帖子列表</option>
-                        <option value="消息列表">消息列表</option>
-                        <option value="发现">发现</option>
-                        <option value="周边用户">周边用户</option>
-                        <option value="周边帖子">周边帖子</option>
-                        <option value="推荐用户">推荐用户</option>
-                        <option value="周边服务">周边服务</option>
-                        <option value="设置">设置</option>
-                        <option value="关于">关于</option>
-                        <option value="外部wap页">外部wap页</option>
+
+                <br>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">模块样式：</label>
+                    <div class="col-sm-10">
+                    <select class="form-control">
+                        <option selected="" value="单页面">单页面</option>
+                        <option value="二级导航">二级导航</option>
+                        <option value="左图右文">左图右文</option>
+                        <option value="自定义页面">自定义页面</option>
                     </select>
+                    </div>
                 </div>
-                <div>
-                    <span>页面样式：</span>
-                    <select id="u162_input">
-                        <option selected="" value="扁平样式">扁平样式</option>
-                        <option value="卡片样式">卡片样式</option>
-                    </select>
+
+                <div class="secondary-nav">
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">添加导航：</label>
+                        <div class="col-sm-10 secondary-nav-right">
+                            <div class="secondary-nav-cate">
+                                <div class="pull-left secondary-nav-name">
+                                    <small>导航一名称：</small>
+                                </div>
+                                <div class="pull-left">
+                                    <input type="text" class="form-control input-sm">
+                                </div>
+                            </div>
+
+                            <div class="secondary-nav-cate">
+                                <div class="pull-left secondary-nav-name"><small>　链接地址：</small></div>
+                                <div class="pull-left">
+                                    <select class="form-control input-sm">
+                                        <option value="版块列表">版块列表</option>
+                                        <option selected="" value="资讯列表">资讯列表</option>
+                                        <option value="简版帖子列表">简版帖子列表</option>
+                                        <option value="消息列表">消息列表</option>
+                                        <option value="发现">发现</option>
+                                        <option value="周边用户">周边用户</option>
+                                        <option value="周边帖子">周边帖子</option>
+                                        <option value="推荐用户">推荐用户</option>
+                                        <option value="周边服务">周边服务</option>
+                                        <option value="设置">设置</option>
+                                        <option value="关于">关于</option>
+                                        <option value="外部wap页">外部wap页</option>
+                                    </select>
+                                </div>
+                                <div class="pull-left option-style">
+                                    <div class="forum-list hide" >
+                                        <small style="margin:0">设置样式：</small>
+                                        <label>
+                                            <input type="checkbox" name="" > <small>勾选则显示图标</small>
+                                        </label>                                        
+                                        <label>
+                                            <input type="checkbox" name="" > <small>勾选则双栏显示</small>
+                                        </label>
+                                    </div>
+
+                                    <div class="consulting-list hide">
+                                        <div class="pull-left secondary-nav-name"><small>　选择门户：</small></div>
+                                        <div class="pull-left">
+                                            <select class="form-control input-sm">
+                                            <option selected="" value="资讯模块一">资讯模块一</option>
+                                            <option value="资讯模块二">资讯模块二</option>
+                                            <option value="资讯模块三">资讯模块三</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="simple-topic-list hide">
+                                        <div class="pull-left secondary-nav-name"><small>　选择版块：</small></div>
+                                        <div class="pull-left">
+                                            <select class="form-control input-sm">
+                                                <option selected="" value="论坛版块一">论坛版块一</option>
+                                                <option value="论坛版块二">论坛版块二</option>
+                                                <option value="论坛版块三">论坛版块三</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="wap-link">
+                                        <div class="pull-left secondary-nav-name">
+                                            <small>wap地址：</small>
+                                        </div>
+                                        <div class="pull-left">
+                                            <input type="text" class="form-control input-sm">
+                                        </div>
+                                    </div>
+                                </div> 
+
+                                <div class="show-style">
+                                    <div class="pull-left secondary-nav-name"><small>　链接地址：</small></div>
+                                    <div class="pull-left">
+                                        <select class="form-control input-sm">
+                                            <option selected="" value="扁平样式">扁平样式</option>
+                                            <option value="卡片样式">卡片样式</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div> <!-- end secondary-nav-cate 二级栏目导航 -->
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <label for="" class="col-sm-2 control-label">添加导航：</label> -->
+                        <div class="col-sm-offset-2 col-sm-10 secondary-nav-right">
+                            <div class="secondary-nav-cate">
+                                <div class="pull-left secondary-nav-name">
+                                    <small>导航一名称：</small>
+                                </div>
+                                <div class="pull-left">
+                                    <input type="text" class="form-control input-sm">
+                                </div>
+                            </div>
+
+                            <div class="secondary-nav-cate">
+                                <div class="pull-left secondary-nav-name"><small>　链接地址：</small></div>
+                                <div class="pull-left">
+                                    <select class="form-control input-sm">
+                                        <option value="版块列表">版块列表</option>
+                                        <option selected="" value="资讯列表">资讯列表</option>
+                                        <option value="简版帖子列表">简版帖子列表</option>
+                                        <option value="消息列表">消息列表</option>
+                                        <option value="发现">发现</option>
+                                        <option value="周边用户">周边用户</option>
+                                        <option value="周边帖子">周边帖子</option>
+                                        <option value="推荐用户">推荐用户</option>
+                                        <option value="周边服务">周边服务</option>
+                                        <option value="设置">设置</option>
+                                        <option value="关于">关于</option>
+                                        <option value="外部wap页">外部wap页</option>
+                                    </select>
+                                </div>
+                                <div class="pull-left option-style">
+                                    <div class="forum-list hide" >
+                                        <small style="margin:0">设置样式：</small>
+                                        <label>
+                                            <input type="checkbox" name="" > <small>勾选则显示图标</small>
+                                        </label>                                        
+                                        <label>
+                                            <input type="checkbox" name="" > <small>勾选则双栏显示</small>
+                                        </label>
+                                    </div>
+
+                                    <div class="consulting-list hide">
+                                        <div class="pull-left secondary-nav-name"><small>　选择门户：</small></div>
+                                        <div class="pull-left">
+                                            <select class="form-control input-sm">
+                                            <option selected="" value="资讯模块一">资讯模块一</option>
+                                            <option value="资讯模块二">资讯模块二</option>
+                                            <option value="资讯模块三">资讯模块三</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="simple-topic-list hide">
+                                        <div class="pull-left secondary-nav-name"><small>　选择版块：</small></div>
+                                        <div class="pull-left">
+                                            <select class="form-control input-sm">
+                                                <option selected="" value="论坛版块一">论坛版块一</option>
+                                                <option value="论坛版块二">论坛版块二</option>
+                                                <option value="论坛版块三">论坛版块三</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="wap-link">
+                                        <div class="pull-left secondary-nav-name">
+                                            <small>wap地址：</small>
+                                        </div>
+                                        <div class="pull-left">
+                                            <input type="text" class="form-control input-sm">
+                                        </div>
+                                    </div>
+                                </div> 
+
+                                <div class="show-style">
+                                    <div class="pull-left secondary-nav-name"><small>　链接地址：</small></div>
+                                    <div class="pull-left">
+                                        <select class="form-control input-sm">
+                                            <option selected="" value="扁平样式">扁平样式</option>
+                                            <option value="卡片样式">卡片样式</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div> <!-- end secondary-nav-cate 二级栏目导航 -->
+
+                        </div>
+                    </div>
+
+                </div> <!-- end secondary-nav -->
+
+
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">链接地址：</label>
+                    <div class="col-sm-3">
+                        <select class="form-control">
+                            <option value="版块列表">版块列表</option>
+                            <option selected="" value="资讯列表">资讯列表</option>
+                            <option value="简版帖子列表">简版帖子列表</option>
+                            <option value="消息列表">消息列表</option>
+                            <option value="发现">发现</option>
+                            <option value="周边用户">周边用户</option>
+                            <option value="周边帖子">周边帖子</option>
+                            <option value="推荐用户">推荐用户</option>
+                            <option value="周边服务">周边服务</option>
+                            <option value="设置">设置</option>
+                            <option value="关于">关于</option>
+                            <option value="外部wap页">外部wap页</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="forum-list hide" >
+                            <small style="margin:0">设置样式：</small>
+                            <label>
+                                <input type="checkbox" name="" > <small>勾选则显示图标</small>
+                            </label>                                        
+                            <label>
+                                <input type="checkbox" name="" > <small>勾选则双栏显示</small>
+                            </label>
+                        </div>
+
+                        <div class="simple-topic-list">
+                            <div class="pull-left secondary-nav-name"><small>　选择版块：</small></div>
+                            <div class="pull-left">
+                                <select class="form-control input-sm">
+                                    <option selected="" value="论坛版块一">论坛版块一</option>
+                                    <option value="论坛版块二">论坛版块二</option>
+                                    <option value="论坛版块三">论坛版块三</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="wap-link hide">
+                            <div class="pull-left secondary-nav-name">
+                                <small>wap地址：</small>
+                            </div>
+                            <div class="pull-left">
+                                <input type="text" class="form-control input-sm">
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">页面样式：</label>
+                    <div class="col-sm-10">
+                        <select class="form-control">
+                            <option selected="" value="扁平样式">扁平样式</option>
+                            <option value="卡片样式">卡片样式</option>
+                        </select> 
+                    </div>
+                </div>
+
+
+
                 <% } %>    
             </div>
             <div class="modal-footer">

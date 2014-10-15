@@ -20,16 +20,29 @@ class IndexController extends AdminController
 
     public function actionLogin()
     {
+
         if (UserUtils::isInAppbymeAdminGroup()) {
             $this->redirect(Yii::app()->createAbsoluteUrl('admin/index'));
         }
 
         if (!empty($_POST)) {
-            if ($_POST['username'] == 'admin' && $_POST['password'] == 'admin') {
-                $this->redirect(Yii::app()->createAbsoluteUrl('admin/index'));
+
+            $username = isset($_POST['username']) ? $_POST['username'] : '';
+            $password = isset($_POST['password']) ? $_POST['password'] : '';
+            $result = UserUtils::login($username, $password);
+
+            $errorMsg = '';
+            if ($result['errcode']) {
+                $errorMsg = $result['message'];
+            } else {
+                if (UserUtils::isInAppbymeAdminGroup()) {
+                    $this->redirect(Yii::app()->createAbsoluteUrl('admin/index'));
+                } else {
+                    $errorMsg = '用户不是管理员，也不在允许登录的范围内！';
+                }
             }
         }
 
-        $this->renderPartial('login');
+        $this->renderPartial('login', array('errorMsg' => $errorMsg, 'username' => $username));
     }
 }
