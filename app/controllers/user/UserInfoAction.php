@@ -145,7 +145,7 @@ class UserInfoAction extends CAction {
 
         if($_G['uid'] == $space['uid'] || $_G['group']['allowviewip']) {
             foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
-                if(!$field['available'] || $field['invisible']) {
+                if(!$field['available'] || $field['invisible'] || in_array($fieldid, array('birthmonth', 'birthyear'))) {
                     continue;
                 }
                 $val = profile_show($fieldid, $space);
