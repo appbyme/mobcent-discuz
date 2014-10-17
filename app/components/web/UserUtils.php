@@ -755,4 +755,20 @@ class UserUtils {
         }
     }
 
+
+
+    /**
+     * 通过username删除用户的accessToken、accessSecret
+     * 
+     * @param string $username Description.
+     * @static
+     *
+     */
+    public static function delUserAccessByUsername($username) {
+        $userInfo = DzCommonMember::getUidByUsername($username);
+        $delUid = $userInfo['uid'];
+        AppbymeUserAccess::delUserAccess($delUid);
+    }
+
+
 }

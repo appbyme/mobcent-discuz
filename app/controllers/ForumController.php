@@ -42,7 +42,7 @@ class ForumController extends MobcentController  {
             'topicactivityview' => true,
             'topicadminview' => true,
             'updatecache' => false,
-            'topicadmin' => false,
+            'topicadmin' => true,
             'search' => false,
             'photogallery' => false,
             'atuserlist' => true,

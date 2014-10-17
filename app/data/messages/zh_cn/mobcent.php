@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'do_success' => WebUtils::t('00000000:操作成功 '),
+    'do_success' => WebUtils::t('0000000:操作成功 '),
 
     'error_custom' => WebUtils::t('11100001: {customMsg}'),
     'mobcent_error_params' => WebUtils::t('11100002: 客户端参数不正确'),
@@ -40,6 +40,8 @@ return array(
 
     'UPLOAD_ATTACHMENT_ERROR' => WebUtils::t('01000001: {attachment} 上传失败'),
 
+    'mobcent_post_newthread_success' => WebUtils::t('00000000:发帖成功'),
+    'mobcent_post_reply_succeed' => WebUtils::t('00000000:回帖成功'),
     'post_thread_closed' => WebUtils::t('00500000:抱歉，本主题已关闭，不再接受新内容'),
     'forum_passwd' => WebUtils::t('00500001:本版块需要密码'),
     'post_newbie_span' => WebUtils::t('00500002:抱歉，您在注册时间起 {newbiespan} 分钟后才能拥有发帖权限'),
