@@ -15,7 +15,11 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 class UIDiyController extends AdminController
 {
     public function actionIndex()
-    {
+    {   
+        $newsModules = AppbymePoralModule::getModuleList();
+
+        $navInfo = AppbymeUIDiyModel::getNavigationInfo();
+
         $modules = array();
         $tempModules = AppbymeUIDiyModel::getModules();
         $isFindDiscover = $isFindFastpost = false;
@@ -23,14 +27,14 @@ class UIDiyController extends AdminController
         $fastpostModule = AppbymeUIDiyModel::initFastpostModule();
 
         foreach ($tempModules as $module) {
-            switch ($module['type']) {
-                case AppbymeUIDiyModel::MODULE_TYPE_DISCOVER:
+            switch ($module['id']) {
+                case AppbymeUIDiyModel::MODULE_ID_DISCOVER:
                     if (!$isFindDiscover) {
                         $isFindDiscover = true;
                         $discoverModule = $module;
                     }
                     break;
-                case AppbymeUIDiyModel::MODULE_TYPE_FASTPOST:
+                case AppbymeUIDiyModel::MODULE_ID_FASTPOST:
                     if (!$isFindFastpost) {
                         $isFindFastpost = true;
                         $fastpostModule = $module;
@@ -44,16 +48,37 @@ class UIDiyController extends AdminController
         array_unshift($modules, $discoverModule, $fastpostModule);
 
         $this->renderPartial('index', array(
+            'navInfo' => $navInfo,
             'modules' => $modules,
+            'newsModules' => $newsModules,
         ));
+    }
+
+    public function actionSaveNavInfo($navInfo)
+    {
+        $res = WebUtils::initWebApiResult();
+
+        $navInfo = WebUtils::jsonDecode($navInfo);
+        AppbymeUIDiyModel::saveNavigationInfo($navInfo);
+
+        echo WebUtils::outputWebApi($res, '', false);
     }
 
     public function actionSaveModules($modules)
     {
-        $res = array('errorCode' => 0, 'errorInfo' => '');
+        $res = WebUtils::initWebApiResult();
 
         $modules = WebUtils::jsonDecode($modules);
         AppbymeUIDiyModel::saveModules($modules);
+
+        echo WebUtils::outputWebApi($res, '', false);
+    }
+
+    public function actionInit()
+    {
+        $res = WebUtils::initWebApiResult();
+
+        AppbymeUIDiyModel::deleteModules();
 
         echo WebUtils::outputWebApi($res, '', false);
     }

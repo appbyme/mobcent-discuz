@@ -31,6 +31,8 @@ return array(
         'application.components.db.*',
         'application.components.web.*',
 
+        'application.modules.admin.models.*',
+        
         'ext.mobcent.components.*',
         'ext.mobcent.components.db.*',
         'ext.mobcent.components.utils.*',

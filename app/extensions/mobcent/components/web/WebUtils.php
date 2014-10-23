@@ -35,6 +35,18 @@ class WebUtils {
         return $res;
     }
 
+    public static function initWebApiResult()
+    {
+        return array(
+            'errCode' => 0,
+            'errMsg' => '',
+            'version' => MOBCENT_VERSION,
+            'data' => array(
+                'padding' => '',
+            ),
+        );
+    }
+
     public static function makeErrorInfo($res, $message, $params=array()) {
         $errInfo = explode(':', Yii::t('mobcent', $message, $params), 2);
         if (count($errInfo) == 1) {
