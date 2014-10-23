@@ -20,7 +20,6 @@ class IndexController extends AdminController
 
     public function actionLogin()
     {
-
         if (UserUtils::isInAppbymeAdminGroup()) {
             $this->redirect(Yii::app()->createAbsoluteUrl('admin/index'));
         }
@@ -45,4 +44,11 @@ class IndexController extends AdminController
 
         $this->renderPartial('login', array('errorMsg' => $errorMsg, 'username' => $username));
     }
+
+    public function actionLogout()
+    {
+        UserUtils::logout();
+        $this->redirect(Yii::app()->createAbsoluteUrl('admin/index'));
+    }
+
 }

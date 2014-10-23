@@ -8,9 +8,17 @@
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-3.2.0.min.css">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-theme-3.2.0.min.css">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/appbyme-admin-uidiy.css">
+    <style type="text/css">
+        .mobleShow {
+            width: 380px;
+            background:url("<?php echo $this->rootUrl; ?>/images/admin/moble.png") no-repeat right top;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
+<?php global $_G; ?>
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
       <div class="container">
@@ -18,16 +26,18 @@
           <a class="navbar-brand" href="#">APPbyme</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">网站首页</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+          <ul class="nav navbar-nav nav-list">
+            <li class=""><a href="<?php echo $this->dzRootUrl; ?>" target="_blank">网站首页</a></li>
+            <li><a href="http://addon.discuz.com/?@appbyme_app.plugin.doc/install" target="_blank">说明文档</a></li>
+            <li><a href="<?php echo $this->dzRootUrl; ?>/plugin.php?id=appbyme_app:download" target="_blank">应用下载</a></li>
+            <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/requirements/index.php" target="_blank">配置需求</a></li>
+            <li><a href="<?php echo $this->dzRootUrl; ?>/admin.php" target="_blank">Discuz!管理中心</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">admin <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $_G['username']; ?> <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#">退出</a></li>
+                <li><a href="<?php echo Yii::app()->createAbsoluteUrl('admin/index/logout'); ?>">退出</a></li>
               </ul>
             </li>
           </ul>
@@ -41,7 +51,143 @@
         <div class="row">
 
             <div class="col-md-4">
-                <div id="mobleShow"></div>
+                <div class="mobleShow">
+
+                    <div class="moble-content"> 
+
+                        <!-- 底部导航添加弹出 -->
+                        <div class="play-border-add">
+                            <div>
+                                <p>添加导航<button type="button" class="close" aria-hidden="true">&times;</button></p>
+                            </div>
+                            <div>
+                                导航名称：<input type="text" >
+                            </div>
+                            <div>导航图标：<button type="button" class="btn btn-primary">选择导航图标</button></div>
+
+                            <div>
+                                <button type="button" class="btn btn-default btn-xs pull-right" style="margin-right:40px">取消</button>
+                                <button type="button" class="btn btn-primary btn-xs pull-right" style="margin-right:40px">确认</button>
+                            </div>
+                        </div> 
+
+                        <!-- 发现下方加号弹出框 -->
+                        <div class="play-add-plug">
+                            <div class="panel panel-success">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title pull-left"><small>插件设置</small></h3>
+                                    <button type="button" class="close select-plug pull-right">&times;</button>
+                                </div>
+                                <div class="panel-body">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 天气
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 登录
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 签到
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 搜索
+                                    </label>
+                                </div>
+                                <div class="panel-footer">
+                                    <input type="submit" class="btn btn-primary btn-xs" value="确定" >  
+                                    <button type="button" class="btn btn-default btn-xs select-plug">取 消</button>
+                                </div>
+                            </div>
+                        </div> 
+
+
+
+                        <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
+
+                        <div class="found-module">
+                            <img class="moble-top-show" src="<?php echo $this->rootUrl; ?>/images/admin/moble-nav.png">
+                            <div class="moble-top-title">
+                                <img class="pull-left select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
+                                <span>发现</span>
+                                <img class="pull-right select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
+                                <img class="pull-right select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
+                            </div>
+                            <div class="slide-img">
+                                <img src="<?php echo $this->rootUrl; ?>/images/admin/timo.jpg">
+                                <span><a href="">点击添加更多幻灯片</a></span>
+                            </div>
+
+                            <div class="module-show">
+                                <div class="module-show-one"><img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                                    <span class="pull-left ">个人中心</span><span class="pull-right"><small><a href="">隐藏</a></small></span>
+                                </div>
+                                <div class="module-show-two">
+                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                                    <span class="pull-left">设置</span><span class="pull-right"><small><a href="">显示</a></small></span>
+                                </div>
+                                <div class="module-show-three">
+                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                                    <span class="pull-left">关于</span><span class="pull-right"><small><a href="">显示</a></small></span>
+                                </div>
+                            </div>
+
+                            <div class="module-show">
+                                <div class="module-show-one"><img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                                    <span class="pull-left ">周边生活</span>
+                                </div>
+                                <div class="module-show-two">
+                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                                    <span class="pull-left">商城</span>
+                                </div>
+                                <div class="module-show-three">
+                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                                    <span class="pull-left">活动专区</span>
+                                </div>
+                            </div>
+
+                            <div class="module-show">
+                                <div class="module-show-two">
+                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                                    <span class="pull-left">商城</span>
+                                    <span class="pull-right"><small><a href="">编辑</a></small></span>
+                                    <span class="pull-right"><small><a href="">删除</a></small></span>
+                                </div>
+                                <div class="module-show-three">
+                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                                    <span class="pull-left">活动专区</span>
+                                    <span class="pull-right"><small><a href="">编辑</a></small></span>
+                                    <span class="pull-right"><small><a href="">删除</a></small></span>
+                                </div>
+                            </div>
+                            <span><a href="">点击添加更多</a></span>
+                        </div>
+                    </div><!-- end moble-content -->
+
+                    <!-- 手机底部导航 -->
+                    <div class="moble-bottom-nav">
+                        <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/mc_forum_main_bar_button1.png") no-repeat 50% 20%'>
+                            <div>
+                                <small class="hidden">发现</small>
+                                <div class="nav-edit">
+                                    <span><small><a href="">编辑</a></small></span>
+                                    <span><small><a href="">删除</a></small></span>
+                                </div>
+                            </div>
+                        </div>                
+                        <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/mc_forum_main_bar_button1.png") no-repeat 50% 20%'>
+                            <div>
+                                <small class="">导航第一</small>
+                                <div class="nav-edit hidden">
+                                    <span><small><a href="">编辑</a></small></span>
+                                    <span><small><a href="">删除</a></small></span>
+                                </div>
+                            </div>
+                        </div>   
+                     
+                        <div class="pull-left nav-add">
+                            <img  src="<?php echo $this->rootUrl; ?>/images/admin/add-nav-ico.png">
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="col-md-8" id="operation">
@@ -320,5 +466,57 @@
         </div>
     </div>
     </script>
+    <!-- 页面弹出样式用到的js -->
+    <script type="text/javascript">
+        $(function() {
+
+            // 底部导航
+            $('.nav-add').on({
+                click:function(){
+                    $('.play-border-add').slideToggle();
+                }
+            });
+
+            $('.play-border-add .close').on({
+                click:function() {
+                    $('.play-border-add').slideToggle();
+                }
+            })
+
+            // 导航样式调整
+            $('.nav-list li').hover(
+                function() {
+                    $(this).toggleClass('active');
+                }, 
+                function() {
+                    $(this).toggleClass('active');
+                }
+            );
+
+            // 模块编辑弹出框
+            $('.close-play, .module-add-btn').on({
+                click:function() {
+                    closeModulePlay();
+                }
+            })
+
+            function closeModulePlay() {
+                $('.module-play').fadeToggle();
+            }
+
+            // 选择插件
+            $('.select-plug').on({
+                click:function () {
+                    closeSelectPlug();
+                }
+            })
+
+            function closeSelectPlug() {
+                $('.play-add-plug').fadeToggle();
+            }
+
+        })
+    </script>
+
 </body>
 </html>

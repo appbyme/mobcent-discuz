@@ -2,7 +2,6 @@ div {
     /*border: 1px solid red;*/
 }
 
-
 /*重写了Bootstrap*/
 .container {
     width: 90%;
@@ -22,22 +21,137 @@ label {
     font-weight:100;
 }
 
+
 #uidiy-main-view {
     /*background: #e3e3e3;*/
     border-radius: 5px;
 }
 
 /*左侧手机*/
-#mobleShow {
+.mobleShow {
     margin: 5px;
     border-radius: 5px;
-    border: 1px solid #CCCCFF;
+    border: 1px solid white;
     height: 800px;
+    position: relative;
 }
+
+/*手机中间显示的内容*/
+.mobleShow .moble-content{
+    width: 320px;
+    margin: 118px 0px 0px 30px;
+    /*border: 1px solid blue;*/
+    height: 520px;
+    background: #F8F8F8;
+}
+
+.moble-top-show {
+    width: 320px;
+}
+.moble-top-title {
+    margin-top: 10px;
+    /*border: 1px solid red;*/
+    height: 40px;
+}
+.moble-top-title img {
+    width: 22px;
+    height: 22px;
+    /*border: 1px solid blue;*/
+}
+.moble-top-title span {
+    font-size: 16px;
+    font-weight: 200;
+}
+
+/*灰色的*/
+.module-show {
+    margin-top: 10px;
+}
+.module-show img {
+    width: 25px;
+    height: 25px;
+    margin: 1px 20px 0px 0px;
+}
+.module-show-one, .module-show-two, .module-show-three{
+    background: #CCCCCC;
+    height: 28px;
+    border: 1px solid #797979;
+    padding: 0px 20px 0px 25px;
+    line-height: 26px;
+
+}
+.module-show-one {
+    border-bottom: 0px;
+}
+.module-show-three {
+    border-top: 0px;
+    width: 300px;
+    border-radius: 5px;
+    margin-left: 10px;
+    padding: 0px 10px 0px 15px;
+}
+.module-show-one .pull-right, .module-show-two .pull-right, .module-show-three .pull-right{
+    margin-right: 10px;
+}
+
+/*手机底部的导航*/
+.moble-bottom-nav {
+    height: 50px;
+    width: 320px;
+    background: #CCCCCC;
+    border-top: 1px solid #797979;
+    margin: 0px 0px 0px 30px;
+}
+
+.moble-bottom-nav .nav-column {
+    width: 64px;
+    height: 50px;
+    padding-top:30px
+}
+
+.moble-bottom-nav .nav-column img {
+    width: 80px;
+    height: 80px;
+    border: 1px solid red;
+}
+
+.moble-bottom-nav .nav-add img{
+    width:30px;
+    height: 30px;
+    margin:10px 10px 0px 15px;
+}
+
+/*底部添加导航*/
+.play-border-add {
+    width: 300px;
+    height: 300px;
+    background: #CCCCFF;
+    border-radius: 5px;
+    position: absolute;
+    right: 45px;
+    bottom: 174px;
+    z-index: 10;
+    display:none;
+}
+
+/*三个加号*/
+.play-add-plug {
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    position: absolute;
+    right: 37px;
+    top: 188px;
+    z-index: 10;
+    display:none;
+}
+
 
 /*右侧整体*/
 #operation {
     margin-top: 40px;
+    /*border: 1px solid green;*/
+    font-size: 12px;
 }
 
 /*导航栏目*/
@@ -141,4 +255,27 @@ label {
 
 .wap-link input[type=text] {
     width: 200px;
+}
+
+
+/*新写的模块编辑填出框*/
+.module-play {
+    width: 700px;
+    /*height: 600px;*/
+    background: white;
+    border-radius: 5px;
+    position: absolute;
+    left: 21px;
+    top: 120px;
+   /* overflow-y:auto;
+    overflow-x:hidden;*/
+    display: none;
+}
+
+.module-play .panel-heading, .play-add-plug .panel-heading {
+    width: 100%;
+    height: 40px;
+}
+.module-play .panel-title {
+    width: 100px;
 }

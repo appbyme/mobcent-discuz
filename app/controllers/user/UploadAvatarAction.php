@@ -24,7 +24,7 @@ class UploadAvatarAction extends MobcentAction {
 
     private function _runAction($res, $uid) {
         ($imageData = file_get_contents('php://input')) === false && $imageData = $GLOBALS['HTTP_RAW_POST_DATA']; 
-        // $imageData = FileUtils::getFile('/home/xjp/data/images/2.jpg');
+        //$imageData = file_get_contents('http://appbyme.com/mobcentACA/resource/images/logo.jpg');
         if (!empty($imageData)) {
             if (($savePath = UploadUtils::getTempAvatarPath()) != '') {
                 $fileName = sprintf('%s/avatar_%s.jpg', $savePath, $uid);
