@@ -1,18 +1,21 @@
-div {
-    /*border: 1px solid red;*/
-}
+
+
+body {overflow：scroll;}
 
 /*重写了Bootstrap*/
 .container {
     width: 90%;
 }
- 
+ .form-group {
+    margin-bottom: 5px;
+ }
 .form-group input[type=text] {
     width: 200px;
+    font-size: 12px;
 }
-
-.form-group select{
+.form-group select {
     width: 200px;
+    font-size: 12px;
 }
 .form-group label {
     padding-right: 0px;
@@ -20,7 +23,6 @@ div {
 label {
     font-weight:100;
 }
-
 
 #uidiy-main-view {
     /*background: #e3e3e3;*/
@@ -168,16 +170,6 @@ label {
     font-size: 12px;
 }
 
-/*导航栏目*/
-/*.navCategory {
-    background: #CCCCFF;
-    border-radius: 5px;
-    height: 35px;
-    line-height: 35px;
-    padding-left: 10px;
-    color: white;
-}*/
-
 /*模块管理*/
 #module-list {
     height: 600px;
@@ -241,46 +233,6 @@ label {
     width: 150px;
 }
 
-/*二级导航*/
-.secondary-nav .secondary-nav-right {
-    /*border: 1px solid green;*/
-    padding:5px 0px 0px 20px;
-}
-
-.secondary-nav .secondary-nav-cate{
-    height: 40px;
-}
-.secondary-nav-name {
-    line-height:30px;
-}
-
-.secondary-nav-cate input[type=text] {
-    width:150px;
-}
-.secondary-nav-cate select {
-    width:135px;
-}
-
-.option-style {
-    width: 300px;
-    height: 30px;
-    margin:0px 0px 0px 5px;
-    line-height: 30px;
-}
-
-.option-style input[type=checkbox] {
-    vertical-align: middle;
-    margin: 0 6px 1px 0;
-}
-
-.consulting-list,.simple-topic-list select {
-    width: 200px;
-}
-
-.wap-link input[type=text] {
-    width: 200px;
-}
-
 /*新写的模块编辑填出框*/
 .module-play {
     width: 99%;
@@ -290,15 +242,13 @@ label {
     position: absolute;
     left: 15px;
     top: 0px;
-    /*max-height: 1100px;*/
     overflow-y:auto;
-    /*overflow-x:hidden;*/
-    /*display: none;*/
     z-index: 100;
-    /*border: 10px solid green;*/
-
 }
-
+.module-play .panel-body {
+    max-height: 650px;
+    overflow: auto;
+}
 /*主要是弹出框面板的标题*/
 .module-play .panel-heading, .play-add-plug .panel-heading, .play-border-add .panel-heading {
     width: 100%;
@@ -314,5 +264,45 @@ label {
     border-radius: 5px;
     margin: 5px 0px 5px 0px;
     padding: 5px 0px 5px 0px;
-    border: 1px solid #3D86C5;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+ 
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0,0,0,0.1); 
+    /*background: #2E8BCE;*/
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    /*-webkit-box-shadow: inset 0 0 6px #2E8BCE;*/
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    /*background: rgba(255,0,0,0.4); */
+    background: #2E8BCE;
+}
+
+
+/*颜色*//*面板边框*/
+.panel-primary {
+    border-color:#e3e3e3;
+}
+.panel-primary .panel-heading{
+    background: #66ADE8
+}
+.btn-primary {
+    background: #5FA7E5;
+}
+
+.btn-xs {
+    padding:3px 6px;
 }

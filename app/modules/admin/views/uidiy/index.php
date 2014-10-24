@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-
+<div style="min-width:800px;height:1000px">
 <?php global $_G; ?>
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
@@ -68,11 +68,12 @@
                                             <label class="col-sm-4 control-label">导航名字：</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control">
+                                                <p class="help-block">输入1-4个字母、数字或汉字</p>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="col-sm-4 control-label">导航名字：</label>
+                                            <label class="col-sm-4 control-label">导航图标：</label>
                                             <div class="col-sm-4">
                                                 <button type="button" class="btn btn-primary">选择图标</button>
                                             </div>
@@ -80,7 +81,7 @@
 
                                         <div class="form-group">
                                             <div class="col-sm-offset-4 col-sm-4">
-                                                <img src="" style="width:80px;height:80px;" class="img-rounded">
+                                                <img src="" style="width:60px;height:60px;" class="img-rounded">
                                             </div>
                                         </div>
 
@@ -230,7 +231,6 @@
                     </div>
                 </div>
 
-
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">模块管理</h3>
@@ -245,11 +245,13 @@
                     </div>
                 </div>
 
-
                 <div id="foot">
-                    <p class="text-center">设置完成后请务必点击 
+                    <p class="text-center">
+                        设置完成后请务必点击 
                         <button type="button" class="btn btn-primary btn-sm uidiy-sync-btn">同 步</button> 保证您所添加或设置的内容能在客户端显示！
-                    </p> 
+                        恢复初始设置可以点击
+                        <button type="button" class="btn btn-primary btn-sm">默认设置</button> 来进行恢复！
+                    </p>                     
                 </div>
             </div>
         </div>
@@ -287,9 +289,9 @@
         <img title="<%- title %>" src="<%= icon %>" class="img-thumbnail">
         <div class="module-title"><%- title %></div>
         <div>
-            <button class="module-edit-btn btn btn-primary btn-xs" data-toggle="modal" data-target=".module-edit-dlg" data-backdrop="">编辑</button>
+            <button class="module-edit-btn btn btn-primary btn-xs" data-toggle="modal" data-target=".module-edit-dlg" data-backdrop="">编 辑</button>
             <% if (id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER) { %>
-            <button class="module-remove-btn btn btn-primary btn-xs" data-toggle="modal" data-target=".module-remove-dlg" data-backdrop="">删除</button>
+            <button class="module-remove-btn btn btn-primary btn-xs" data-toggle="modal" data-target=".module-remove-dlg" data-backdrop="">删 除</button>
             <% } %>
         </div>
     </div>
@@ -304,7 +306,7 @@
             <form class="module-edit-form form-horizontal">
             <div class="panel-body">
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">编辑名称：</label>
+                        <label for="" class="col-sm-2 control-label">模块名称：</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control sm" name="moduleTitle" value="<%- title %>" placeholder="">
                             <p class="help-block">请输入1-4个字母、数字或汉字作为名称</p>
@@ -342,7 +344,6 @@
                     <div id="module-edit-detail">
                     </div>
 
-                
             </div>
             <div class="panel-footer text-right">
                 <input type="submit" class="btn btn-primary" value="确定" >  
@@ -411,9 +412,13 @@
     <div class="component-view-container"></div>
     </div>
     <% } else if (type == MODULE_TYPE_NEWS) { %>
-        <h5>请在左侧预览图中设置添加内容</h5>
+        <div class="col-sm-offset-2 col-sm-4">
+            <h5>请在左侧预览图中设置添加内容</h5>
+        </div>
     <% } else if (type == MODULE_TYPE_CUSTOM) { %>
-        <h5>请在左侧预览图中设置添加内容</h5>
+        <div class="col-sm-offset-2 col-sm-4">
+            <h5>请在左侧预览图中设置添加内容</h5>
+        </div>
     <% } %> 
     </script>
     <script type="text/template" id="module-remove-template">
@@ -444,7 +449,7 @@
     <div class="component-view" id="component-view-<%= id %>">
     
         <div class="form-group">
-            <label for="" class="col-sm-2 control-label">导航名称一：</label>
+            <label for="" class="col-sm-2 control-label">导航名称：</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control input-sm" name="componentTitle[]" value="<%= title %>">
             </div>
@@ -567,7 +572,7 @@
             );
 
             // 模块编辑弹出框
-            $('.close-play, .module-add-btn').on({
+            $('.close-module-play, .module-add-btn').on({
                 click:function() {
                     closeModulePlay();
                 }
@@ -590,6 +595,6 @@
 
         })
     </script>
-
+<div>
 </body>
 </html>
