@@ -97,6 +97,7 @@ $(function () {
         events: {
             'change #moduleType': 'onChangeModuleType',
             'submit .module-edit-form': 'moduleSubmit',
+            'click .close-module-play' : 'closeModule',
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
@@ -191,6 +192,9 @@ $(function () {
             $('.module-edit-dlg').modal('hide');
             this.$el.html('');
         },
+        closeModule: function () {
+            $('.module-play').fadeToggle();
+        },
     });
     
     var ModuleEditDetailView = Backbone.View.extend({
@@ -212,7 +216,6 @@ $(function () {
             return this;
         },
         moduleSubmit: function (event) {
-            alert('1');
             event.preventDefault();
 
             this.model.destroy();

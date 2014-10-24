@@ -57,25 +57,47 @@
 
                         <!-- 底部导航添加弹出 -->
                         <div class="play-border-add">
-                            <div>
-                                <p>添加导航<button type="button" class="close" aria-hidden="true">&times;</button></p>
-                            </div>
-                            <div>
-                                导航名称：<input type="text" >
-                            </div>
-                            <div>导航图标：<button type="button" class="btn btn-primary">选择导航图标</button></div>
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title pull-left">添加导航</h3>
+                                    <button type="button" class="add-nav-close close pull-right">&times;</button>
+                                </div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">导航名字：</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </div>
 
-                            <div>
-                                <button type="button" class="btn btn-default btn-xs pull-right" style="margin-right:40px">取消</button>
-                                <button type="button" class="btn btn-primary btn-xs pull-right" style="margin-right:40px">确认</button>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">导航名字：</label>
+                                            <div class="col-sm-4">
+                                                <button type="button" class="btn btn-primary">选择图标</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-4 col-sm-4">
+                                                <img src="" style="width:80px;height:80px;" class="img-rounded">
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="panel-footer text-right">
+                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+                                    <button type="button" class="btn btn-default btn-sm add-nav-close">取 消</button>
+                                </div>
                             </div>
                         </div> 
 
                         <!-- 发现下方加号弹出框 -->
                         <div class="play-add-plug">
-                            <div class="panel panel-success">
+                            <div class="panel panel-primary">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title pull-left"><small>插件设置</small></h3>
+                                    <h3 class="panel-title pull-left">插件设置</h3>
                                     <button type="button" class="close select-plug pull-right">&times;</button>
                                 </div>
                                 <div class="panel-body">
@@ -92,9 +114,9 @@
                                         <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 搜索
                                     </label>
                                 </div>
-                                <div class="panel-footer">
-                                    <input type="submit" class="btn btn-primary btn-xs" value="确定" >  
-                                    <button type="button" class="btn btn-default btn-xs select-plug">取 消</button>
+                                <div class="panel-footer text-right">
+                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+                                    <button type="button" class="btn btn-default btn-sm select-plug">取 消</button>
                                 </div>
                             </div>
                         </div> 
@@ -191,18 +213,38 @@
             </div>
 
             <div class="col-md-8" id="operation">
-                <p class="navCategory">选择导航样式</p>
-                <div id="footNav">
-                    <label><input type="radio"> 底部导航</label>
+
+                <div id="module-edit-dlg-view">
                 </div>
 
-                <p class="navCategory">模块管理</p>
-                <div id="module-list">
-                    <div class="module last-module">
-                        <a href="#" data-toggle="modal" data-target=".module-edit-dlg" data-backdrop="" class="module-add-btn"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
-                        <div>添加模块</div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">选择导航样式</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="radio">
+                            <label>
+                                <input type="radio"> 底部导航
+                            </label>
+                        </div>
                     </div>
                 </div>
+
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">模块管理</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="module-list">
+                            <div class="module last-module">
+                                <a href="#" data-toggle="modal" data-target=".module-edit-dlg" data-backdrop="" class="module-add-btn"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
+                                <div>添加模块</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div id="foot">
                     <p class="text-center">设置完成后请务必点击 
@@ -213,8 +255,8 @@
         </div>
     </div>
     
-    <div id="module-edit-dlg-view">
-    </div>
+<!--     <div id="module-edit-dlg-view">
+    </div> -->
     <div id="module-remove-dlg-view">
     </div>
 
@@ -243,70 +285,71 @@
     <script type="text/template" id="module-template">
     <div class="module" id="module-id-<%= id %>">
         <img title="<%- title %>" src="<%= icon %>" class="img-thumbnail">
-        <div><%- title %></div>
+        <div class="module-title"><%- title %></div>
         <div>
-            <button class="module-edit-btn" data-toggle="modal" data-target=".module-edit-dlg" data-backdrop="">编辑</button>
+            <button class="module-edit-btn btn btn-primary btn-xs" data-toggle="modal" data-target=".module-edit-dlg" data-backdrop="">编辑</button>
             <% if (id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER) { %>
-            <button class="module-remove-btn" data-toggle="modal" data-target=".module-remove-dlg" data-backdrop="">删除</button>
+            <button class="module-remove-btn btn btn-primary btn-xs" data-toggle="modal" data-target=".module-remove-dlg" data-backdrop="">删除</button>
             <% } %>
         </div>
     </div>
     </script>
     <script type="text/template" id="module-edit-template">
-    <div class="modal fade bs-example-modal-lg module-edit-dlg" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span>
-                    <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title"><%= id != 0 ? '编辑模块' : '添加模块' %></h4>
+    <div class="module-play">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title pull-left"><%= id != 0 ? '编辑模块' : '添加模块' %></h3>
+                <button type="button" class="close close-module-play pull-right">&times;</button>
             </div>
-            <form class="module-edit-form form-horizontal" method="get">
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="" class="col-sm-2 control-label">编辑名称：</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control sm" name="moduleTitle" value="<%- title %>" placeholder="">
-                        <p class="help-block">请输入1-4个字母、数字或汉字作为名称</p>
+            <form class="module-edit-form form-horizontal">
+            <div class="panel-body">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">编辑名称：</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control sm" name="moduleTitle" value="<%- title %>" placeholder="">
+                            <p class="help-block">请输入1-4个字母、数字或汉字作为名称</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group hidden">
-                    <label for="" class="col-sm-2 control-label">编辑图标：</label>
-                    <div class="col-sm-10">
-                        <input type="file" id="" >
-                        <p class="help-block">请上传1:1比例的JPG或PNG格式图片作为图标</p>
+                    <div class="form-group hidden">
+                        <label for="" class="col-sm-2 control-label">编辑图标：</label>
+                        <div class="col-sm-10">
+                            <input type="file" id="" >
+                            <p class="help-block">请上传1:1比例的JPG或PNG格式图片作为图标</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group hidden">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <img src="" style="width:100px;height:100px;" class="img-rounded">
+                    <div class="form-group hidden">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <img src="" style="width:100px;height:100px;" class="img-rounded">
+                        </div>
                     </div>
-                </div>
-                <% var isModuleTypeSelect = id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER; %>
-                <div class="<%= !isModuleTypeSelect ? 'hidden' : '' %>">
-                    <label>模块样式: </label>
-                    <select id="moduleType" name="moduleType">
-                        <option value="<%= MODULE_TYPE_FASTPOST %>" <%= type == MODULE_TYPE_FASTPOST ? 'selected' : '' %> class="<%= isModuleTypeSelect ? 'hidden' : '' %>">快速发帖</option>
-                        <option value="<%= MODULE_TYPE_FULL %>" <%= type == MODULE_TYPE_FULL ? 'selected' : '' %>>单页面</option>
-                        <option value="<%= MODULE_TYPE_SUBNAV %>" <%= type == MODULE_TYPE_SUBNAV ? 'selected' : '' %>>二级导航</option>
-                        <option value="<%= MODULE_TYPE_NEWS %>" <%= type == MODULE_TYPE_NEWS ? 'selected' : '' %>>左图右文</option>
-                        <option value="<%= MODULE_TYPE_CUSTOM %>" <%= type == MODULE_TYPE_CUSTOM ? 'selected' : '' %>>自定义页面</option>
-                    </select>
-                </div>
-                <div id="module-edit-detail">
-                </div>
+
+                    <% var isModuleTypeSelect = id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER; %>
+                    <div class="<%= !isModuleTypeSelect ? 'hidden' : '' %> form-group">
+                        <label class="col-sm-2 control-label">模块样式: </label>
+                        <div class="col-sm-10">
+                        <select id="moduleType" name="moduleType" class="form-control">
+                            <option value="<%= MODULE_TYPE_FASTPOST %>" <%= type == MODULE_TYPE_FASTPOST ? 'selected' : '' %> class="<%= isModuleTypeSelect ? 'hidden' : '' %>">快速发帖</option>
+                            <option value="<%= MODULE_TYPE_FULL %>" <%= type == MODULE_TYPE_FULL ? 'selected' : '' %>>单页面</option>
+                            <option value="<%= MODULE_TYPE_SUBNAV %>" <%= type == MODULE_TYPE_SUBNAV ? 'selected' : '' %>>二级导航</option>
+                            <option value="<%= MODULE_TYPE_NEWS %>" <%= type == MODULE_TYPE_NEWS ? 'selected' : '' %>>左图右文</option>
+                            <option value="<%= MODULE_TYPE_CUSTOM %>" <%= type == MODULE_TYPE_CUSTOM ? 'selected' : '' %>>自定义页面</option>
+                        </select>
+                        </div>
+                    </div>
+
+                    <div id="module-edit-detail">
+                    </div>
+
+                
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+            <div class="panel-footer text-right">
                 <input type="submit" class="btn btn-primary" value="确定" >  
+                <button type="button" class="btn btn-default close-module-play">取 消</button>
             </div>
             </form>
         </div>
-      </div>
     </div>
     </script>
     <script type="text/template" id="module-edit-detail-template">
@@ -343,7 +386,7 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-6">
+            <div class="col-sm-offset-2 col-sm-7">
                 <label for="" class="control-label">选择发表项：</label>
                 <select class="input-sm">
                     <option selected="" value="发表文字">发表文字</option>
@@ -361,10 +404,12 @@
     <div class="component-view-container"></div>
     <% } else if (type == MODULE_TYPE_SUBNAV) { %>
     <div><label>添加导航: </label></div>
+    <div class="add-nav-list">
     <div class="component-view-container"></div>
     <div class="component-view-container"></div>
     <div class="component-view-container"></div>
     <div class="component-view-container"></div>
+    </div>
     <% } else if (type == MODULE_TYPE_NEWS) { %>
         <h5>请在左侧预览图中设置添加内容</h5>
     <% } else if (type == MODULE_TYPE_CUSTOM) { %>
@@ -397,12 +442,19 @@
     </script>
     <script type="text/template" id="component-template">
     <div class="component-view" id="component-view-<%= id %>">
-        <div>
-            <input type="text" name="componentTitle[]" value="<%= title %>">
+    
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">导航名称一：</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control input-sm" name="componentTitle[]" value="<%= title %>">
+            </div>
         </div>
-        <div>
-            <small>链接地址：</small>
-            <select name="componentType[]" class="selectComponentType">
+
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">链接地址：</label>
+            <div class="col-sm-10">
+            <select name="componentType[]" class="selectComponentType form-control">
                 <option value="<%= COMPONENT_TYPE_FORUMLIST %>" <%= type == COMPONENT_TYPE_FORUMLIST ? 'selected' : '' %>>版块列表</option>
                 <option value="<%= COMPONENT_TYPE_NEWSLIST %>" <%= type == COMPONENT_TYPE_NEWSLIST ? 'selected' : '' %>>资讯列表</option>
                 <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>简版帖子列表</option>
@@ -414,27 +466,40 @@
                 <option value="<%= COMPONENT_TYPE_ABOAT %>" <%= type == COMPONENT_TYPE_ABOAT ? 'selected' : '' %>>关于</option>
                 <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
             </select>
-        </div>
-        <div id="component-view-<% print(COMPONENT_TYPE_FORUMLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_FORUMLIST ? '' : 'hidden' %>">
-            <div>
-                <small>设置样式: </small>
-                <label>
-                    <input type="checkbox" name="isShowForumIcon[]" <%= extParams.isShowForumIcon ? 'checked' : '' %>><small>勾选则显示图标</small>
-                </label>
-                <label>
-                    <input type="checkbox" name="isShowForumTwoCols[]" <%= extParams.isShowForumTwoCols ? 'checked' : '' %>> <small>勾选则双栏显示</small>
-                </label>
             </div>
+        </div>
+
+
+        <div id="component-view-<% print(COMPONENT_TYPE_FORUMLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_FORUMLIST ? '' : 'hidden' %>">
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">设置样式：</label>
+                <div class="col-sm-10">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="isShowForumIcon[]" <%= extParams.isShowForumIcon ? 'checked' : '' %>><small>勾选则显示图标</small>
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="isShowForumTwoCols[]" <%= extParams.isShowForumTwoCols ? 'checked' : '' %>> <small>勾选则双栏显示</small>
+                    </label>
+                </div>
+            </div>
+
+
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_NEWSLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_NEWSLIST ? '' : 'hidden' %>">
-            <div>                                 
-                <small>选择门户: </small>
-                <select name="newsModuleId[]">
-                <?php foreach ($newsModules as $newsModule) { ?>
-                    <option value="<?php echo $newsModule['mid'] ?>"><?php echo $newsModule['name'] ?></option> 
-                <?php } ?>
-                </select> 
+
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">选择门户：</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="newsModuleId[]">
+                    <?php foreach ($newsModules as $newsModule) { ?>
+                        <option value="<?php echo $newsModule['mid'] ?>"><?php echo $newsModule['name'] ?></option> 
+                    <?php } ?>
+                    </select> 
+                </div>
             </div>
+
+
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_TOPICLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_TOPICLIST ? '' : 'hidden' %>">
         </div>
@@ -451,19 +516,27 @@
         <div id="component-view-<% print(COMPONENT_TYPE_ABOAT+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_ABOAT ? '' : 'hidden' %>">
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_WEBAPP+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_WEBAPP ? '' : 'hidden' %>">
-            <div>
-                <small>wap地址: </small>
-                <input type="text" name="componentRedirect[]" value="">
+
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">wap地址：</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-sm" name="componentRedirect[]" value="">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">页面样式：</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="componentStyle[]">
+                    <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
+                    <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
+                    <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式</option>
+                </select> 
             </div>
         </div>
-        <div>                                 
-            <small>页面样式: </small>
-            <select name="componentStyle[]">
-                <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
-                <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
-                <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式</option>
-            </select> 
-        </div>
+
     </div>
     </script>
     <!-- 页面弹出样式用到的js -->
@@ -477,7 +550,7 @@
                 }
             });
 
-            $('.play-border-add .close').on({
+            $('.play-border-add .add-nav-close').on({
                 click:function() {
                     $('.play-border-add').slideToggle();
                 }
