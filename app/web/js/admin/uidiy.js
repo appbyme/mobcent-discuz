@@ -48,11 +48,61 @@ $(function () {
         }
     });
 
+    var NavItemModel = Backbone.Model.extend({
+        defaults: uidiyGlobalObj.navItemInitParams,
+        validate: function (attrs, options) {
+            if (attrs.title == '') {
+                return '请输入1-4个字母、数字或汉字作为名称';
+            }
+            return '';
+        },
+    });
+
     var ModuleList = Backbone.Collection.extend({
         model: ModuleModel,
     });
 
+    var NavItemList = Backbone.Collection.extend({
+        model: NavItemModel,
+    });
+
     var modules = new ModuleList();
+    var navItems = new NavItemList();
+
+    var NavItemView = Backbone.View.extend({
+        className: 'nav-item',
+        template: _.template($('#navitem-template').html()),
+        events: {
+            'click .navitem-edit-btn': 'dlgEditNavItem',
+            'click .navitem-remove-btn': 'dlgRemoveNavItem',
+        },
+        initialize: function() {
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'destroy', this.remove);
+
+            this.$el.hover(function() {
+                $(this).find('.navitem-title').addClass('hidden');
+                $(this).find('.nav-edit').removeClass('hidden');
+            }, function () {
+                $(this).find('.navitem-title').removeClass('hidden');
+                $(this).find('.nav-edit').addClass('hidden');
+            });
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        dlgEditNavItem: function (event) {
+            navItemEditDlg.model = this.model;
+            navItemEditDlg.render();
+            navItemEditDlg.toggle();
+        },
+        dlgRemoveNavItem: function (event) {
+            navItemRemoveDlg.model = this.model;
+            navItemRemoveDlg.render();
+            navItemRemoveDlg.toggle();
+        },
+    });
 
     var ModuleView = Backbone.View.extend({
         template: _.template($('#module-template').html()),
@@ -90,7 +140,7 @@ $(function () {
             $('#component-view-'+type+'-'+id).removeClass('hidden').siblings('.component-view-item').addClass('hidden');
         },
     });
-
+    
     var ModuleEditDlg = Backbone.View.extend({
         el: $("#module-edit-dlg-view"),
         template: _.template($('#module-edit-template').html()),
@@ -189,8 +239,7 @@ $(function () {
             
             modules.add(this.model, {merge: true, remove: false, add: true});
 
-            $('.module-edit-dlg').modal('hide');
-            this.$el.html('');
+            this.closeModule();
         },
         closeModule: function () {
             $('.module-play').fadeToggle();
@@ -224,15 +273,76 @@ $(function () {
         },
     });
 
+    var NavItemEditDlg = Backbone.View.extend({
+        el: $("#navitem-edit-dlg-view"),
+        template: _.template($('#navitem-edit-template').html()),
+        events: {
+            'submit .navitem-edit-form': 'submitNavItem',
+            'click .add-nav-close' : 'toggle',
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        submitNavItem: function (event) {
+            event.preventDefault();
+
+            var form = $('.navitem-edit-form')[0];
+            
+            this.model.set({
+                title: form.navItemTitle.value,
+                moduleId: parseInt(form.navItemModuleId.value),
+                // icon: '',
+            });
+
+            var error = this.model.validate(this.model.attributes);
+            if (error != '') {
+                alert(error);
+                this.model.destroy();
+                return;
+            }
+            // console.log(this.model)
+            navItems.add(this.model, {merge: true, remove: false, add: true});
+
+            this.toggle();
+        },
+        toggle: function () {
+            this.$el.slideToggle();
+        },
+    });
+
+    var NavItemRemoveDlg = Backbone.View.extend({
+        el: $("#navitem-remove-dlg-view"),
+        template: _.template($('#navitem-remove-template').html()),
+        events: {
+            'submit .navitem-remove-form': 'submitNavItem',
+            'click .btn-remove-navitem' : 'toggle',
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        submitNavItem: function (event) {
+            event.preventDefault();
+            this.model.destroy();
+            this.toggle();
+        },
+        toggle: function () {
+            this.$el.slideToggle();
+        },
+    });
+
     var MainView = Backbone.View.extend({
         el: $("#uidiy-main-view"),
         events: {
             'click .module-add-btn': 'dlgAddModule',
             'click .module-remove-btn': 'dlgRemoveModule',
+            'click .navitem-add-btn': 'dlgAddNavItem',
             'click .uidiy-sync-btn': 'uidiySync',
         },
         initialize: function() {
             this.listenTo(modules, 'add', this.addModule);
+            this.listenTo(navItems, 'add', this.addNavItem);
 
             // 转换module, component对象
             _.each(uidiyGlobalObj.moduleInitList, function (module) {
@@ -243,6 +353,8 @@ $(function () {
                 module.componentList = tmpComponentList;
                 modules.add(new ModuleModel(module));
             })
+
+            navItems.set(uidiyGlobalObj.navItemInitList);
         },
         render: function () {
             return this;
@@ -250,6 +362,15 @@ $(function () {
         addModule: function (module) {
             var view = new ModuleView({model: module});
             $('.last-module').before(view.render().el);
+        },
+        addNavItem: function (navItem) {
+            var view = new NavItemView({model: navItem});
+            $('.navitem-add-btn').before(view.render().el);   
+        },
+        dlgAddNavItem: function () {
+            navItemEditDlg.model = new NavItemModel();
+            navItemEditDlg.render();
+            navItemEditDlg.toggle();
         },
         dlgAddModule: function (event) {
             moduleEditDlg.model = new ModuleModel();
@@ -269,25 +390,34 @@ $(function () {
                     modules: JSON.stringify(modules),
                 },
                 success: function (result,status,xhr) {
+                    var navInfo = {
+                        type: NAV_TYPE_BOTTOM,
+                        navItemList: navItems,
+                    };
                     Backbone.ajax({
                         url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/savenavinfo',
                         type: 'post',
                         dataType: 'json',
                         data: {
-                            navinfo: JSON.stringify(modules),
+                            navInfo: JSON.stringify(navInfo),
                         },
                         success: function (result,status,xhr) {
-                            // alert('同步成功');
+                            alert('同步成功');
                         }
                     });
-                    alert('同步成功');
                 }
             });
         },
     });
 
-    var mainView = new MainView();
-    var moduleEditDlg = new ModuleEditDlg();
-    var moduleEditDetailView = new ModuleEditDetailView();
-    var moduleRemoveDlg = new ModuleRemoveDlg();
+    var mainView = new MainView(),
+        navItemEditDlg = new NavItemEditDlg(),
+        navItemRemoveDlg = new NavItemRemoveDlg(),
+        moduleEditDlg = new ModuleEditDlg(),
+        moduleEditDetailView = new ModuleEditDetailView(),
+        moduleRemoveDlg = new ModuleRemoveDlg();
+
+    window.Appbyme = {
+        uiModules: modules,
+    }
 });

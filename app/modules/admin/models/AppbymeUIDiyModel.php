@@ -65,7 +65,9 @@ class AppbymeUIDiyModel extends DiscuzAR
     {
         return array(
             'type' => self::NAV_TYPE_BOTTOM,
-            'navItemList' => array(),
+            'navItemList' => array(
+                self::initNavItemDiscover(),
+            ),
         );
     }
 
@@ -75,6 +77,17 @@ class AppbymeUIDiyModel extends DiscuzAR
             'moduleId' => 0,
             'title' => '',
             'icon' => self::NAV_ITEM_ICON_1,
+        );
+    }
+
+    public static function initNavItemDiscover()
+    {
+        return array_merge(
+            self::initNavItem(),
+            array(
+                'moduleId' => self::MODULE_ID_DISCOVER,
+                'title' => '发现',
+            )
         );
     }
 
@@ -171,6 +184,14 @@ class AppbymeUIDiyModel extends DiscuzAR
             DbUtils::getDzDbUtils(true)->update('appbyme_config', $appUIDiyModules, array('ckey' => self::MODULE_KEY));
         }
         return true;
+    }
+
+    public static function deleteNavInfo()
+    {
+        return DbUtils::getDzDbUtils(true)->delete('appbyme_config', array(
+            'where' => 'ckey = %s',
+            'arg' => array(self::NAV_KEY),
+        ));
     }
 
     public static function deleteModules()

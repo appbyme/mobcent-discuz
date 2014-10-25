@@ -19,6 +19,15 @@ class UIDiyController extends AdminController
         $newsModules = AppbymePoralModule::getModuleList();
 
         $navInfo = AppbymeUIDiyModel::getNavigationInfo();
+        empty($navInfo) && $navInfo = AppbymeUIDiyModel::initNavigation();
+        $hasDiscoverNavItem = false;
+        foreach ($navInfo['navItemList'] as $navItem) {
+            if ($navItem['moduleId'] == AppbymeUIDiyModel::MODULE_ID_DISCOVER) {
+                $hasDiscoverNavItem = true;
+                break;
+            }
+        }
+        !$hasDiscoverNavItem && array_unshift($navInfo['navItemList'], AppbymeUIDiyModel::initNavItemDiscover());
 
         $modules = array();
         $tempModules = AppbymeUIDiyModel::getModules();

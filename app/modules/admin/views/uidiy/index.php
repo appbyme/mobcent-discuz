@@ -55,44 +55,10 @@
 
                     <div class="moble-content"> 
 
-                        <!-- 底部导航添加弹出 -->
-                        <div class="play-border-add">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title pull-left">添加导航</h3>
-                                    <button type="button" class="add-nav-close close pull-right">&times;</button>
-                                </div>
-                                <div class="panel-body">
-                                    <form class="form-horizontal">
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label">导航名字：</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control">
-                                                <p class="help-block">输入1-4个字母、数字或汉字</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label">导航图标：</label>
-                                            <div class="col-sm-4">
-                                                <button type="button" class="btn btn-primary">选择图标</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="col-sm-offset-4 col-sm-4">
-                                                <img src="" style="width:60px;height:60px;" class="img-rounded">
-                                            </div>
-                                        </div>
-
-                                    </form>
-                                </div>
-                                <div class="panel-footer text-right">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
-                                    <button type="button" class="btn btn-default btn-sm add-nav-close">取 消</button>
-                                </div>
-                            </div>
-                        </div> 
+                        <div id="navitem-edit-dlg-view" class="play-border-add">
+                        </div>
+                        <div id="navitem-remove-dlg-view" class="play-border-add">
+                        </div>
 
                         <!-- 发现下方加号弹出框 -->
                         <div class="play-add-plug">
@@ -187,27 +153,8 @@
 
                     <!-- 手机底部导航 -->
                     <div class="moble-bottom-nav">
-                        <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/mc_forum_main_bar_button1.png") no-repeat 50% 20%'>
-                            <div>
-                                <small class="hidden">发现</small>
-                                <div class="nav-edit">
-                                    <span><small><a href="">编辑</a></small></span>
-                                    <span><small><a href="">删除</a></small></span>
-                                </div>
-                            </div>
-                        </div>                
-                        <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/mc_forum_main_bar_button1.png") no-repeat 50% 20%'>
-                            <div>
-                                <small class="">导航第一</small>
-                                <div class="nav-edit hidden">
-                                    <span><small><a href="">编辑</a></small></span>
-                                    <span><small><a href="">删除</a></small></span>
-                                </div>
-                            </div>
-                        </div>   
-                     
-                        <div class="pull-left nav-add">
-                            <img  src="<?php echo $this->rootUrl; ?>/images/admin/add-nav-ico.png">
+                        <div class="pull-left nav-add navitem-add-btn">
+                            <img src="<?php echo $this->rootUrl; ?>/images/admin/add-nav-ico.png">
                         </div>
                     </div>
                 </div>
@@ -238,7 +185,7 @@
                     <div class="panel-body">
                         <div id="module-list">
                             <div class="module last-module">
-                                <a href="#" data-toggle="modal" data-target=".module-edit-dlg" data-backdrop="" class="module-add-btn"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
+                                <a href="#" data-toggle="modal" class="module-add-btn"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
                                 <div>添加模块</div>
                             </div>
                         </div>
@@ -257,8 +204,6 @@
         </div>
     </div>
     
-<!--     <div id="module-edit-dlg-view">
-    </div> -->
     <div id="module-remove-dlg-view">
     </div>
 
@@ -270,6 +215,8 @@
         moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule()); ?>,
         componentInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initComponent()); ?>,
         moduleInitList: <?php echo WebUtils::jsonEncode($modules); ?>,
+        navItemInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initNavItem()); ?>,
+        navItemInitList: <?php echo WebUtils::jsonEncode($navInfo['navItemList']); ?>,
     };
     <?php
     $reflect = new ReflectionClass('AppbymeUIDiyModel');
@@ -284,12 +231,90 @@
     <script src="<?php echo $this->rootUrl; ?>/js/underscore-1.7.0.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/backbone-1.1.2.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/admin/uidiy.js"></script>
+    <script type="text/template" id="navitem-template">
+    <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/<%= icon %>.png") no-repeat 50% 20%'>
+        <small class="navitem-title"><%= title %></small>
+        <% if (moduleId != MODULE_ID_DISCOVER) { %>
+        <div class="nav-edit hidden">
+            <span class="navitem-edit-btn"><small>编辑</small></span>
+            <span class="navitem-remove-btn"><small>删除</small></span>
+        </div>
+        <% } %>
+    </div>
+    </script>
+    <!-- 导航添加/编辑模板 -->
+    <script type="text/template" id="navitem-edit-template">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title pull-left"><%= moduleId == 0 ? '添加导航' : '编辑导航' %></h3>
+            <button type="button" class="add-nav-close close pull-right">&times;</button>
+        </div>
+        <form class="form-horizontal navitem-edit-form">
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">导航名字：</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="navItemTitle" value="<%= title %>">
+                    <p class="help-block">输入1-4个字母、数字或汉字</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">导航图标：</label>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-primary">选择图标</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-4">
+                    <img src="" style="width:60px;height:60px;" class="img-rounded">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">链接地址: </label>
+                <div class="col-sm-4">
+                    <select name="navItemModuleId" class="form-control">
+                    <% for (var i = 0; i < Appbyme.uiModules.models.length; i++) {
+                        var module = Appbyme.uiModules.models[i]; 
+                        if (module.id != MODULE_ID_DISCOVER) {
+                    %>
+                        <option value="<%= module.id %>" <%= moduleId == module.id ? 'selected' : '' %>><%= module.attributes.title %></option>
+                    <% }} %>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+            <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+            <button type="button" class="btn btn-default btn-sm add-nav-close">取 消</button>
+        </div>
+        </form>
+    </div>
+    </script>
+    <!-- 导航删除模板 -->
+    <script type="text/template" id="navitem-remove-template">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title pull-left">删除导航</h3>
+            <button type="button" class="btn-remove-navitem close pull-right">&times;</button>
+        </div>
+        <form class="form-horizontal navitem-remove-form">
+        <div class="panel-body">
+            确定要删除 <%= title %> 导航吗?
+        </div>
+        <div class="panel-footer text-right">
+            <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+            <button type="button" class="btn btn-default btn-sm btn-remove-navitem">取 消</button>
+        </div>
+        </form>
+    </div>
+    </script>
     <script type="text/template" id="module-template">
     <div class="module" id="module-id-<%= id %>">
         <img title="<%- title %>" src="<%= icon %>" class="img-thumbnail">
         <div class="module-title"><%- title %></div>
         <div>
-            <button class="module-edit-btn btn btn-primary btn-xs" data-toggle="modal" data-target=".module-edit-dlg" data-backdrop="">编 辑</button>
+            <button class="module-edit-btn btn btn-primary btn-xs">编 辑</button>
             <% if (id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER) { %>
             <button class="module-remove-btn btn btn-primary btn-xs" data-toggle="modal" data-target=".module-remove-dlg" data-backdrop="">删 除</button>
             <% } %>
@@ -548,39 +573,15 @@
     <script type="text/javascript">
         $(function() {
 
-            // 底部导航
-            $('.nav-add').on({
-                click:function(){
-                    $('.play-border-add').slideToggle();
-                }
-            });
-
-            $('.play-border-add .add-nav-close').on({
-                click:function() {
-                    $('.play-border-add').slideToggle();
-                }
-            })
-
             // 导航样式调整
             $('.nav-list li').hover(
                 function() {
                     $(this).toggleClass('active');
-                }, 
+                },
                 function() {
                     $(this).toggleClass('active');
                 }
             );
-
-            // 模块编辑弹出框
-            $('.close-module-play, .module-add-btn').on({
-                click:function() {
-                    closeModulePlay();
-                }
-            })
-
-            function closeModulePlay() {
-                $('.module-play').fadeToggle();
-            }
 
             // 选择插件
             $('.select-plug').on({
