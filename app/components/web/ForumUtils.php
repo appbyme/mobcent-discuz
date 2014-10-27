@@ -96,6 +96,22 @@ class ForumUtils {
     }
 
     /**
+     * 获取所有版块列表
+     *
+     * @return array
+     */
+    public static function getForumListForHtml() {
+        global $_G;
+        loadcache('forums');
+        // $settings[0] = lang('portalcp', 'block_all_forum');
+        foreach($_G['cache']['forums'] as $fid => $forum) {
+            $forumValue = ($forum['type'] == 'forum' ? str_repeat('&nbsp;', 4) : ($forum['type'] == 'sub' ? str_repeat('&nbsp;', 8) : '')).$forum['name'];
+            $settings[$fid] = $forumValue;
+        }
+        return $settings;
+    }
+
+    /**
      * 主题相关
      */
 
