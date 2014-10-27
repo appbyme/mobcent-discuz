@@ -103,12 +103,15 @@ label {
     background: #CCCCCC;
     border-top: 1px solid #797979;
     margin: 0px 0px 0px 30px;
+    overflow:hidden;
 }
 
 .moble-bottom-nav .nav-column {
-    width: 64px;
+    width: 62px;
     height: 50px;
-    padding-top:30px
+    padding-top:30px;
+    overflow:hidden;
+    font-size: 11px;
 }
 
 .moble-bottom-nav .nav-column img {
@@ -140,7 +143,9 @@ label {
 .play-border-add input[type=text] {
     width: 150px;
 }
-
+.play-border-add select {
+    width: 150px;
+}
 /*重写面板*/
 .play-border-add .panel {
     margin-bottom: 0px;
@@ -303,6 +308,6 @@ label {
     background: #5FA7E5;
 }
 
-.btn-xs {
+#module-list .btn-xs {
     padding:3px 6px;
 }

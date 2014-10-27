@@ -236,8 +236,8 @@
         <small class="navitem-title"><%= title %></small>
         <% if (moduleId != MODULE_ID_DISCOVER) { %>
         <div class="nav-edit hidden">
-            <span class="navitem-edit-btn"><small>编辑</small></span>
-            <span class="navitem-remove-btn"><small>删除</small></span>
+            <a><span class="navitem-edit-btn"><small>编辑</a></small></span></a>
+            <a><span class="navitem-remove-btn"><small>删除</small></span></a>
         </div>
         <% } %>
     </div>
