@@ -66,7 +66,7 @@
             </div>
         </div>
         <form class="form-signin" role="form" action="" method="post">
-            <input type="text" name="username" class="form-control" placeholder="请输入用户名" value="<?php echo isset($username) ? $username : '' ?>" required autofocus >
+            <input type="text" name="username" class="form-control" placeholder="请输入用户名"  required autofocus >
             <input type="password" name="password" class="form-control" placeholder="请输入密码" required >
             <button class="btn btn-primary  btn-lg btn-block" type="submit">登 录</button>
         </form>
