@@ -18,7 +18,7 @@ class InitUIAction extends MobcentAction
         $res = $this->initWebApiArray();
         $res['body'] = $this->_getUIconfig();
         $res['head']['errInfo'] = '';
-        echo WebUtils::outputWebApi($res, 'utf8', false);
+        echo WebUtils::outputWebApi($res, 'utf-8', false);
     }
 
     private function _getUIconfig()

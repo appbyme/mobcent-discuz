@@ -212,11 +212,11 @@
     <script type="text/javascript">
     var uidiyGlobalObj = {
         rootUrl: '<?php echo $this->rootUrl; ?>',
-        moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule(), 'utf8'); ?>,
-        componentInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initComponent(), 'utf8'); ?>,
-        moduleInitList: <?php echo WebUtils::jsonEncode($modules, 'utf8'); ?>,
-        navItemInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initNavItem(), 'utf8'); ?>,
-        navItemInitList: <?php echo WebUtils::jsonEncode($navInfo['navItemList'], 'utf8'); ?>,
+        moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule(), 'utf-8'); ?>,
+        componentInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initComponent(), 'utf-8'); ?>,
+        moduleInitList: <?php echo WebUtils::jsonEncode($modules, 'utf-8'); ?>,
+        navItemInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initNavItem(), 'utf-8'); ?>,
+        navItemInitList: <?php echo WebUtils::jsonEncode($navInfo['navItemList'], 'utf-8'); ?>,
     };
     <?php
     $reflect = new ReflectionClass('AppbymeUIDiyModel');
