@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-<div style="min-width:800px;height:1000px">
+
 <?php global $_G; ?>
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
@@ -88,23 +88,65 @@
                             </div>
                         </div> 
 
+                        <!-- 左图右文添加/编辑弹出框 -->
+                        <div class="pic-text-pop">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title pull-left">添加内容</h3>
+                                    <button type="button" class="close pic-text-pop-close pull-right">&times;</button>
+                                </div>
+                                <form class="form-horizontal navitem-edit-form">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">导航名字：</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control">
+                                                <p class="help-block">输入1-4个字母、数字或汉字</p>
+                                            </div>
+                                        </div>
 
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">内容简介：</label>
+                                            <div class="col-sm-8">
+                                                <textarea class="form-control" rows="3" style="resize:none;margin-bottom:8px;"></textarea>
+                                            </div>
+                                        </div>
+
+                                         <div class="form-group">
+                                            <label for="" class="col-sm-4 control-label">编辑图标：</label>
+                                            <div class="col-sm-8">
+                                                <input type="file" id="" >
+                                                <p class="help-block">上传1:1比例的JPG或PNG格式</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-4 col-sm-8 text-left">
+                                                <img src="" style="width:50px;height:50px;" class="img-rounded">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="panel-footer text-right">
+                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+                                    <button type="button" class="btn btn-default btn-sm pic-text-pop-close">取 消</button>
+                                </div>
+                            </div>
+                        </div>
 
                         <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
-
-                        <div class="found-module">
-                            <img class="moble-top-show" src="<?php echo $this->rootUrl; ?>/images/admin/moble-nav.png">
-                            <div class="moble-top-title">
-                                <img class="pull-left select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
-                                <span>发现</span>
-                                <img class="pull-right select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
-                                <img class="pull-right select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
-                            </div>
+                        <img class="moble-top-show" src="<?php echo $this->rootUrl; ?>/images/admin/moble-nav.png">
+                        <div class="moble-top-title">
+                            <img class="pull-left select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
+                            <span>发现</span>
+                            <img class="pull-right select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
+                            <img class="pull-right select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
+                        </div>
+                        <div class="found-module" style="background:;height:450px;">
                             <div class="slide-img">
                                 <img src="<?php echo $this->rootUrl; ?>/images/admin/timo.jpg">
                                 <span><a href="">点击添加更多幻灯片</a></span>
                             </div>
-
                             <div class="module-show">
                                 <div class="module-show-one"><img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
                                     <span class="pull-left ">个人中心</span><span class="pull-right"><small><a href="">隐藏</a></small></span>
@@ -149,14 +191,50 @@
                             </div>
                             <span><a href="">点击添加更多</a></span>
                         </div>
+
+                        <!-- 左图右文 -->
+                        <div class="pic-text hidden">
+                            <div class="edit-list">
+                                <div class="pull-left"><img src="" style="width:50px;height:50px" class="img-rounded"></div>
+                                <div class="pull-left text-left page-main">
+                                    <div class="page-title"><strong>此处显示为标题此处显示为标题</strong></div>
+                                    <div class="page-content">此处显示为文字描述此处显示为文字描述此处显示为文字描述</div>
+                                </div>
+                                <div class="text-left pull-left">
+                                    <a class="add-edit-page">编辑</a>
+                                    <a href="">删除</a>
+                                </div>
+                            </div>
+
+                            <div class="edit-list">
+                                <div class="pull-left"><img src="" style="width:50px;height:50px" class="img-rounded"></div>
+                                <div class="pull-left text-left page-main">
+                                    <div class="page-title"><strong>此处显示为标题此处显示为标题</strong></div>
+                                    <div class="page-content">此处显示为文字描述此处显示为文字描述此处显示为文字描述</div>
+                                </div>
+                                <div class="text-left pull-left">
+                                    <a class="add-edit-page">编辑</a>
+                                    <a href="">删除</a>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                               <button type="button" class="btn btn-primary add-edit-page">点击添加更多</button>
+                            </div>
+                        </div>
+
+                        <!-- 手机底部导航 -->
+                        <div class="moble-bottom-nav">
+                            <div class="nav-move">
+                                <div class="pull-left nav-add navitem-add-btn">
+                                    <img src="<?php echo $this->rootUrl; ?>/images/admin/add-nav-ico.png">
+                                </div>
+                            </div>
+                        </div>
+
                     </div><!-- end moble-content -->
 
-                    <!-- 手机底部导航 -->
-                    <div class="moble-bottom-nav">
-                        <div class="pull-left nav-add navitem-add-btn">
-                            <img src="<?php echo $this->rootUrl; ?>/images/admin/add-nav-ico.png">
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -171,9 +249,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="radio">
-                            <label>
-                                <input type="radio"> 底部导航
-                            </label>
+                            <label><input type="radio"> 底部导航</label>
                         </div>
                     </div>
                 </div>
@@ -231,6 +307,7 @@
     <script src="<?php echo $this->rootUrl; ?>/js/underscore-1.7.0.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/backbone-1.1.2.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/admin/uidiy.js"></script>
+    <script type="text/javascript" src="<?php echo $this->rootUrl; ?>/js/jquery-ui-1.11.2.min.js"></script>
     <script type="text/template" id="navitem-template">
     <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/<%= icon %>.png") no-repeat 50% 20%'>
         <small class="navitem-title"><%= title %></small>
@@ -573,6 +650,10 @@
     <script type="text/javascript">
         $(function() {
 
+
+            $(".nav-move").sortable();
+
+
             // 导航样式调整
             $('.nav-list li').hover(
                 function() {
@@ -594,8 +675,24 @@
                 $('.play-add-plug').fadeToggle();
             }
 
+            // 左图右文弹出框
+            $('.add-edit-page').on({
+                click:function(){
+                    $('.pic-text-pop').fadeToggle();
+                }
+            })
+
+            $('.pic-text-pop-close').on({
+                click:function(){
+                    $('.pic-text-pop').fadeOut();
+                }
+            })
+
         })
     </script>
-<div>
+    <!-- 手机显示底部导航拖动 -->
+    <script type="text/javascript">
+
+    </script>
 </body>
 </html>
