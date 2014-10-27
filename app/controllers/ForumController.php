@@ -29,6 +29,7 @@ class ForumController extends MobcentController  {
             'vote' => 'application.controllers.forum.VoteAction',
             'topicrate' => 'application.controllers.forum.TopicRateAction',
             'ratelistview' => 'application.controllers.forum.RateListViewAction',
+            'classification' => 'application.controllers.forum.ClassificationAction',            
         );
     }
 
@@ -51,6 +52,7 @@ class ForumController extends MobcentController  {
             'vote' => false,
             'topicrate' => true,
             'ratelistview' => false,
+            'classification' => true,
         );
     }
 }
