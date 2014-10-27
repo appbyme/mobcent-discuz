@@ -31,6 +31,8 @@ return array(
         'application.components.db.*',
         'application.components.web.*',
 
+        'application.modules.admin.models.*',
+        
         'ext.mobcent.components.*',
         'ext.mobcent.components.db.*',
         'ext.mobcent.components.utils.*',
@@ -44,11 +46,13 @@ return array(
         /*
         'gii'=>array(
             'class'=>'system.gii.GiiModule',
-            'password'=>'Enter Your Password Here',
+            'password'=>'appbyme',
             // If removed, Gii defaults to localhost only. Edit carefully to taste.
             'ipFilters'=>array('127.0.0.1','::1'),
         ),
         */
+        'admin' => array(
+        ),
     ),
 
     // application components

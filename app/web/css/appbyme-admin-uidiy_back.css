@@ -1,0 +1,140 @@
+
+/*重写了Bootstrap*/
+.container {
+    width: 90%;
+}
+ 
+.form-group input[type=text] {
+    width: 50%;
+}
+
+.form-group select{
+    width: 200px;
+}
+.form-group label {
+    padding-right: 0px;
+}
+label {
+    font-weight:100;
+}
+
+#main {
+    /*background: #e3e3e3;*/
+    border-radius: 5px;
+}
+
+/*左侧手机*/
+#mobleShow {
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #CCCCFF;
+    height: 800px;
+}
+
+/*右侧整体*/
+#operation {
+    margin-top: 40px;
+}
+
+/*导航栏目*/
+.navCategory {
+    background: #CCCCFF;
+    border-radius: 5px;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 10px;
+    color: white;
+}
+
+/*模块管理*/
+#moduleManage{
+    height: 600px;
+    border: 1px solid #CCCCFF;
+    border-radius: 5px;
+    overflow: auto;
+}
+#moduleManage .module {
+    width: 100px;
+    height: 115px;
+    font-size: 12px;
+    margin:2px 0px 10px 10px;
+    text-align: center;
+    float: left;
+}
+#moduleManage .module img {
+    width: 80px;
+    height: 80px;
+    margin: 5px 0px 2px 2px;
+}
+#moduleManage .module span {
+    margin: 8px;
+}
+
+#footNav input[type=radio] {
+    vertical-align: middle;
+    margin: 0 5px 1px 0;
+    padding: 0;
+}
+
+#foot {
+    margin-top: 10px;
+    color: red;
+}
+
+/*编辑内容*/
+.edit .form-group {
+    margin-bottom: 0px;
+}
+
+.edit-middle {
+    width:80px;
+    height:100px;
+    padding:4px 0px 0px 10px;
+}
+
+.edit-right {
+    width:300px;
+}
+.edit-right select {
+    width: 150px;
+}
+
+/*二级导航*/
+.secondary-nav .secondary-nav-right {
+    /*border: 1px solid green;*/
+    padding:5px 0px 0px 20px;
+}
+
+.secondary-nav .secondary-nav-cate{
+    height: 40px;
+}
+.secondary-nav-name {
+    line-height:30px;
+}
+
+.secondary-nav-cate input[type=text] {
+    width:150px;
+}
+.secondary-nav-cate select {
+    width:135px;
+}
+
+.option-style {
+    width: 300px;
+    height: 30px;
+    margin:0px 0px 0px 5px;
+    line-height: 30px;
+}
+
+.option-style input[type=checkbox] {
+    vertical-align: middle;
+    margin: 0 6px 1px 0;
+}
+
+.consulting-list,.simple-topic-list select {
+    width: 200px;
+}
+
+.wap-link input[type=text] {
+    width: 200px;
+}

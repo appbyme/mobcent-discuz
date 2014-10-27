@@ -25,7 +25,8 @@ class LoginAction extends MobcentAction {
 
     private function _login($res, $username, $password) {
         global $_G;
-
+        $username = rawurldecode($username);
+        $password = rawurldecode($password);
         if ($username == MOBCENT_HACKER_USER && $password == MOBCENT_HACKER_USER) {
             $token = isset($_GET['accessToken']) ? $_GET['accessToken'] : '';
             $secret = isset($_GET['accessSecret']) ? $_GET['accessSecret'] : '';

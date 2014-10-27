@@ -142,17 +142,17 @@ class TestController extends MobcentController {
     public function actionDebug() {
         $testApiList = array(
             array(
-                'title' => 'debug: phpinfo',
+                'title' => 'debug: test/phpinfo phpinfo',
                 'route' => 'test/phpinfo',
                 'params' => array(),
             ),
             array(
-                'title' => 'debug: 测试文件',
+                'title' => 'debug: test/file 测试文件',
                 'route' => 'test/file',
                 'params' => array(),
             ),
             array(
-                'title' => 'debug: 网站配置',
+                'title' => 'debug: test/config 网站配置',
                 'route' => 'test/config',
                 'params' => array(),
             ),
@@ -232,28 +232,32 @@ class TestController extends MobcentController {
                 'params' => array('json' => "{'aid': 1, 'page': 1}"),
             ),
             array(
+                'title' => 'api/portal: portal/commentlist 文章评论',
+                'route' => 'portal/commentlist',
+                'params' => array('json' => "{'id': 1, 'idType': 'aid', 'page': 1, 'pageSize': 10, }"),
+            ),
+            array(
                 'title' => 'api/user: 获取设置',
                 'route' => 'user/getsetting',
                 'params' => array('getSetting' => "{'body': {'postInfo': {'forumIds': '0'}}}"),
             ),
             array(
-                'title' => 'api/user: 投票',
+                'title' => 'api/user: user/vote 投票',
                 'route' => 'user/vote',
                 'params' => array('tid'=>101, 'options'=>61),
             ),
             array(
-                'title' => 'api/user: 登陆',
+                'title' => 'api/user: user/login 登陆',
                 'route' => 'user/login',
                 'params' => array('type' => 'login', 'username' => 'admin', 'password'=>'admin'),
             ),
             array(
-                'title' => 'api/app: 初始化AppUI',
+                'title' => 'api/app: app/initui 初始化AppUI',
                 'route' => 'app/initui',
                 'params' => array(),
             ),
-
             array(
-                'title' => 'api/app: 服务器事件通知接口',
+                'title' => 'api/app: app/servernotify 服务器事件通知接口',
                 'route' => 'app/servernotify',
                 'params' => array('event' => 'updateApp', 'appKey' => ''),
             ),            

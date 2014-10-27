@@ -52,7 +52,7 @@ class SwitchAction extends MobcentAction {
             if(C::t('#myrepeats#myrepeats')->count_by_uid_username($newuid, $olddiscuz_userss)) {
                 // 第一次登录，需要输入密码
             }
-            return $this->makeErrorInfo($res, lang('plugin/myrepeats', 'user_nonexistence'));
+            //return $this->makeErrorInfo($res, lang('plugin/myrepeats', 'user_nonexistence'));
         } elseif($user['locked']) {
             return $this->makeErrorInfo($res, lang('plugin/myrepeats', 'user_locked', array('user' => $_GET['username'])));
         }
