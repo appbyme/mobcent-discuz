@@ -191,6 +191,7 @@ $(function () {
                 isShowForumIcon = $(form['isShowForumIcon[]']),
                 isShowForumTwoCols = $(form['isShowForumTwoCols[]']),
                 newsModuleId = $(form['newsModuleId[]']),
+                forumId = $(form['forumId[]']),
                 componentRedirect = $(form['componentRedirect[]']),
                 componentStyle = $(form['componentStyle[]']);
             
@@ -209,7 +210,8 @@ $(function () {
                                 isShowForumIcon: isShowForumIcon[i].checked ? 1 : 0,
                                 isShowForumTwoCols: isShowForumTwoCols[i].checked ? 1 : 0,
                                 newsModuleId: parseInt(newsModuleId[i].value),
-                                componentRedirect: componentRedirect[i].value,
+                                forumId: parseInt(forumId[i].value),
+                                redirect: componentRedirect[i].value,
                             };
                             var model = new ComponentModel({
                                 title: componentTitle[i].value,
@@ -301,7 +303,7 @@ $(function () {
                 this.model.destroy();
                 return;
             }
-            // console.log(this.model)
+
             navItems.add(this.model, {merge: true, remove: false, add: true});
 
             this.toggle();
@@ -339,6 +341,7 @@ $(function () {
             'click .module-remove-btn': 'dlgRemoveModule',
             'click .navitem-add-btn': 'dlgAddNavItem',
             'click .uidiy-sync-btn': 'uidiySync',
+            'click .uidiy-init-btn': 'uidiyInit',
         },
         initialize: function() {
             this.listenTo(modules, 'add', this.addModule);
@@ -408,6 +411,16 @@ $(function () {
                 }
             });
         },
+        uidiyInit: function () {
+            Backbone.ajax({
+                url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/init',
+                type: 'post',
+                success: function (result,status,xhr) {
+                    alert('初始化成功');
+                    location.href = uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy';
+                }
+            });
+        }
     });
 
     var mainView = new MainView(),

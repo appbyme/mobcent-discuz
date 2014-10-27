@@ -100,12 +100,15 @@ class AppbymeUIDiyModel extends DiscuzAR
             ',
             array('appbyme_config', self::NAV_KEY)
         );
-        return $data ? (array)unserialize($data) : array();
+        return $data ? (array)unserialize(WebUtils::u($data)) : array();
     }
 
     public static function saveNavigationInfo($navInfo)
     {
-        $appUIDiyNavInfo = array('ckey' => self::NAV_KEY, 'cvalue' => serialize($navInfo));
+        $appUIDiyNavInfo = array(
+            'ckey' => self::NAV_KEY, 
+            'cvalue' => WebUtils::t(serialize($navInfo)),
+        );
         $config = DbUtils::getDzDbUtils(true)->queryRow('
             SELECT * 
             FROM %t 
@@ -165,12 +168,15 @@ class AppbymeUIDiyModel extends DiscuzAR
             ',
             array('appbyme_config', self::MODULE_KEY)
         );
-        return $data ? (array)unserialize($data) : array();
+        return $data ? (array)unserialize(WebUtils::u($data)) : array();
     }
 
     public static function saveModules($modules)
     {
-        $appUIDiyModules = array('ckey' => self::MODULE_KEY, 'cvalue' => serialize($modules));
+        $appUIDiyModules = array(
+            'ckey' => self::MODULE_KEY, 
+            'cvalue' => WebUtils::t(serialize($modules)),
+        );
         $config = DbUtils::getDzDbUtils(true)->queryRow('
             SELECT * 
             FROM %t 

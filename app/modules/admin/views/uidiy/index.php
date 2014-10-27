@@ -197,7 +197,7 @@
                         设置完成后请务必点击 
                         <button type="button" class="btn btn-primary btn-sm uidiy-sync-btn">同 步</button> 保证您所添加或设置的内容能在客户端显示！
                         恢复初始设置可以点击
-                        <button type="button" class="btn btn-primary btn-sm">默认设置</button> 来进行恢复！
+                        <button type="button" class="btn btn-primary btn-sm uidiy-init-btn">默认设置</button> 来进行恢复！
                     </p>                     
                 </div>
             </div>
@@ -212,11 +212,11 @@
     <script type="text/javascript">
     var uidiyGlobalObj = {
         rootUrl: '<?php echo $this->rootUrl; ?>',
-        moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule()); ?>,
-        componentInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initComponent()); ?>,
-        moduleInitList: <?php echo WebUtils::jsonEncode($modules); ?>,
-        navItemInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initNavItem()); ?>,
-        navItemInitList: <?php echo WebUtils::jsonEncode($navInfo['navItemList']); ?>,
+        moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule(), 'utf8'); ?>,
+        componentInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initComponent(), 'utf8'); ?>,
+        moduleInitList: <?php echo WebUtils::jsonEncode($modules, 'utf8'); ?>,
+        navItemInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initNavItem(), 'utf8'); ?>,
+        navItemInitList: <?php echo WebUtils::jsonEncode($navInfo['navItemList'], 'utf8'); ?>,
     };
     <?php
     $reflect = new ReflectionClass('AppbymeUIDiyModel');
@@ -523,7 +523,7 @@
                 <div class="col-sm-10">
                     <select class="form-control" name="newsModuleId[]">
                     <?php foreach ($newsModules as $newsModule) { ?>
-                        <option value="<?php echo $newsModule['mid'] ?>"><?php echo $newsModule['name'] ?></option> 
+                        <option value="<?php echo $newsModule['mid'] ?>" <%= extParams.newsModuleId == <?php echo $newsModule['mid'] ?> ? 'selected' : '' %>><?php echo WebUtils::u($newsModule['name']) ?></option> 
                     <?php } ?>
                     </select> 
                 </div>
@@ -532,6 +532,17 @@
 
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_TOPICLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_TOPICLIST ? '' : 'hidden' %>">
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">选择版块: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="forumId[]">
+                    <?php foreach ($forumList as $fid => $title) { ?>
+                        <option value="<?php echo $fid ?>" <%= extParams.forumId == <?php echo $fid; ?> ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
+                    <?php } ?>
+                    </select> 
+                </div>
+            </div>
+
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_MESSAGELIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_MESSAGELIST ? '' : 'hidden' %>">
         </div>

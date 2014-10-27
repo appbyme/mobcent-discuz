@@ -13,6 +13,10 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
 class AdminModule extends CWebModule
 {
+    public $controllerMap = array(
+        'uidiy' => 'application.modules.admin.controllers.UIDiyController',
+    );
+
     public function init()
     {
         $this->setImport(array(

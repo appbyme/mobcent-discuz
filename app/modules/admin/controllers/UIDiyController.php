@@ -17,6 +17,7 @@ class UIDiyController extends AdminController
     public function actionIndex()
     {   
         $newsModules = AppbymePoralModule::getModuleList();
+        $forumList = ForumUtils::getForumListForHtml();
 
         $navInfo = AppbymeUIDiyModel::getNavigationInfo();
         empty($navInfo) && $navInfo = AppbymeUIDiyModel::initNavigation();
@@ -60,6 +61,7 @@ class UIDiyController extends AdminController
             'navInfo' => $navInfo,
             'modules' => $modules,
             'newsModules' => $newsModules,
+            'forumList' => $forumList,
         ));
     }
 
@@ -87,6 +89,7 @@ class UIDiyController extends AdminController
     {
         $res = WebUtils::initWebApiResult();
 
+        AppbymeUIDiyModel::deleteNavInfo();
         AppbymeUIDiyModel::deleteModules();
 
         echo WebUtils::outputWebApi($res, '', false);
