@@ -5,7 +5,6 @@
 <meta charset="<?php echo $_G['charset'] ?>">
 <title><?php echo WebUtils::t('显示全部评分'); ?></title>
 <meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1.0,initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="<?php echo $this->rootUrl.'/css/'; ?>bootstrap.min.css">
 <script type="text/javascript"></script>
 <style type="text/css">
     *{

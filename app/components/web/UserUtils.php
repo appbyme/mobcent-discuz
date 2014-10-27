@@ -754,6 +754,19 @@ class UserUtils {
     }
 
     /**
+     * 通过username删除用户的accessToken、accessSecret
+     * 
+     * @param string $username Description.
+     * @static
+     *
+     */
+    public static function delUserAccessByUsername($username) {
+        $userInfo = DzCommonMember::getUidByUsername($username);
+        $delUid = $userInfo['uid'];
+        AppbymeUserAccess::delUserAccess($delUid);
+    }
+
+    /**
      * 判断此当前用户是否在安米后台管理允许登陆的用户组内
      *
      * @return bool

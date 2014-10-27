@@ -60,6 +60,10 @@ class AppbymeUserAccess extends DiscuzAR {
         return DbUtils::getDzDbUtils(true)->update('appbyme_user_access', $data, array('user_id'=> $userId));
     }
 
+    public static function delUserAccess($userId) {
+        return DbUtils::getDzDbUtils(true)->delete('appbyme_user_access', array('user_id'=> $userId));
+    }
+
     public static function getSecretStr($uid, $password) {
         return array(
             'accessToken' => substr(md5($uid.'mobcent'),0,-3),

@@ -922,7 +922,8 @@ class TopicAdminAction extends MobcentAction{
             $temp = $extcredits3['extcredits3'] + $temp['extcredits3'];
             DB::query('UPDATE '.DB::table('common_member_count').' set extcredits3 = %d WHERE uid = %d',array($temp,$_G['uid']));
          */
-            return array('rs'=>1,'errcode'=>WebUtils::t('发贴成功'));
+            // return array('rs'=>1,'errcode'=>WebUtils::t('发贴成功'));
+            return $this->makeErrorInfo($res,'mobcent_post_reply_succeed', array('noError' => 1));
     }
 
     /*发普通贴和分类贴方法*/
@@ -1452,7 +1453,8 @@ class TopicAdminAction extends MobcentAction{
                 DB::query('UPDATE '.DB::table('common_member_count').' set extcredits3 = %d WHERE uid = %d',array($temp,$_G['uid']));
              */
              //showmessage('post_newthread_succeed', $returnurl, $values, $param);
-            return array('rs'=>1,'errcode'=>WebUtils::t('发贴成功'));
+            // return array('rs'=>1,'errcode'=>WebUtils::t('发贴成功'));
+            return $this->makeErrorInfo($res,'mobcent_post_newthread_success', array('noError' => 1));
         }
 
     }

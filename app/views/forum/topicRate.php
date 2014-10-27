@@ -31,7 +31,7 @@
     }
     #main{
         margin: 0 auto;
-        width: 20%;
+        width: 400px;
         height: auto;
         /*background: #e3e3e3;*/
         padding-bottom: 5px;
@@ -98,6 +98,20 @@
 		padding: 4px;
 	}
 
+    /* 平板电脑和小屏电脑之间的分辨率 */
+    @media (min-width: 768px) {
+        #main{
+            width: 90%;
+            margin: 0 auto;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        #rate_category, #rate_reason, #foot {
+            width: 90%;
+        }
+    }
+
     @media (max-width: 480px) {
 	    #main{
 	        width: 90%;
@@ -110,6 +124,20 @@
 	    	width: 90%;
 	    }
 	}
+    @media (max-width: 240px) {
+        #main{
+            width: 240px;
+            margin: 0 auto;
+            padding-left: 3%;
+            padding-right: 3%;
+        }
+
+        #rate_category, #rate_reason, #foot {
+            width: 240px;
+        }
+    }
+
+
 </style>
 <script type="text/javascript">
     $(function(){

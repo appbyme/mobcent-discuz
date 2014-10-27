@@ -18,7 +18,7 @@ class SaveAvatarAction extends MobcentAction {
 
         $uid = $this->getController()->uid;
         $res = $this->_runAction(array('res' => $res, 'uid' => $uid, 'avatar' => $avatar));
-
+ 
         echo WebUtils::outputWebApi($res, '', false);
     }
 
@@ -56,8 +56,13 @@ class SaveAvatarAction extends MobcentAction {
                 $this->_deleteTempAvatarFiles($uid);
             }
         }
-
-        return $isSaveSuccess ? $res : WebUtils::makeErrorInfo_oldVersion($res, WebUtils::t('保存文件失败'));
+        if ($isSaveSuccess) {
+            $this->_updateAvatarStatus();
+            return $res;
+        } else {
+            return WebUtils::makeErrorInfo_oldVersion($res, WebUtils::t('保存文件失败'));
+        }
+        // return $isSaveSuccess ? $res : WebUtils::makeErrorInfo_oldVersion($res, WebUtils::t('保存文件失败'));
     }
 
     private function _getTempAvatarFiles($uid) {
@@ -110,5 +115,19 @@ class SaveAvatarAction extends MobcentAction {
             $r .= $k1 . $k2;
         }
         return $r;
+    }
+
+    private function _updateAvatarStatus() {
+        global $_G;
+        loaducenter();
+        $uc_avatarflash = uc_avatar($_G['uid'], 'virtual', 0);
+
+        if(empty($space['avatarstatus']) && uc_check_avatar($_G['uid'], 'middle')) {
+            C::t('common_member')->update($_G['uid'], array('avatarstatus'=>'1'));
+
+            updatecreditbyaction('setavatar');
+
+            manyoulog('user', $_G['uid'], 'update');
+        }
     }
 }

@@ -21,6 +21,7 @@ class UserInfoAction extends CAction {
         $puid = isset($_GET['userId']) ? $_GET['userId'] : $uid;
 
         $res = $this->_getUserInfo($res, $uid, $puid);
+
         $res['info'] = array();
         
         echo WebUtils::outputWebApi($res, '', false);
@@ -69,6 +70,8 @@ class UserInfoAction extends CAction {
             );
         }
         $res['body']['repeatList'] = $repeatList;
+        $res['body']['profileList'] = $this->_getPersonalDataInfo($puid, $space);
+        $res['body']['creditList'] = $this->_getStatisticalInformation($uid, $space);
         return $res;
     }
 
@@ -99,9 +102,104 @@ class UserInfoAction extends CAction {
         return $list;
     }
 
+    private function _getPersonalDataInfo($puid, $space) {
+        global $_G;
+        $res['body']['PersonalData'] = array();
+
+        require_once libfile('function/spacecp');
+        space_merge($space, 'count');
+        space_merge($space, 'field_home');
+        space_merge($space, 'field_forum');
+        space_merge($space, 'profile');
+        space_merge($space, 'status');
+
+        $space['buyerrank'] = 0;
+        if($space['buyercredit']){
+            foreach($_G['setting']['ec_credit']['rank'] AS $level => $credit) {
+                if($space['buyercredit'] <= $credit) {
+                    $space['buyerrank'] = $level;
+                    break;
+                }
+            }
+        }
+
+        $space['sellerrank'] = 0;
+        if($space['sellercredit']){
+            foreach($_G['setting']['ec_credit']['rank'] AS $level => $credit) {
+                if($space['sellercredit'] <= $credit) {
+                    $space['sellerrank'] = $level;
+                    break;
+                }
+            }
+        }
+
+        require_once libfile('function/friend');
+        $isfriend = friend_check($space['uid'], 1);
+        loadcache('profilesetting');
+        include_once libfile('function/profile');
+        $profiles = array();
+        $privacy = $space['privacy']['profile'] ? $space['privacy']['profile'] : array();
+        if($_G['setting']['verify']['enabled']) {
+            space_merge($space, 'verify');
+        }
+
+        if($_G['uid'] == $space['uid'] || $_G['group']['allowviewip']) {
+            foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
+                if(!$field['available'] || $field['invisible'] || in_array($fieldid, array('birthmonth', 'birthyear'))) {
+                    continue;
+                }
+                $val = profile_show($fieldid, $space);
+                $profiles[] = array('type' => $fieldid, 'title'=>$field['title'], 'data'=>WebUtils::emptyHtml($val));
+            }
+        } else {
+            foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
+                if(!$field['available'] || in_array($fieldid, array('birthprovince', 'birthdist', 'birthcommunity', 'resideprovince', 'residedist', 'residecommunity'))) {
+                        continue;
+                }
+                if(
+                    $field['available'] && (strlen($space[$fieldid]) > 0 || ($fieldid == 'birthcity' && strlen($space['birthprovince']) || $fieldid == 'residecity' && strlen($space['resideprovince']))) &&
+                    ($space['self'] || empty($privacy[$fieldid]) || ($isfriend && $privacy[$fieldid] == 1)) &&
+                    (!$_G['inajax'] && !$field['invisible'] || $_G['inajax'] && $field['showincard'])
+                ) {
+                    $val = profile_show($fieldid, $space);
+                    if($val !== false) {
+                        if($fieldid == 'realname' && $_G['uid'] != $space['uid'] && !ckrealname(1)) {
+                            continue;
+                        }
+                        if($field['formtype'] == 'file' && $val) {
+                            $imgurl = getglobal('setting/attachurl').'./profile/'.$val;
+                            $val = '<span><a href="'.$imgurl.'" target="_blank"><img src="'.$imgurl.'"  style="max-width: 500px;" /></a></span>';
+                        }
+                        $profiles[] = array('type' => $fieldid, 'title'=>$field['title'], 'data'=>WebUtils::emptyHtml($val));
+                    }
+                }
+            }
+        }
+        return $profiles;
+    }   
+
+    private function _getStatisticalInformation($uid, $space) {
+        global $_G;
+
+        $statisticalInfos = array();
+        $statisticalInfos[] = array('type' => 'credits', 'title' => WebUtils::t('积分'),'data' => (int)$space['credits']);
+        if(is_array($_G['setting']['extcredits'])) {
+            foreach($_G['setting']['extcredits'] as $key => $value) { 
+                if($value['title']) {
+                    $statisticalInfos[] = array('type' => 'extcredits' . $key, 'title' => $value['title'],'data' => (int)$space["extcredits$key"]);
+                }
+            }
+        }
+        return $statisticalInfos;
+    }
+
     // 获取登录用户发表的帖子
     private function _getHomeTopicNum($uid) {
         return DzUserInfo::getAllHomeTopicNum($uid);
+    }
+
+    private function _getPersonalData($puid) {
+        return UserUtils::getUserProfile($puid);
     }
 }
 

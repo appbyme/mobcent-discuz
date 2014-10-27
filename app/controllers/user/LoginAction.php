@@ -52,6 +52,7 @@ class LoginAction extends MobcentAction {
             $password = rawurldecode($password);
             $logInfo = UserUtils::login($username, $password);
             if ($logInfo['errcode']) {
+                UserUtils::delUserAccessByUsername($username);
                 return $this->makeErrorInfo($res, $logInfo['message']);
             }            
             $userInfo = AppbymeUserAccess::loginProcess($_G['uid'], $password);
