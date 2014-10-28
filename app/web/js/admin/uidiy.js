@@ -159,7 +159,9 @@ $(function () {
             var moduleModel = this.model.attributes.type == moduleType ? this.model : new ModuleModel({type: moduleType});
             moduleEditDetailView.model = moduleModel;
             moduleEditDetailView.render();
-            
+            moduleEditMobileView.model = moduleModel;
+            moduleEditMobileView.render();
+
             switch (moduleType) {
                 case MODULE_TYPE_FULL:
                 case MODULE_TYPE_SUBNAV:
@@ -251,8 +253,98 @@ $(function () {
     var ModuleEditDetailView = Backbone.View.extend({
         template: _.template($('#module-edit-detail-template').html()),
         render: function () {
-            $('#module-edit-detail').html(this.template(this.model.attributes));
+            $('#module-edit-detail-view').html(this.template(this.model.attributes));
             return this;
+        },
+    });
+
+    var ModuleEditMobileView = Backbone.View.extend({
+        el: $('#module-edit-mobile-view'),
+        template: _.template($('#module-edit-mobile-template').html()),
+        events: {
+            'click .select-topbar-btn': 'selectTopbar',
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        selectTopbar: function (event) {
+            var index = $(event.currentTarget).index();
+            var module = this.model.attributes;
+            var componentModel = null;
+            switch (index) {
+                case 0:
+                    if (module.leftTopbars.length > 0) {
+                        componentModel = wrapComponent(module.leftTopbars[0]);
+                    }
+                    break;
+                case 2:
+                case 3:
+                    if (module.rightTopbars.length > index - 2) {
+                        componentModel = wrapComponent(module.rightTopbars[index - 2]);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            moduleTopbarDlg.model = componentModel;
+            moduleTopbarDlg.moduleModel = module;
+            moduleTopbarDlg.render();
+            moduleTopbarDlg.toggle();
+            $('#topbarIndex').val(index);
+        },
+    });
+
+    var ModuleTopbarDlg = Backbone.View.extend({
+        el: $('#module-topbar-dlg-view'),
+        template: _.template($('#module-topbar-dlg-template').html()),
+        events: {
+            'submit .module-topbar-edit-form': 'submitTopbar',
+            'click .close-topbar-btn': 'toggle',
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        submitTopbar: function () {
+            event.preventDefault();
+
+            var form = $('.module-topbar-edit-form')[0],
+                type = form.topbarComponentType.value,
+                index = parseInt(form.topbarIndex.value),
+                model = new ComponentModel({type: type}),
+                module = this.moduleModel;
+
+            switch (index) {
+                case 0:
+                    if (type == COMPONENT_TYPE_DEFAULT) {
+                        module.leftTopbars = [];
+                    } else {
+                        module.leftTopbars[0] = model;
+                    }
+                    break;
+                case 2:
+                    if (type == COMPONENT_TYPE_DEFAULT) {
+                        module.rightTopbars.shift();
+                    } else {
+                        module.rightTopbars[0] = model;
+                    }
+                    break;
+                case 3:
+                    if (type == COMPONENT_TYPE_DEFAULT) {
+                        module.rightTopbars.length > 1 && module.rightTopbars.pop();
+                    } else {
+                        module.rightTopbars[module.rightTopbars.length > 0 ? 1 : 0] = model;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            this.toggle();
+        },
+        toggle: function () {
+            this.$el.fadeToggle();
         },
     });
 
@@ -427,7 +519,9 @@ $(function () {
         navItemEditDlg = new NavItemEditDlg(),
         navItemRemoveDlg = new NavItemRemoveDlg(),
         moduleEditDlg = new ModuleEditDlg(),
+        moduleTopbarDlg = new ModuleTopbarDlg(),
         moduleEditDetailView = new ModuleEditDetailView(),
+        moduleEditMobileView = new ModuleEditMobileView(),
         moduleRemoveDlg = new ModuleRemoveDlg();
 
     window.Appbyme = {

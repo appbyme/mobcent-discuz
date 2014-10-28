@@ -30,7 +30,13 @@ class AppbymeUIDiyModel extends DiscuzAR
     const MODULE_TYPE_FASTPOST = 'fastpost';
     const MODULE_TYPE_CUSTOM = 'custom';
 
+    const MODULE_STYLE_CARD = 'card';
+
+    // mc_forum_top_bar_button5
+    // mc_forum_icon27
+    
     // component
+    const COMPONENT_TYPE_DEFAULT = 'forumlist';
     const COMPONENT_TYPE_DISCOVER = 'discover';
     const COMPONENT_TYPE_FASTTEXT = 'fasttext';
     const COMPONENT_TYPE_FASTIMAGE = 'fastimage';
@@ -129,6 +135,7 @@ class AppbymeUIDiyModel extends DiscuzAR
         return array(
             'id' => 0,
             'type' => self::MODULE_TYPE_FULL,
+            'style' => self::MODULE_STYLE_CARD,
             'title' => '',
             'icon' => Yii::app()->getController()->rootUrl.'/images/admin/module-default.png',
             'leftTopbars' => array(),
@@ -212,7 +219,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     {
         return array(
             'id' => '',
-            'type' => self::COMPONENT_TYPE_FORUMLIST,
+            'type' => self::COMPONENT_TYPE_DEFAULT,
             'title' => '',
             'desc' => '',
             'icon' => '',
