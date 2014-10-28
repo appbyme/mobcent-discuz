@@ -67,7 +67,7 @@
                                     <h3 class="panel-title pull-left">插件设置</h3>
                                     <button type="button" class="close select-plug pull-right">&times;</button>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body" style="padding:10px">
                                     <label class="radio-inline">
                                         <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 天气
                                     </label>
@@ -79,6 +79,9 @@
                                     </label>
                                     <label class="radio-inline">
                                         <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 搜索
+                                    </label>                                    
+                                    <label class="radio-inline">
+                                        <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 取消
                                     </label>
                                 </div>
                                 <div class="panel-footer text-right">
@@ -134,6 +137,65 @@
                             </div>
                         </div>
 
+                        <!-- 添加风格区弹出框 -->
+                        <div class="add-style-pop">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title pull-left">添加风格区</h3>
+                                    <button type="button" class="close pull-right">&times;</button>
+                                </div>
+                                <form class="form-horizontal navitem-edit-form">
+                                    <div class="panel-body">
+                                        <form class="form-horizontal">
+
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">选择风格区: </label>
+                                                <div class="col-sm-4">
+                                                    <select class="form-control input-sm">
+                                                        <option >默认风格</option>
+                                                        <option >图片墙风格</option>
+                                                        <option >九宫格风格</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">设置样式：</label>
+                                                <div class="col-sm-8 text-left">
+                                                    <!-- 没加name -->
+                                                    <label class="radio-inline"><input type="radio"> 是</label>
+                                                    <label class="radio-inline"><input type="radio"> 否</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">风格区标题：</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control input-sm">
+                                                    <p class="help-block">输入1-9个汉字、数字或字母</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">标题位置：</label>
+                                                <div class="col-sm-8" style="padding:0px 0px 0px 15px;">
+                                                    <label class="radio-inline pull-left"><input type="radio"> 风格区顶部</label>
+                                                    <label class="radio-inline pull-left"><input type="radio"> 风格区底部</label>
+                                                </div>
+                                            </div>
+
+
+
+                                        </form> 
+                                    </div>
+                                </form>
+                                <div class="panel-footer text-right">
+                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+                                    <button type="button" class="btn btn-default btn-sm">取 消</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
                         <img class="moble-top-show" src="<?php echo $this->rootUrl; ?>/images/admin/moble-nav.png">
                         <div class="moble-top-title">
@@ -142,7 +204,7 @@
                             <img class="pull-right select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
                             <img class="pull-right select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
                         </div>
-                        <div class="found-module" style="background:;height:450px;">
+                        <div class="found-module">
                             <div class="slide-img">
                                 <img src="<?php echo $this->rootUrl; ?>/images/admin/timo.jpg">
                                 <span><a href="">点击添加更多幻灯片</a></span>
@@ -222,6 +284,13 @@
                                <button type="button" class="btn btn-primary add-edit-page">点击添加更多</button>
                             </div>
                         </div>
+
+                        <!-- 添加风格 -->
+                        <div class="add-style hidden">
+                            <button type="button" class="btn btn-primary add-style-btn">点击添加风格区</button>
+                            <button type="button" class="btn btn-primary add-style-btn">点击添加组件</button>
+                        </div>
+
 
                         <!-- 手机底部导航 -->
                         <div class="moble-bottom-nav">
@@ -343,7 +412,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-4 col-sm-4">
+                <div class="col-sm-offset-4 col-sm-4 text-left">
                     <img src="" style="width:60px;height:60px;" class="img-rounded">
                 </div>
             </div>
@@ -662,7 +731,7 @@
         $(function() {
 
 
-            $(".nav-move").sortable();
+            // $(".nav-move").sortable();
 
 
             // 导航样式调整
