@@ -12,7 +12,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
     exit('Access Denied');
 }
 
-defined('MAX_PORTAL_MODULE_LEN') or define('MAX_PORTAL_MODULE_LEN', 6);
+defined('MAX_PORTAL_MODULE_LEN') or define('MAX_PORTAL_MODULE_LEN', 60);
 defined('MAX_PORTAL_MODULE_SLIDER_LEN') or define('MAX_PORTAL_MODULE_SLIDER_LEN', 5);
 
 require_once dirname(__FILE__) . '/appbyme.class.php';
