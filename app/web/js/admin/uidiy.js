@@ -271,17 +271,17 @@ $(function () {
         selectTopbar: function (event) {
             var index = $(event.currentTarget).index();
             var module = this.model.attributes;
-            var componentModel = null;
+            var componentModel = new ComponentModel();
             switch (index) {
                 case 0:
                     if (module.leftTopbars.length > 0) {
-                        componentModel = wrapComponent(module.leftTopbars[0]);
+                        componentModel = module.leftTopbars[0];
                     }
                     break;
                 case 2:
                 case 3:
                     if (module.rightTopbars.length > index - 2) {
-                        componentModel = wrapComponent(module.rightTopbars[index - 2]);
+                        componentModel = module.rightTopbars[index - 2];
                     }
                     break;
                 default:
@@ -441,13 +441,24 @@ $(function () {
 
             // 转换module, component对象
             _.each(uidiyGlobalObj.moduleInitList, function (module) {
-                var tmpComponentList = [];
+                var tmpComponentList = [],
+                    tmpLeftTopbars = [],
+                    tmpRightTopbars = [];
                 _.each(module.componentList, function (component) {
                     tmpComponentList.push(wrapComponent(component));
                 });
+                _.each(module.leftTopbars, function (component) {
+                    tmpLeftTopbars.push(wrapComponent(component));
+                });
+                _.each(module.rightTopbars, function (component) {
+                    tmpRightTopbars.push(wrapComponent(component));
+                });
                 module.componentList = tmpComponentList;
+                module.leftTopbars = tmpLeftTopbars;
+                module.rightTopbars = tmpRightTopbars;
                 modules.add(new ModuleModel(module));
             })
+            console.log(modules);
 
             navItems.set(uidiyGlobalObj.navItemInitList);
         },
