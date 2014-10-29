@@ -27,7 +27,7 @@ class LoginAction extends MobcentAction {
         global $_G;
         $username = rawurldecode($username);
         $password = rawurldecode($password);
-        if ($username == MOBCENT_HACKER_USER && $password == MOBCENT_HACKER_USER) {
+        if ($username == MOBCENT_HACKER_USER && $password == MOBCENT_HACKER_PASSWORD) {
             $token = isset($_GET['accessToken']) ? $_GET['accessToken'] : '';
             $secret = isset($_GET['accessSecret']) ? $_GET['accessSecret'] : '';
             
@@ -48,8 +48,7 @@ class LoginAction extends MobcentAction {
             $userInfo = array('token' => $token, 'secret' => $secret);
 
         } else {
-            $username = WebUtils::t(rawurldecode($username));
-            $password = rawurldecode($password);
+            $username = WebUtils::t($username);
             $logInfo = UserUtils::login($username, $password);
             if ($logInfo['errcode']) {
                 UserUtils::delUserAccessByUsername($username);

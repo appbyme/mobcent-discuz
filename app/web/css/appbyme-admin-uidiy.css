@@ -10,11 +10,11 @@ body {overflow：scroll;}
     margin-bottom: 5px;
  }
 .form-group input[type=text] {
-    width: 200px;
+    width: 225px;
     font-size: 12px;
 }
 .form-group select {
-    width: 200px;
+    width: 225px;
     font-size: 12px;
 }
 .form-group label {

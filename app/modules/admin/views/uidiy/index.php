@@ -67,7 +67,7 @@
                                     <h3 class="panel-title pull-left">插件设置</h3>
                                     <button type="button" class="close select-plug pull-right">&times;</button>
                                 </div>
-                                <div class="panel-body" style="padding:10px">
+                                <div class="panel-body" style="padding:25px 0px">
                                     <label class="radio-inline">
                                         <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 天气
                                     </label>
