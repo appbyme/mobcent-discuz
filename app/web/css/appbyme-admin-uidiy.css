@@ -55,7 +55,7 @@ label {
     width: 320px;
 }
 .moble-top-title {
-    margin-top: 10px;
+    /*margin-top: 10px;*/
     height: 40px;
 }
 .moble-top-title img {
@@ -395,4 +395,10 @@ label {
 
 #module-list .btn-xs {
     padding:3px 6px;
+}
+
+/*tmp*/
+.msg-list img {
+    width: 320px;
+    height: 450px;
 }

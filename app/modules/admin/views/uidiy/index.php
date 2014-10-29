@@ -61,35 +61,8 @@
                         </div>
 
                         <!-- 发现下方加号弹出框 -->
-                        <div class="play-add-plug">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title pull-left">插件设置</h3>
-                                    <button type="button" class="close select-plug pull-right">&times;</button>
-                                </div>
-                                <div class="panel-body" style="padding:25px 0px">
-                                    <label class="radio-inline">
-                                        <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 天气
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 登录
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 签到
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 搜索
-                                    </label>                                    
-                                    <label class="radio-inline">
-                                        <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 取消
-                                    </label>
-                                </div>
-                                <div class="panel-footer text-right">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
-                                    <button type="button" class="btn btn-default btn-sm select-plug">取 消</button>
-                                </div>
-                            </div>
-                        </div> 
+                        <div id="module-topbar-dlg-view" class="play-add-plug">
+                        </div>
 
                         <!-- 左图右文添加/编辑弹出框 -->
                         <div class="pic-text-pop">
@@ -184,8 +157,6 @@
                                                 </div>
                                             </div>
 
-
-
                                         </form> 
                                     </div>
                                 </form>
@@ -197,92 +168,8 @@
                         </div>
 
                         <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
-                        <img class="moble-top-show" src="<?php echo $this->rootUrl; ?>/images/admin/moble-nav.png">
-                        <div class="moble-top-title">
-                            <img class="pull-left select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
-                            <span>发现</span>
-                            <img class="pull-right select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
-                            <img class="pull-right select-plug" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
-                        </div>
-                        <div class="found-module">
-                            <div class="slide-img">
-                                <img src="<?php echo $this->rootUrl; ?>/images/admin/timo.jpg">
-                                <span><a href="">点击添加更多幻灯片</a></span>
-                            </div>
-                            <div class="module-show">
-                                <div class="module-show-one"><img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
-                                    <span class="pull-left ">个人中心</span><span class="pull-right"><small><a href="">隐藏</a></small></span>
-                                </div>
-                                <div class="module-show-two">
-                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
-                                    <span class="pull-left">设置</span><span class="pull-right"><small><a href="">显示</a></small></span>
-                                </div>
-                                <div class="module-show-three">
-                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
-                                    <span class="pull-left">关于</span><span class="pull-right"><small><a href="">显示</a></small></span>
-                                </div>
-                            </div>
 
-                            <div class="module-show">
-                                <div class="module-show-one"><img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
-                                    <span class="pull-left ">周边生活</span>
-                                </div>
-                                <div class="module-show-two">
-                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
-                                    <span class="pull-left">商城</span>
-                                </div>
-                                <div class="module-show-three">
-                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
-                                    <span class="pull-left">活动专区</span>
-                                </div>
-                            </div>
-
-                            <div class="module-show">
-                                <div class="module-show-two">
-                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
-                                    <span class="pull-left">商城</span>
-                                    <span class="pull-right"><small><a href="">编辑</a></small></span>
-                                    <span class="pull-right"><small><a href="">删除</a></small></span>
-                                </div>
-                                <div class="module-show-three">
-                                    <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
-                                    <span class="pull-left">活动专区</span>
-                                    <span class="pull-right"><small><a href="">编辑</a></small></span>
-                                    <span class="pull-right"><small><a href="">删除</a></small></span>
-                                </div>
-                            </div>
-                            <span><a href="">点击添加更多</a></span>
-                        </div>
-
-                        <!-- 左图右文 -->
-                        <div class="pic-text hidden">
-                            <div class="edit-list">
-                                <div class="pull-left"><img src="" style="width:50px;height:50px" class="img-rounded"></div>
-                                <div class="pull-left text-left page-main">
-                                    <div class="page-title"><strong>此处显示为标题此处显示为标题</strong></div>
-                                    <div class="page-content">此处显示为文字描述此处显示为文字描述此处显示为文字描述</div>
-                                </div>
-                                <div class="text-left pull-left">
-                                    <a class="add-edit-page">编辑</a>
-                                    <a href="">删除</a>
-                                </div>
-                            </div>
-
-                            <div class="edit-list">
-                                <div class="pull-left"><img src="" style="width:50px;height:50px" class="img-rounded"></div>
-                                <div class="pull-left text-left page-main">
-                                    <div class="page-title"><strong>此处显示为标题此处显示为标题</strong></div>
-                                    <div class="page-content">此处显示为文字描述此处显示为文字描述此处显示为文字描述</div>
-                                </div>
-                                <div class="text-left pull-left">
-                                    <a class="add-edit-page">编辑</a>
-                                    <a href="">删除</a>
-                                </div>
-                            </div>
-
-                            <div class="text-center">
-                               <button type="button" class="btn btn-primary add-edit-page">点击添加更多</button>
-                            </div>
+                        <div id="module-edit-mobile-view">
                         </div>
 
                         <!-- 添加风格 -->
@@ -302,7 +189,6 @@
                         </div>
 
                     </div><!-- end moble-content -->
-
 
                 </div>
             </div>
@@ -377,6 +263,7 @@
     <script src="<?php echo $this->rootUrl; ?>/js/backbone-1.1.2.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/admin/uidiy.js"></script>
     <script type="text/javascript" src="<?php echo $this->rootUrl; ?>/js/jquery-ui-1.11.2.min.js"></script>
+    <!-- 底部导航模板 -->
     <script type="text/template" id="navitem-template">
     <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/<%= icon %>.png") no-repeat 50% 20%'>
         <small class="navitem-title"><%= title %></small>
@@ -386,6 +273,39 @@
             <a><span class="navitem-remove-btn"><small>删除</small></span></a>
         </div>
         <% } %>
+    </div>
+    </script>
+    <!-- topbar 编辑模板 -->
+    <script type="text/template" id="module-topbar-dlg-template">
+    <div class="panel panel-primary">
+        <form class="module-topbar-edit-form">
+        <div class="panel-heading">
+            <h3 class="panel-title pull-left">插件设置</h3>
+            <button type="button" class="close close-topbar-btn pull-right">&times;</button>
+        </div>
+        <input type="hidden" name="topbarIndex" id="topbarIndex" value="0">
+        <div class="panel-body">
+            <label class="radio-inline">
+                <input type="radio" name="topbarComponentType" value="<%= COMPONENT_TYPE_DEFAULT %>" <%= type == COMPONENT_TYPE_DEFAULT ? 'checked' : '' %>> 取消
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="topbarComponentType" value="<%= COMPONENT_TYPE_WEATHER %>" <%= type == COMPONENT_TYPE_WEATHER ? 'checked' : '' %>> 天气
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="topbarComponentType" value="<%= COMPONENT_TYPE_USERINFO %>" <%= type == COMPONENT_TYPE_USERINFO ? 'checked' : '' %>> 用户中心
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="topbarComponentType" value="<%= COMPONENT_TYPE_SIGN %>" <%= type == COMPONENT_TYPE_SIGN ? 'checked' : '' %>> 签到
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="topbarComponentType" value="<%= COMPONENT_TYPE_SEARCH %>" <%= type == COMPONENT_TYPE_SEARCH ? 'checked' : '' %>> 搜索
+            </label>
+        </div>
+        <div class="panel-footer text-right">
+            <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+            <button type="button" class="btn btn-default btn-sm close-topbar-btn">取 消</button>
+        </div>
+        </form>
     </div>
     </script>
     <!-- 导航添加/编辑模板 -->
@@ -512,7 +432,7 @@
                         </div>
                     </div>
 
-                    <div id="module-edit-detail">
+                    <div id="module-edit-detail-view">
                     </div>
 
             </div>
@@ -523,6 +443,102 @@
             </form>
         </div>
     </div>
+    </script>
+    <!-- 模块于手机内的编辑模板 -->
+    <script type="text/template" id="module-edit-mobile-template">
+    <img class="moble-top-show" src="<?php echo $this->rootUrl; ?>/images/admin/moble-nav.png">
+    <div class="moble-top-title">
+        <img class="pull-left select-topbar-btn" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
+        <span><%= title %></span>
+        <img class="pull-right select-topbar-btn" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
+        <img class="pull-right select-topbar-btn" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
+    </div>
+    <% if (id == MODULE_ID_DISCOVER) { %>
+    <div class="found-module" style="background:;height:450px;">
+        <div class="slide-img">
+            <img src="<?php echo $this->rootUrl; ?>/images/admin/timo.jpg">
+            <span><a href="">点击添加更多幻灯片</a></span>
+        </div>
+        <div class="module-show">
+            <div class="module-show-one"><img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                <span class="pull-left ">个人中心</span><span class="pull-right"><small><a href="">隐藏</a></small></span>
+            </div>
+            <div class="module-show-two">
+                <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                <span class="pull-left">设置</span><span class="pull-right"><small><a href="">显示</a></small></span>
+            </div>
+            <div class="module-show-three">
+                <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                <span class="pull-left">关于</span><span class="pull-right"><small><a href="">显示</a></small></span>
+            </div>
+        </div>
+
+        <div class="module-show">
+            <div class="module-show-one"><img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                <span class="pull-left ">周边生活</span>
+            </div>
+            <div class="module-show-two">
+                <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                <span class="pull-left">商城</span>
+            </div>
+            <div class="module-show-three">
+                <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                <span class="pull-left">活动专区</span>
+            </div>
+        </div>
+
+        <div class="module-show">
+            <div class="module-show-two">
+                <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                <span class="pull-left">商城</span>
+                <span class="pull-right"><small><a href="">编辑</a></small></span>
+                <span class="pull-right"><small><a href="">删除</a></small></span>
+            </div>
+            <div class="module-show-three">
+                <img class="pull-left" src="<?php echo $this->rootUrl; ?>/images/admin/moble-ico.jpg">
+                <span class="pull-left">活动专区</span>
+                <span class="pull-right"><small><a href="">编辑</a></small></span>
+                <span class="pull-right"><small><a href="">删除</a></small></span>
+            </div>
+        </div>
+        <span><a href="">点击添加更多</a></span>
+    </div>
+    <% } else if (id == MODULE_ID_FASTPOST) { %>
+    <% } else if (type == MODULE_TYPE_FULL) { %>
+    <% } else if (type == MODULE_TYPE_SUBNAV) { %>
+    <% } else if (type == MODULE_TYPE_NEWS) { %>
+    <!-- 左图右文 -->
+    <div class="pic-text">
+        <div class="edit-list">
+            <div class="pull-left"><img src="" style="width:50px;height:50px" class="img-rounded"></div>
+            <div class="pull-left text-left page-main">
+                <div class="page-title"><strong>此处显示为标题此处显示为标题</strong></div>
+                <div class="page-content">此处显示为文字描述此处显示为文字描述此处显示为文字描述</div>
+            </div>
+            <div class="text-left pull-left">
+                <a class="add-edit-page">编辑</a>
+                <a href="">删除</a>
+            </div>
+        </div>
+
+        <div class="edit-list">
+            <div class="pull-left"><img src="" style="width:50px;height:50px" class="img-rounded"></div>
+            <div class="pull-left text-left page-main">
+                <div class="page-title"><strong>此处显示为标题此处显示为标题</strong></div>
+                <div class="page-content">此处显示为文字描述此处显示为文字描述此处显示为文字描述</div>
+            </div>
+            <div class="text-left pull-left">
+                <a class="add-edit-page">编辑</a>
+                <a href="">删除</a>
+            </div>
+        </div>
+
+        <div class="text-center">
+           <button type="button" class="btn btn-primary add-edit-page">点击添加更多</button>
+        </div>
+    </div>
+    <% } else if (type == MODULE_TYPE_CUSTOM) { %>
+    <% } %> 
     </script>
     <script type="text/template" id="module-edit-detail-template">
     <% if (id == MODULE_ID_DISCOVER) { %>
@@ -668,6 +684,7 @@
                 <label for="" class="col-sm-2 control-label">选择门户：</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="newsModuleId[]">
+                        <option value="0" <%= extParams.newsModuleId == 0 ? 'selected' : '' %> class="hidden">默认模块</option>
                     <?php foreach ($newsModules as $newsModule) { ?>
                         <option value="<?php echo $newsModule['mid'] ?>" <%= extParams.newsModuleId == <?php echo $newsModule['mid'] ?> ? 'selected' : '' %>><?php echo WebUtils::u($newsModule['name']) ?></option> 
                     <?php } ?>
@@ -682,6 +699,7 @@
                 <label for="" class="col-sm-2 control-label">选择版块: </label>
                 <div class="col-sm-10">
                     <select class="form-control" name="forumId[]">
+                        <option value="0" <%= extParams.forumId == 0 ? 'selected' : '' %> class="hidden">全部版块</option>
                     <?php foreach ($forumList as $fid => $title) { ?>
                         <option value="<?php echo $fid ?>" <%= extParams.forumId == <?php echo $fid; ?> ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
                     <?php } ?>
@@ -707,7 +725,7 @@
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">wap地址：</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control input-sm" name="componentRedirect[]" value="">
+                    <input type="text" class="form-control input-sm" name="componentRedirect[]" value="<%= extParams.redirect %>">
                 </div>
             </div>
 
@@ -720,7 +738,7 @@
                     <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
                     <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
                     <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式</option>
-                </select> 
+                </select>
             </div>
         </div>
 
@@ -730,9 +748,7 @@
     <script type="text/javascript">
         $(function() {
 
-
             // $(".nav-move").sortable();
-
 
             // 导航样式调整
             $('.nav-list li').hover(
@@ -743,17 +759,6 @@
                     $(this).toggleClass('active');
                 }
             );
-
-            // 选择插件
-            $('.select-plug').on({
-                click:function () {
-                    closeSelectPlug();
-                }
-            })
-
-            function closeSelectPlug() {
-                $('.play-add-plug').fadeToggle();
-            }
 
             // 左图右文弹出框
             $('.add-edit-page').on({
@@ -767,12 +772,7 @@
                     $('.pic-text-pop').fadeOut();
                 }
             })
-
         })
-    </script>
-    <!-- 手机显示底部导航拖动 -->
-    <script type="text/javascript">
-
     </script>
 </body>
 </html>

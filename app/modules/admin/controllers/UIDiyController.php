@@ -94,4 +94,33 @@ class UIDiyController extends AdminController
 
         echo WebUtils::outputWebApi($res, '', false);
     }
+
+    public function actionMobileUI()
+    {
+        $navInfo = AppbymeUIDiyModel::getNavigationInfo();
+        $modulesInfo = AppbymeUIDiyModel::getModules();
+        // var_dump($navInfo);
+        // echo '<hr />';
+        // var_dump($modules);
+        // die;
+
+        $modules = array();
+        foreach ($modulesInfo as $module) {
+            $modules[$module['id']][] = $module;
+        }
+
+        $this->renderPartial('mobileui', array(
+            'navInfo' => $navInfo,
+            'modules' => $modules,
+        ));
+    }
+
+    public function actionModulemobileui($module='') 
+    {   
+        $module = WebUtils::jsonDecode($module);
+        $this->renderPartial('module_mobile_ui', array(
+            'module' => $module,
+        ));
+    }
+
 }
