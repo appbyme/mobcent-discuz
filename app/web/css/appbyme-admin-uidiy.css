@@ -1,20 +1,18 @@
 
-
-body {overflow：scroll;}
-
 /*重写了Bootstrap*/
 .container {
     width: 90%;
+    width: 1200px;
 }
  .form-group {
     margin-bottom: 5px;
  }
 .form-group input[type=text] {
-    width: 200px;
+    width: 225px;
     font-size: 12px;
 }
 .form-group select {
-    width: 200px;
+    width: 225px;
     font-size: 12px;
 }
 .form-group label {
@@ -22,6 +20,9 @@ body {overflow：scroll;}
 }
 label {
     font-weight:100;
+}
+.help-block {
+    margin-bottom: 5px;
 }
 
 #uidiy-main-view {
@@ -43,10 +44,9 @@ label {
 .mobleShow .moble-content{
     width: 320px;
     margin: 118px 0px 0px 30px;
-    /*border: 1px solid blue;*/
     height: 570px;
     background: #F8F8F8;
-    /*background: blue;*/
+    overflow: hidden;
 }
 
 .moble-top-show {
@@ -81,7 +81,6 @@ label {
     border: 1px solid #797979;
     padding: 0px 20px 0px 25px;
     line-height: 26px;
-
 }
 .module-show-one {
     border-bottom: 0px;
@@ -97,11 +96,16 @@ label {
     margin-right: 10px;
 }
 
+/*发现模块*/
+.found-module {
+    height: 453px;
+}
+
 /*左图右文*/
 .pic-text {
     width: 320px;
-    max-height: 500px;
-    overflow-y: scroll;
+    height: 500px;
+    overflow-y: auto;
     padding: 5px;
 }
 
@@ -113,6 +117,7 @@ label {
     padding:8px 0px 0px 8px;
     margin: 0 auto;
     margin-bottom: 10px;
+    background: #F5F5F5;
 }
 
 .page-main {
@@ -136,7 +141,6 @@ label {
 .pic-text-pop {
     width: 300px;
     height: 300px;
-    /*background: blue;*/
     border-radius: 5px;
     position: absolute;
     right: 38px;
@@ -146,6 +150,44 @@ label {
     font-size: 12px;
 }
 
+/*添加风格*/
+.add-style {
+    width: 320px;
+    height: 502px;
+    overflow-y: auto;
+    padding: 5px;
+    /*background: orange;*/
+}
+
+.add-style-btn, .add-style-comp {
+    width: 200px;
+    margin-top: 120px;
+}
+
+/*添加风格弹出框*/
+.add-style-pop {
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    position: absolute;
+    right: 38px;
+    top: 174px;
+    z-index: 101;
+    display:none;
+    font-size: 12px;
+}
+
+.add-comp-pop {
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    position: absolute;
+    right: 38px;
+    top: 174px;
+    z-index: 10;
+    display:none;
+    font-size: 12px;
+}
 
 /*手机底部的导航*/
 .moble-bottom-nav {
@@ -180,21 +222,23 @@ label {
 /*底部添加导航*/
 .play-border-add {
     width: 300px;
-    height: 300px;
+    /*height: 300px;*/
     background: #D6ECCD;
     border-radius: 5px;
     position: absolute;
     right: 38px;
-    bottom: 174px;
+    bottom: 170px;
     z-index: 10;
     display:none;
     font-size: 12px;
 }
 
-.play-border-add input[type=text], .pic-text-pop input[type=text]{
+.play-border-add input[type=text], .pic-text-pop input[type=text], .add-style-pop input[type=text],
+.add-comp-pop input[type=text]
+{
     width: 150px;
 }
-.play-border-add select, .pic-text-pop select {
+.play-border-add select, .pic-text-pop select, .add-style-pop select,.add-comp-pop select{
     width: 150px;
 }
 /*重写面板*/
@@ -274,7 +318,7 @@ label {
 
 /*编辑内容*/
 .edit .form-group, .pic-text-pop .form-group {
-    margin-bottom: 0px;
+    margin-bottom: 5px;
 }
 
 .edit-middle {
@@ -290,6 +334,18 @@ label {
     width: 150px;
 }
 
+.edit .more-fastpost-btn {
+    width:225px;
+    margin-left:145px;
+}
+
+.quick-edit {
+    border-radius: 5px;
+    margin: 5px 0px 5px 0px;
+    padding: 5px 0px 5px 0px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
 /*新写的模块编辑填出框*/
 .module-play {
     width: 99%;
@@ -300,14 +356,17 @@ label {
     left: 15px;
     top: 0px;
     overflow-y:auto;
+    overflow-x:hidden;
     z-index: 100;
 }
 .module-play .panel-body {
     max-height: 650px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 /*主要是弹出框面板的标题*/
-.module-play .panel-heading, .play-add-plug .panel-heading, .play-border-add .panel-heading, .pic-text-pop .panel-heading{
+.module-play .panel-heading, .play-add-plug .panel-heading, .play-border-add .panel-heading, .pic-text-pop .panel-heading,
+.add-style-pop .panel-heading, .add-comp-pop .panel-heading {
     width: 100%;
     height: 40px;
 }
