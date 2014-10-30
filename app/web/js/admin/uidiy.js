@@ -45,7 +45,15 @@ $(function () {
         defaults: uidiyGlobalObj.componentInitParams,
         initialize: function () {
             this.set({id: this.cid});
-        }
+        },
+        sync: function (method, model, options) {
+        },
+        validate: function (attrs, options) {
+            // if (attrs.title == '') {
+            //     return '请输入1-4个字母、数字或汉字作为名称';
+            // }
+            return '';
+        },
     });
 
     var NavItemModel = Backbone.Model.extend({
@@ -64,6 +72,10 @@ $(function () {
 
     var NavItemList = Backbone.Collection.extend({
         model: NavItemModel,
+    });
+
+    var ComponentList = Backbone.Collection.extend({
+        model: ComponentModel,
     });
 
     var modules = new ModuleList();
@@ -142,6 +154,72 @@ $(function () {
         },
     });
     
+    var NewsComponentEditDlg = Backbone.View.extend({
+        el: $("#news-component-edit-dlg-view"),
+        template: _.template($('#news-component-edit-dlg-template').html()),
+        events: {
+            'click .news-component-close-btn': 'closeComponentDlg',
+            'submit .news-component-edit-form': 'submitNewsComponent',
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            var view = new ComponentView({model: this.model});
+            $('.component-view-container').html(view.render().el);
+            return this;
+        },
+        toggle: function () {
+            this.$el.fadeToggle();
+        },
+        closeComponentDlg: function () {
+            this.$el.fadeOut();
+            this.$el.html('');
+        },
+        submitNewsComponent: function (event) {
+            event.preventDefault();
+
+            var form = $('.news-component-edit-form')[0],
+                componentType = $(form['componentType[]'])[0],
+                componentTitle = $(form['componentTitle[]'])[0],
+                componentDesc = $(form['componentDesc[]'])[0],
+                isShowForumIcon = $(form['isShowForumIcon[]'])[0],
+                isShowForumTwoCols = $(form['isShowForumTwoCols[]'])[0],
+                newsModuleId = $(form['newsModuleId[]'])[0],
+                forumId = $(form['forumId[]'])[0],
+                fastpostForumId = $(form['fastpostForumId[]'])[0],
+                isShowTopicTitle = $(form['isShowTopicTitle[]'])[0],
+                isShowTopicSort = $(form['isShowTopicSort[]'])[0],
+                componentRedirect = $(form['componentRedirect[]'])[0],
+                componentStyle = $(form['componentStyle[]'])[0];
+
+            var extParams = {
+                isShowForumIcon: isShowForumIcon.checked ? 1 : 0,
+                isShowForumTwoCols: isShowForumTwoCols.checked ? 1 : 0,
+                newsModuleId: parseInt(newsModuleId.value),
+                forumId: parseInt(forumId.value),
+                isShowTopicTitle: isShowTopicTitle.checked ? 1 : 0,
+                isShowTopicSort: isShowTopicSort.checked ? 1 : 0,
+                redirect: componentRedirect.value,
+            };
+            this.model.set({
+                title: componentTitle.value,
+                desc: componentDesc.value,
+                type: componentType.value,
+                style: componentStyle.value,
+                extParams: extParams,
+            });
+
+            var error = this.model.validate(this.model.attributes);
+            if (error != '') {
+                alert(error);
+                return;
+            }
+
+            this.moduleModel.attributes.componentList.add(this.model, {merge: true, remove: false, add: true});
+
+            this.closeComponentDlg();
+        },
+    });
+
     var ModuleEditDlg = Backbone.View.extend({
         el: $("#module-edit-dlg-view"),
         template: _.template($('#module-edit-template').html()),
@@ -200,6 +278,7 @@ $(function () {
             var form = $('.module-edit-form')[0],
                 componentType = $(form['componentType[]']),
                 componentTitle = $(form['componentTitle[]']),
+                componentDesc = $(form['componentDesc[]']),
                 isShowForumIcon = $(form['isShowForumIcon[]']),
                 isShowForumTwoCols = $(form['isShowForumTwoCols[]']),
                 newsModuleId = $(form['newsModuleId[]']),
@@ -234,6 +313,7 @@ $(function () {
                             };
                             var model = new ComponentModel({
                                 title: componentTitle[i].value,
+                                desc: componentDesc[i].value,
                                 type: componentType[i].value,
                                 style: componentStyle[i].value,
                                 extParams: extParams,
@@ -242,6 +322,9 @@ $(function () {
                         }
                         this.model.attributes.componentList = componentList;
                     }
+                    break;
+                case MODULE_TYPE_NEWS:
+                    this.model.attributes.componentList = this.model.attributes.componentList.models;
                     break;
                 default:
                     break;
@@ -264,6 +347,8 @@ $(function () {
         },
         closeModule: function () {
             $('.module-play').fadeToggle();
+            
+            moduleEditMobileView.$el.html('');
         },
         selectFastpostItem: function () {
             event.preventDefault();
@@ -301,9 +386,21 @@ $(function () {
         template: _.template($('#module-edit-mobile-template').html()),
         events: {
             'click .select-topbar-btn': 'selectTopbar',
+            'click .add-news-component-item-btn': 'dlgAddNewsComponent',
+        },
+        initialize: function () { 
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
+
+            // module type 为news时, 转换 componentList对象为一个collection
+            if (this.model.attributes.type == MODULE_TYPE_NEWS) {
+                var componentList = this.model.attributes.componentList;
+                this.model.attributes.componentList = new ComponentList();
+                this.listenTo(this.model.attributes.componentList, 'add', this.addNewsComponentItem);
+
+                this.model.attributes.componentList.set(componentList);
+            }
             return this;
         },
         selectTopbar: function (event) {
@@ -330,6 +427,42 @@ $(function () {
             moduleTopbarDlg.render();
             moduleTopbarDlg.toggle();
             $('#topbarIndex').val(index);
+        },
+        dlgAddNewsComponent: function () {
+            newsComponentEditDlg.model = new ComponentModel();
+            newsComponentEditDlg.moduleModel = this.model;
+            newsComponentEditDlg.render();
+            newsComponentEditDlg.toggle();
+        },
+        addNewsComponentItem: function (component) {
+            var view = new NewsComponentItemView({model: component});
+            view.moduleModel = this.model;
+            $('.news-component-item-container').append(view.render().el);
+        },
+    });
+    
+    var NewsComponentItemView = Backbone.View.extend({
+        template: _.template($('#news-component-item-template').html()),
+        events: {
+            'click .edit-news-component-item-btn': 'dlgEditNewsComponent',
+            'click .remove-news-component-item-btn': 'removeItem',
+        },
+        initialize: function () {
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'destroy', this.remove);
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        dlgEditNewsComponent: function () {
+            newsComponentEditDlg.model = this.model;
+            newsComponentEditDlg.moduleModel = this.moduleModel;
+            newsComponentEditDlg.render();
+            newsComponentEditDlg.toggle();
+        },
+        removeItem: function () {
+            this.model.destroy();
         },
     });
 
@@ -568,6 +701,7 @@ $(function () {
         navItemRemoveDlg = new NavItemRemoveDlg(),
         moduleEditDlg = new ModuleEditDlg(),
         moduleTopbarDlg = new ModuleTopbarDlg(),
+        newsComponentEditDlg = new NewsComponentEditDlg(),
         moduleEditDetailView = new ModuleEditDetailView(),
         moduleEditMobileView = new ModuleEditMobileView(),
         moduleRemoveDlg = new ModuleRemoveDlg();
