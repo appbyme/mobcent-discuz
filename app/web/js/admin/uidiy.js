@@ -127,6 +127,7 @@ $(function () {
         template: _.template($('#component-template').html()),
         events: {
             'change .selectComponentType': 'onChangeComponentType',
+            'click .remove-component-btn': 'remove',
         },
         initialize: function() {
         },
@@ -148,6 +149,9 @@ $(function () {
             'change #moduleType': 'onChangeModuleType',
             'submit .module-edit-form': 'moduleSubmit',
             'click .close-module-play' : 'closeModule',
+            'click .more-fastpost-btn': 'selectFastpostItem',
+            'click .close-fastpost-item-btn': 'closeSelectFastpostItem',
+            'click .add-fastpost-item-btn': 'addFastpostItem',
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
@@ -180,6 +184,12 @@ $(function () {
                         $('.component-view-container').eq(i).html(view.render().el);
                     }
                     break;
+                case MODULE_TYPE_FASTPOST:
+                    _.each(this.model.attributes.componentList, function (component) {
+                        var view = new ComponentView({model: component});
+                        $('.fastpost-components-container').append(view.render().el);
+                    });
+                    break;
                 default:
                     break;
             }
@@ -188,31 +198,38 @@ $(function () {
             event.preventDefault();
 
             var form = $('.module-edit-form')[0],
-                componentTitle = $(form['componentTitle[]']),
                 componentType = $(form['componentType[]']),
+                componentTitle = $(form['componentTitle[]']),
                 isShowForumIcon = $(form['isShowForumIcon[]']),
                 isShowForumTwoCols = $(form['isShowForumTwoCols[]']),
                 newsModuleId = $(form['newsModuleId[]']),
                 forumId = $(form['forumId[]']),
+                fastpostForumId = $(form['fastpostForumId[]']),
+                isShowTopicTitle = $(form['isShowTopicTitle[]']),
+                isShowTopicSort = $(form['isShowTopicSort[]']),
                 componentRedirect = $(form['componentRedirect[]']),
                 componentStyle = $(form['componentStyle[]']);
             
+            var moduleType = form.moduleType.value;
             this.model.set({
                 title: form.moduleTitle.value,
-                type: form.moduleType.value,
+                type: moduleType,
             });
 
-            switch (this.model.get('type')) {
+            switch (moduleType) {
                 case MODULE_TYPE_FULL:
                 case MODULE_TYPE_SUBNAV:
+                case MODULE_TYPE_FASTPOST:
                     if (this.model.id != MODULE_ID_DISCOVER) {
                         var componentList = [];
-                        for (var i = 0; i < componentTitle.length; i++) {
+                        for (var i = 0; i < componentType.length; i++) {
                             var extParams = {
                                 isShowForumIcon: isShowForumIcon[i].checked ? 1 : 0,
                                 isShowForumTwoCols: isShowForumTwoCols[i].checked ? 1 : 0,
                                 newsModuleId: parseInt(newsModuleId[i].value),
-                                forumId: parseInt(forumId[i].value),
+                                forumId: parseInt(moduleType == MODULE_TYPE_FASTPOST ? fastpostForumId[i].value : forumId[i].value),
+                                isShowTopicTitle: isShowTopicTitle[i].checked ? 1 : 0,
+                                isShowTopicSort: isShowTopicSort[i].checked ? 1 : 0,
                                 redirect: componentRedirect[i].value,
                             };
                             var model = new ComponentModel({
@@ -248,6 +265,27 @@ $(function () {
         closeModule: function () {
             $('.module-play').fadeToggle();
         },
+        selectFastpostItem: function () {
+            event.preventDefault();
+
+            $('.fastpost-item-select-div').removeClass('hidden');
+            $('.more-fastpost-btn').addClass('hidden');
+        },
+        closeSelectFastpostItem: function () {
+            $('.fastpost-item-select-div').addClass('hidden');
+            $('.more-fastpost-btn').removeClass('hidden');
+        },
+        addFastpostItem: function () {
+            var form = $('.module-edit-form')[0],
+                type = $(form['fastpostItemSelect'])[0].value;
+            
+            var model = new ComponentModel({
+                type: type,
+            });
+
+            var view = new ComponentView({model: model});
+            $('.fastpost-components-container').append(view.render().el);
+        }
     });
     
     var ModuleEditDetailView = Backbone.View.extend({
@@ -271,17 +309,17 @@ $(function () {
         selectTopbar: function (event) {
             var index = $(event.currentTarget).index();
             var module = this.model.attributes;
-            var componentModel = null;
+            var componentModel = new ComponentModel();
             switch (index) {
                 case 0:
                     if (module.leftTopbars.length > 0) {
-                        componentModel = wrapComponent(module.leftTopbars[0]);
+                        componentModel = module.leftTopbars[0];
                     }
                     break;
                 case 2:
                 case 3:
                     if (module.rightTopbars.length > index - 2) {
-                        componentModel = wrapComponent(module.rightTopbars[index - 2]);
+                        componentModel = module.rightTopbars[index - 2];
                     }
                     break;
                 default:
@@ -441,11 +479,21 @@ $(function () {
 
             // 转换module, component对象
             _.each(uidiyGlobalObj.moduleInitList, function (module) {
-                var tmpComponentList = [];
+                var tmpComponentList = [],
+                    tmpLeftTopbars = [],
+                    tmpRightTopbars = [];
                 _.each(module.componentList, function (component) {
                     tmpComponentList.push(wrapComponent(component));
                 });
+                _.each(module.leftTopbars, function (component) {
+                    tmpLeftTopbars.push(wrapComponent(component));
+                });
+                _.each(module.rightTopbars, function (component) {
+                    tmpRightTopbars.push(wrapComponent(component));
+                });
                 module.componentList = tmpComponentList;
+                module.leftTopbars = tmpLeftTopbars;
+                module.rightTopbars = tmpRightTopbars;
                 modules.add(new ModuleModel(module));
             })
 

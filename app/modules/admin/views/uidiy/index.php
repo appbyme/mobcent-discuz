@@ -221,7 +221,11 @@
                             <button type="button" class="btn btn-primary add-style-comp close-comp-pop">点击添加组件</button>
                         </div>
 
+                        <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
 
+                        <div id="module-edit-mobile-view">
+                        </div>
+                        
                         <!-- 手机底部导航 -->
                         <div class="moble-bottom-nav">
                             <div class="nav-move">
@@ -586,60 +590,41 @@
     <script type="text/template" id="module-edit-detail-template">
     <% if (id == MODULE_ID_DISCOVER) { %>
     <% } else if (id == MODULE_ID_FASTPOST) { %>
+
     <div class="edit">
         <div class="form-group">
             <label for="" class="col-sm-2 control-label">编辑内容：</label>
-            <div class="col-sm-2">
-                <div class="text-center">
-                    <img src="" style="width:80px;height:80px;" class="img-rounded">
-                    <p><small>发表文字</small></p>
-                </div>
-            </div>
-            <div class="form-group col-sm-8">
-                <div class="pull-left edit-middle">
-                    <label for="" class="">发表版块：</label>
-                </div>
-                <div class="pull-left edit-right">
-                    <select class="input-sm">
-                        <option selected="" value="用户自选版块">用户自选版块</option>
-                        <option value="版块一">版块一</option>
-                        <option value="版块二">版块二</option>
-                        <option value="版块三">版块三</option>
-                        <option value="版块四">版块四</option>
-                    </select>
-                    <div class="checkbox">
-                        <label><input type="checkbox" value=""><small>勾选则需用户填写标题</small></label>
-                    </div>                        
-                    <div class="checkbox">
-                        <label><input type="checkbox" value=""><small>勾选则显示主题分类</small></label>
-                    </div>
-                </div>
-            </div>
+        </div>
+        <div class="fastpost-components-container">
         </div>
         <div class="form-group">
+            <button class="more-fastpost-btn btn btn-primary btn-sm">点击添加更多发表项</button>
+        <div>
+        <div class="form-group fastpost-item-select-div hidden">
             <div class="col-sm-offset-2 col-sm-7">
                 <label for="" class="control-label">选择发表项：</label>
-                <select class="input-sm">
-                    <option selected="" value="发表文字">发表文字</option>
-                    <option value="发表图片">发表图片</option>
-                    <option value="拍照发表">拍照发表</option>
-                    <option value="发表语音">发表语音</option>
-                    <option value="签到">签到</option>
+                <select class="input-sm" name="fastpostItemSelect">
+                    <option value="<%= COMPONENT_TYPE_FASTTEXT %>">发表文字</option>
+                    <option value="<%= COMPONENT_TYPE_FASTIMAGE %>">发表图片</option>
+                    <option value="<%= COMPONENT_TYPE_FASTCAMERA %>">拍照发表</option>
+                    <option value="<%= COMPONENT_TYPE_FASTAUDIO %>">发表语音</option>
+                    <option value="<%= COMPONENT_TYPE_SIGN %>">签到</option>
                 </select>                        
-                <button type="button" class="btn btn-primary btn-sm">添加</button>
-                <button type="button" class="btn btn-primary btn-sm">取消</button>
+                <button type="button" class="btn btn-primary btn-sm add-fastpost-item-btn">添加</button>
+                <button type="button" class="btn btn-primary btn-sm close-fastpost-item-btn">取消</button>
             </div>
         </div>
     </div>
+
     <% } else if (type == MODULE_TYPE_FULL) { %>
     <div class="component-view-container"></div>
     <% } else if (type == MODULE_TYPE_SUBNAV) { %>
     <div><label>添加导航: </label></div>
     <div class="add-nav-list">
-    <div class="component-view-container"></div>
-    <div class="component-view-container"></div>
-    <div class="component-view-container"></div>
-    <div class="component-view-container"></div>
+        <div class="component-view-container"></div>
+        <div class="component-view-container"></div>
+        <div class="component-view-container"></div>
+        <div class="component-view-container"></div>
     </div>
     <% } else if (type == MODULE_TYPE_NEWS) { %>
         <div class="col-sm-offset-2 col-sm-4">
@@ -676,8 +661,8 @@
     </div>
     </script>
     <script type="text/template" id="component-template">
-    <div class="component-view" id="component-view-<%= id %>">
-    
+    <div class="component-view quick-edit" id="component-view-<%= id %>">
+
         <div class="form-group">
             <label for="" class="col-sm-2 control-label">导航名称：</label>
             <div class="col-sm-10">
@@ -700,10 +685,14 @@
                 <option value="<%= COMPONENT_TYPE_SETTING %>" <%= type == COMPONENT_TYPE_SETTING ? 'selected' : '' %>>设置</option>
                 <option value="<%= COMPONENT_TYPE_ABOAT %>" <%= type == COMPONENT_TYPE_ABOAT ? 'selected' : '' %>>关于</option>
                 <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
+                <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %>>发表文字</option>
+                <option value="<%= COMPONENT_TYPE_FASTIMAGE %>" <%= type == COMPONENT_TYPE_FASTIMAGE ? 'selected' : '' %>>发表图片</option>
+                <option value="<%= COMPONENT_TYPE_FASTCAMERA %>" <%= type == COMPONENT_TYPE_FASTCAMERA ? 'selected' : '' %>>拍照发表</option>
+                <option value="<%= COMPONENT_TYPE_FASTAUDIO %>" <%= type == COMPONENT_TYPE_FASTAUDIO ? 'selected' : '' %>>发表语音</option>
+                <option value="<%= COMPONENT_TYPE_SIGN %>" <%= type == COMPONENT_TYPE_SIGN ? 'selected' : '' %>>签到</option>
             </select>
             </div>
         </div>
-
 
         <div id="component-view-<% print(COMPONENT_TYPE_FORUMLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_FORUMLIST ? '' : 'hidden' %>">
 
@@ -749,7 +738,6 @@
                     </select> 
                 </div>
             </div>
-
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_MESSAGELIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_MESSAGELIST ? '' : 'hidden' %>">
         </div>
@@ -763,17 +751,52 @@
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_ABOAT+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_ABOAT ? '' : 'hidden' %>">
         </div>
+        <!-- wepapp 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_WEBAPP+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_WEBAPP ? '' : 'hidden' %>">
-
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">wap地址：</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control input-sm" name="componentRedirect[]" value="<%= extParams.redirect %>">
                 </div>
             </div>
-
         </div>
-
+        <!-- fasttext/fastimage/fastcamera/fastaudio 组件模板 -->
+        <div id="component-view-fastpost-<%= id %>" class="component-view-item <%= type == COMPONENT_TYPE_FASTTEXT || type == COMPONENT_TYPE_FASTIMAGE || type == COMPONENT_TYPE_FASTCAMERA || type == COMPONENT_TYPE_FASTAUDIO ? '' : 'hidden' %>">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">发表板块：</label>
+                <div class="col-sm-10">
+                    <select class="input-sm" name="fastpostForumId[]">
+                        <option value="0" <%= extParams.forumId == 0 ? 'selected' : '' %>>全部版块</option>
+                        <?php foreach ($forumList as $fid => $title) { ?>
+                            <option value="<?php echo $fid ?>" <%= extParams.forumId == <?php echo $fid; ?> ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="isShowTopicTitle[]" <%= extParams.isShowTopicTitle ? 'checked' : '' %>> 勾选则需用户填写标题
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="isShowTopicSort[]" <%= extParams.isShowTopicSort ? 'checked' : '' %>> 勾选则显示主题分类
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-4">
+                    <button class="remove-component-btn btn btn-primary btn-sm" style="width:225px;">删　除</button>
+                </div>
+            </div>
+        </div>
+        <!-- sign 组件模板 -->
+        <div id="component-view-<% print(COMPONENT_TYPE_SIGN+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SIGN ? '' : 'hidden' %>">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-4">
+                    <button class="remove-component-btn btn btn-primary btn-sm" style="width:225px;">删　除</button>
+                </div>
+            </div>
+        </div>
         <div class="form-group">
             <label for="" class="col-sm-2 control-label">页面样式：</label>
             <div class="col-sm-10">
@@ -793,6 +816,7 @@
 
             // 底部导航拖动
             // $(".nav-move").sortable();
+            $(".nav-move").sortable();
 
             // 导航样式调整
             $('.nav-list li').hover(

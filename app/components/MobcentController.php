@@ -53,6 +53,7 @@ class MobcentController extends Controller {
     protected function checkUserAccess($checkLogin=true) {
         if (!UserUtils::checkAccess() && $checkLogin) {
             WebUtils::endAppWithErrorInfo(array('rs' => 0, 'errcode' => 50000000), 'to_login');
+            // WebUtils::endAppWithErrorInfo(array(), 'to_login');
         }
 
         global $_G;

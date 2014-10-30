@@ -318,7 +318,7 @@ label {
 
 /*编辑内容*/
 .edit .form-group, .pic-text-pop .form-group {
-    margin-bottom: 0px;
+    margin-bottom: 5px;
 }
 
 .edit-middle {
@@ -334,6 +334,18 @@ label {
     width: 150px;
 }
 
+.edit .more-fastpost-btn {
+    width:225px;
+    margin-left:145px;
+}
+
+.quick-edit {
+    border-radius: 5px;
+    margin: 5px 0px 5px 0px;
+    padding: 5px 0px 5px 0px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
 /*新写的模块编辑填出框*/
 .module-play {
     width: 99%;
@@ -344,11 +356,13 @@ label {
     left: 15px;
     top: 0px;
     overflow-y:auto;
+    overflow-x:hidden;
     z-index: 100;
 }
 .module-play .panel-body {
     max-height: 650px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 /*主要是弹出框面板的标题*/
 .module-play .panel-heading, .play-add-plug .panel-heading, .play-border-add .panel-heading, .pic-text-pop .panel-heading,
