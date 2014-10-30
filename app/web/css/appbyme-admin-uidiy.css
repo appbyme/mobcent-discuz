@@ -2,7 +2,7 @@
 /*重写了Bootstrap*/
 .container {
     width: 90%;
-    width: 1200px;
+    /*width: 1200px;*/
 }
  .form-group {
     margin-bottom: 5px;
@@ -25,6 +25,20 @@ label {
     margin-bottom: 5px;
 }
 
+/*面板和模态框一样的效果*/
+.panel {
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+    outline: none;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+       -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+       -moz-background-clip: padding-box;
+            background-clip: padding-box;
+}
+
 #uidiy-main-view {
     /*background: #e3e3e3;*/
     border-radius: 5px;
@@ -41,7 +55,7 @@ label {
 }
 
 /*手机中间显示的内容*/
-.mobleShow .moble-content{
+.mobleShow .moble-content {
     width: 320px;
     margin: 118px 0px 0px 30px;
     height: 570px;
@@ -145,7 +159,7 @@ label {
     position: absolute;
     right: 38px;
     top: 174px;
-    z-index: 10;
+    z-index: 100;
     display:none;
     font-size: 12px;
 }
@@ -156,7 +170,6 @@ label {
     height: 502px;
     overflow-y: auto;
     padding: 5px;
-    /*background: orange;*/
 }
 
 .add-style-btn, .add-style-comp {
@@ -172,11 +185,12 @@ label {
     position: absolute;
     right: 38px;
     top: 174px;
-    z-index: 101;
+    z-index: 100;
     display:none;
     font-size: 12px;
 }
 
+/*添加组件弹出框*/
 .add-comp-pop {
     width: 300px;
     height: 300px;
@@ -228,7 +242,7 @@ label {
     position: absolute;
     right: 38px;
     bottom: 170px;
-    z-index: 10;
+    z-index: 100;
     display:none;
     font-size: 12px;
 }
@@ -251,13 +265,13 @@ label {
 
 /*三个加号*/
 .play-add-plug {
-    width: 300px;
+    width: 310px;
     height: 300px;
     border-radius: 5px;
     position: absolute;
-    right: 37px;
+    right: 32px;
     top: 188px;
-    z-index: 10;
+    z-index: 100;
     display:none;
     font-size: 12px;
 }
@@ -267,19 +281,26 @@ label {
 #operation {
     margin-top: 40px;
     padding-top: 30px;
-    /*border: 1px solid green;*/
     font-size: 12px;
 }
 
 /*模块管理*/
 #module-list {
-    height: 600px;
+    /*height: 500px;*/
     /*border: 1px solid #CCCCFF;*/
     /*border-radius: 5px;*/
     /*overflow: auto;*/
 }
+
+.module-management {
+    height: 500px;
+    max-height: 500px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
 #module-list .module {
-    width: 100px;
+    width: 99px;
     height: 120px;
     font-size: 12px;
     margin:2px 0px 10px 5px;
@@ -354,11 +375,12 @@ label {
     border-radius: 5px;
     position: absolute;
     left: 15px;
-    top: 0px;
+    top: 30px;
     overflow-y:auto;
     overflow-x:hidden;
-    z-index: 100;
+    z-index: 49;
 }
+
 .module-play .panel-body {
     max-height: 650px;
     overflow-y: auto;
@@ -398,6 +420,7 @@ label {
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: rgba(0,0,0,0.1); 
+    background: white;
     /*background: #2E8BCE;*/
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
     /*-webkit-box-shadow: inset 0 0 6px #2E8BCE;*/
@@ -407,6 +430,19 @@ label {
     background: #2E8BCE;
 }
 
+/*弹出框覆盖层*/
+.covering{
+    z-index: 50;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    opacity:0.4;
+    filter:alpha(opacity=40);
+    display:none
+}
 
 /*颜色*//*面板边框*/
 .panel-primary {
@@ -415,10 +451,21 @@ label {
 .panel-primary .panel-heading{
     background: #66ADE8
 }
-.btn-primary {
-    background: #5FA7E5;
+.btn-primary, .btn-default {
+    /*background: #66ADE8;*/
+   -webkit-border-radius: 4px;
+   -moz-border-radius: 4px;
+        border-radius: 4px;
+    outline: none;
+    -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+       -moz-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+       -moz-background-clip: padding-box;
+            background-clip: padding-box;
 }
 
 #module-list .btn-xs {
     padding:3px 6px;
 }
+

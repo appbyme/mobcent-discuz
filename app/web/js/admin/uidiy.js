@@ -17,6 +17,14 @@ $(function () {
         return new ComponentModel(component);
     };
 
+    var coveringToggle = function (param) {
+        if (param == 'close') {
+            $('.covering').fadeOut();
+        } else {
+            $('.covering').fadeIn();
+        }
+    }
+
     var ModuleModel = Backbone.Model.extend({
         defaults: uidiyGlobalObj.moduleInitParams,
         sync: function (method, model, options) {
@@ -96,11 +104,13 @@ $(function () {
             navItemEditDlg.model = this.model;
             navItemEditDlg.render();
             navItemEditDlg.toggle();
+            coveringToggle();
         },
         dlgRemoveNavItem: function (event) {
             navItemRemoveDlg.model = this.model;
             navItemRemoveDlg.render();
             navItemRemoveDlg.toggle();
+            coveringToggle();
         },
     });
 
@@ -329,6 +339,7 @@ $(function () {
             moduleTopbarDlg.moduleModel = module;
             moduleTopbarDlg.render();
             moduleTopbarDlg.toggle();
+            coveringToggle();
             $('#topbarIndex').val(index);
         },
     });
@@ -382,6 +393,7 @@ $(function () {
             this.toggle();
         },
         toggle: function () {
+            coveringToggle('close');
             this.$el.fadeToggle();
         },
     });
@@ -439,7 +451,8 @@ $(function () {
             this.toggle();
         },
         toggle: function () {
-            this.$el.slideToggle();
+            coveringToggle('close');
+            this.$el.fadeToggle();
         },
     });
 
@@ -460,7 +473,8 @@ $(function () {
             this.toggle();
         },
         toggle: function () {
-            this.$el.slideToggle();
+            this.$el.fadeToggle();
+            coveringToggle('close');
         },
     });
 
@@ -514,6 +528,7 @@ $(function () {
             navItemEditDlg.model = new NavItemModel();
             navItemEditDlg.render();
             navItemEditDlg.toggle();
+            coveringToggle();
         },
         dlgAddModule: function (event) {
             moduleEditDlg.model = new ModuleModel();

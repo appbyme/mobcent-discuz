@@ -18,6 +18,9 @@
 </head>
 <body>
 
+
+<div class="covering"></div>
+
 <?php global $_G; ?>
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
@@ -47,10 +50,10 @@
     
     <div id="uidiy-main-view">
 
-    <div class="container">
+    <div class="container" style="width:1200px;height:800px;">
         <div class="row">
 
-            <div class="col-md-4">
+            <div class="col-sm-xs-4 col-sm-4 col-md-4">
                 <div class="mobleShow">
 
                     <div class="moble-content"> 
@@ -240,7 +243,7 @@
                 </div>
             </div>
 
-            <div class="col-md-8" id="operation">
+            <div class="col-sm-xs-8 col-sm-8 col-md-8" id="operation">
 
                 <div id="module-edit-dlg-view">
                 </div>
@@ -260,7 +263,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">模块管理</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body module-management">
                         <div id="module-list">
                             <div class="module last-module">
                                 <a href="#" data-toggle="modal" class="module-add-btn"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
@@ -816,7 +819,6 @@
 
             // 底部导航拖动
             // $(".nav-move").sortable();
-            $(".nav-move").sortable();
 
             // 导航样式调整
             $('.nav-list li').hover(
@@ -831,6 +833,7 @@
             // 左图右文弹出框
             $('.add-edit-page').on({
                 click:function(){
+                    $('.covering').fadeToggle();
                     $('.pic-text-pop').fadeToggle();
                 }
             })
@@ -844,6 +847,7 @@
             // 添加风格区弹出框切换
             $('.close-style-pop').on({
                 click:function() {
+                    $('.covering').fadeToggle();
                     $('.add-style-pop').fadeToggle();
                 }
             })
@@ -851,6 +855,7 @@
             // 添加组件弹出框切换
             $('.close-comp-pop').on({
                 click:function() {
+                    $('.covering').fadeToggle();
                     $('.add-comp-pop').fadeToggle();
                 }
             })
