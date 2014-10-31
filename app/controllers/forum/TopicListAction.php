@@ -15,10 +15,9 @@ class TopicListAction extends MobcentAction {
 
     public function run($boardId=0, $page=1, $pageSize=10, $sortby='all', $filterType='', $filterId=0) {
         switch ($boardId) {
-            case -1: $sortby = 'all'; $boardId = 0;break;
-            case 0: $sortby = 'new'; $boardId = 0;break;
-            case -2: $sortby = 'marrow'; $boardId = 0;break;
-            case -3: $sortby = 'photo'; $boardId = 0;break;
+            case -1: $sortby = 'new'; $boardId = 0; break;
+            case -2: $sortby = 'marrow'; $boardId = 0; break;
+            case -3: $sortby = 'photo'; $boardId = 0; break;
         }
 
         $sortby == '' && $sortby = 'all';
@@ -91,13 +90,14 @@ class TopicListAction extends MobcentAction {
     }
 
     protected function getResult($params=array()) {
-        if ($params['sort'] == 'photo')
-        $_GET = array_merge($_GET, $params);
-        ob_start();
-        $this->getController()->forward('forum/photogallery', false);
-        $res = ob_get_clean();
-        $list = WebUtils::jsonDecode($res);
-        return $list;
+        if ($params['sort'] == 'photo') {
+            $_GET = array_merge($_GET, $params);
+            ob_start();
+            $this->getController()->forward('forum/photogallery', false);
+            $res = ob_get_clean();
+            $list = WebUtils::jsonDecode($res);
+            return $list;
+        }
         extract($params);
 
         $res = WebUtils::initWebApiArray_oldVersion();
