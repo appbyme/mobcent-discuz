@@ -68,49 +68,7 @@
                         </div>
 
                         <!-- 左图右文添加/编辑弹出框 -->
-                        <div class="pic-text-pop">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title pull-left">添加内容</h3>
-                                    <button type="button" class="close pic-text-pop-close pull-right">&times;</button>
-                                </div>
-                                <form class="form-horizontal navitem-edit-form">
-                                    <div class="panel-body">
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label">导航名字：</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control">
-                                                <p class="help-block">输入1-4个字母、数字或汉字</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label">内容简介：</label>
-                                            <div class="col-sm-8">
-                                                <textarea class="form-control" rows="3" style="resize:none;margin-bottom:8px;"></textarea>
-                                            </div>
-                                        </div>
-
-                                         <div class="form-group">
-                                            <label for="" class="col-sm-4 control-label">编辑图标：</label>
-                                            <div class="col-sm-8">
-                                                <input type="file" id="" >
-                                                <p class="help-block">上传1:1比例的JPG或PNG格式</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="col-sm-offset-4 col-sm-8 text-left">
-                                                <img src="" style="width:50px;height:50px;" class="img-rounded">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <div class="panel-footer text-right">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
-                                    <button type="button" class="btn btn-default btn-sm pic-text-pop-close">取 消</button>
-                                </div>
-                            </div>
+                        <div id="news-component-edit-dlg-view" class="pic-text-pop">
                         </div>
 
                         <!-- 添加风格区弹出框 -->
@@ -559,32 +517,10 @@
     <% } else if (type == MODULE_TYPE_NEWS) { %>
     <!-- 左图右文 -->
     <div class="pic-text">
-        <div class="edit-list">
-            <div class="pull-left"><img src="" style="width:50px;height:50px" class="img-rounded"></div>
-            <div class="pull-left text-left page-main">
-                <div class="page-title"><strong>此处显示为标题此处显示为标题</strong></div>
-                <div class="page-content">此处显示为文字描述此处显示为文字描述此处显示为文字描述</div>
-            </div>
-            <div class="text-left pull-left">
-                <a class="add-edit-page">编辑</a>
-                <a href="">删除</a>
-            </div>
+        <div class="news-component-item-container">
         </div>
-
-        <div class="edit-list">
-            <div class="pull-left"><img src="" style="width:50px;height:50px" class="img-rounded"></div>
-            <div class="pull-left text-left page-main">
-                <div class="page-title"><strong>此处显示为标题此处显示为标题</strong></div>
-                <div class="page-content">此处显示为文字描述此处显示为文字描述此处显示为文字描述</div>
-            </div>
-            <div class="text-left pull-left">
-                <a class="add-edit-page">编辑</a>
-                <a href="">删除</a>
-            </div>
-        </div>
-
         <div class="text-center">
-           <button type="button" class="btn btn-primary add-edit-page">点击添加更多</button>
+           <button type="button" class="btn btn-primary add-news-component-item-btn">点击添加更多</button>
         </div>
     </div>
     <% } else if (type == MODULE_TYPE_CUSTOM) { %>
@@ -672,7 +608,12 @@
                 <input type="text" class="form-control input-sm" name="componentTitle[]" value="<%= title %>">
             </div>
         </div>
-
+        <div class="form-group">
+            <label class="col-sm-2 control-label">内容简介：</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" name="componentDesc[]" rows="3" style="resize:none;margin-bottom:8px;"><%= desc %></textarea>
+            </div>
+        </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">链接地址：</label>
@@ -702,12 +643,16 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">设置样式：</label>
                 <div class="col-sm-10">
+                    <div>
                     <label class="checkbox-inline">
                         <input type="checkbox" name="isShowForumIcon[]" <%= extParams.isShowForumIcon ? 'checked' : '' %>><small>勾选则显示图标</small>
                     </label>
+                    </div>
+                    <div>
                     <label class="checkbox-inline">
                         <input type="checkbox" name="isShowForumTwoCols[]" <%= extParams.isShowForumTwoCols ? 'checked' : '' %>> <small>勾选则双栏显示</small>
                     </label>
+                    </div>
                 </div>
             </div>
 
@@ -813,6 +758,39 @@
 
     </div>
     </script>
+    <!-- 添加/编辑 左图右文模块 组件模板 -->
+    <script type="text/template" id="news-component-edit-dlg-template">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title pull-left">添加内容</h3>
+            <button type="button" class="close news-component-close-btn pull-right">&times;</button>
+        </div>
+        <form class="form-horizontal news-component-edit-form">
+        <div class="panel-body">
+            <div class="component-view-container">
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+            <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+            <button type="button" class="btn btn-default btn-sm news-component-close-btn">取 消</button>
+        </div>
+        </form>
+    </div>
+    </script>
+    <!-- 左图右文模块 于手机ui的组件模板 -->
+    <script type="text/template" id="news-component-item-template">
+    <div class="edit-list">
+        <div class="pull-left"><img src="<%= icon %>" style="width:50px;height:50px" class="img-rounded"></div>
+        <div class="pull-left text-left page-main">
+            <div class="page-title"><strong><%= title || '此处显示为标题' %></strong></div>
+            <div class="page-content"><%= desc || '此处显示为文字描述' %></div>
+        </div>
+        <div class="text-left pull-left">
+            <button class="edit-news-component-item-btn">编辑</button>
+            <button class="remove-news-component-item-btn">删除</button>
+        </div>
+    </div>
+    </script>
     <!-- 页面弹出样式用到的js -->
     <script type="text/javascript">
         $(function() {
@@ -830,20 +808,6 @@
                 }
             );
 
-            // 左图右文弹出框
-            $('.add-edit-page').on({
-                click:function(){
-                    $('.covering').fadeToggle();
-                    $('.pic-text-pop').fadeToggle();
-                }
-            })
-
-            $('.pic-text-pop-close').on({
-                click:function(){
-                    $('.pic-text-pop').fadeOut();
-                }
-            })
-
             // 添加风格区弹出框切换
             $('.close-style-pop').on({
                 click:function() {
@@ -859,7 +823,6 @@
                     $('.add-comp-pop').fadeToggle();
                 }
             })
-
         })
     </script>
 </body>

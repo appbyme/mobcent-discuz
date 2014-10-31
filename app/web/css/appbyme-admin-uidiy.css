@@ -15,6 +15,11 @@
     width: 225px;
     font-size: 12px;
 }
+.form-group textarea {
+    width: 225px;
+    font-size: 12px;
+}
+
 .form-group label {
     padding-right: 0px;
 }
@@ -284,7 +289,7 @@ label {
     font-size: 12px;
 }
 
-/*模块管理*/
+/*模块管理 暂时不用*/
 #module-list {
     /*height: 500px;*/
     /*border: 1px solid #CCCCFF;*/
@@ -398,7 +403,6 @@ label {
 
 /*二级导航/添加导航列表*/
 .add-nav-list .component-view-container {
-    /*background: #D8EDCF;*/
     border-radius: 5px;
     margin: 5px 0px 5px 0px;
     padding: 5px 0px 5px 0px;
@@ -430,7 +434,7 @@ label {
     background: #2E8BCE;
 }
 
-/*弹出框覆盖层*/
+/* 弹出框覆盖层 */
 .covering{
     z-index: 50;
     position:fixed;
@@ -444,13 +448,7 @@ label {
     display:none
 }
 
-/*颜色*//*面板边框*/
-.panel-primary {
-    border-color:#e3e3e3;
-}
-.panel-primary .panel-heading{
-    background: #66ADE8
-}
+/* 对用到的按钮增加阴影的操作 */
 .btn-primary, .btn-default {
     /*background: #66ADE8;*/
    -webkit-border-radius: 4px;
@@ -465,7 +463,29 @@ label {
             background-clip: padding-box;
 }
 
+/* 对模块管理中的按钮样式修改 */
 #module-list .btn-xs {
     padding:3px 6px;
 }
 
+/* 兼容代码，兼容左图右文弹出框样式 */
+.pic-text-pop .col-sm-2 {
+    padding-left: 15px;
+    width: 99px;
+}
+
+.pic-text-pop .col-sm-10 {
+    width: 150px;
+}
+
+.pic-text-pop .form-group textarea {
+    width: 150px;
+}
+
+/* 整体颜色的修改，主要是针对bootstrap的面板进行修改 */
+.panel-primary {
+    border-color:#e3e3e3;
+}
+.panel-primary .panel-heading{
+    background: #66ADE8
+}

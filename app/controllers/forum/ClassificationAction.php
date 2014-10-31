@@ -33,7 +33,7 @@ class ClassificationAction extends MobcentAction
         $typevararr = C::t('forum_typevar')->fetch_all_by_sortid($sortid, 'ASC');
         $typeoptionarr = DzClassifiedBysortid::getTypeoptionInfo($sortid);
         if($threadtypearr['expiration']) {
-            $res['body']['classified'][] = $this->_getTimeLimit();
+            $res['body']['classified'] = $this->_getTimeLimit();
         }
 
         foreach($typevararr as $tpvs) {
@@ -114,12 +114,29 @@ class ClassificationAction extends MobcentAction
                     break;
             }
 
+            $choiceArr = explode("\r\n",$classifiedArr[$i][classifiedRules][choices]);
+            if($classifiedArr[$i][classifiedRules][choices] != "") {
+                foreach($choiceArr as $charr){
+                    $choiceVal = explode("=" , $charr);
+                    if($choiceVal[0] == intval($choiceVal[0])){
+                        $tempchoiceVal['name'] = $choiceVal[1];
+                        $tempchoiceVal['value'] = $choiceVal[0];
+                        $cd[] = $tempchoiceVal;
+                        foreach($classifList as $classifL){
+                            $msd = count($classifL);
+                        }
+                    }
+                }
+            $classifiedArr[$i][classifiedRules][choices] = array_slice($cd, $msd);
+            $classifList[] = $cd;
+        }
+
             if($classifiedArr[$i][classifiedRules] == false){
                 $classifiedArr[$i][classifiedRules] = array();
             }
         }
 
-        $res['body']['classified'][] = $classifiedArr;
+        $res['body']['classified'] = $classifiedArr;
         return $res;   
     }
 
