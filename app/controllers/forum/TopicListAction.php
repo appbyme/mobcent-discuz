@@ -14,6 +14,13 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 class TopicListAction extends MobcentAction {
 
     public function run($boardId=0, $page=1, $pageSize=10, $sortby='all', $filterType='', $filterId=0) {
+        switch ($boardId) {
+            case -1: $sortby = 'all'; $boardId = 0;break;
+            case 0: $sortby = 'new'; $boardId = 0;break;
+            case -2: $sortby = 'marrow'; $boardId = 0;break;
+            case -3: $sortby = 'photo'; $boardId = 0;break;
+        }
+
         $sortby == '' && $sortby = 'all';
         $sortMaps = array(
             'publish' => 'new',
@@ -21,7 +28,8 @@ class TopicListAction extends MobcentAction {
             'top' => 'top',
             'new' => 'new',
             'marrow' => 'marrow',
-            'all' => 'all'
+            'all' => 'all',
+            'photo' => 'photo',
         );
         $sort = $sortby;
         $sort =  isset($sortMaps[$sort]) ? $sortMaps[$sort] : '';
@@ -83,6 +91,13 @@ class TopicListAction extends MobcentAction {
     }
 
     protected function getResult($params=array()) {
+        if ($params['sort'] == 'photo')
+        $_GET = array_merge($_GET, $params);
+        ob_start();
+        $this->getController()->forward('forum/photogallery', false);
+        $res = ob_get_clean();
+        $list = WebUtils::jsonDecode($res);
+        return $list;
         extract($params);
 
         $res = WebUtils::initWebApiArray_oldVersion();
@@ -160,7 +175,6 @@ class TopicListAction extends MobcentAction {
 
         $res['list'] = $list;
         $res = array_merge($res, WebUtils::getWebApiArrayWithPage_oldVersion($page, $pageSize, $count));
-
         return $res;
     }
 
@@ -269,6 +283,7 @@ class TopicListAction extends MobcentAction {
             $topicInfo['replies'] = (int)$topic['replies'];
             $topicInfo['essence'] = ForumUtils::isMarrowTopic($topic) ? 1 : 0;
             $topicInfo['top'] = ForumUtils::isTopTopic($topic) ? 1 : 0;
+            $topicInfo['status'] = (int)$topic['status'];
 
             $cache = Yii::app()->params['mobcent']['cache']['topicSummary'];
             $key = sprintf('mobcentTopicSummary_%s_%s', $tid, $_G['groupid']);
@@ -279,8 +294,10 @@ class TopicListAction extends MobcentAction {
                 }
             }
             $topicInfo['subject'] = $topicSummary['msg'];
-            $topicInfo['pic_path'] = ImageUtils::getThumbImage($topicSummary['image']);
-
+            // $topicInfo['pic_path'] = ImageUtils::getThumbImage($topicSummary['image']);
+            $tempTopicInfo = ImageUtils::getThumbImageEx($topicSummary['image'], 15, true, false);
+            $topicInfo['pic_path'] = $tempTopicInfo['image'];
+            $topicInfo['ratio'] = $tempTopicInfo['ratio'];
             $list[] = $topicInfo;
         }
 

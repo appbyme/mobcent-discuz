@@ -195,7 +195,7 @@
 						    			<a class="pull-right" href="javascript:void()">更多</a>
 						    		</div>
 						    	</div>
-						    	<button type="button" class="btn btn-primary btn-xs">继续添加组件</button>
+						    	<button type="button" class="btn btn-primary btn-xs close-comp-pop">继续添加组件</button>
 						    	<button type="button" class="btn btn-primary btn-xs">删除该风格区</button>
 						    </div>
 
