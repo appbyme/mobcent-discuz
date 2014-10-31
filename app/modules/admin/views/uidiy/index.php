@@ -178,15 +178,32 @@
 
                         <!-- 添加风格 -->
                         <div class="add-style hidden">
-                            <button type="button" class="btn btn-primary add-style-btn close-style-pop">点击添加风格区</button>
+						    <div class="single-style">
+						    	<div class="style-content">
+						    		<div class="style-title">
+						    			<p class="pull-left">此处是风格区标题</p>
+						    			<a class="pull-right" href="javascript:void()">更多</a>
+						    		</div>
+						    		<div class="style-area">
+						    			分割区示意
+						    		</div>
+						    		<div class="style-area">
+										分割区示意
+						    		</div>
+						    		<div class="style-title">
+						    			<p class="pull-left">此处是风格区标题</p>
+						    			<a class="pull-right" href="javascript:void()">更多</a>
+						    		</div>
+						    	</div>
+						    	<button type="button" class="btn btn-primary btn-xs">继续添加组件</button>
+						    	<button type="button" class="btn btn-primary btn-xs">删除该风格区</button>
+						    </div>
+
+                            <button type="button" class="btn btn-primary add-style-btn close-style-pop hidden">点击添加风格区</button>
+                            <button type="button" class="btn btn-primary add-style-btn close-style-pop">继续添加风格区</button>
                             <button type="button" class="btn btn-primary add-style-comp close-comp-pop">点击添加组件</button>
                         </div>
 
-                        <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
-
-                        <div id="module-edit-mobile-view">
-                        </div>
-                        
                         <!-- 手机底部导航 -->
                         <div class="moble-bottom-nav">
                             <div class="nav-move">
@@ -786,8 +803,8 @@
             <div class="page-content"><%= desc || '此处显示为文字描述' %></div>
         </div>
         <div class="text-left pull-left">
-            <button class="edit-news-component-item-btn">编辑</button>
-            <button class="remove-news-component-item-btn">删除</button>
+            <button class="edit-news-component-item-btn btn btn-primary btn-xs">编辑</button>
+            <button class="remove-news-component-item-btn btn btn-primary btn-xs">删除</button>
         </div>
     </div>
     </script>
