@@ -48,6 +48,8 @@
       </div>
     </nav>
     
+
+
     <div id="uidiy-main-view">
 
     <div class="container" style="width:1200px;height:800px;">
@@ -481,7 +483,53 @@
     <% if (id == MODULE_ID_DISCOVER) { %>
     <div class="found-module" style="background:;height:450px;">
         <div class="slide-img">
-            <img src="<?php echo $this->rootUrl; ?>/images/admin/timo.jpg">
+		    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="width:320px;height:150px;">
+
+		        <ol class="carousel-indicators">
+		            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+		            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+		            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+		            <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+		        </ol>
+
+		        <div class="carousel-inner">
+		            <div class="item active">
+		                <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp1.jpg" alt="" style="width:320px;height:150px;">
+		                <div class="carousel-caption">
+		                   <!--  <h3>Apple iPhone 5S</h3> -->
+		                    <p>predecessor</p> 
+		                </div>
+		            </div>
+		            <div class="item">
+		                <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp2.jpg" style="width:320px;height:150px;">
+		                <div class="carousel-caption">
+		                    <!-- <h3>Samsung Galaxy Note 3Similar to the updates Samsung made to the Galaxy S4<</h3> -->
+		                    <p>Similar to the updates Samsung made to the Galaxy S4</p>
+		                </div>
+		            </div>
+		            <div class="item">
+		                <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp3.jpg" style="width:320px;height:150px;">
+		                <div class="carousel-caption">
+		                    <!-- <h3>Sony Xperia Z1</h3> --> 
+		                    <p>Sony's got a plan and it's sticking </p>
+		                </div>
+		            </div>
+		            <div class="item">
+		                <img src="<?php echo $this->rootUrl; ?>/images/admin/timo.jpg" style="width:320px;height:150px;">
+		                <div class="carousel-caption">
+		                    <!-- <h3>Sony Xperia Z1</h3> -->
+		                    <p>Sony's got a plan and it's sticking </p>
+		                </div>
+		            </div>
+		        </div>
+
+		        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+		            <span class="glyphicon glyphicon-chevron-left"></span>
+		        </a>
+		        <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+		            <span class="glyphicon glyphicon-chevron-right"></span>
+		        </a>
+		    </div>
             <span><a href="">点击添加更多幻灯片</a></span>
         </div>
         <div class="module-show">

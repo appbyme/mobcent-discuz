@@ -30,6 +30,24 @@ label {
     margin-bottom: 5px;
 }
 
+/* 对幻灯片样式的修改 */
+.carousel-indicators {
+    position: absolute;
+    left: 260px;
+    top: 130px;
+}
+.carousel-caption {
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    position: absolute;
+    left: 0px;
+    top: 98px;
+    overflow:hidden;
+}
+
+
+
 /*面板和模态框一样的效果*/
 .panel {
     -webkit-border-radius: 6px;
@@ -399,7 +417,6 @@ label {
     border-radius: 5px;
     margin: 5px 0px 5px 0px;
     padding: 5px 0px 5px 0px;
-    border: 1px solid rgba(0,0,0,0.1);
 }
 
 /*新写的模块编辑填出框*/
