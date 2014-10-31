@@ -88,6 +88,7 @@ class DzPictureSet extends DiscuzAR {
             FROM %t 
             WHERE fid IN (%n)
             AND displayorder >= 0
+            AND attachment = 2
             ORDER BY dateline DESC
             LIMIT %d, %d
             ', 
@@ -102,6 +103,7 @@ class DzPictureSet extends DiscuzAR {
             FROM %t
             WHERE fid IN (%n)
             AND displayorder >= 0
+            AND attachment = 2
             ', 
             array('forum_thread', $fids)
         );
