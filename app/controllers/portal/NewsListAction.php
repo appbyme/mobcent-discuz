@@ -257,7 +257,10 @@ class NewsListAction extends MobcentAction {
         $row['hits'] = $source_type == 'topic' ? (int)$list['views'] : (int)$list['viewnum'];
         $row['summary'] = $summary['msg'];
         $row['replies'] = $source_type == 'topic' ? (int)$list['replies'] : (int)$list['commentnum'];
-        $row['pic_path'] = ImageUtils::getThumbImage($summary['image']);
+        // $row['pic_path'] = ImageUtils::getThumbImage($summary['image']);
+        $tempRow = ImageUtils::getThumbImageEx($summary['image'], 15, true, false);
+        $row['pic_path'] = $tempRow['image'];
+        $row['ratio'] = $tempRow['ratio'];
         $row['redirectUrl'] = (string)$list['url'];
 
         return $row;
