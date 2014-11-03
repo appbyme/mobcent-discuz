@@ -31,6 +31,9 @@ label {
 }
 
 /* 对幻灯片样式的修改 */
+.carousel-example-generic_one {
+    margin-bottom: 5px;
+}
 .carousel-indicators {
     position: absolute;
     left: 260px;
@@ -103,40 +106,41 @@ label {
     font-weight: 200;
 }
 
-/*灰色的*/
-.module-show {
-    margin-top: 10px;
-}
-.module-show img {
-    width: 25px;
-    height: 25px;
-    margin: 1px 20px 0px 0px;
-}
-.module-show-one, .module-show-two, .module-show-three{
-    background: #CCCCCC;
-    height: 28px;
-    border: 1px solid #797979;
-    padding: 0px 20px 0px 25px;
-    line-height: 26px;
-}
-.module-show-one {
-    border-bottom: 0px;
-}
-.module-show-three {
-    border-top: 0px;
-    width: 300px;
-    border-radius: 5px;
-    margin-left: 10px;
-    padding: 0px 10px 0px 15px;
-}
-.module-show-one .pull-right, .module-show-two .pull-right, .module-show-three .pull-right{
-    margin-right: 10px;
-}
 
 /*发现模块*/
 .found-module {
-    height: 453px;
+    height: 503px;
 }
+
+/* 前面图标大小 */
+.found-content img {
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+}
+
+.found-content {
+    background: #e3e3e3;
+    height: 400px;
+}
+
+.fixed-content {
+    margin-top:10px;
+    height: 160px;
+}
+
+.user-content {
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+/* 覆盖一些列表组的样式 */
+.found-content .list-group-item {
+    height: 50px;
+    border: 1px solid #e3e3e3;
+    padding:5px 0px 5px 30px;
+}
+
 
 /*左图右文*/
 .pic-text {
