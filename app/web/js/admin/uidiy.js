@@ -17,6 +17,14 @@ $(function () {
         return new ComponentModel(component);
     };
 
+    var coveringToggle = function (param) {
+        if (param == 'close') {
+            $('.covering').fadeOut();
+        } else {
+            $('.covering').fadeIn();
+        }
+    }
+
     var ModuleModel = Backbone.Model.extend({
         defaults: uidiyGlobalObj.moduleInitParams,
         sync: function (method, model, options) {
@@ -45,7 +53,15 @@ $(function () {
         defaults: uidiyGlobalObj.componentInitParams,
         initialize: function () {
             this.set({id: this.cid});
-        }
+        },
+        sync: function (method, model, options) {
+        },
+        validate: function (attrs, options) {
+            // if (attrs.title == '') {
+            //     return '请输入1-4个字母、数字或汉字作为名称';
+            // }
+            return '';
+        },
     });
 
     var NavItemModel = Backbone.Model.extend({
@@ -64,6 +80,10 @@ $(function () {
 
     var NavItemList = Backbone.Collection.extend({
         model: NavItemModel,
+    });
+
+    var ComponentList = Backbone.Collection.extend({
+        model: ComponentModel,
     });
 
     var modules = new ModuleList();
@@ -96,11 +116,13 @@ $(function () {
             navItemEditDlg.model = this.model;
             navItemEditDlg.render();
             navItemEditDlg.toggle();
+            coveringToggle();
         },
         dlgRemoveNavItem: function (event) {
             navItemRemoveDlg.model = this.model;
             navItemRemoveDlg.render();
             navItemRemoveDlg.toggle();
+            coveringToggle();
         },
     });
 
@@ -127,6 +149,7 @@ $(function () {
         template: _.template($('#component-template').html()),
         events: {
             'change .selectComponentType': 'onChangeComponentType',
+            'click .remove-component-btn': 'remove',
         },
         initialize: function() {
         },
@@ -141,6 +164,73 @@ $(function () {
         },
     });
     
+    var NewsComponentEditDlg = Backbone.View.extend({
+        el: $("#news-component-edit-dlg-view"),
+        template: _.template($('#news-component-edit-dlg-template').html()),
+        events: {
+            'click .news-component-close-btn': 'closeComponentDlg',
+            'submit .news-component-edit-form': 'submitNewsComponent',
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            var view = new ComponentView({model: this.model});
+            $('.component-view-container').html(view.render().el);
+            return this;
+        },
+        toggle: function () {
+            this.$el.fadeToggle();
+        },
+        closeComponentDlg: function () {
+            this.$el.fadeOut();
+            this.$el.html('');
+            coveringToggle('close');
+        },
+        submitNewsComponent: function (event) {
+            event.preventDefault();
+
+            var form = $('.news-component-edit-form')[0],
+                componentType = $(form['componentType[]'])[0],
+                componentTitle = $(form['componentTitle[]'])[0],
+                componentDesc = $(form['componentDesc[]'])[0],
+                isShowForumIcon = $(form['isShowForumIcon[]'])[0],
+                isShowForumTwoCols = $(form['isShowForumTwoCols[]'])[0],
+                newsModuleId = $(form['newsModuleId[]'])[0],
+                forumId = $(form['forumId[]'])[0],
+                fastpostForumId = $(form['fastpostForumId[]'])[0],
+                isShowTopicTitle = $(form['isShowTopicTitle[]'])[0],
+                isShowTopicSort = $(form['isShowTopicSort[]'])[0],
+                componentRedirect = $(form['componentRedirect[]'])[0],
+                componentStyle = $(form['componentStyle[]'])[0];
+
+            var extParams = {
+                isShowForumIcon: isShowForumIcon.checked ? 1 : 0,
+                isShowForumTwoCols: isShowForumTwoCols.checked ? 1 : 0,
+                newsModuleId: parseInt(newsModuleId.value),
+                forumId: parseInt(forumId.value),
+                isShowTopicTitle: isShowTopicTitle.checked ? 1 : 0,
+                isShowTopicSort: isShowTopicSort.checked ? 1 : 0,
+                redirect: componentRedirect.value,
+            };
+            this.model.set({
+                title: componentTitle.value,
+                desc: componentDesc.value,
+                type: componentType.value,
+                style: componentStyle.value,
+                extParams: extParams,
+            });
+
+            var error = this.model.validate(this.model.attributes);
+            if (error != '') {
+                alert(error);
+                return;
+            }
+
+            this.moduleModel.attributes.componentList.add(this.model, {merge: true, remove: false, add: true});
+
+            this.closeComponentDlg();
+        },
+    });
+
     var ModuleEditDlg = Backbone.View.extend({
         el: $("#module-edit-dlg-view"),
         template: _.template($('#module-edit-template').html()),
@@ -148,6 +238,9 @@ $(function () {
             'change #moduleType': 'onChangeModuleType',
             'submit .module-edit-form': 'moduleSubmit',
             'click .close-module-play' : 'closeModule',
+            'click .more-fastpost-btn': 'selectFastpostItem',
+            'click .close-fastpost-item-btn': 'closeSelectFastpostItem',
+            'click .add-fastpost-item-btn': 'addFastpostItem',
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
@@ -180,6 +273,12 @@ $(function () {
                         $('.component-view-container').eq(i).html(view.render().el);
                     }
                     break;
+                case MODULE_TYPE_FASTPOST:
+                    _.each(this.model.attributes.componentList, function (component) {
+                        var view = new ComponentView({model: component});
+                        $('.fastpost-components-container').append(view.render().el);
+                    });
+                    break;
                 default:
                     break;
             }
@@ -188,35 +287,44 @@ $(function () {
             event.preventDefault();
 
             var form = $('.module-edit-form')[0],
-                componentTitle = $(form['componentTitle[]']),
                 componentType = $(form['componentType[]']),
+                componentTitle = $(form['componentTitle[]']),
+                componentDesc = $(form['componentDesc[]']),
                 isShowForumIcon = $(form['isShowForumIcon[]']),
                 isShowForumTwoCols = $(form['isShowForumTwoCols[]']),
                 newsModuleId = $(form['newsModuleId[]']),
                 forumId = $(form['forumId[]']),
+                fastpostForumId = $(form['fastpostForumId[]']),
+                isShowTopicTitle = $(form['isShowTopicTitle[]']),
+                isShowTopicSort = $(form['isShowTopicSort[]']),
                 componentRedirect = $(form['componentRedirect[]']),
                 componentStyle = $(form['componentStyle[]']);
             
+            var moduleType = form.moduleType.value;
             this.model.set({
                 title: form.moduleTitle.value,
-                type: form.moduleType.value,
+                type: moduleType,
             });
 
-            switch (this.model.get('type')) {
+            switch (moduleType) {
                 case MODULE_TYPE_FULL:
                 case MODULE_TYPE_SUBNAV:
+                case MODULE_TYPE_FASTPOST:
                     if (this.model.id != MODULE_ID_DISCOVER) {
                         var componentList = [];
-                        for (var i = 0; i < componentTitle.length; i++) {
+                        for (var i = 0; i < componentType.length; i++) {
                             var extParams = {
                                 isShowForumIcon: isShowForumIcon[i].checked ? 1 : 0,
                                 isShowForumTwoCols: isShowForumTwoCols[i].checked ? 1 : 0,
                                 newsModuleId: parseInt(newsModuleId[i].value),
-                                forumId: parseInt(forumId[i].value),
+                                forumId: parseInt(moduleType == MODULE_TYPE_FASTPOST ? fastpostForumId[i].value : forumId[i].value),
+                                isShowTopicTitle: isShowTopicTitle[i].checked ? 1 : 0,
+                                isShowTopicSort: isShowTopicSort[i].checked ? 1 : 0,
                                 redirect: componentRedirect[i].value,
                             };
                             var model = new ComponentModel({
                                 title: componentTitle[i].value,
+                                desc: componentDesc[i].value,
                                 type: componentType[i].value,
                                 style: componentStyle[i].value,
                                 extParams: extParams,
@@ -225,6 +333,9 @@ $(function () {
                         }
                         this.model.attributes.componentList = componentList;
                     }
+                    break;
+                case MODULE_TYPE_NEWS:
+                    this.model.attributes.componentList = this.model.attributes.componentList.models;
                     break;
                 default:
                     break;
@@ -247,7 +358,30 @@ $(function () {
         },
         closeModule: function () {
             $('.module-play').fadeToggle();
+            
+            moduleEditMobileView.$el.html('');
         },
+        selectFastpostItem: function () {
+            event.preventDefault();
+
+            $('.fastpost-item-select-div').removeClass('hidden');
+            $('.more-fastpost-btn').addClass('hidden');
+        },
+        closeSelectFastpostItem: function () {
+            $('.fastpost-item-select-div').addClass('hidden');
+            $('.more-fastpost-btn').removeClass('hidden');
+        },
+        addFastpostItem: function () {
+            var form = $('.module-edit-form')[0],
+                type = $(form['fastpostItemSelect'])[0].value;
+            
+            var model = new ComponentModel({
+                type: type,
+            });
+
+            var view = new ComponentView({model: model});
+            $('.fastpost-components-container').append(view.render().el);
+        }
     });
     
     var ModuleEditDetailView = Backbone.View.extend({
@@ -263,9 +397,21 @@ $(function () {
         template: _.template($('#module-edit-mobile-template').html()),
         events: {
             'click .select-topbar-btn': 'selectTopbar',
+            'click .add-news-component-item-btn': 'dlgAddNewsComponent',
+        },
+        initialize: function () { 
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
+
+            // module type 为news时, 转换 componentList对象为一个collection
+            if (this.model.attributes.type == MODULE_TYPE_NEWS) {
+                var componentList = this.model.attributes.componentList;
+                this.model.attributes.componentList = new ComponentList();
+                this.listenTo(this.model.attributes.componentList, 'add', this.addNewsComponentItem);
+
+                this.model.attributes.componentList.set(componentList);
+            }
             return this;
         },
         selectTopbar: function (event) {
@@ -291,7 +437,45 @@ $(function () {
             moduleTopbarDlg.moduleModel = module;
             moduleTopbarDlg.render();
             moduleTopbarDlg.toggle();
+            coveringToggle();
             $('#topbarIndex').val(index);
+        },
+        dlgAddNewsComponent: function () {
+            newsComponentEditDlg.model = new ComponentModel();
+            newsComponentEditDlg.moduleModel = this.model;
+            newsComponentEditDlg.render();
+            newsComponentEditDlg.toggle();
+            coveringToggle();
+        },
+        addNewsComponentItem: function (component) {
+            var view = new NewsComponentItemView({model: component});
+            view.moduleModel = this.model;
+            $('.news-component-item-container').append(view.render().el);
+        },
+    });
+    
+    var NewsComponentItemView = Backbone.View.extend({
+        template: _.template($('#news-component-item-template').html()),
+        events: {
+            'click .edit-news-component-item-btn': 'dlgEditNewsComponent',
+            'click .remove-news-component-item-btn': 'removeItem',
+        },
+        initialize: function () {
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'destroy', this.remove);
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        dlgEditNewsComponent: function () {
+            newsComponentEditDlg.model = this.model;
+            newsComponentEditDlg.moduleModel = this.moduleModel;
+            newsComponentEditDlg.render();
+            newsComponentEditDlg.toggle();
+        },
+        removeItem: function () {
+            this.model.destroy();
         },
     });
 
@@ -344,6 +528,7 @@ $(function () {
             this.toggle();
         },
         toggle: function () {
+            coveringToggle('close');
             this.$el.fadeToggle();
         },
     });
@@ -401,7 +586,8 @@ $(function () {
             this.toggle();
         },
         toggle: function () {
-            this.$el.slideToggle();
+            coveringToggle('close');
+            this.$el.fadeToggle();
         },
     });
 
@@ -422,7 +608,8 @@ $(function () {
             this.toggle();
         },
         toggle: function () {
-            this.$el.slideToggle();
+            this.$el.fadeToggle();
+            coveringToggle('close');
         },
     });
 
@@ -458,7 +645,6 @@ $(function () {
                 module.rightTopbars = tmpRightTopbars;
                 modules.add(new ModuleModel(module));
             })
-            console.log(modules);
 
             navItems.set(uidiyGlobalObj.navItemInitList);
         },
@@ -477,6 +663,7 @@ $(function () {
             navItemEditDlg.model = new NavItemModel();
             navItemEditDlg.render();
             navItemEditDlg.toggle();
+            coveringToggle();
         },
         dlgAddModule: function (event) {
             moduleEditDlg.model = new ModuleModel();
@@ -531,6 +718,7 @@ $(function () {
         navItemRemoveDlg = new NavItemRemoveDlg(),
         moduleEditDlg = new ModuleEditDlg(),
         moduleTopbarDlg = new ModuleTopbarDlg(),
+        newsComponentEditDlg = new NewsComponentEditDlg(),
         moduleEditDetailView = new ModuleEditDetailView(),
         moduleEditMobileView = new ModuleEditMobileView(),
         moduleRemoveDlg = new ModuleRemoveDlg();

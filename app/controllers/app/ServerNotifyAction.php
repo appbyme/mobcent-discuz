@@ -13,26 +13,26 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
 class ServerNotifyAction extends MobcentAction
 {
-    public function run($event, $appKey)
+    public function run($event, $appKey, $test=0)
     {
         $res = $this->initWebApiArray();
         
-        $res = $this->_doEvent($res, $event, $appKey);
+        $res = $this->_doEvent($res, $event, $appKey, $test);
 
         echo WebUtils::outputWebApi($res, '', false);
     }
 
-    private function _doEvent($res, $event, $appKey)
+    private function _doEvent($res, $event, $appKey, $test)
     {
         if($event == 'newApp') {
-            $res = $this->_doNewApp($res, $appKey);
+            $res = $this->_doNewApp($res, $appKey, $test);
         } elseif ($event == 'updateApp') {
-            $res = $this->_doUpdateApp($res, $appKey);
+            $res = $this->_doUpdateApp($res, $appKey, $test);
         }
         return $res;
     }
 
-    private function _doNewApp($res, $appKey)
+    private function _doNewApp($res, $appKey, $test)
     {
         // $url = 'http://192.168.1.211:9797/mobcentACA/app/wAMkQjefj3HPHsrfCk/profile';
         $url = 'http://www.appbyme.com/mobcentACA/app/'.$appKey.'/profile';
@@ -57,14 +57,15 @@ class ServerNotifyAction extends MobcentAction
             )
         );
 
-        AppbymeConfig::saveDownloadOptions($appInfo);
-        AppbymeConfig::saveForumkey($temRes['forumKey']);
-        
+        if ($test == 0) {
+            AppbymeConfig::saveDownloadOptions($appInfo);
+            AppbymeConfig::saveForumkey($temRes['forumKey']);
+        }
         return $res; 
     }
 
-    private function _doUpdateApp($res, $appKey)
+    private function _doUpdateApp($res, $appKey, $test)
     {
-        return $this->_doNewApp($res, $appKey); 
+        return $this->_doNewApp($res, $appKey, $test); 
     }
 }

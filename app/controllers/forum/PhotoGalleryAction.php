@@ -13,21 +13,15 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
 class PhotoGalleryAction extends CAction {
 
-    public function run() {
+    public function run($page=1, $pageSize=10) {
 
         $res = WebUtils::initWebApiArray_oldVersion();
-
-        $uid = $this->getController()->uid;
-
-        $page = $_GET['page'] ? $_GET['page'] : 1;
-        $pageSize = $_GET['pageSize'] ? $_GET['pageSize'] : 10;
-
-        $res = $this->_getImageList($res, $uid, $page, $pageSize);
+        $res = $this->_getImageList($res, $page, $pageSize);
 
         echo WebUtils::outputWebApi($res, '', false);
     }
 
-    private function _getImageList($res, $uid, $page, $pageSize) {
+    private function _getImageList($res, $page, $pageSize) {
         $res['list'] = $this->_getImageInfoByTids($page, $pageSize);
         $count = $this->_getImageInfoCount();
         $res = WebUtils::getWebApiArrayWithPage_oldVersion($page, $pageSize, $count, $res);
@@ -90,29 +84,28 @@ class DzPictureSet extends DiscuzAR {
     public static function getImageTidsByFids($fids, $page, $pageSize) {
 
         return DbUtils::getDzDbUtils(true)->queryColumn('
-            SELECT g.tid 
-            FROM %t g INNER JOIN %t img 
-            ON g.tid = img.tid 
-            WHERE g.fid IN (%n)
-            AND g.displayorder >= 0
-            ORDER BY g.dateline DESC
+            SELECT tid 
+            FROM %t 
+            WHERE fid IN (%n)
+            AND displayorder >= 0
+            AND attachment = 2
+            ORDER BY dateline DESC
             LIMIT %d, %d
             ', 
-            array('forum_thread', 'forum_threadimage', $fids, $pageSize*($page-1), $pageSize)
+            array('forum_thread', $fids, $pageSize*($page-1), $pageSize)
         );
     }
 
     // 查询图片帖子总数
     public static function getImageListCount($fids) {
-        $count = DbUtils::getDzDbUtils(true)->queryRow('
+        return DbUtils::getDzDbUtils(true)->queryScalar('
             SELECT count(*) as num
-            FROM %t g INNER JOIN %t img 
-            ON g.tid = img.tid 
-            WHERE g.fid IN (%n)
-            AND g.displayorder >= 0
+            FROM %t
+            WHERE fid IN (%n)
+            AND displayorder >= 0
+            AND attachment = 2
             ', 
-            array('forum_thread', 'forum_threadimage', $fids)
+            array('forum_thread', $fids)
         );
-        return $count['num'];
     }
 }

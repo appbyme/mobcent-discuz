@@ -1,10 +1,8 @@
 
-
-body {overflow：scroll;}
-
 /*重写了Bootstrap*/
 .container {
     width: 90%;
+    /*width: 1200px;*/
 }
  .form-group {
     margin-bottom: 5px;
@@ -17,6 +15,11 @@ body {overflow：scroll;}
     width: 225px;
     font-size: 12px;
 }
+.form-group textarea {
+    width: 225px;
+    font-size: 12px;
+}
+
 .form-group label {
     padding-right: 0px;
 }
@@ -25,6 +28,38 @@ label {
 }
 .help-block {
     margin-bottom: 5px;
+}
+
+/* 对幻灯片样式的修改 */
+.carousel-indicators {
+    position: absolute;
+    left: 260px;
+    top: 130px;
+}
+.carousel-caption {
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    position: absolute;
+    left: 0px;
+    top: 98px;
+    overflow:hidden;
+}
+
+
+
+/*面板和模态框一样的效果*/
+.panel {
+    -webkit-border-radius: 6px;
+       -moz-border-radius: 6px;
+            border-radius: 6px;
+    outline: none;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+       -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+       -moz-background-clip: padding-box;
+            background-clip: padding-box;
 }
 
 #uidiy-main-view {
@@ -43,7 +78,7 @@ label {
 }
 
 /*手机中间显示的内容*/
-.mobleShow .moble-content{
+.mobleShow .moble-content {
     width: 320px;
     margin: 118px 0px 0px 30px;
     height: 570px;
@@ -147,7 +182,7 @@ label {
     position: absolute;
     right: 38px;
     top: 174px;
-    z-index: 10;
+    z-index: 100;
     display:none;
     font-size: 12px;
 }
@@ -157,13 +192,42 @@ label {
     width: 320px;
     height: 502px;
     overflow-y: auto;
+    overflow-x:hidden;
     padding: 5px;
-    /*background: orange;*/
 }
 
-.add-style-btn {
+.add-style-btn, .add-style-comp {
     width: 200px;
-    margin-top: 120px;
+    margin-top: 50px;
+}
+
+/* 风格区域 */
+.single-style {
+    width: 310px;
+    /*height: 200px;*/
+    margin: 5px auto 5px;
+    padding-bottom: 5px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+.style-content {
+    padding: 5px;
+    margin-bottom: 5px;
+    width: 300px;
+    /*height: 165px;*/
+}
+
+.style-title {
+    height: 30px;
+    width: 300px;
+}
+
+.style-area {
+    width: 300px;
+    height: 60px;
+    background: #e3e3e3;
+    margin-bottom: 5px;
 }
 
 /*添加风格弹出框*/
@@ -174,7 +238,20 @@ label {
     position: absolute;
     right: 38px;
     top: 174px;
-    z-index: 10;
+    z-index: 100;
+    display:none;
+    font-size: 12px;
+}
+
+/*添加组件弹出框*/
+.add-comp-pop {
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    position: absolute;
+    right: 38px;
+    top: 174px;
+    z-index: 100;
     display:none;
     font-size: 12px;
 }
@@ -218,15 +295,17 @@ label {
     position: absolute;
     right: 38px;
     bottom: 170px;
-    z-index: 10;
+    z-index: 100;
     display:none;
     font-size: 12px;
 }
 
-.play-border-add input[type=text], .pic-text-pop input[type=text], .add-style-pop input[type=text]{
+.play-border-add input[type=text], .pic-text-pop input[type=text], .add-style-pop input[type=text],
+.add-comp-pop input[type=text]
+{
     width: 150px;
 }
-.play-border-add select, .pic-text-pop select, .add-style-pop select {
+.play-border-add select, .pic-text-pop select, .add-style-pop select,.add-comp-pop select{
     width: 150px;
 }
 /*重写面板*/
@@ -239,13 +318,13 @@ label {
 
 /*三个加号*/
 .play-add-plug {
-    width: 300px;
+    width: 310px;
     height: 300px;
     border-radius: 5px;
     position: absolute;
-    right: 37px;
+    right: 32px;
     top: 188px;
-    z-index: 10;
+    z-index: 100;
     display:none;
     font-size: 12px;
 }
@@ -255,19 +334,26 @@ label {
 #operation {
     margin-top: 40px;
     padding-top: 30px;
-    /*border: 1px solid green;*/
     font-size: 12px;
 }
 
-/*模块管理*/
+/*模块管理 暂时不用*/
 #module-list {
-    height: 600px;
+    /*height: 500px;*/
     /*border: 1px solid #CCCCFF;*/
     /*border-radius: 5px;*/
     /*overflow: auto;*/
 }
+
+.module-management {
+    height: 500px;
+    max-height: 500px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
 #module-list .module {
-    width: 100px;
+    width: 99px;
     height: 120px;
     font-size: 12px;
     margin:2px 0px 10px 5px;
@@ -306,7 +392,7 @@ label {
 
 /*编辑内容*/
 .edit .form-group, .pic-text-pop .form-group {
-    margin-bottom: 0px;
+    margin-bottom: 5px;
 }
 
 .edit-middle {
@@ -322,6 +408,17 @@ label {
     width: 150px;
 }
 
+.edit .more-fastpost-btn {
+    width:225px;
+    margin-left:145px;
+}
+
+.quick-edit {
+    border-radius: 5px;
+    margin: 5px 0px 5px 0px;
+    padding: 5px 0px 5px 0px;
+}
+
 /*新写的模块编辑填出框*/
 .module-play {
     width: 99%;
@@ -330,17 +427,20 @@ label {
     border-radius: 5px;
     position: absolute;
     left: 15px;
-    top: 0px;
+    top: 30px;
     overflow-y:auto;
-    z-index: 100;
+    overflow-x:hidden;
+    z-index: 49;
 }
+
 .module-play .panel-body {
     max-height: 650px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 /*主要是弹出框面板的标题*/
 .module-play .panel-heading, .play-add-plug .panel-heading, .play-border-add .panel-heading, .pic-text-pop .panel-heading,
-.add-style-pop .panel-heading{
+.add-style-pop .panel-heading, .add-comp-pop .panel-heading {
     width: 100%;
     height: 40px;
 }
@@ -350,7 +450,6 @@ label {
 
 /*二级导航/添加导航列表*/
 .add-nav-list .component-view-container {
-    /*background: #D8EDCF;*/
     border-radius: 5px;
     margin: 5px 0px 5px 0px;
     padding: 5px 0px 5px 0px;
@@ -372,6 +471,7 @@ label {
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: rgba(0,0,0,0.1); 
+    background: white;
     /*background: #2E8BCE;*/
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
     /*-webkit-box-shadow: inset 0 0 6px #2E8BCE;*/
@@ -381,14 +481,62 @@ label {
     background: #2E8BCE;
 }
 
+/* 弹出框覆盖层 */
+.covering{
+    z-index: 50;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    opacity:0.4;
+    filter:alpha(opacity=40);
+    display:none
+}
 
-/*颜色*//*面板边框*/
+/* 对用到的按钮增加阴影的操作 */
+.btn-primary, .btn-default {
+    /*background: #66ADE8;*/
+   -webkit-border-radius: 4px;
+   -moz-border-radius: 4px;
+        border-radius: 4px;
+    outline: none;
+    -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+       -moz-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+       -moz-background-clip: padding-box;
+            background-clip: padding-box;
+}
+
+/* 对模块管理中的按钮样式修改 */
+#module-list .btn-xs {
+    padding:3px 6px;
+}
+
+/* 兼容代码，兼容左图右文弹出框样式 */
+.pic-text-pop .col-sm-2 {
+    padding-left: 15px;
+    width: 99px;
+}
+
+.pic-text-pop .col-sm-10 {
+    width: 150px;
+}
+
+.pic-text-pop .form-group textarea {
+    width: 150px;
+}
+
+/* 整体颜色的修改，主要是针对bootstrap的面板进行修改 */
 .panel-primary {
     border-color:#e3e3e3;
 }
 .panel-primary .panel-heading{
     background: #66ADE8
 }
+
 .btn-primary {
     background: #5FA7E5;
 }
@@ -397,8 +545,26 @@ label {
     padding:3px 6px;
 }
 
-/*tmp*/
-.msg-list img {
-    width: 320px;
-    height: 450px;
+/*手机页面显示，首页*/
+.content-list {
+    width:314px;
+    height:255px;
+    margin:5px auto 0px;
+    /*border:1px solid rgba(0,0,0,0.1);*/
+    border-radius:5px;
+    overflow:hidden;
+    /*background: green;*/
+}
+
+.content-list .list-group-item {
+    height:85px;
+    padding:5px 10px 5px 5px;
+}
+
+.content-list .list-group-item-text {
+    height:50px;
+    width:210px;
+    overflow:hidden; 
+    line-height:17px;
+    text-indent:25px;
 }
