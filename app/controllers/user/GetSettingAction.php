@@ -36,6 +36,7 @@ class GetSettingAction extends MobcentAction {
         $res['body']['portal'] = $this->_getPortalSetting();
         $res['body']['user'] = $this->_getUserSetting();
         $res['body']['message'] = $this->_getMessageSetting();
+        $res['body']['moduleList'] = PortalUtils::getModuleList(6); // 2014/11/4 门户资讯分类模块列表
 
         echo WebUtils::outputWebApi($res, '', false);
     }

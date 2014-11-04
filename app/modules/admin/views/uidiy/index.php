@@ -243,7 +243,7 @@
                     <div class="panel-body module-management">
                         <div id="module-list">
                             <div class="module last-module">
-                                <a href="." data-toggle="modal" class="module-add-btn"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
+                                <a class="module-add-btn"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
                                 <div>添加模块</div>
                             </div>
                         </div>
