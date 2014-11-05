@@ -266,9 +266,12 @@ class TopicAdminAction extends MobcentAction{
         }
         $jsonInfo['content'] = WebUtils::jsonDecode(rawurldecode($jsonInfo['content']));
         foreach ($jsonInfo['content'] as $k => $v ) {
-           switch ($v ["type"]) {
-               case 0 :
-                   $message .= $v ["infor"]."\r\n";
+            switch ($v ["type"]) {
+                case 0 :
+                // 解析文本的超链接, 暂时不处理 
+                // @author: xjp
+                // $v['infor'] = preg_replace('/(https?:\/\/\S+)/i', '[url=$1]$1[/url]', $v['infor']);
+                $message .= $v["infor"]."\r\n";
                    break;
                case 1 :
                    if(empty($aid_Img)) {

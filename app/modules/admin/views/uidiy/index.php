@@ -74,136 +74,17 @@
                         </div>
 
                         <!-- 添加风格区弹出框 -->
-                        <div class="add-style-pop">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title pull-left">添加风格区</h3>
-                                    <button type="button" class="close close-style-pop pull-right">&times;</button>
-                                </div>
-                                <form class="form-horizontal navitem-edit-form">
-                                    <div class="panel-body">
-                                        <form class="form-horizontal">
-
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">选择风格区: </label>
-                                                <div class="col-sm-4">
-                                                    <select class="form-control input-sm">
-                                                        <option >默认风格</option>
-                                                        <option >图片墙风格</option>
-                                                        <option >九宫格风格</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">是否显示标题：</label>
-                                                <div class="col-sm-8 text-left">
-                                                    <!-- 没加name -->
-                                                    <label class="radio-inline"><input type="radio"> 是</label>
-                                                    <label class="radio-inline"><input type="radio"> 否</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">风格区标题：</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control input-sm">
-                                                    <p class="help-block">输入1-9个汉字、数字或字母</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">标题位置：</label>
-                                                <div class="col-sm-8" style="padding:0px 0px 0px 15px;">
-                                                    <label class="radio-inline pull-left"><input type="radio"> 风格区顶部</label>
-                                                    <label class="radio-inline pull-left"><input type="radio"> 风格区底部</label>
-                                                </div>
-                                            </div>
-
-                                        </form> 
-                                    </div>
-                                </form>
-                                <div class="panel-footer text-right">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
-                                    <button type="button" class="btn btn-default btn-sm close-style-pop">取 消</button>
-                                </div>
-                            </div>
+                        <div id="custom-style-edit-dlg-view" class="add-style-pop">
                         </div>
 
-                        <!-- 添加组件弹出框 -->
-                        <div class="add-comp-pop">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title pull-left">添加组件</h3>
-                                    <button type="button" class="close close-comp-pop pull-right">&times;</button>
-                                </div>
-                                <form class="form-horizontal navitem-edit-form">
-                                    <div class="panel-body">
-                                        <form class="form-horizontal">
-
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">选择视窗类型: </label>
-                                                <div class="col-sm-4">
-                                                    <select class="form-control input-sm">
-                                                        <option value="">单栏样式(高)</option>
-                                                        <option value="">单栏样式(中)</option>
-                                                        <option value="">单栏样式(低)</option>
-                                                        <option value="">双栏样式(高)</option>
-                                                        <option value="">双栏样式(中)</option>
-                                                        <option value="">双栏样式(低)</option>
-                                                        <option value="">三栏样式(高)</option>
-                                                        <option value="">三栏样式(中)</option>
-                                                        <option value="">三栏样式(低)</option>
-                                                        <option value="">1+2样式</option>
-                                                        <option value="">2+1样式</option>
-                                                        <option value="">1+3样式</option>
-                                                        <option value="">3+1样式</option>
-                                                        <option value="">上1下2样式</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                        </form> 
-                                    </div>
-                                </form>
-                                <div class="panel-footer text-right">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
-                                    <button type="button" class="btn btn-default btn-sm close-comp-pop">取 消</button>
-                                </div>
-                            </div>
+                        <!-- 自定义添加组件弹出框 -->
+                        <div id="custom-style-component-edit-dlg-view" class="add-comp-pop">
                         </div>
 
                         <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
 
+                        <!-- 模块于手机内的编辑视图 -->
                         <div id="module-edit-mobile-view">
-                        </div>
-
-                        <!-- 添加风格 -->
-                        <div class="add-style hidden">
-						    <div class="single-style">
-						    	<div class="style-content">
-						    		<div class="style-title">
-						    			<p class="pull-left">此处是风格区标题</p>
-						    			<a class="pull-right" href="javascript:void()">更多</a>
-						    		</div>
-						    		<div class="style-area">
-						    			分割区示意
-						    		</div>
-						    		<div class="style-area">
-										分割区示意
-						    		</div>
-						    		<div class="style-title">
-						    			<p class="pull-left">此处是风格区标题</p>
-						    			<a class="pull-right" href="javascript:void()">更多</a>
-						    		</div>
-						    	</div>
-						    	<button type="button" class="btn btn-primary btn-xs close-comp-pop">继续添加组件</button>
-						    	<button type="button" class="btn btn-primary btn-xs">删除该风格区</button>
-						    </div>
-
-                            <button type="button" class="btn btn-primary add-style-btn close-style-pop hidden">点击添加风格区</button>
-                            <button type="button" class="btn btn-primary add-style-btn close-style-pop">继续添加风格区</button>
-                            <button type="button" class="btn btn-primary add-style-comp close-comp-pop">点击添加组件</button>
                         </div>
 
                         <!-- 手机底部导航 -->
@@ -222,7 +103,7 @@
 
             <div class="col-sm-xs-8 col-sm-8 col-md-8" id="operation">
 
-                <div id="module-edit-dlg-view">
+                <div id="module-edit-dlg-view" class="module-play">
                 </div>
 
                 <div class="panel panel-primary">
@@ -272,6 +153,7 @@
         rootUrl: '<?php echo $this->rootUrl; ?>',
         moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule(), 'utf-8'); ?>,
         componentInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initComponent(), 'utf-8'); ?>,
+        layoutInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initLayout(), 'utf-8'); ?>,
         moduleInitList: <?php echo WebUtils::jsonEncode($modules, 'utf-8'); ?>,
         navItemInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initNavItem(), 'utf-8'); ?>,
         navItemInitList: <?php echo WebUtils::jsonEncode($navInfo['navItemList'], 'utf-8'); ?>,
@@ -415,60 +297,44 @@
     </div>
     </script>
     <script type="text/template" id="module-edit-template">
-    <div class="module-play">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title pull-left"><%= id != 0 ? '编辑模块' : '添加模块' %></h3>
-                <button type="button" class="close close-module-play pull-right">&times;</button>
-            </div>
-            <form class="module-edit-form form-horizontal">
-            <div class="panel-body">
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">模块名称：</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control sm" name="moduleTitle" value="<%- title %>" placeholder="">
-                            <p class="help-block">请输入1-4个字母、数字或汉字作为名称</p>
-                        </div>
-                    </div>
-
-                    <div class="form-group hidden">
-                        <label for="" class="col-sm-2 control-label">编辑图标：</label>
-                        <div class="col-sm-10">
-                            <input type="file" id="" >
-                            <p class="help-block">请上传1:1比例的JPG或PNG格式图片作为图标</p>
-                        </div>
-                    </div>
-
-                    <div class="form-group hidden">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <img src="" style="width:100px;height:100px;" class="img-rounded">
-                        </div>
-                    </div>
-
-                    <% var isModuleTypeSelect = id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER; %>
-                    <div class="<%= !isModuleTypeSelect ? 'hidden' : '' %> form-group">
-                        <label class="col-sm-2 control-label">模块样式: </label>
-                        <div class="col-sm-10">
-                        <select id="moduleType" name="moduleType" class="form-control">
-                            <option value="<%= MODULE_TYPE_FASTPOST %>" <%= type == MODULE_TYPE_FASTPOST ? 'selected' : '' %> class="<%= isModuleTypeSelect ? 'hidden' : '' %>">快速发帖</option>
-                            <option value="<%= MODULE_TYPE_FULL %>" <%= type == MODULE_TYPE_FULL ? 'selected' : '' %>>单页面</option>
-                            <option value="<%= MODULE_TYPE_SUBNAV %>" <%= type == MODULE_TYPE_SUBNAV ? 'selected' : '' %>>二级导航</option>
-                            <option value="<%= MODULE_TYPE_NEWS %>" <%= type == MODULE_TYPE_NEWS ? 'selected' : '' %>>左图右文</option>
-                            <option value="<%= MODULE_TYPE_CUSTOM %>" <%= type == MODULE_TYPE_CUSTOM ? 'selected' : '' %>>自定义页面</option>
-                        </select>
-                        </div>
-                    </div>
-
-                    <div id="module-edit-detail-view">
-                    </div>
-
-            </div>
-            <div class="panel-footer text-right">
-                <input type="submit" class="btn btn-primary" value="确定" >  
-                <button type="button" class="btn btn-default close-module-play">取 消</button>
-            </div>
-            </form>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title pull-left"><%= id != 0 ? '编辑模块' : '添加模块' %></h3>
+            <button type="button" class="close close-module-play pull-right">&times;</button>
         </div>
+        <form class="module-edit-form form-horizontal">
+        <div class="panel-body">
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">模块名称：</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control sm" name="moduleTitle" value="<%- title %>" placeholder="">
+                        <p class="help-block">请输入1-4个字母、数字或汉字作为名称</p>
+                    </div>
+                </div>
+
+                <% var isModuleTypeSelect = id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER; %>
+                <div class="<%= !isModuleTypeSelect ? 'hidden' : '' %> form-group">
+                    <label class="col-sm-2 control-label">模块样式: </label>
+                    <div class="col-sm-10">
+                    <select id="moduleType" name="moduleType" class="form-control">
+                        <option value="<%= MODULE_TYPE_FASTPOST %>" <%= type == MODULE_TYPE_FASTPOST ? 'selected' : '' %> class="<%= isModuleTypeSelect ? 'hidden' : '' %>">快速发帖</option>
+                        <option value="<%= MODULE_TYPE_FULL %>" <%= type == MODULE_TYPE_FULL ? 'selected' : '' %>>单页面</option>
+                        <option value="<%= MODULE_TYPE_SUBNAV %>" <%= type == MODULE_TYPE_SUBNAV ? 'selected' : '' %>>二级导航</option>
+                        <option value="<%= MODULE_TYPE_NEWS %>" <%= type == MODULE_TYPE_NEWS ? 'selected' : '' %>>左图右文</option>
+                        <option value="<%= MODULE_TYPE_CUSTOM %>" <%= type == MODULE_TYPE_CUSTOM ? 'selected' : '' %>>自定义页面</option>
+                    </select>
+                    </div>
+                </div>
+
+                <div id="module-edit-detail-view">
+                </div>
+
+        </div>
+        <div class="panel-footer text-right">
+            <input type="submit" class="btn btn-primary" value="确定" >  
+            <button type="button" class="btn btn-default close-module-play">取 消</button>
+        </div>
+        </form>
     </div>
     </script>
     <!-- 模块于手机内的编辑模板 -->
@@ -588,9 +454,17 @@
            <button type="button" class="btn btn-primary add-news-component-item-btn">点击添加更多</button>
         </div>
     </div>
+    <!-- 自定义 -->
     <% } else if (type == MODULE_TYPE_CUSTOM) { %>
+    <!-- 添加风格 -->
+    <div class="add-style">
+        <div class="custom-style-item-container">
+        </div>
+        <button type="button" class="btn btn-primary add-style-btn">点击添加风格区</button>
+    </div>
     <% } %> 
     </script>
+    <!-- 模块编辑模板 -->
     <script type="text/template" id="module-edit-detail-template">
     <% if (id == MODULE_ID_DISCOVER) { %>
     <% } else if (id == MODULE_ID_FASTPOST) { %>
@@ -665,7 +539,7 @@
     </div>
     </script>
     <script type="text/template" id="component-template">
-    <div class="component-view quick-edit" id="component-view-<%= id %>">
+    <div class="quick-edit" id="component-view-<%= id %>">
 
         <div class="form-group">
             <label for="" class="col-sm-2 control-label">导航名称：</label>
@@ -679,7 +553,42 @@
                 <textarea class="form-control" name="componentDesc[]" rows="3" style="resize:none;margin-bottom:8px;"><%= desc %></textarea>
             </div>
         </div>
-
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">编辑图标：</label>
+            <div class="col-sm-10">
+                <input type="file" name="componentIcon[]" value="<%= icon %>">
+                <p class="help-block">请上传1:1比例的JPG或PNG格式图片作为图标</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <img src="<%= icon %>" style="width:100px;height:100px;" class="img-rounded">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">图标样式: </label>
+            <div class="col-sm-10">
+                <select class="form-control" name="componentIconStyle[]">
+                    <option value="<%= COMPONENT_ICON_STYLE_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_IMAGE ? 'selected' : '' %>>单张图片</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_IMAGE ? 'selected' : '' %>>上图下文</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN ? 'selected' : '' %>>文字覆盖在下</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_CIRCLE %>" <%= iconStyle == COMPONENT_ICON_STYLE_CIRCLE ? 'selected' : '' %>>圆形</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_NEWS %>" <%= iconStyle == COMPONENT_ICON_STYLE_NEWS ? 'selected' : '' %>>左图右文</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_UP_VIDEO %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_UP_VIDEO ? 'selected' : '' %>>视频_文字覆盖在上</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN_VIDEO %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN_VIDEO ? 'selected' : '' %>>视频_文字覆盖在下</option>
+                </select> 
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">页面样式：</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="componentStyle[]">
+                    <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
+                    <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
+                    <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式</option>
+                </select> 
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">链接地址：</label>
             <div class="col-sm-10">
@@ -705,7 +614,7 @@
 
         <div id="component-view-<% print(COMPONENT_TYPE_FORUMLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_FORUMLIST ? '' : 'hidden' %>">
 
-            <div class="form-group">
+            <div class="form-group hidden">
                 <label class="col-sm-2 control-label">设置样式：</label>
                 <div class="col-sm-10">
                     <div>
@@ -720,7 +629,6 @@
                     </div>
                 </div>
             </div>
-
 
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_NEWSLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_NEWSLIST ? '' : 'hidden' %>">
@@ -778,10 +686,9 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">发表板块：</label>
                 <div class="col-sm-10">
-                    <select class="input-sm" name="fastpostForumId[]">
-                        <option value="0" <%= extParams.forumId == 0 ? 'selected' : '' %>>全部版块</option>
+                    <select class="input-sm" name="fastpostForumIds[]" multiple>
                         <?php foreach ($forumList as $fid => $title) { ?>
-                            <option value="<?php echo $fid ?>" <%= extParams.forumId == <?php echo $fid; ?> ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
+                            <option value="<?php echo $fid ?>" <%= extParams.fastpostForumIds.indexOf(<?php echo $fid; ?>) != -1 ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
                         <?php } ?>
                     </select>
                 </div>
@@ -796,31 +703,15 @@
                     </label>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-4">
-                    <button class="remove-component-btn btn btn-primary btn-sm" style="width:225px;">删　除</button>
-                </div>
-            </div>
         </div>
         <!-- sign 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_SIGN+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SIGN ? '' : 'hidden' %>">
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-4">
-                    <button class="remove-component-btn btn btn-primary btn-sm" style="width:225px;">删　除</button>
-                </div>
-            </div>
         </div>
         <div class="form-group">
-            <label for="" class="col-sm-2 control-label">页面样式：</label>
-            <div class="col-sm-10">
-                <select class="form-control" name="componentStyle[]">
-                    <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
-                    <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
-                    <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式</option>
-                </select> 
+            <div class="col-sm-offset-2 col-sm-4">
+                <button class="remove-component-btn btn btn-primary btn-sm" style="width:225px;">删　除</button>
             </div>
         </div>
-
     </div>
     </script>
     <!-- 添加/编辑 左图右文模块 组件模板 -->
@@ -856,10 +747,151 @@
         </div>
     </div>
     </script>
+    <!-- 添加/编辑 自定义模块 风格组件模板 -->
+    <script type="text/template" id="custom-style-edit-dlg-template">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title pull-left">添加风格区</h3>
+            <button type="button" class="close style-close-btn pull-right">&times;</button>
+        </div>
+        <form class="form-horizontal style-edit-form">
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">选择风格区: </label>
+                <div class="col-sm-4">
+                    <select class="form-control input-sm" name="layoutStyle">
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_DEFAULT %>" <%= style == COMPONENT_STYLE_LAYOUT_DEFAULT ? 'selected' : '' %>>默认风格</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_IMAGE %>" <%= style == COMPONENT_STYLE_LAYOUT_IMAGE ? 'selected' : '' %>>图片墙风格</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_SUDOKU %>" <%= style == COMPONENT_STYLE_LAYOUT_SUDOKU ? 'selected' : '' %>>九宫格风格</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">是否显示标题：</label>
+                <div class="col-sm-8 text-left">
+                    <label class="radio-inline">
+                    <input class="isShowStyleHeaderRadio" type="radio" name="isShowStyleHeader" <%= extParams.styleHeader.isShow ? 'checked' : '' %> value="1">是</label>
+                    <label class="radio-inline">
+                    <input class="isShowStyleHeaderRadio" type="radio" name="isShowStyleHeader" <%= !extParams.styleHeader.isShow ? 'checked' : '' %> value="0">否</label>
+                </div>
+            </div>
+
+            <div class="style-header-container">
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">风格区标题：</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control input-sm" name="styleHeaderTitle" value="<%= extParams.styleHeader.title %>">
+                    <p class="help-block">输入1-9个汉字、数字或字母</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">标题位置：</label>
+                <div class="col-sm-8" style="padding:0px 0px 0px 15px;">
+                    <label class="radio-inline pull-left">
+                    <input type="radio" name="styleHeaderPosition" <%= extParams.styleHeader.position ? 'checked' : '' %> value="1">风格区顶部</label>
+                    <label class="radio-inline pull-left">
+                    <input type="radio" name="styleHeaderPosition" <%= !extParams.styleHeader.position ? 'checked' : '' %> value="0">风格区底部</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-4 control-label">是否显示更多: </label>
+                <div class="col-sm-8" style="padding:0px 0px 0px 15px;">
+                    <label class="radio-inline pull-left">
+                    <input class="isShowStyleHeaderMoreRadio" type="radio" value="1" name="isShowStyleHeaderMore" <%= extParams.styleHeader.isShowMore ? 'checked' : '' %>>是</label>
+                    <label class="radio-inline pull-left">
+                    <input class="isShowStyleHeaderMoreRadio" type="radio" value="0" name="isShowStyleHeaderMore" <%= !extParams.styleHeader.isShowMore ? 'checked' : '' %>>否</label>
+                </div>
+            </div>
+
+            <div class="component-view-container">
+            </div>
+
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+            <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+            <button type="button" class="btn btn-default btn-sm style-close-btn">取 消</button>
+        </div>
+        </form>
+    </div>              
+    </script>
+    <!-- 添加/编辑 自定义模块 风格内组件模板 -->
+    <script type="text/template" id="custom-style-component-edit-dlg-template">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title pull-left">添加组件</h3>
+            <button type="button" class="close pull-right style-component-close-btn">&times;</button>
+        </div>
+        <form class="form-horizontal style-component-edit-form">
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">选择视窗类型: </label>
+                <div class="col-sm-4">
+                    <select class="form-control input-sm layoutStyleSelect" name="layoutStyle">
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH ? 'selected' : '' %>>单栏样式(高)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW ? 'selected' : '' %>>单栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH ? 'selected' : '' %>>双栏样式(高)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_MID ? 'selected' : '' %>>双栏样式(中)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_LOW ? 'selected' : '' %>>双栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH ? 'selected' : '' %>>三栏样式(高)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_MID ? 'selected' : '' %>>三栏样式(中)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_LOW ? 'selected' : '' %>>三栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_FOUR_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_FOUR_COL ? 'selected' : '' %>>四栏样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW ? 'selected' : '' %>>1+2样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW ? 'selected' : '' %>>1+3样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_SLIDER %>" <%= style == COMPONENT_STYLE_LAYOUT_SLIDER ? 'selected' : '' %>>幻灯片样式</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="component-view-container">
+            </div>
+            <button class="add-component-item-btn btn btn-primary btn-sm" style="width:225px;">添加组件</button>
+        </div>
+        <div class="panel-footer text-right">
+            <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+            <button type="button" class="btn btn-default btn-sm style-component-close-btn">取 消</button>
+        </div>
+        </form>
+    </div>
+    </script>
+    <!-- 自定义模块 于手机ui的风格模板 -->
+    <script type="text/template" id="custom-style-item-template">
+    <div class="single-style">
+        <div class="style-content">
+            <div class="style-title <%= extParams.styleHeader.isShow && extParams.styleHeader.position ? '' : 'hidden' %>">
+                <p class="pull-left"><%= extParams.styleHeader.title ? extParams.styleHeader.title : '此处是风格区标题' %></p>
+                <span class="pull-right" <%= extParams.styleHeader.isShowMore ? '' : 'hidden' %>>更多</span>
+            </div>
+            <div class="custom-style-component-item-container">
+            </div>
+            <button type="button" class="btn btn-primary btn-xs add-style-component-btn">点击添加组件</button>
+            <div class="style-title <%= extParams.styleHeader.isShow && !extParams.styleHeader.position ? '' : 'hidden' %>">
+                <p class="pull-left"><%= extParams.styleHeader.title ? extParams.styleHeader.title : '此处是风格区标题' %></p>
+                <span class="pull-right" <%= extParams.styleHeader.isShowMore ? '' : 'hidden' %>>更多</span>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary btn-xs edit-custom-style-item-btn">编辑该风格区</button>
+        <button type="button" class="btn btn-primary btn-xs remove-custom-style-item-btn">删除该风格区</button>
+    </div>
+    </script>
+    <!-- 自定义模块 于手机ui的组件模板 -->
+    <script type="text/template" id="custom-style-component-item-template">
+    <div class="style-area">
+        分割区示意
+    </div>
+    <div class="text-left pull-left">
+        <button class="edit-style-component-item-btn btn btn-primary btn-xs">编辑</button>
+        <button class="remove-style-component-item-btn btn btn-primary btn-xs">删除</button>
+    </div>
+    </script>
+
     <!-- 页面弹出样式用到的js -->
     <script type="text/javascript">
         $(function() {
-
             // 底部导航拖动
             // $(".nav-move").sortable();
 
@@ -872,22 +904,6 @@
                     $(this).toggleClass('active');
                 }
             );
-
-            // 添加风格区弹出框切换
-            $('.close-style-pop').on({
-                click:function() {
-                    $('.covering').fadeToggle();
-                    $('.add-style-pop').fadeToggle();
-                }
-            })
-
-            // 添加组件弹出框切换
-            $('.close-comp-pop').on({
-                click:function() {
-                    $('.covering').fadeToggle();
-                    $('.add-comp-pop').fadeToggle();
-                }
-            })
         })
     </script>
 </body>

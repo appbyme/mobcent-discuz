@@ -431,6 +431,7 @@ label {
     overflow-y:auto;
     overflow-x:hidden;
     z-index: 49;
+    display: none;
 }
 
 .module-play .panel-body {
