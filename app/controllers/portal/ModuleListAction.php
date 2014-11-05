@@ -21,13 +21,7 @@ class ModuleListAction extends MobcentAction {
 
     // 获取门户资讯列表
     private function _getModuleList() {
-        $moduleList = AppbymePoralModule::getModuleList();
-        $lists = array();
-        foreach ($moduleList as $module) {
-            $list['moduleId'] = (int)$module['mid'];
-            $list['moduleName'] = (string)$module['name'];
-            $lists[] = $list;
-        }
-        return $lists;
+        // 封装:PortalUtils.php,6:截取的数组长度 Date:2014/11/4
+        return PortalUtils::getModuleList(6);
     }
 }

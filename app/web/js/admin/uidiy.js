@@ -7,7 +7,6 @@
  */
 
 $(function () {
-
     var wrapComponent = function f(component) {
         var tmpComponentList = [];
         _.each(component.componentList, function (value) {
@@ -581,6 +580,7 @@ $(function () {
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
+            $('.carousel-example-generic_one').carousel();
             return this;
         },
         selectTopbar: function (event) {
