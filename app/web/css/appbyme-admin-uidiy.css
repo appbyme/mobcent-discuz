@@ -294,7 +294,7 @@ label {
     right: 38px;
     top: 174px;
     z-index: 100;
-    /*display:none;*/
+    display:none;
     font-size: 12px;
 }
 
@@ -474,6 +474,7 @@ label {
     overflow-y:auto;
     overflow-x:hidden;
     z-index: 49;
+    display: none;
 }
 
 .module-play .panel-body {

@@ -31,6 +31,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const MODULE_TYPE_CUSTOM = 'custom';
 
     const MODULE_STYLE_CARD = 'card';
+    const MODULE_STYLE_FLAT = 'flat';
 
     // mc_forum_top_bar_button5
     // mc_forum_icon27
@@ -59,10 +60,43 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_TYPE_SURROUDING_USERLIST = 'surroudingUserlist';
     const COMPONENT_TYPE_RECOMMEND_USERLIST = 'recommendUserlist';
 
+    const COMPONENT_ICON_STYLE_IMAGE = 'image';
+    const COMPONENT_ICON_STYLE_TEXT_IMAGE = 'textImage';
+    const COMPONENT_ICON_STYLE_TEXT_OVERLAP_UP = 'textOverlapUp';
+    const COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN = 'textOverlapDown';
+    const COMPONENT_ICON_STYLE_CIRCLE = 'circle';
+    const COMPONENT_ICON_STYLE_NEWS = 'news';
+    const COMPONENT_ICON_STYLE_TEXT_OVERLAP_UP_VIDEO = 'textOverlapUp_Video';
+    const COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN_VIDEO = 'textOverlapDown_Video';
+
     const COMPONENT_STYLE_FLAT = 'flat';
     const COMPONENT_STYLE_CARD = 'card';
     const COMPONENT_STYLE_IMAGE = 'image';
+
     const COMPONENT_STYLE_LAYOUT_DEFAULT = 'layoutDefault';
+    const COMPONENT_STYLE_LAYOUT_IMAGE = 'layoutImage';
+    const COMPONENT_STYLE_LAYOUT_SUDOKU = 'layoutSudoku';
+    const COMPONENT_STYLE_LAYOUT_SLIDER = 'layoutSlider';
+
+    const COMPONENT_STYLE_LAYOUT_ONE_COL = 'layoutOneCol';
+    const COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH = 'layoutOneCol_High';
+    const COMPONENT_STYLE_LAYOUT_ONE_COL_MID = 'layoutOneCol_Mid';
+    const COMPONENT_STYLE_LAYOUT_ONE_COL_LOW = 'layoutOneCol_Low';
+    const COMPONENT_STYLE_LAYOUT_TWO_COL = 'layoutTwoCol';
+    const COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH = 'layoutTwoCol_High';
+    const COMPONENT_STYLE_LAYOUT_TWO_COL_MID = 'layoutTwoCol_Mid';
+    const COMPONENT_STYLE_LAYOUT_TWO_COL_LOW = 'layoutTwoCol_Low';
+    const COMPONENT_STYLE_LAYOUT_THREE_COL = 'layoutThreeCol';
+    const COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH = 'layoutThreeCol_High';
+    const COMPONENT_STYLE_LAYOUT_THREE_COL_MID = 'layoutThreeCol_Mid';
+    const COMPONENT_STYLE_LAYOUT_THREE_COL_LOW = 'layoutThreeCol_Low';
+    const COMPONENT_STYLE_LAYOUT_FOUR_COL = 'layoutFourCol';
+    const COMPONENT_STYLE_LAYOUT_FOUR_COL_HIGH = 'layoutFourCol_High';
+    const COMPONENT_STYLE_LAYOUT_FOUR_COL_MID = 'layoutFourCol_Mid';
+    const COMPONENT_STYLE_LAYOUT_FOUR_COL_LOW = 'layoutFourCol_Low';
+    const COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW = 'layoutOneColTwoRow';
+    const COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW = 'layoutOneColThreeRow';
+
     const COMPONENT_STYLE_DISCOVER_DEFAULT = 'discoverDefault';
     const COMPONENT_STYLE_DISCOVER_CUSTOM = 'discoverCustom';
     const COMPONENT_STYLE_DISCOVER_SLIDER = 'discoverSlider';
@@ -220,12 +254,15 @@ class AppbymeUIDiyModel extends DiscuzAR
         return array(
             'id' => '',
             'type' => self::COMPONENT_TYPE_DEFAULT,
+            'style' => self::COMPONENT_STYLE_FLAT,
             'title' => '',
             'desc' => '',
             'icon' => '',
-            'style' => self::COMPONENT_STYLE_FLAT,
+            'iconStyle' => self::COMPONENT_ICON_STYLE_IMAGE,
             'componentList' => array(),
-            'extParams' => array('padding' => '',),
+            'extParams' => array(
+                'fastpostForumIds' => array(),
+            ),
         );
     }
 
@@ -247,13 +284,25 @@ class AppbymeUIDiyModel extends DiscuzAR
                             'type' => self::COMPONENT_TYPE_USERINFO,
                         )),
                         array_merge(self::initComponent(), array(
+                            'title' => '周边用户',
+                            'type' => self::COMPONENT_TYPE_SURROUDING_USERLIST,
+                        )),
+                        array_merge(self::initComponent(), array(
+                            'title' => '周边帖子',
+                            'type' => self::COMPONENT_TYPE_SURROUDING_POSTLIST,
+                        )),
+                        array_merge(self::initComponent(), array(
+                            'title' => '推荐用户',
+                            'type' => self::COMPONENT_TYPE_RECOMMEND_USERLIST,
+                        )),
+                        array_merge(self::initComponent(), array(
                             'title' => '设置',
                             'type' => self::COMPONENT_TYPE_SETTING,
                         )),
-                        array_merge(self::initComponent(), array(
-                            'title' => '关于',
-                            'type' => self::COMPONENT_TYPE_ABOAT,
-                        )),
+                        // array_merge(self::initComponent(), array(
+                        //     'title' => '关于',
+                        //     'type' => self::COMPONENT_TYPE_ABOAT,
+                        // )),
                     ),
                 )),
                 array_merge(self::initLayout(), array(
