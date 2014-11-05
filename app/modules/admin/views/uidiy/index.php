@@ -18,7 +18,6 @@
 </head>
 <body>
 
-
 <div class="covering"></div>
 
 <?php global $_G; ?>
@@ -48,222 +47,332 @@
       </div>
     </nav>
     
-
-
     <div id="uidiy-main-view">
+        <div class="container" style="width:1200px;height:800px;">
+            <div class="row">
 
-    <div class="container" style="width:1200px;height:800px;">
-        <div class="row">
+                <div class="col-sm-xs-4 col-sm-4 col-md-4">
+                    <div class="mobleShow">
 
-            <div class="col-sm-xs-4 col-sm-4 col-md-4">
-                <div class="mobleShow">
+                        <div class="moble-content"> 
 
-                    <div class="moble-content"> 
+                            <div id="navitem-edit-dlg-view" class="play-border-add">
+                            </div>
+                            <div id="navitem-remove-dlg-view" class="play-border-add">
+                            </div>
 
-                        <div id="navitem-edit-dlg-view" class="play-border-add">
-                        </div>
-                        <div id="navitem-remove-dlg-view" class="play-border-add">
-                        </div>
+                            <!-- 发现下方加号弹出框 -->
+                            <div id="module-topbar-dlg-view" class="play-add-plug">
+                            </div>
 
-                        <!-- 发现下方加号弹出框 -->
-                        <div id="module-topbar-dlg-view" class="play-add-plug">
-                        </div>
+                            <!-- 左图右文添加/编辑弹出框 -->
+                            <div id="news-component-edit-dlg-view" class="pic-text-pop">
+                            </div>
 
-                        <!-- 左图右文添加/编辑弹出框 -->
-                        <div id="news-component-edit-dlg-view" class="pic-text-pop">
-                        </div>
-
-                        <!-- 添加风格区弹出框 -->
-                        <div class="add-style-pop">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title pull-left">添加风格区</h3>
-                                    <button type="button" class="close close-style-pop pull-right">&times;</button>
-                                </div>
-                                <form class="form-horizontal navitem-edit-form">
-                                    <div class="panel-body">
-                                        <form class="form-horizontal">
-
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">选择风格区: </label>
-                                                <div class="col-sm-4">
-                                                    <select class="form-control input-sm">
-                                                        <option >默认风格</option>
-                                                        <option >图片墙风格</option>
-                                                        <option >九宫格风格</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">是否显示标题：</label>
-                                                <div class="col-sm-8 text-left">
-                                                    <!-- 没加name -->
-                                                    <label class="radio-inline"><input type="radio"> 是</label>
-                                                    <label class="radio-inline"><input type="radio"> 否</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">风格区标题：</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control input-sm">
-                                                    <p class="help-block">输入1-9个汉字、数字或字母</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">标题位置：</label>
-                                                <div class="col-sm-8" style="padding:0px 0px 0px 15px;">
-                                                    <label class="radio-inline pull-left"><input type="radio"> 风格区顶部</label>
-                                                    <label class="radio-inline pull-left"><input type="radio"> 风格区底部</label>
-                                                </div>
-                                            </div>
-
-                                        </form> 
+                            <!-- 添加风格区弹出框 -->
+                            <div class="add-style-pop">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title pull-left">添加风格区</h3>
+                                        <button type="button" class="close close-style-pop pull-right">&times;</button>
                                     </div>
-                                </form>
-                                <div class="panel-footer text-right">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
-                                    <button type="button" class="btn btn-default btn-sm close-style-pop">取 消</button>
+                                    <form class="form-horizontal navitem-edit-form">
+                                        <div class="panel-body">
+                                            <form class="form-horizontal">
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">选择风格区: </label>
+                                                    <div class="col-sm-4">
+                                                        <select class="form-control input-sm">
+                                                            <option >默认风格</option>
+                                                            <option >图片墙风格</option>
+                                                            <option >九宫格风格</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">是否显示标题：</label>
+                                                    <div class="col-sm-8 text-left">
+                                                        <!-- 没加name -->
+                                                        <label class="radio-inline"><input type="radio"> 是</label>
+                                                        <label class="radio-inline"><input type="radio"> 否</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">风格区标题：</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm">
+                                                        <p class="help-block">输入1-9个汉字、数字或字母</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">标题位置：</label>
+                                                    <div class="col-sm-8" style="padding:0px 0px 0px 15px;">
+                                                        <label class="radio-inline pull-left"><input type="radio"> 风格区顶部</label>
+                                                        <label class="radio-inline pull-left"><input type="radio"> 风格区底部</label>
+                                                    </div>
+                                                </div>
+
+                                            </form> 
+                                        </div>
+                                    </form>
+                                    <div class="panel-footer text-right">
+                                        <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+                                        <button type="button" class="btn btn-default btn-sm close-style-pop">取 消</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- 添加组件弹出框 -->
-                        <div class="add-comp-pop">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title pull-left">添加组件</h3>
-                                    <button type="button" class="close close-comp-pop pull-right">&times;</button>
+                            <!-- 添加组件弹出框 -->
+                            <div class="add-comp-pop">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title pull-left">添加组件</h3>
+                                        <button type="button" class="close close-comp-pop pull-right">&times;</button>
+                                    </div>
+                                    <form class="form-horizontal navitem-edit-form">
+                                        <div class="panel-body">
+                                            <form class="form-horizontal">
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">选择视窗类型: </label>
+                                                    <div class="col-sm-4">
+                                                        <select class="form-control input-sm">
+                                                            <option value="">单栏样式(高)</option>
+                                                            <option value="">单栏样式(中)</option>
+                                                            <option value="">单栏样式(低)</option>
+                                                            <option value="">双栏样式(高)</option>
+                                                            <option value="">双栏样式(中)</option>
+                                                            <option value="">双栏样式(低)</option>
+                                                            <option value="">三栏样式(高)</option>
+                                                            <option value="">三栏样式(中)</option>
+                                                            <option value="">三栏样式(低)</option>
+                                                            <option value="">1+2样式</option>
+                                                            <option value="">2+1样式</option>
+                                                            <option value="">1+3样式</option>
+                                                            <option value="">3+1样式</option>
+                                                            <option value="">上1下2样式</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </form> 
+                                        </div>
+                                    </form>
+                                    <div class="panel-footer text-right">
+                                        <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+                                        <button type="button" class="btn btn-default btn-sm close-comp-pop">取 消</button>
+                                    </div>
                                 </div>
-                                <form class="form-horizontal navitem-edit-form">
-                                    <div class="panel-body">
-                                        <form class="form-horizontal">
+                            </div>
 
+                            <!-- 添加幻灯片弹出框 -->
+                            <div class="add-slide-pop">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title pull-left">添加幻灯片</h3>
+                                        <button type="button" class="close close-add-slide pull-right">&times;</button>
+                                    </div>
+                                    <form class="form-horizontal navitem-edit-form">
+                                        <div class="panel-body">
                                             <div class="form-group">
-                                                <label class="col-sm-4 control-label">选择视窗类型: </label>
+                                                <label class="col-sm-4 control-label">上传图片: </label>
                                                 <div class="col-sm-4">
-                                                    <select class="form-control input-sm">
-                                                        <option value="">单栏样式(高)</option>
-                                                        <option value="">单栏样式(中)</option>
-                                                        <option value="">单栏样式(低)</option>
-                                                        <option value="">双栏样式(高)</option>
-                                                        <option value="">双栏样式(中)</option>
-                                                        <option value="">双栏样式(低)</option>
-                                                        <option value="">三栏样式(高)</option>
-                                                        <option value="">三栏样式(中)</option>
-                                                        <option value="">三栏样式(低)</option>
-                                                        <option value="">1+2样式</option>
-                                                        <option value="">2+1样式</option>
-                                                        <option value="">1+3样式</option>
-                                                        <option value="">3+1样式</option>
-                                                        <option value="">上1下2样式</option>
-                                                    </select>
+                                                    <input type="file" class="control-label">
                                                 </div>
                                             </div>
 
-                                        </form> 
+                                            <!-- 图片、链接地址、下拉框开始 -->
+                                            <div class="form-group slide-list">
+                                                <div class="pull-left">
+                                                    <img src="" style="width:50px;height:50px;" class="img-rounded">
+                                                </div>
+                                                <!-- 中间class=”form-group是链接地址的开始“ -->
+                                                <div class="pull-left slide-select">
+
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">链接地址: </label>
+                                                        <div class="col-sm-4">
+                                                            <select name="" class="form-control">
+                                                                <option value="">板块列表</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- 图片、链接地址、下拉框结束 -->
+
+                                            <!-- 图片、链接地址、下拉框开始 -->
+                                            <div class="form-group slide-list">
+                                                <div class="pull-left">
+                                                    <img src="" style="width:50px;height:50px;" class="img-rounded">
+                                                </div>
+                                                <!-- 中间class=”form-group是链接地址的开始“ -->
+                                                <div class="pull-left slide-select">
+
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label">链接地址: </label>
+                                                        <div class="col-sm-4">
+                                                            <select name="" class="form-control">
+                                                                <option value="">板块列表</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            <!-- 图片、链接地址、下拉框结束 -->
+
+                                        </div>
+                                    </form> 
+                                    <div class="panel-footer text-right">
+                                        <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+                                        <button type="button" class="btn btn-default btn-sm close-add-slide">取 消</button>
                                     </div>
-                                </form>
-                                <div class="panel-footer text-right">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
-                                    <button type="button" class="btn btn-default btn-sm close-comp-pop">取 消</button>
+                                </div>
+                            </div>
+
+                            <!-- 添加频道弹出框 -->
+                            <!-- 和添加导航底部导航基本一样 -->
+                            <div class="add-channel-pop">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title pull-left">添加频道</h3>
+                                        <button type="button" class="close close-add-channel pull-right">&times;</button>
+                                    </div>
+                                    <form class="form-horizontal">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">频道名称：</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="" value="">
+                                                <p class="help-block">输入1-4个字母、数字或汉字</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">频道图标：</label>
+                                            <div class="col-sm-4">
+                                                <button type="button" class="btn btn-primary">选择图标</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-4 col-sm-4 text-left">
+                                                <img src="" style="width:60px;height:60px;" class="img-rounded">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">链接地址: </label>
+                                            <div class="col-sm-4">
+                                                <select name="" class="form-control">
+                                                    <option value="" >板块列表</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer text-right">
+                                        <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+                                        <button type="button" class="btn btn-default btn-sm close-add-channel">取 消</button>
+                                    </div>
+                                    </form> 
+                                </div>
+                            </div>
+
+                            <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
+
+                            <div id="module-edit-mobile-view">
+                            </div>
+
+                            <!-- 添加风格 -->
+                            <div class="add-style hidden">
+    						    <div class="single-style">
+    						    	<div class="style-content">
+    						    		<div class="style-title">
+    						    			<p class="pull-left">此处是风格区标题</p>
+    						    			<a class="pull-right" href="javascript:void()">更多</a>
+    						    		</div>
+    						    		<div class="style-area">
+    						    			分割区示意
+    						    		</div>
+    						    		<div class="style-area">
+    										分割区示意
+    						    		</div>
+    						    		<div class="style-title">
+    						    			<p class="pull-left">此处是风格区标题</p>
+    						    			<a class="pull-right" href="javascript:void()">更多</a>
+    						    		</div>
+    						    	</div>
+    						    	<button type="button" class="btn btn-primary btn-xs close-comp-pop">继续添加组件</button>
+    						    	<button type="button" class="btn btn-primary btn-xs">删除该风格区</button>
+    						    </div>
+
+                                <button type="button" class="btn btn-primary add-style-btn close-style-pop hidden">点击添加风格区</button>
+                                <button type="button" class="btn btn-primary add-style-btn close-style-pop">继续添加风格区</button>
+                                <button type="button" class="btn btn-primary add-style-comp close-comp-pop">点击添加组件</button>
+                            </div>
+
+                            <!-- 手机底部导航 -->
+                            <div class="moble-bottom-nav">
+                                <div class="nav-move">
+                                    <div class="pull-left nav-add navitem-add-btn">
+                                        <img src="<?php echo $this->rootUrl; ?>/images/admin/add-nav-ico.png">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div><!-- end moble-content -->
+
+                    </div>
+                </div>
+
+                <div class="col-sm-xs-8 col-sm-8 col-md-8" id="operation">
+
+                    <div id="module-edit-dlg-view">
+                    </div>
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">选择导航样式</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="radio">
+                                <label><input type="radio"> 底部导航</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">模块管理</h3>
+                        </div>
+                        <div class="panel-body module-management">
+                            <div id="module-list">
+                                <div class="module last-module">
+                                    <a class="module-add-btn"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
+                                    <div>添加模块</div>
                                 </div>
                             </div>
                         </div>
-
-                        <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
-
-                        <div id="module-edit-mobile-view">
-                        </div>
-
-                        <!-- 添加风格 -->
-                        <div class="add-style hidden">
-						    <div class="single-style">
-						    	<div class="style-content">
-						    		<div class="style-title">
-						    			<p class="pull-left">此处是风格区标题</p>
-						    			<a class="pull-right" href="javascript:void()">更多</a>
-						    		</div>
-						    		<div class="style-area">
-						    			分割区示意
-						    		</div>
-						    		<div class="style-area">
-										分割区示意
-						    		</div>
-						    		<div class="style-title">
-						    			<p class="pull-left">此处是风格区标题</p>
-						    			<a class="pull-right" href="javascript:void()">更多</a>
-						    		</div>
-						    	</div>
-						    	<button type="button" class="btn btn-primary btn-xs close-comp-pop">继续添加组件</button>
-						    	<button type="button" class="btn btn-primary btn-xs">删除该风格区</button>
-						    </div>
-
-                            <button type="button" class="btn btn-primary add-style-btn close-style-pop hidden">点击添加风格区</button>
-                            <button type="button" class="btn btn-primary add-style-btn close-style-pop">继续添加风格区</button>
-                            <button type="button" class="btn btn-primary add-style-comp close-comp-pop">点击添加组件</button>
-                        </div>
-
-                        <!-- 手机底部导航 -->
-                        <div class="moble-bottom-nav">
-                            <div class="nav-move">
-                                <div class="pull-left nav-add navitem-add-btn">
-                                    <img src="<?php echo $this->rootUrl; ?>/images/admin/add-nav-ico.png">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div><!-- end moble-content -->
-
-                </div>
-            </div>
-
-            <div class="col-sm-xs-8 col-sm-8 col-md-8" id="operation">
-
-                <div id="module-edit-dlg-view">
-                </div>
-
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">选择导航样式</h3>
                     </div>
-                    <div class="panel-body">
-                        <div class="radio">
-                            <label><input type="radio"> 底部导航</label>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">模块管理</h3>
+                    <div id="foot">
+                        <p class="text-center">
+                            设置完成后请务必点击 
+                            <button type="button" class="btn btn-primary btn-sm uidiy-sync-btn">同 步</button> 保证您所添加或设置的内容能在客户端显示！
+                            恢复初始设置可以点击
+                            <button type="button" class="btn btn-primary btn-sm uidiy-init-btn">默认设置</button> 来进行恢复！
+                        </p>                     
                     </div>
-                    <div class="panel-body module-management">
-                        <div id="module-list">
-                            <div class="module last-module">
-                                <a class="module-add-btn"><img title="模块1" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png" class="img-circle"></a>
-                                <div>添加模块</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="foot">
-                    <p class="text-center">
-                        设置完成后请务必点击 
-                        <button type="button" class="btn btn-primary btn-sm uidiy-sync-btn">同 步</button> 保证您所添加或设置的内容能在客户端显示！
-                        恢复初始设置可以点击
-                        <button type="button" class="btn btn-primary btn-sm uidiy-init-btn">默认设置</button> 来进行恢复！
-                    </p>                     
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div id="module-remove-dlg-view">
-    </div>
+        
+        <div id="module-remove-dlg-view">
+        </div>
 
     </div>
 
@@ -847,21 +956,21 @@
                 }
             );
 
-            // 添加风格区弹出框切换
-            $('.close-style-pop').on({
+            // 添加幻灯片弹出框切换
+            $('.close-add-slide').on({
                 click:function() {
-                    $('.covering').fadeToggle();
-                    $('.add-style-pop').fadeToggle();
+                    $('.add-slide-pop').fadeToggle();
                 }
             })
 
-            // 添加组件弹出框切换
-            $('.close-comp-pop').on({
+            // 添加频道弹出框切换
+            $('.close-add-channel').on({
                 click:function() {
-                    $('.covering').fadeToggle();
-                    $('.add-comp-pop').fadeToggle();
+                    $('.add-channel-pop').fadeToggle();
                 }
             })
+
+
 
         })
     </script>

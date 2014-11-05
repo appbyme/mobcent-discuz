@@ -260,6 +260,45 @@ label {
     font-size: 12px;
 }
 
+/* 添加幻灯片弹出框 */
+.add-slide-pop {
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    position: absolute;
+    right: 38px;
+    top: 174px;
+    z-index: 100;
+    display:none;
+    font-size: 12px;
+}
+
+.slide-list {
+    padding-left: 50px;
+}
+
+.slide-list select {
+    width: 120px;
+}
+
+.slide-select {
+    padding-top: 10px;
+}
+
+/* 添加频道弹出框 */
+.add-channel-pop{
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    position: absolute;
+    right: 38px;
+    top: 174px;
+    z-index: 100;
+    /*display:none;*/
+    font-size: 12px;
+}
+
+
 /*手机底部的导航*/
 .moble-bottom-nav {
     height: 50px;
@@ -305,11 +344,11 @@ label {
 }
 
 .play-border-add input[type=text], .pic-text-pop input[type=text], .add-style-pop input[type=text],
-.add-comp-pop input[type=text]
+.add-comp-pop input[type=text], .add-channel-pop input[type=text]
 {
     width: 150px;
 }
-.play-border-add select, .pic-text-pop select, .add-style-pop select,.add-comp-pop select{
+.play-border-add select, .pic-text-pop select, .add-style-pop select,.add-comp-pop select, .add-channel-pop select {
     width: 150px;
 }
 /*重写面板*/
@@ -444,7 +483,7 @@ label {
 }
 /*主要是弹出框面板的标题*/
 .module-play .panel-heading, .play-add-plug .panel-heading, .play-border-add .panel-heading, .pic-text-pop .panel-heading,
-.add-style-pop .panel-heading, .add-comp-pop .panel-heading {
+.add-style-pop .panel-heading, .add-comp-pop .panel-heading, .add-slide-pop .panel-heading, .add-channel-pop .panel-heading {
     width: 100%;
     height: 40px;
 }
