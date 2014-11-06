@@ -172,8 +172,13 @@ class AppbymeUIDiyModel extends DiscuzAR
             'style' => self::MODULE_STYLE_CARD,
             'title' => '',
             'icon' => Yii::app()->getController()->rootUrl.'/images/admin/module-default.png',
-            'leftTopbars' => array(),
-            'rightTopbars' => array(),
+            'leftTopbars' => array(
+                self::initComponent(),
+            ),
+            'rightTopbars' => array(
+                self::initComponent(),
+                self::initComponent(),  
+            ),
             'componentList' => array(),
             'extParams' => array('padding' => '',),
         );
@@ -257,7 +262,7 @@ class AppbymeUIDiyModel extends DiscuzAR
             'style' => self::COMPONENT_STYLE_FLAT,
             'title' => '',
             'desc' => '',
-            'icon' => '',
+            'icon' => Yii::app()->getController()->rootUrl.'/images/admin/module-default.png',
             'iconStyle' => self::COMPONENT_ICON_STYLE_IMAGE,
             'componentList' => array(),
             'extParams' => array(

@@ -461,14 +461,13 @@
     </div>
     <% if (id == MODULE_ID_DISCOVER) { %>
     <div class="found-module">
+        <% var tmpComponentList = componentList[0].attributes.componentList; %>
         <div class="slide-img">
-            <div class="carousel slide carousel-example-generic_one" data-ride="carousel" data-interval="3000" style="width:320px;height:150px;">
+        <div class="carousel slide carousel-example-generic_one" data-ride="carousel" data-interval="3000" style="width:320px;height:150px;">
                 <!-- 圆点 -->
                 <ol class="carousel-indicators">
                     <li data-target=".carousel-example-generic_one" data-slide-to="0" class="active"></li>
-                    <li data-target=".carousel-example-generic_one" data-slide-to="1"></li>
-                    <li data-target=".carousel-example-generic_one" data-slide-to="2"></li>
-                    <li data-target=".carousel-example-generic_one" data-slide-to="3"></li>
+                    <li data-target=".carousel-example-generic_one" data-slide-to="1" class=""></li>
                 </ol>
                 <!-- 图片区域，item是一个图片 -->
                 <div class="carousel-inner">
@@ -484,21 +483,7 @@
                             <p>Similar to the updates Samsung made to the Galaxy S4</p>
                         </div>
                     </div>
-                    <div class="item">
-                        <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp3.jpg" style="width:320px;height:150px;">
-                        <div class="carousel-caption">
-                            <p>Sony's got a plan and it's sticking </p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img src="<?php echo $this->rootUrl; ?>/images/admin/timo.jpg" style="width:320px;height:150px;">
-                        <div class="carousel-caption">
-                            <!-- <h3>Sony Xperia Z1</h3> -->
-                            <p>Sony's got a plan and it's sticking </p>
-                        </div>
-                    </div>
                 </div>
-
                 <a class="left carousel-control" href=".carousel-example-generic_one" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
@@ -508,26 +493,38 @@
             </div>
             <button type="button" class="btn btn-primary btn-xs">点击添加更多幻灯片</button>
         </div>
-
         <div class="found-content">
             <div class="fixed-content">
                 <div class="list-group text-left">
-                  <a class="list-group-item"><img class="img-circle" src="<?php echo $this->rootUrl; ?>/images/admin/module-default.png">周边帖子</a>
-                  <a class="list-group-item"><img class="img-circle" src="<?php echo $this->rootUrl; ?>/images/admin/module-default.png">周边用户</a>
-                  <a class="list-group-item"><img class="img-circle" src="<?php echo $this->rootUrl; ?>/images/admin/module-default.png">推荐用户</a>
+                <% for (var i = 0; i < tmpComponentList.length; i++) { %>
+                <% var tmpInerComponentList = tmpComponentList[i].attributes.componentList; %>
+                    <% if (tmpComponentList[i].attributes.style == COMPONENT_STYLE_DISCOVER_DEFAULT) { %>
+                        <% for (var j = 0; j < tmpInerComponentList.length; j++) { %>
+                            <a class="list-group-item">
+                                <img class="img-circle" src="<%= tmpInerComponentList[j].attributes.icon %>"><%= tmpInerComponentList[j].attributes.title %>
+                            </a>
+                            <span class="show-hide-discover-item-btn hidden"><%= tmpInerComponentList[j].attributes.extParams.isHidden ? '显示' : '隐藏' %></span>
+                        <% } %>
+                    <% } %>
+                <% } %>
                 </div>
             </div>
-
             <div class="user-content">
                 <div class="list-group text-left">
-                  <a class="list-group-item"><img class="img-circle" src="<?php echo $this->rootUrl; ?>/images/admin/module-default.png">设置</a>
-                  <a class="list-group-item"><img class="img-circle" src="<?php echo $this->rootUrl; ?>/images/admin/module-default.png">关于</a>
+                <% for (var i = 0; i < tmpComponentList.length; i++) { %>
+                <% var tmpInerComponentList = tmpComponentList[i].attributes.componentList; %>
+                    <% if (tmpComponentList[i].attributes.style == COMPONENT_STYLE_DISCOVER_DEFAULT) { %>
+                        <% for (var j = 0; j < tmpInerComponentList.length; j++) { %>
+                          <a class="list-group-item"><img class="img-circle" src="<%= tmpInerComponentList[j].attributes.icon %>"><%= tmpInerComponentList[j].attributes.title %></a>
+                          <span class="edit-discover-item-btn hidden">编辑<span>
+                          <span class="remove-discover-item-btn hidden">删除<span>
+                        <% } %>
+                    <% } %>
+                <% } %>
                 </div>
             </div>
-
             <button type="button" class="btn btn-primary btn-xs">点击添加更多</button>
         </div>
-
     </div>
     <% } else if (id == MODULE_ID_FASTPOST) { %>
     <% } else if (type == MODULE_TYPE_FULL) { %>
@@ -719,20 +716,17 @@
 
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_NEWSLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_NEWSLIST ? '' : 'hidden' %>">
-
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">选择门户：</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="newsModuleId[]">
-                        <option value="0" <%= extParams.newsModuleId == 0 ? 'selected' : '' %> class="hidden">默认模块</option>
+                        <option value="0" <%= extParams.newsModuleId == 0 ? 'selected' : '' %> class="hidden">请选择模块</option>
                     <?php foreach ($newsModules as $newsModule) { ?>
                         <option value="<?php echo $newsModule['mid'] ?>" <%= extParams.newsModuleId == <?php echo $newsModule['mid'] ?> ? 'selected' : '' %>><?php echo WebUtils::u($newsModule['name']) ?></option> 
                     <?php } ?>
                     </select> 
                 </div>
             </div>
-
-
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_TOPICLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_TOPICLIST ? '' : 'hidden' %>">
             <div class="form-group">
@@ -991,18 +985,6 @@
                     $(this).toggleClass('active');
                 }
             )
-
-            $('.close-add-slide').on({
-                click:function() {
-                    $('.add-slide-pop').fadeToggle();
-                }
-            })
-            $('.close-add-channel').on({
-                click:function() {
-                    $('.add-channel-pop').fadeToggle();
-                }
-            })
-
         })
     </script>
 </body>
