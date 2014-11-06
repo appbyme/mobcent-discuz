@@ -106,7 +106,6 @@ label {
     font-weight: 200;
 }
 
-
 /*发现模块*/
 .found-module {
     height: 503px;
@@ -120,23 +119,43 @@ label {
 }
 
 .found-content {
+    margin: 5px 0px 2px 0px;
     background: #e3e3e3;
-    height: 400px;
+    height: 285px;
+    overflow-y:auto;
+}
+
+.oper-btn {
+    margin-top:10px;
+    margin-left:40px;
+    width: 80px;
+}
+
+.discover-title {
+    margin-top:10px;
+    width:80px;
+    overflow:hidden;
 }
 
 .fixed-content {
-    margin-top:10px;
-    height: 160px;
+    /*margin-top:10px;*/
+    /*height: 160px;*/
+
 }
 
 .user-content {
-    height: 100px;
-    margin-bottom: 10px;
+    /*height: 100px;*/
+    /*margin-bottom: 10px;*/
 }
 
 /* 覆盖一些列表组的样式 */
+
+.found-content .list-group {
+    margin-bottom: 10px;
+}
+
 .found-content .list-group-item {
-    height: 50px;
+    height: 55px;
     border: 1px solid #e3e3e3;
     padding:5px 0px 5px 30px;
 }
@@ -185,7 +204,7 @@ label {
     border-radius: 5px;
     position: absolute;
     right: 38px;
-    top: 174px;
+    top: 120px;
     z-index: 100;
     display:none;
     font-size: 12px;
@@ -249,15 +268,21 @@ label {
 
 /*添加组件弹出框*/
 .add-comp-pop {
-    width: 300px;
-    height: 300px;
+    width: 310px;
+    /*height: 600px;*/
     border-radius: 5px;
     position: absolute;
-    right: 38px;
-    top: 174px;
+    right: 33px;
+    top: 120px;
     z-index: 100;
     display:none;
     font-size: 12px;
+}
+
+.add-comp-pop .panel-body {
+    height: 500px;
+    overflow-y:auto;
+    overflow-x:hidden;
 }
 
 /* 添加幻灯片弹出框 */
@@ -303,10 +328,11 @@ label {
 .moble-bottom-nav {
     height: 50px;
     width: 320px;
-    background: #CCCCCC;
+    background: #e3e3e3;
     border-top: 1px solid #797979;
     margin: 0px 0px 0px 0px;
     overflow:hidden;
+
 }
 
 .moble-bottom-nav .nav-column {
@@ -314,19 +340,40 @@ label {
     height: 50px;
     padding-top:30px;
     overflow:hidden;
-    font-size: 11px;
+    font-size: 10px;
 }
 
-.moble-bottom-nav .nav-column img {
+/*.moble-bottom-nav .nav-column img {
     width: 80px;
     height: 80px;
-    border: 1px solid red;
-}
+}*/
 
 .moble-bottom-nav .nav-add img{
-    width:30px;
-    height: 30px;
-    margin:10px 10px 0px 15px;
+    width:40px;
+    height: 40px;
+    margin:4px 10px 0px 15px;
+    border-radius: 5px;
+
+}
+
+.nav-icon {
+    /*padding: 5px 5px; */
+    background: #eae9e9; 
+    width: 450px;
+    height: 222px;
+    border-radius: 5px;
+    position: absolute;
+    bottom:200px;
+    left: 115px;
+    display: none;
+}
+
+.nav-pic {
+    margin: 2px;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    float: left;
 }
 
 /*底部添加导航*/
@@ -460,6 +507,7 @@ label {
     border-radius: 5px;
     margin: 5px 0px 5px 0px;
     padding: 5px 0px 5px 0px;
+    border: 1px solid rgba(0,0,0,0.1);
 }
 
 /*新写的模块编辑填出框*/
@@ -496,8 +544,7 @@ label {
 .add-nav-list .component-view-container {
     border-radius: 5px;
     margin: 5px 0px 5px 0px;
-    padding: 5px 0px 5px 0px;
-    border: 1px solid rgba(0,0,0,0.1);
+    /*padding: 5px 0px 5px 0px;*/
 }
 
 /* 设置滚动条的样式 */
@@ -559,17 +606,22 @@ label {
     padding:3px 6px;
 }
 
-/* 兼容代码，兼容左图右文弹出框样式 */
-.pic-text-pop .col-sm-2 {
+/* 兼容代码，兼容左图右文弹出框样式、添加组件 */
+.pic-text-pop .col-sm-2, .add-comp-pop .col-sm-2 {
     padding-left: 15px;
     width: 99px;
 }
 
-.pic-text-pop .col-sm-10 {
+/* 为了兼容上传图片下面的预览框 */
+.pic-text-pop .col-sm-offset-2, .add-comp-pop .col-sm-offset-2 {
+    padding-left: 40px;
+}
+
+.pic-text-pop .col-sm-10, .add-comp-pop .col-sm-10 {
     width: 150px;
 }
 
-.pic-text-pop .form-group textarea {
+.pic-text-pop .form-group textarea, .add-comp-pop textarea {
     width: 150px;
 }
 

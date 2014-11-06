@@ -204,7 +204,7 @@
                         <div class="moble-bottom-nav">
                             <div class="nav-move">
                                 <div class="pull-left nav-add navitem-add-btn">
-                                    <img src="<?php echo $this->rootUrl; ?>/images/admin/add-nav-ico.png">
+                                    <img src="<?php echo $this->rootUrl; ?>/images/admin/icon1/mc_forum_main_bar_button17_h.png">
                                 </div>
                             </div>
                         </div>
@@ -291,10 +291,10 @@
     <script type="text/javascript" src="<?php echo $this->rootUrl; ?>/js/jquery-ui-1.11.2.min.js"></script>
     <!-- 底部导航模板 -->
     <script type="text/template" id="navitem-template">
-    <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/<%= icon %>.png") no-repeat 50% 20%'>
-        <small class="navitem-title"><%= title %></small>
+    <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/icon1/<%= icon %>.png") no-repeat 50% 35%;background-size:70px 70px'>
+        <div class="navitem-title" style="margin-top:3px;"><%= title %></div>
         <% if (moduleId != MODULE_ID_DISCOVER) { %>
-        <div class="nav-edit hidden">
+        <div class="nav-edit hidden" style="margin-top:3px;">
             <a><span class="navitem-edit-btn"><small>编辑</a></small></span></a>
             <a><span class="navitem-remove-btn"><small>删除</small></span></a>
         </div>
@@ -351,15 +351,19 @@
                 </div>
             </div>
 
+            <div class="nav-icon">
+                
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-4 control-label">导航图标：</label>
                 <div class="col-sm-4">
-                    <button type="button" class="btn btn-primary">选择图标</button>
+                    <button type="button" class="btn btn-primary select-nav-icon">选择图标</button>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-4 text-left">
-                    <img src="" style="width:60px;height:60px;" class="img-rounded">
+                    <img src="" style="width:60px;height:60px;" class="img-rounded nav-pic-preview">
                 </div>
             </div>
             <div class="form-group">
@@ -505,9 +509,12 @@
                     <% if (tmpComponentList[i].attributes.style == COMPONENT_STYLE_DISCOVER_DEFAULT) { %>
                         <% for (var j = 0; j < tmpInerComponentList.length; j++) { %>
                             <a class="list-group-item">
-                                <img class="img-circle" src="<%= tmpInerComponentList[j].attributes.icon %>"><%= tmpInerComponentList[j].attributes.title %>
+                                <img class="img-circle pull-left" src="<%= tmpInerComponentList[j].attributes.icon %>">
+                                <div class="pull-left discover-title"><%= tmpInerComponentList[j].attributes.title %></div>
+                                <div class="pull-left oper-btn text-right">
+                                    <button type="button" class="btn btn-primary btn-xs show-hide-discover-item-btn"><%= tmpInerComponentList[j].attributes.extParams.isHidden ? '显示' : '隐藏' %></button>
+                                </div>
                             </a>
-                            <span class="show-hide-discover-item-btn hidden"><%= tmpInerComponentList[j].attributes.extParams.isHidden ? '显示' : '隐藏' %></span>
                         <% } %>
                     <% } %>
                 <% } %>
@@ -519,16 +526,21 @@
                 <% var tmpInerComponentList = tmpComponentList[i].attributes.componentList; %>
                     <% if (tmpComponentList[i].attributes.style == COMPONENT_STYLE_DISCOVER_DEFAULT) { %>
                         <% for (var j = 0; j < tmpInerComponentList.length; j++) { %>
-                          <a class="list-group-item"><img class="img-circle" src="<%= tmpInerComponentList[j].attributes.icon %>"><%= tmpInerComponentList[j].attributes.title %></a>
-                          <span class="edit-discover-item-btn hidden">编辑<span>
-                          <span class="remove-discover-item-btn hidden">删除<span>
+                          <a class="list-group-item">
+                          <img class="img-circle pull-left" src="<%= tmpInerComponentList[j].attributes.icon %>">
+                          <div class="pull-left discover-title"><%= tmpInerComponentList[j].attributes.title %></div>
+                          <div class="pull-left oper-btn text-right">
+                              <button type="button" class="btn btn-primary btn-xs edit-discover-item-btn">编辑</button>
+                              <button type="button" class="btn btn-primary btn-xs  remove-discover-item-btn">删除</button>
+                          </div>
+                          </a>
                         <% } %>
                     <% } %>
                 <% } %>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary btn-xs">点击添加更多</button>
         </div>
+            <button type="button" class="btn btn-primary btn-xs">点击添加更多</button>
     </div>
     <% } else if (id == MODULE_ID_FASTPOST) { %>
     <% } else if (type == MODULE_TYPE_FULL) { %>
@@ -650,7 +662,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <img src="<%= icon %>" style="width:100px;height:100px;" class="img-rounded">
+                <img src="<%= icon %>" style="width:50px;height:50px;" class="img-rounded">
             </div>
         </div>
         <div class="form-group">
@@ -794,7 +806,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
-                <button class="remove-component-btn btn btn-primary btn-sm" style="width:225px;">删　除</button>
+                <button class="remove-component-btn btn btn-primary btn-sm" style="width:200px;">删　除</button>
             </div>
         </div>
     </div>
@@ -913,8 +925,8 @@
         <form class="form-horizontal style-component-edit-form">
         <div class="panel-body">
             <div class="form-group">
-                <label class="col-sm-4 control-label">选择视窗类型: </label>
-                <div class="col-sm-4">
+                <label class="col-sm-2 control-label">选择视窗类型: </label>
+                <div class="col-sm-10">
                     <select class="form-control input-sm layoutStyleSelect" name="layoutStyle">
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH ? 'selected' : '' %>>单栏样式(高)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW ? 'selected' : '' %>>单栏样式(低)</option>
@@ -936,7 +948,9 @@
 
             <div class="component-view-container">
             </div>
-            <button class="add-component-item-btn btn btn-primary btn-sm" style="width:225px;">添加组件</button>
+            <div class="form-group">
+                <button class="add-component-item-btn btn btn-info btn-sm" style="width:280px;">添加组件</button>
+            </div>
         </div>
         <div class="panel-footer text-right">
             <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
@@ -991,6 +1005,33 @@
                     $(this).toggleClass('active');
                 }
             )
+
+            $('.close-add-slide').on({
+                click:function() {
+                    $('.add-slide-pop').fadeToggle();
+                }
+            })
+            $('.close-add-channel').on({
+                click:function() {
+                    $('.add-channel-pop').fadeToggle();
+                }
+            })
+
+            // 点击图标之后把图片放入到下方的预览框
+            function clickIconCall() {
+                $('.nav-pic').on({
+                    click:function() {
+                        var selectNav = $(this).attr('src');
+                        $('.nav-pic-preview').attr('src', selectNav);
+                        $('.nav-icon').toggle( "drop" );
+                    },
+                    mousemove:function() {
+                        var selectNav = $(this).attr('src');
+                        $('.nav-pic-preview').attr('src', selectNav);
+                    }
+
+                })
+            }
         })
     </script>
 </body>

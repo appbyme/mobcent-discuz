@@ -22,6 +22,21 @@ $(function () {
 
     var APPBYME_UIDIY_AUTOSAVE = 'appbyme_uidiy_autosave';
 
+    // 添加导航弹出图片
+    function clickIconCall() {
+        $('.nav-pic').on({
+            click:function() {
+                var selectNav = $(this).attr('src');
+                $('.nav-pic-preview').attr('src', selectNav);
+                $('.nav-icon').toggle( "drop" );
+            },
+            mousemove:function() {
+                var selectNav = $(this).attr('src');
+                $('.nav-pic-preview').attr('src', selectNav);
+            }
+        })
+    }
+
     var wrapComponent = function f(component) {
         var tmpComponentList = [];
         _.each(component.componentList, function (value) {
@@ -840,6 +855,17 @@ $(function () {
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
+            $('.select-nav-icon').on({
+                click:function() {
+                    var imgContent = '';
+                    for(var i=1;i<=49;i++){
+                        imgContent += "<img class='nav-pic' src="+uidiyGlobalObj.rootUrl+"/images/admin/icon1/mc_forum_main_bar_button"+i+"_h.png >";
+                    }
+                    $('.nav-icon').html(imgContent);
+                    $('.nav-icon').toggle("drop");
+                    clickIconCall();
+                }
+            })
             return this;
         },
         submitNavItem: function (event) {

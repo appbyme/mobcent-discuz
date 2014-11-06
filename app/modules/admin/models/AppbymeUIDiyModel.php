@@ -18,7 +18,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const NAV_KEY_TEMP = 'app_uidiy_nav_info_temp';
 
     const NAV_TYPE_BOTTOM = 'bottom';
-    const NAV_ITEM_ICON_1 = 'mc_forum_main_bar_button1';
+    const NAV_ITEM_ICON_1 = 'mc_forum_main_bar_button5_h';
 
     // module
     const MODULE_KEY = 'app_uidiy_modules';
