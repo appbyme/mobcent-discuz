@@ -15,11 +15,14 @@ class AppbymeUIDiyModel extends DiscuzAR
 {
     // navigator
     const NAV_KEY = 'app_uidiy_nav_info';
+    const NAV_KEY_TEMP = 'app_uidiy_nav_info_temp';
+
     const NAV_TYPE_BOTTOM = 'bottom';
     const NAV_ITEM_ICON_1 = 'mc_forum_main_bar_button1';
 
     // module
     const MODULE_KEY = 'app_uidiy_modules';
+    const MODULE_KEY_TEMP = 'app_uidiy_modules_temp';
     
     const MODULE_ID_DISCOVER = 1;
     const MODULE_ID_FASTPOST = 2;
@@ -96,6 +99,8 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_STYLE_LAYOUT_FOUR_COL_LOW = 'layoutFourCol_Low';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW = 'layoutOneColTwoRow';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW = 'layoutOneColThreeRow';
+    const COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW = 'layoutTwoColOneRow';
+    const COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW = 'layoutThreeColOneRow';
 
     const COMPONENT_STYLE_DISCOVER_DEFAULT = 'discoverDefault';
     const COMPONENT_STYLE_DISCOVER_CUSTOM = 'discoverCustom';
@@ -131,22 +136,23 @@ class AppbymeUIDiyModel extends DiscuzAR
         );
     }
 
-    public static function getNavigationInfo()
+    public static function getNavigationInfo($isTemp=false)
     {
         $data = DbUtils::getDzDbUtils(true)->queryScalar('
             SELECT cvalue
             FROM %t
             WHERE ckey = %s
             ',
-            array('appbyme_config', self::NAV_KEY)
+            array('appbyme_config', $isTemp ? self::NAV_KEY_TEMP : self::NAV_KEY)
         );
         return $data ? (array)unserialize(WebUtils::u($data)) : array();
     }
 
-    public static function saveNavigationInfo($navInfo)
+    public static function saveNavigationInfo($navInfo, $isTemp=false)
     {
+        $key = $isTemp ? self::NAV_KEY_TEMP : self::NAV_KEY;
         $appUIDiyNavInfo = array(
-            'ckey' => self::NAV_KEY, 
+            'ckey' => $key, 
             'cvalue' => WebUtils::t(serialize($navInfo)),
         );
         $config = DbUtils::getDzDbUtils(true)->queryRow('
@@ -154,12 +160,12 @@ class AppbymeUIDiyModel extends DiscuzAR
             FROM %t 
             WHERE ckey=%s
             ',
-            array('appbyme_config', self::NAV_KEY)
+            array('appbyme_config', $key)
         );
         if (empty($config)) {
             DbUtils::getDzDbUtils(true)->insert('appbyme_config', $appUIDiyNavInfo);
         } else {
-            DbUtils::getDzDbUtils(true)->update('appbyme_config', $appUIDiyNavInfo, array('ckey' => self::NAV_KEY));
+            DbUtils::getDzDbUtils(true)->update('appbyme_config', $appUIDiyNavInfo, array('ckey' => $key));
         }
         return true;
     }
@@ -205,22 +211,23 @@ class AppbymeUIDiyModel extends DiscuzAR
         ));
     }
 
-    public static function getModules()
+    public static function getModules($isTemp=false)
     {
         $data = DbUtils::getDzDbUtils(true)->queryScalar('
             SELECT cvalue
             FROM %t
             WHERE ckey = %s
             ',
-            array('appbyme_config', self::MODULE_KEY)
+            array('appbyme_config', $isTemp ? self::MODULE_KEY_TEMP : self::MODULE_KEY)
         );
         return $data ? (array)unserialize(WebUtils::u($data)) : array();
     }
 
-    public static function saveModules($modules)
+    public static function saveModules($modules, $isTemp=false)
     {
+        $key = $isTemp ? self::MODULE_KEY_TEMP : self::MODULE_KEY;
         $appUIDiyModules = array(
-            'ckey' => self::MODULE_KEY, 
+            'ckey' => $key, 
             'cvalue' => WebUtils::t(serialize($modules)),
         );
         $config = DbUtils::getDzDbUtils(true)->queryRow('
@@ -228,29 +235,29 @@ class AppbymeUIDiyModel extends DiscuzAR
             FROM %t 
             WHERE ckey=%s
             ',
-            array('appbyme_config', self::MODULE_KEY)
+            array('appbyme_config', $key)
         );
         if (empty($config)) {
             DbUtils::getDzDbUtils(true)->insert('appbyme_config', $appUIDiyModules);
         } else {
-            DbUtils::getDzDbUtils(true)->update('appbyme_config', $appUIDiyModules, array('ckey' => self::MODULE_KEY));
+            DbUtils::getDzDbUtils(true)->update('appbyme_config', $appUIDiyModules, array('ckey' => $key));
         }
         return true;
     }
 
-    public static function deleteNavInfo()
+    public static function deleteNavInfo($isTemp=false)
     {
         return DbUtils::getDzDbUtils(true)->delete('appbyme_config', array(
             'where' => 'ckey = %s',
-            'arg' => array(self::NAV_KEY),
+            'arg' => array($isTemp ? self::NAV_KEY_TEMP : self::NAV_KEY),
         ));
     }
 
-    public static function deleteModules()
+    public static function deleteModules($isTemp=false)
     {
         return DbUtils::getDzDbUtils(true)->delete('appbyme_config', array(
             'where' => 'ckey = %s',
-            'arg' => array(self::MODULE_KEY),
+            'arg' => array($isTemp ? self::MODULE_KEY_TEMP : self::MODULE_KEY),
         ));
     }
 

@@ -219,6 +219,10 @@
                 <div id="module-edit-dlg-view" class="module-play">
                 </div>
 
+                <div>
+                请点击<button class="uidiy-save-btn">保存</button>按钮来保存你的客户端UI配置, 或者可以勾选<label><input type="checkbox" id="autoSaveCheckbox">(自动保存)</label>
+                <p>PS: 这里仅仅保存你在后台的配置, 如果想同步到客户端, 请点击下面的同步按钮</p>
+                </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">选择导航样式</h3>
@@ -923,6 +927,8 @@
                         <option value="<%= COMPONENT_STYLE_LAYOUT_FOUR_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_FOUR_COL ? 'selected' : '' %>>四栏样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW ? 'selected' : '' %>>1+2样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW ? 'selected' : '' %>>1+3样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW ? 'selected' : '' %>>2+1样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW ? 'selected' : '' %>>3+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_SLIDER %>" <%= style == COMPONENT_STYLE_LAYOUT_SLIDER ? 'selected' : '' %>>幻灯片样式</option>
                     </select>
                 </div>

@@ -19,7 +19,7 @@ class UIDiyController extends AdminController
         $newsModules = AppbymePoralModule::getModuleList();
         $forumList = ForumUtils::getForumListForHtml();
 
-        $navInfo = AppbymeUIDiyModel::getNavigationInfo();
+        $navInfo = AppbymeUIDiyModel::getNavigationInfo(true);
         empty($navInfo) && $navInfo = AppbymeUIDiyModel::initNavigation();
         $hasDiscoverNavItem = false;
         foreach ($navInfo['navItemList'] as $navItem) {
@@ -31,7 +31,7 @@ class UIDiyController extends AdminController
         !$hasDiscoverNavItem && array_unshift($navInfo['navItemList'], AppbymeUIDiyModel::initNavItemDiscover());
 
         $modules = array();
-        $tempModules = AppbymeUIDiyModel::getModules();
+        $tempModules = AppbymeUIDiyModel::getModules(true);
         $isFindDiscover = $isFindFastpost = false;
         $discoverModule = AppbymeUIDiyModel::initDiscoverModule();
         $fastpostModule = AppbymeUIDiyModel::initFastpostModule();
@@ -65,22 +65,42 @@ class UIDiyController extends AdminController
         ));
     }
 
-    public function actionSaveNavInfo($navInfo)
+    public function actionSaveNavInfo($navInfo, $isSync=false)
     {
         $res = WebUtils::initWebApiResult();
 
         $navInfo = WebUtils::jsonDecode($navInfo);
-        AppbymeUIDiyModel::saveNavigationInfo($navInfo);
+        AppbymeUIDiyModel::saveNavigationInfo($navInfo, true);
+        $isSync && AppbymeUIDiyModel::saveNavigationInfo($navInfo);
 
         echo WebUtils::outputWebApi($res, '', false);
     }
 
-    public function actionSaveModules($modules)
+    public function actionSaveModules($modules, $isSync=false)
     {
         $res = WebUtils::initWebApiResult();
 
         $modules = WebUtils::jsonDecode($modules);
-        AppbymeUIDiyModel::saveModules($modules);
+        AppbymeUIDiyModel::saveModules($modules, true);
+
+        if ($isSync) {
+            $tempModules = array();
+            foreach ($modules as $module) {
+                $module['leftTopbars'] = $this->_filterTopbars($module['leftTopbars']);
+                $module['rightTopbars'] = $this->_filterTopbars($module['rightTopbars']);
+                if ($module['type'] == AppbymeUIDiyModel::MODULE_TYPE_SUBNAV) {
+                    $tempComponentList = array();
+                    foreach ($module['componentList'] as $component) {
+                        if ($component['title'] != '') {
+                            $tempComponentList[] = $component;
+                        }
+                    }
+                    $module['componentList'] = $tempComponentList;
+                }
+                $tempModules[] = $module;
+            }
+            AppbymeUIDiyModel::saveModules($tempModules);
+        }
 
         echo WebUtils::outputWebApi($res, '', false);
     }
@@ -91,7 +111,17 @@ class UIDiyController extends AdminController
 
         AppbymeUIDiyModel::deleteNavInfo();
         AppbymeUIDiyModel::deleteModules();
+        AppbymeUIDiyModel::deleteModules(true);
 
         echo WebUtils::outputWebApi($res, '', false);
+    }
+
+    private function _filterTopbars($topbars)
+    {
+        $tempTopbars = array();
+        foreach ($topbars as $topbar) {
+            $topbar['type'] != AppbymeUIDiyModel::COMPONENT_TYPE_DEFAULT && $tempTopbars[] = $topbar;
+        }
+        return $tempTopbars;
     }
 }

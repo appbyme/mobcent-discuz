@@ -7,6 +7,21 @@
  */
 
 $(function () {
+
+    var LocalStorageWrapper = function () {
+        this.available = typeof(Storage) !== 'undefined';
+        this.getItem = function (key) {
+            return this.available ? localStorage.getItem(key) : undefined;
+        };
+        this.setItem = function (key, value) {
+            this.available && localStorage.setItem(key, value);
+        };
+    };
+
+    var localStorageWrapper = new LocalStorageWrapper();
+
+    var APPBYME_UIDIY_AUTOSAVE = 'appbyme_uidiy_autosave';
+
     var wrapComponent = function f(component) {
         var tmpComponentList = [];
         _.each(component.componentList, function (value) {
@@ -409,13 +424,15 @@ $(function () {
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_MID:
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_LOW:
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW:
+                    case COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW:
                         size = 3;
                         break;
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL:
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL_HIGH:
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL_MID:
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL_LOW:
-                    case COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW:
+                    case COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW:
                         size = 4;
                         break;
                     default:
@@ -541,6 +558,10 @@ $(function () {
             modules.add(this.model, {merge: true, remove: false, add: true});
 
             this.closeModule();
+
+            if ($('#autoSaveCheckbox')[0].checked) {
+                mainView.saveUIDiy(false);
+            }
         },
         closeModule: function () {
             this.toggle();
@@ -876,8 +897,10 @@ $(function () {
             'click .module-add-btn': 'dlgAddModule',
             'click .module-remove-btn': 'dlgRemoveModule',
             'click .navitem-add-btn': 'dlgAddNavItem',
+            'click .uidiy-save-btn': 'uidiySave',
             'click .uidiy-sync-btn': 'uidiySync',
             'click .uidiy-init-btn': 'uidiyInit',
+            'change #autoSaveCheckbox': 'onChangeAutoSave',
         },
         initialize: function() {
             this.listenTo(modules, 'add', this.addModule);
@@ -888,6 +911,8 @@ $(function () {
             })
 
             navItems.set(uidiyGlobalObj.navItemInitList);
+
+            $('#autoSaveCheckbox')[0].checked = localStorageWrapper.getItem(APPBYME_UIDIY_AUTOSAVE) == 1;
         },
         render: function () {
             return this;
@@ -915,13 +940,17 @@ $(function () {
             moduleRemoveDlg.model = modules.get(moduleId);
             moduleRemoveDlg.render();
         },
-        uidiySync: function (event) {
+        onChangeAutoSave: function (event) {
+            localStorageWrapper.setItem(APPBYME_UIDIY_AUTOSAVE, event.currentTarget.checked ? 1 : 0);
+        },
+        saveUIDiy: function (isSync, success, error) {
             Backbone.ajax({
                 url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/savemodules',
                 type: 'post',
                 dataType: 'json',
                 data: {
                     modules: JSON.stringify(modules),
+                    isSync: isSync,
                 },
                 success: function (result,status,xhr) {
                     var navInfo = {
@@ -934,12 +963,21 @@ $(function () {
                         dataType: 'json',
                         data: {
                             navInfo: JSON.stringify(navInfo),
+                            isSync: isSync,
                         },
-                        success: function (result,status,xhr) {
-                            alert('同步成功');
-                        }
+                        success: success,
                     });
                 }
+            });
+        },
+        uidiySave: function () {
+            this.saveUIDiy(false, function () {
+                alert('保存成功');
+            });
+        },
+        uidiySync: function () {
+            this.saveUIDiy(true, function () {
+                alert('同步成功');
             });
         },
         uidiyInit: function () {
@@ -953,7 +991,7 @@ $(function () {
                     }
                 });
             }
-        }
+        },
     });
 
     var mainView = new MainView(),
