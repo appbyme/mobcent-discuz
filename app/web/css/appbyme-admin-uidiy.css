@@ -106,7 +106,6 @@ label {
     font-weight: 200;
 }
 
-
 /*发现模块*/
 .found-module {
     height: 503px;
@@ -120,23 +119,43 @@ label {
 }
 
 .found-content {
+    margin: 5px 0px 2px 0px;
     background: #e3e3e3;
-    height: 400px;
+    height: 285px;
+    overflow-y:auto;
+}
+
+.oper-btn {
+    margin-top:10px;
+    margin-left:40px;
+    width: 80px;
+}
+
+.discover-title {
+    margin-top:10px;
+    width:80px;
+    overflow:hidden;
 }
 
 .fixed-content {
-    margin-top:10px;
-    height: 160px;
+    /*margin-top:10px;*/
+    /*height: 160px;*/
+
 }
 
 .user-content {
-    height: 100px;
-    margin-bottom: 10px;
+    /*height: 100px;*/
+    /*margin-bottom: 10px;*/
 }
 
 /* 覆盖一些列表组的样式 */
+
+.found-content .list-group {
+    margin-bottom: 10px;
+}
+
 .found-content .list-group-item {
-    height: 50px;
+    height: 55px;
     border: 1px solid #e3e3e3;
     padding:5px 0px 5px 30px;
 }
@@ -344,7 +363,7 @@ label {
     height: 222px;
     border-radius: 5px;
     position: absolute;
-    bottom:100px;
+    bottom:200px;
     left: 115px;
     display: none;
 }

@@ -7,6 +7,22 @@
  */
 
 $(function () {
+
+    // 添加导航弹出图片
+    function clickIconCall() {
+        $('.nav-pic').on({
+            click:function() {
+                var selectNav = $(this).attr('src');
+                $('.nav-pic-preview').attr('src', selectNav);
+                $('.nav-icon').toggle( "drop" );
+            },
+            mousemove:function() {
+                var selectNav = $(this).attr('src');
+                $('.nav-pic-preview').attr('src', selectNav);
+            }
+        })
+    }
+
     var wrapComponent = function f(component) {
         var tmpComponentList = [];
         _.each(component.componentList, function (value) {
@@ -70,6 +86,23 @@ $(function () {
 
     var ModuleModel = Backbone.Model.extend({
         defaults: uidiyGlobalObj.moduleInitParams,
+        initialize: function () {
+            var tmpComponentList = [],
+                tmpLeftTopbars = [],
+                tmpRightTopbars = [];
+            _.each(this.attributes.componentList, function (component) {
+                tmpComponentList.push(wrapComponent(component));
+            });
+            _.each(this.attributes.leftTopbars, function (component) {
+                tmpLeftTopbars.push(wrapComponent(component));
+            });
+            _.each(this.attributes.rightTopbars, function (component) {
+                tmpRightTopbars.push(wrapComponent(component));
+            });
+            this.attributes.componentList = tmpComponentList;
+            this.attributes.leftTopbars = tmpLeftTopbars;
+            this.attributes.rightTopbars = tmpRightTopbars;
+        },
         sync: function (method, model, options) {
             switch (method) {
                 case 'delete':
@@ -242,7 +275,7 @@ $(function () {
                 return;
             }
 
-            this.moduleModel.tempComponentList.add(this.model, {merge: true, remove: false, add: true});
+            moduleEditMobileView.model.tempComponentList.add(this.model, {merge: true, remove: false, add: true});
 
             this.closeComponentDlg();
         },
@@ -301,7 +334,7 @@ $(function () {
                 return;
             }
 
-            this.moduleModel.tempComponentList.add(this.model, {merge: true, remove: false, add: true});
+            moduleEditMobileView.model.tempComponentList.add(this.model, {merge: true, remove: false, add: true});
             
             this.closeComponentDlg();
         },
@@ -468,22 +501,18 @@ $(function () {
                     });
                     break;
                 case MODULE_TYPE_NEWS:
-                    var componentList = [];
-                    if (this.model.attributes.type == moduleType) {
-                        componentList = this.model.attributes.componentList;
-                    }
-                    moduleModel.tempComponentList = new ComponentList();
-                    this.listenTo(moduleModel.tempComponentList, 'add', moduleEditMobileView.addNewsComponentItem);
-                    moduleModel.tempComponentList.set(componentList);
-                    break;
                 case MODULE_TYPE_CUSTOM:
                     var componentList = [];
                     if (this.model.attributes.type == moduleType) {
                         componentList = this.model.attributes.componentList;
                     }
                     moduleModel.tempComponentList = new ComponentList();
-                    this.listenTo(moduleModel.tempComponentList, 'add', moduleEditMobileView.addCustomStyleItem);
-                    moduleModel.tempComponentList.set(componentList)
+                    if (moduleType == MODULE_TYPE_CUSTOM) {
+                        this.listenTo(moduleModel.tempComponentList, 'add', moduleEditMobileView.addCustomStyleItem);
+                    } else {
+                        this.listenTo(moduleModel.tempComponentList, 'add', moduleEditMobileView.addNewsComponentItem);
+                    }
+                    moduleModel.tempComponentList.set(componentList);
                     break;
                 default:
                     break;
@@ -603,7 +632,6 @@ $(function () {
                     break;
             }
             moduleTopbarDlg.model = componentModel;
-            moduleTopbarDlg.moduleModel = module;
             moduleTopbarDlg.render();
             moduleTopbarDlg.toggle();
 
@@ -611,13 +639,11 @@ $(function () {
         },
         dlgAddNewsComponent: function () {
             newsComponentEditDlg.model = new ComponentModel();
-            newsComponentEditDlg.moduleModel = this.model;
             newsComponentEditDlg.render();
             newsComponentEditDlg.toggle();
         },
         addNewsComponentItem: function (component) {
             var view = new NewsComponentItemView({model: component});
-            view.moduleModel = this.model;
             $('.news-component-item-container').append(view.render().el);
         },
         // 弹出添加风格区
@@ -630,14 +656,12 @@ $(function () {
                 isShowMore: 1,
             };
             customStyleEditDlg.model = model;
-            customStyleEditDlg.moduleModel = this.model;
             customStyleEditDlg.render();
             customStyleEditDlg.toggle();
         },
         // 添加风格区
         addCustomStyleItem: function (style) {
             var view = new CustomStyleItemView({model: style});
-            view.moduleModel = this.model;
             $('.custom-style-item-container').append(view.render().el);
         },
     });
@@ -659,7 +683,6 @@ $(function () {
         },
         dlgEditNewsComponent: function () {
             newsComponentEditDlg.model = this.model;
-            newsComponentEditDlg.moduleModel = this.moduleModel;
             newsComponentEditDlg.render();
             newsComponentEditDlg.toggle();
         },
@@ -692,7 +715,6 @@ $(function () {
         },
         dlgEditCustomStyle: function () {
             customStyleEditDlg.model = this.model;
-            customStyleEditDlg.moduleModel = this.moduleModel;
             customStyleEditDlg.render();
             customStyleEditDlg.toggle();
         },
@@ -759,7 +781,7 @@ $(function () {
                 type = form.topbarComponentType.value,
                 index = parseInt(form.topbarIndex.value),
                 model = new ComponentModel({type: type}),
-                module = this.moduleModel;
+                module = moduleEditMobileView.model.attributes;
 
             switch (index) {
                 case 0:
@@ -770,18 +792,8 @@ $(function () {
                     }
                     break;
                 case 2:
-                    if (type == COMPONENT_TYPE_DEFAULT) {
-                        module.rightTopbars.shift();
-                    } else {
-                        module.rightTopbars[0] = model;
-                    }
-                    break;
                 case 3:
-                    if (type == COMPONENT_TYPE_DEFAULT) {
-                        module.rightTopbars.length > 1 && module.rightTopbars.pop();
-                    } else {
-                        module.rightTopbars[module.rightTopbars.length > 0 ? 1 : 0] = model;
-                    }
+                    module.rightTopbars[index-2] = model;
                     break;
                 default:
                     break;
@@ -823,6 +835,17 @@ $(function () {
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
+            $('.select-nav-icon').on({
+                click:function() {
+                    var imgContent = '';
+                    for(var i=1;i<=49;i++){
+                        imgContent += "<img class='nav-pic' src="+uidiyGlobalObj.rootUrl+"/images/admin/icon1/mc_forum_main_bar_button"+i+"_h.png >";
+                    }
+                    $('.nav-icon').html(imgContent);
+                    $('.nav-icon').toggle("drop");
+                    clickIconCall();
+                }
+            })
             return this;
         },
         submitNavItem: function (event) {
@@ -887,23 +910,7 @@ $(function () {
             this.listenTo(modules, 'add', this.addModule);
             this.listenTo(navItems, 'add', this.addNavItem);
 
-            // 转换module, component对象
             _.each(uidiyGlobalObj.moduleInitList, function (module) {
-                var tmpComponentList = [],
-                    tmpLeftTopbars = [],
-                    tmpRightTopbars = [];
-                _.each(module.componentList, function (component) {
-                    tmpComponentList.push(wrapComponent(component));
-                });
-                _.each(module.leftTopbars, function (component) {
-                    tmpLeftTopbars.push(wrapComponent(component));
-                });
-                _.each(module.rightTopbars, function (component) {
-                    tmpRightTopbars.push(wrapComponent(component));
-                });
-                module.componentList = tmpComponentList;
-                module.leftTopbars = tmpLeftTopbars;
-                module.rightTopbars = tmpRightTopbars;
                 modules.add(new ModuleModel(module));
             })
 
@@ -963,14 +970,16 @@ $(function () {
             });
         },
         uidiyInit: function () {
-            Backbone.ajax({
-                url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/init',
-                type: 'post',
-                success: function (result,status,xhr) {
-                    alert('初始化成功');
-                    location.href = uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy';
-                }
-            });
+            if (confirm('确定要初始化配置吗?')) {
+                Backbone.ajax({
+                    url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/init',
+                    type: 'post',
+                    success: function (result,status,xhr) {
+                        alert('初始化成功');
+                        location.href = uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy';
+                    }
+                });
+            }
         }
     });
 
