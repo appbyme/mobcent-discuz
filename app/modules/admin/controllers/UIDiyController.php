@@ -14,6 +14,15 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 // Mobcent::setErrors();
 class UIDiyController extends AdminController
 {
+    public $navItemIconBaseUrlPath = '';
+
+    public function init()
+    {
+        parent::init();
+
+        $this->navItemIconBaseUrlPath = $this->rootUrl . '/images/admin/icon1';
+    }
+
     public function actionIndex()
     {   
         $newsModules = AppbymePoralModule::getModuleList();
@@ -110,6 +119,7 @@ class UIDiyController extends AdminController
         $res = WebUtils::initWebApiResult();
 
         AppbymeUIDiyModel::deleteNavInfo();
+        AppbymeUIDiyModel::deleteNavInfo(true);
         AppbymeUIDiyModel::deleteModules();
         AppbymeUIDiyModel::deleteModules(true);
 

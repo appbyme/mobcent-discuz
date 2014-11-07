@@ -18,7 +18,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const NAV_KEY_TEMP = 'app_uidiy_nav_info_temp';
 
     const NAV_TYPE_BOTTOM = 'bottom';
-    const NAV_ITEM_ICON_1 = 'mc_forum_main_bar_button5_h';
+    const NAV_ITEM_ICON = 'mc_forum_main_bar_button';
 
     // module
     const MODULE_KEY = 'app_uidiy_modules';
@@ -36,9 +36,6 @@ class AppbymeUIDiyModel extends DiscuzAR
     const MODULE_STYLE_CARD = 'card';
     const MODULE_STYLE_FLAT = 'flat';
 
-    // mc_forum_top_bar_button5
-    // mc_forum_icon27
-    
     // component
     const COMPONENT_TYPE_DEFAULT = 'forumlist';
     const COMPONENT_TYPE_DISCOVER = 'discover';
@@ -97,10 +94,12 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_STYLE_LAYOUT_FOUR_COL_HIGH = 'layoutFourCol_High';
     const COMPONENT_STYLE_LAYOUT_FOUR_COL_MID = 'layoutFourCol_Mid';
     const COMPONENT_STYLE_LAYOUT_FOUR_COL_LOW = 'layoutFourCol_Low';
+    const COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW = 'layoutOneColOneRow';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW = 'layoutOneColTwoRow';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW = 'layoutOneColThreeRow';
-    const COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW = 'layoutTwoColOneRow';
-    const COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW = 'layoutThreeColOneRow';
+    const COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL = 'layoutOneRowOneCol';
+    const COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL = 'layoutTwoRowOneCol';
+    const COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL = 'layoutThreeRowOneCol';
 
     const COMPONENT_STYLE_DISCOVER_DEFAULT = 'discoverDefault';
     const COMPONENT_STYLE_DISCOVER_CUSTOM = 'discoverCustom';
@@ -121,7 +120,7 @@ class AppbymeUIDiyModel extends DiscuzAR
         return array(
             'moduleId' => 0,
             'title' => '',
-            'icon' => self::NAV_ITEM_ICON_1,
+            'icon' => self::NAV_ITEM_ICON . '1',
         );
     }
 

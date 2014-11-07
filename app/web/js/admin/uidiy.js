@@ -22,21 +22,6 @@ $(function () {
 
     var APPBYME_UIDIY_AUTOSAVE = 'appbyme_uidiy_autosave';
 
-    // 添加导航弹出图片
-    function clickIconCall() {
-        $('.nav-pic').on({
-            click:function() {
-                var selectNav = $(this).attr('src');
-                $('.nav-pic-preview').attr('src', selectNav);
-                $('.nav-icon').toggle( "drop" );
-            },
-            mousemove:function() {
-                var selectNav = $(this).attr('src');
-                $('.nav-pic-preview').attr('src', selectNav);
-            }
-        })
-    }
-
     var wrapComponent = function f(component) {
         var tmpComponentList = [];
         _.each(component.componentList, function (value) {
@@ -46,6 +31,10 @@ $(function () {
         return new ComponentModel(component);
     };
 
+    var getNavIconUrl = function (icon) {
+        return uidiyGlobalObj.navItemIconUrlBasePath+'/'+icon+'_h.png'
+    };
+    
     var toggleUICover = function () {
         $('.covering').fadeToggle();
     };
@@ -432,6 +421,8 @@ $(function () {
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH:
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_MID:
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_LOW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL:
                         size = 2;
                         break;
                     case COMPONENT_STYLE_LAYOUT_THREE_COL:
@@ -439,15 +430,15 @@ $(function () {
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_MID:
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_LOW:
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW:
-                    case COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL:
                         size = 3;
                         break;
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL:
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL_HIGH:
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL_MID:
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL_LOW:
-                    case COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW:
-                    case COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL:
                         size = 4;
                         break;
                     default:
@@ -855,17 +846,23 @@ $(function () {
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
+            // 弹出选择图标
             $('.select-nav-icon').on({
-                click:function() {
-                    var imgContent = '';
-                    for(var i=1;i<=49;i++){
-                        imgContent += "<img class='nav-pic' src="+uidiyGlobalObj.rootUrl+"/images/admin/icon1/mc_forum_main_bar_button"+i+"_h.png >";
-                    }
-                    $('.nav-icon').html(imgContent);
-                    $('.nav-icon').toggle("drop");
-                    clickIconCall();
+                click: function() {
+                    $('.nav-icon').toggle('drop');
                 }
             })
+            // 图标选择
+            $('.nav-pic').on({
+                click:function() {
+                    $('.nav-pic-preview').attr('src', $(this).attr('src'));
+                    $('#navItemIcon').val($(this).attr('data-nav-icon'));
+                    $('.nav-icon').toggle( "drop" );
+                },
+                mousemove:function() {
+                    $('.nav-pic-preview').attr('src', $(this).attr('src'));
+                },
+            });
             return this;
         },
         submitNavItem: function (event) {
@@ -876,7 +873,7 @@ $(function () {
             this.model.set({
                 title: form.navItemTitle.value,
                 moduleId: parseInt(form.navItemModuleId.value),
-                // icon: '',
+                icon: form.navItemIcon.value,
             });
 
             var error = this.model.validate(this.model.attributes);
@@ -1019,6 +1016,11 @@ $(function () {
             }
         },
     });
+    
+    window.Appbyme = {
+        uiModules: modules,
+        getNavIconUrl: getNavIconUrl,
+    };
 
     var mainView = new MainView(),
         navItemEditDlg = new NavItemEditDlg(),
@@ -1031,8 +1033,4 @@ $(function () {
         moduleEditDetailView = new ModuleEditDetailView(),
         moduleEditMobileView = new ModuleEditMobileView(),
         moduleRemoveDlg = new ModuleRemoveDlg();
-
-    window.Appbyme = {
-        uiModules: modules,
-    }
 });

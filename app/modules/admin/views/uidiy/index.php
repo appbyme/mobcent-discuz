@@ -26,7 +26,7 @@
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href=".">APPbyme</a>
+          <a class="navbar-brand" href=".">Appbyme</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav nav-list">
@@ -268,6 +268,7 @@
     <script type="text/javascript">
     var uidiyGlobalObj = {
         rootUrl: '<?php echo $this->rootUrl; ?>',
+        navItemIconUrlBasePath: '<?php echo $this->navItemIconBaseUrlPath; ?>',
         moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule(), 'utf-8'); ?>,
         componentInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initComponent(), 'utf-8'); ?>,
         layoutInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initLayout(), 'utf-8'); ?>,
@@ -291,7 +292,7 @@
     <script type="text/javascript" src="<?php echo $this->rootUrl; ?>/js/jquery-ui-1.11.2.min.js"></script>
     <!-- 底部导航模板 -->
     <script type="text/template" id="navitem-template">
-    <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/icon1/<%= icon %>.png") no-repeat 50% 35%;background-size:70px 70px'>
+    <div class="pull-left nav-column" style='background:url("<%= Appbyme.getNavIconUrl(icon) %>") no-repeat 50% 35%;background-size:70px 70px'>
         <div class="navitem-title" style="margin-top:3px;"><%= title %></div>
         <% if (moduleId != MODULE_ID_DISCOVER) { %>
         <div class="nav-edit hidden" style="margin-top:3px;">
@@ -352,9 +353,10 @@
             </div>
 
             <div class="nav-icon">
-                
+                <% for (var i = 1; i <= 49; i++) { %>
+                <img class="nav-pic" data-nav-icon="<%= NAV_ITEM_ICON+i %>" src="<%= Appbyme.getNavIconUrl(NAV_ITEM_ICON+i) %>">
+                <% } %>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label">导航图标：</label>
                 <div class="col-sm-4">
@@ -363,9 +365,10 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-4 text-left">
-                    <img src="" style="width:60px;height:60px;" class="img-rounded nav-pic-preview">
+                    <img src="<%= Appbyme.getNavIconUrl(icon) %>" style="width:60px;height:60px;" class="img-rounded nav-pic-preview">
                 </div>
             </div>
+            <input type="hidden" name="navItemIcon" id="navItemIcon" value="<%= icon %>">
             <div class="form-group">
                 <label class="col-sm-4 control-label">链接地址: </label>
                 <div class="col-sm-4">
@@ -937,10 +940,12 @@
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_MID ? 'selected' : '' %>>三栏样式(中)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_LOW ? 'selected' : '' %>>三栏样式(低)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_FOUR_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_FOUR_COL ? 'selected' : '' %>>四栏样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW ? 'selected' : '' %>>1(大)+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW ? 'selected' : '' %>>1+2样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW ? 'selected' : '' %>>1+3样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW ? 'selected' : '' %>>2+1样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW ? 'selected' : '' %>>3+1样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL ? 'selected' : '' %>>1+1(大)样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL ? 'selected' : '' %>>2+1样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL ? 'selected' : '' %>>3+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_SLIDER %>" <%= style == COMPONENT_STYLE_LAYOUT_SLIDER ? 'selected' : '' %>>幻灯片样式</option>
                     </select>
                 </div>
@@ -1016,22 +1021,6 @@
                     $('.add-channel-pop').fadeToggle();
                 }
             })
-
-            // 点击图标之后把图片放入到下方的预览框
-            function clickIconCall() {
-                $('.nav-pic').on({
-                    click:function() {
-                        var selectNav = $(this).attr('src');
-                        $('.nav-pic-preview').attr('src', selectNav);
-                        $('.nav-icon').toggle( "drop" );
-                    },
-                    mousemove:function() {
-                        var selectNav = $(this).attr('src');
-                        $('.nav-pic-preview').attr('src', selectNav);
-                    }
-
-                })
-            }
         })
     </script>
 </body>
