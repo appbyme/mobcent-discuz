@@ -14,6 +14,25 @@
             background:url("<?php echo $this->rootUrl; ?>/images/admin/moble.png") no-repeat right top;
             text-align: center;
         }
+
+
+        .nav-item-container {
+            display: -moz-box;
+            display: -webkit-box;
+            display: box;
+            float: left;
+        }
+
+        .nav-item-container .nav-item {
+            -moz-box-flex: 4;
+            -webkit-box-flex: 4;
+            box-flex: 4;
+            -webkit-box-orient: horizontal;
+            -moz-box-orient: horizontal;
+            -webkit-box-align: center;
+            -moz-box-align: center;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -202,10 +221,10 @@
 
                         <!-- 手机底部导航 -->
                         <div class="moble-bottom-nav">
-                            <div class="nav-move">
-                                <div class="pull-left nav-add navitem-add-btn">
-                                    <img src="<?php echo $this->rootUrl; ?>/images/admin/icon1/mc_forum_main_bar_button17_h.png">
-                                </div>
+                            <div class="nav-item-container">
+                            </div>
+                            <div class="pull-left nav-add navitem-add-btn">
+                                <img src="<?php echo $this->rootUrl; ?>/images/admin/icon1/mc_forum_main_bar_button17_h.png">
                             </div>
                         </div>
 
@@ -515,7 +534,10 @@
                                 <img class="img-circle pull-left" src="<%= tmpInerComponentList[j].attributes.icon %>">
                                 <div class="pull-left discover-title"><%= tmpInerComponentList[j].attributes.title %></div>
                                 <div class="pull-left oper-btn text-right">
-                                    <button type="button" class="btn btn-primary btn-xs show-hide-discover-item-btn"><%= tmpInerComponentList[j].attributes.extParams.isHidden ? '显示' : '隐藏' %></button>
+                                    <button type="button" class="btn btn-primary btn-xs show-hide-discover-item-btn">
+                                    <span class="show-discover-item-span <%= tmpInerComponentList[j].attributes.extParams.isHidden ? 'hidden' : '' %>">显示</span>
+                                    <span class="hide-discover-item-span <%= tmpInerComponentList[j].attributes.extParams.isHidden ? 'hidden' : '' %>">隐藏</span>
+                                    </button>
                                 </div>
                             </a>
                         <% } %>
@@ -527,7 +549,7 @@
                 <div class="list-group text-left">
                 <% for (var i = 0; i < tmpComponentList.length; i++) { %>
                 <% var tmpInerComponentList = tmpComponentList[i].attributes.componentList; %>
-                    <% if (tmpComponentList[i].attributes.style == COMPONENT_STYLE_DISCOVER_DEFAULT) { %>
+                    <% if (tmpComponentList[i].attributes.style == COMPONENT_STYLE_DISCOVER_CUSTOM) { %>
                         <% for (var j = 0; j < tmpInerComponentList.length; j++) { %>
                           <a class="list-group-item">
                           <img class="img-circle pull-left" src="<%= tmpInerComponentList[j].attributes.icon %>">
@@ -862,7 +884,7 @@
                     <select class="form-control input-sm" name="layoutStyle">
                         <option value="<%= COMPONENT_STYLE_LAYOUT_DEFAULT %>" <%= style == COMPONENT_STYLE_LAYOUT_DEFAULT ? 'selected' : '' %>>默认风格</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_IMAGE %>" <%= style == COMPONENT_STYLE_LAYOUT_IMAGE ? 'selected' : '' %>>图片墙风格</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_SUDOKU %>" <%= style == COMPONENT_STYLE_LAYOUT_SUDOKU ? 'selected' : '' %>>九宫格风格</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_LINE %>" <%= style == COMPONENT_STYLE_LAYOUT_LINE ? 'selected' : '' %>>线分割风格</option>
                     </select>
                 </div>
             </div>
@@ -947,6 +969,8 @@
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL ? 'selected' : '' %>>2+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL ? 'selected' : '' %>>3+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_SLIDER %>" <%= style == COMPONENT_STYLE_LAYOUT_SLIDER ? 'selected' : '' %>>幻灯片样式</option>
+                        <!-- <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_AUTO %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_AUTO ? 'selected' : '' %>>列表自动样式</option> -->
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_MANUAL %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_MANUAL ? 'selected' : '' %>>列表手动样式</option>
                     </select>
                 </div>
             </div>
@@ -999,8 +1023,10 @@
     <script type="text/javascript">
         $(function() {
             // 底部导航拖动
-            // $(".nav-move").sortable();
+            $(".nav-item-container").sortable();
+            $(".nav-item-container").disableSelection();
 
+            
             // 导航样式调整
             $('.nav-list li').hover(
                 function() {

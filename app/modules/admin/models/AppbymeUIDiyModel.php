@@ -48,6 +48,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_TYPE_FORUMLIST = 'forumlist';
     const COMPONENT_TYPE_NEWSLIST = 'newslist';
     const COMPONENT_TYPE_TOPICLIST = 'topiclist';
+    const COMPONENT_TYPE_TOPICLIST_SIMPLE = 'topiclistSimple';
     const COMPONENT_TYPE_SIGN = 'sign';
     const COMPONENT_TYPE_MESSAGELIST = 'messagelist';
     const COMPONENT_TYPE_SETTING = 'setting';
@@ -75,8 +76,11 @@ class AppbymeUIDiyModel extends DiscuzAR
 
     const COMPONENT_STYLE_LAYOUT_DEFAULT = 'layoutDefault';
     const COMPONENT_STYLE_LAYOUT_IMAGE = 'layoutImage';
-    const COMPONENT_STYLE_LAYOUT_SUDOKU = 'layoutSudoku';
+    // const COMPONENT_STYLE_LAYOUT_SUDOKU = 'layoutSudoku';
     const COMPONENT_STYLE_LAYOUT_SLIDER = 'layoutSlider';
+    const COMPONENT_STYLE_LAYOUT_LINE = 'layoutLine';
+    const COMPONENT_STYLE_LAYOUT_NEWS_AUTO = 'layoutNewsAuto';
+    const COMPONENT_STYLE_LAYOUT_NEWS_MANUAL = 'layoutNewsManual';
 
     const COMPONENT_STYLE_LAYOUT_ONE_COL = 'layoutOneCol';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH = 'layoutOneCol_High';
@@ -104,6 +108,10 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_STYLE_DISCOVER_DEFAULT = 'discoverDefault';
     const COMPONENT_STYLE_DISCOVER_CUSTOM = 'discoverCustom';
     const COMPONENT_STYLE_DISCOVER_SLIDER = 'discoverSlider';
+
+    const COMPONENT_TITLE_POSITION_LEFT = 'left';
+    const COMPONENT_TITLE_POSITION_CENTER = 'center';
+    const COMPONENT_TITLE_POSITION_RIGHT = 'right';
 
     public static function initNavigation()
     {

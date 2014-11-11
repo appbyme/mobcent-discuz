@@ -63,6 +63,7 @@ $(function () {
                 tempForumIds.push(parseInt(options[j].value));
             }
             var extParams = {
+                titlePosition: COMPONENT_TITLE_POSITION_LEFT,
                 isShowForumIcon: isShowForumIcon[i].checked ? 1 : 0,
                 isShowForumTwoCols: isShowForumTwoCols[i].checked ? 1 : 0,
                 newsModuleId: parseInt(newsModuleId[i].value),
@@ -946,7 +947,7 @@ $(function () {
         },
         addNavItem: function (navItem) {
             var view = new NavItemView({model: navItem});
-            $('.navitem-add-btn').before(view.render().el);   
+            $('.nav-item-container').append(view.render().el);   
         },
         dlgAddNavItem: function () {
             navItemEditDlg.model = new NavItemModel();
