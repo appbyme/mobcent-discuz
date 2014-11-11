@@ -49,6 +49,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_TYPE_NEWSLIST = 'newslist';
     const COMPONENT_TYPE_TOPICLIST = 'topiclist';
     const COMPONENT_TYPE_TOPICLIST_SIMPLE = 'topiclistSimple';
+    const COMPONENT_TYPE_POSTLIST = 'postlist';
     const COMPONENT_TYPE_SIGN = 'sign';
     const COMPONENT_TYPE_MESSAGELIST = 'messagelist';
     const COMPONENT_TYPE_SETTING = 'setting';
@@ -61,6 +62,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_TYPE_SURROUDING_USERLIST = 'surroudingUserlist';
     const COMPONENT_TYPE_RECOMMEND_USERLIST = 'recommendUserlist';
 
+    const COMPONENT_ICON_STYLE_TEXT = 'text';
     const COMPONENT_ICON_STYLE_IMAGE = 'image';
     const COMPONENT_ICON_STYLE_TEXT_IMAGE = 'textImage';
     const COMPONENT_ICON_STYLE_TEXT_OVERLAP_UP = 'textOverlapUp';
@@ -87,10 +89,12 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_STYLE_LAYOUT_ONE_COL_MID = 'layoutOneCol_Mid';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_LOW = 'layoutOneCol_Low';
     const COMPONENT_STYLE_LAYOUT_TWO_COL = 'layoutTwoCol';
+    const COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT = 'layoutTwoColText';
     const COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH = 'layoutTwoCol_High';
     const COMPONENT_STYLE_LAYOUT_TWO_COL_MID = 'layoutTwoCol_Mid';
     const COMPONENT_STYLE_LAYOUT_TWO_COL_LOW = 'layoutTwoCol_Low';
     const COMPONENT_STYLE_LAYOUT_THREE_COL = 'layoutThreeCol';
+    const COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT = 'layoutThreeColText';
     const COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH = 'layoutThreeCol_High';
     const COMPONENT_STYLE_LAYOUT_THREE_COL_MID = 'layoutThreeCol_Mid';
     const COMPONENT_STYLE_LAYOUT_THREE_COL_LOW = 'layoutThreeCol_Low';
@@ -280,7 +284,18 @@ class AppbymeUIDiyModel extends DiscuzAR
             'iconStyle' => self::COMPONENT_ICON_STYLE_IMAGE,
             'componentList' => array(),
             'extParams' => array(
+                'titlePosition' => self::COMPONENT_TITLE_POSITION_LEFT,
+                // 'isShowForumIcon' => 1,
+                // 'isShowForumTwoCols' => 1,
+                'isDefaultTitle' => 1,
+                'newsModuleId' => 0,
+                'forumId' => 0,
+                'moduleId' => 0,
+                'topicId' => 0,
                 'fastpostForumIds' => array(),
+                'isShowTopicTitle' => 0,
+                // 'isShowTopicSort' => 0,
+                'redirect' => '',
             ),
         );
     }

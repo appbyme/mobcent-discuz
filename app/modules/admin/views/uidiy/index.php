@@ -670,6 +670,7 @@
             <label for="" class="col-sm-2 control-label">导航名称：</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control input-sm" name="componentTitle[]" value="<%= title %>">
+                <lable><input type="checkbox" name="isDefaultTitle[]" <%= extParams.isDefaultTitle ? 'checked' : '' %>>使用该名称作为下级页面的名称</lable>
             </div>
         </div>
         <div class="form-group">
@@ -694,6 +695,7 @@
             <label for="" class="col-sm-2 control-label">图标样式: </label>
             <div class="col-sm-10">
                 <select class="form-control" name="componentIconStyle[]">
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT ? 'selected' : '' %>>纯文字</option>
                     <option value="<%= COMPONENT_ICON_STYLE_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_IMAGE ? 'selected' : '' %>>单张图片</option>
                     <option value="<%= COMPONENT_ICON_STYLE_TEXT_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_IMAGE ? 'selected' : '' %>>上图下文</option>
                     <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN ? 'selected' : '' %>>文字覆盖在下</option>
@@ -720,13 +722,16 @@
             <select name="componentType[]" class="selectComponentType form-control">
                 <option value="<%= COMPONENT_TYPE_FORUMLIST %>" <%= type == COMPONENT_TYPE_FORUMLIST ? 'selected' : '' %>>版块列表</option>
                 <option value="<%= COMPONENT_TYPE_NEWSLIST %>" <%= type == COMPONENT_TYPE_NEWSLIST ? 'selected' : '' %>>资讯列表</option>
-                <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>简版帖子列表</option>
+                <!-- <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>帖子列表</option> -->
+                <option value="<%= COMPONENT_TYPE_TOPICLIST_SIMPLE %>" <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? 'selected' : '' %>>简版帖子列表</option>
+                <option value="<%= COMPONENT_TYPE_POSTLIST %>" <%= type == COMPONENT_TYPE_POSTLIST ? 'selected' : '' %>>帖子详情</option>
                 <option value="<%= COMPONENT_TYPE_MESSAGELIST %>" <%= type == COMPONENT_TYPE_MESSAGELIST ? 'selected' : '' %>>消息列表</option>
                 <option value="<%= COMPONENT_TYPE_SURROUDING_USERLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_USERLIST ? 'selected' : '' %>>周边用户</option>
                 <option value="<%= COMPONENT_TYPE_SURROUDING_POSTLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_POSTLIST ? 'selected' : '' %>>周边帖子</option>
                 <option value="<%= COMPONENT_TYPE_RECOMMEND_USERLIST %>" <%= type == COMPONENT_TYPE_RECOMMEND_USERLIST ? 'selected' : '' %>>推荐用户</option>
                 <option value="<%= COMPONENT_TYPE_SETTING %>" <%= type == COMPONENT_TYPE_SETTING ? 'selected' : '' %>>设置</option>
                 <option value="<%= COMPONENT_TYPE_ABOAT %>" <%= type == COMPONENT_TYPE_ABOAT ? 'selected' : '' %>>关于</option>
+                <option value="<%= COMPONENT_TYPE_MODULEREF %>" <%= type == COMPONENT_TYPE_MODULEREF ? 'selected' : '' %>>模块指向</option>
                 <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
                 <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %>>发表文字</option>
                 <option value="<%= COMPONENT_TYPE_FASTIMAGE %>" <%= type == COMPONENT_TYPE_FASTIMAGE ? 'selected' : '' %>>发表图片</option>
@@ -738,8 +743,8 @@
         </div>
 
         <div id="component-view-<% print(COMPONENT_TYPE_FORUMLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_FORUMLIST ? '' : 'hidden' %>">
-
-            <div class="form-group hidden">
+        <!--
+            <div class="form-group">
                 <label class="col-sm-2 control-label">设置样式：</label>
                 <div class="col-sm-10">
                     <div>
@@ -754,7 +759,7 @@
                     </div>
                 </div>
             </div>
-
+        --> 
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_NEWSLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_NEWSLIST ? '' : 'hidden' %>">
             <div class="form-group">
@@ -773,12 +778,34 @@
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">选择版块: </label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="forumId[]">
-                        <option value="0" <%= extParams.forumId == 0 ? 'selected' : '' %> class="hidden">全部版块</option>
+                    <select class="form-control" name="topicForumId[]">
+                        <option value="0" <%= extParams.forumId == 0 ? 'selected' : '' %> class="">全部版块</option>
+                    <?php foreach ($forumList as $fid => $title) { ?>
+                        <option value="<?php echo $fid ?>" <%= extParams.forumId == <?php echo $fid; ?> ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
+                    <?php } ?>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div id="component-view-<% print(COMPONENT_TYPE_TOPICLIST_SIMPLE+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? '' : 'hidden' %>">
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">选择版块: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="topicSimpleForumId[]">
+                        <option value="0" <%= extParams.forumId == 0 ? 'selected' : '' %> class="">全部版块</option>
                     <?php foreach ($forumList as $fid => $title) { ?>
                         <option value="<?php echo $fid ?>" <%= extParams.forumId == <?php echo $fid; ?> ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
                     <?php } ?>
                     </select> 
+                </div>
+            </div>
+        </div>
+        <!-- 帖子详情模板 -->
+        <div id="component-view-<% print(COMPONENT_TYPE_POSTLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_POSTLIST ? '' : 'hidden' %>">
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">主题id: </label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control input-sm" name="topicId[]" value="<%= extParams.topicId %>">
                 </div>
             </div>
         </div>
@@ -803,6 +830,20 @@
                 </div>
             </div>
         </div>
+        <!-- 模块指向 组件模板 -->
+        <div id="component-view-<% print(COMPONENT_TYPE_MODULEREF+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_MODULEREF ? '' : 'hidden' %>">
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">选择模块: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="moduleId[]">
+                    <% for (var i = 0; i < Appbyme.uiModules.length; i++) { %>
+                        <% var module = Appbyme.uiModules.models[i].attributes; %>
+                        <option value="<%= module.id %>" <%= extParams.moduleId == module.id ? 'selected' : '' %>><%= module.title %></option> 
+                    <% } %>
+                    </select>
+                </div>
+            </div>
+        </div>
         <!-- fasttext/fastimage/fastcamera/fastaudio 组件模板 -->
         <div id="component-view-fastpost-<%= id %>" class="component-view-item <%= type == COMPONENT_TYPE_FASTTEXT || type == COMPONENT_TYPE_FASTIMAGE || type == COMPONENT_TYPE_FASTCAMERA || type == COMPONENT_TYPE_FASTAUDIO ? '' : 'hidden' %>">
             <div class="form-group">
@@ -820,9 +861,11 @@
                     <label class="checkbox-inline">
                         <input type="checkbox" name="isShowTopicTitle[]" <%= extParams.isShowTopicTitle ? 'checked' : '' %>> 勾选则需用户填写标题
                     </label>
+                    <!-- 
                     <label class="checkbox-inline">
                         <input type="checkbox" name="isShowTopicSort[]" <%= extParams.isShowTopicSort ? 'checked' : '' %>> 勾选则显示主题分类
                     </label>
+                    -->
                 </div>
             </div>
         </div>
@@ -955,9 +998,11 @@
                     <select class="form-control input-sm layoutStyleSelect" name="layoutStyle">
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH ? 'selected' : '' %>>单栏样式(高)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW ? 'selected' : '' %>>单栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT ? 'selected' : '' %>>双栏文字</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH ? 'selected' : '' %>>双栏样式(高)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_MID ? 'selected' : '' %>>双栏样式(中)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_LOW ? 'selected' : '' %>>双栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT ? 'selected' : '' %>>三栏文字</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH ? 'selected' : '' %>>三栏样式(高)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_MID ? 'selected' : '' %>>三栏样式(中)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_LOW ? 'selected' : '' %>>三栏样式(低)</option>
@@ -1022,11 +1067,6 @@
     <!-- 页面弹出样式用到的js -->
     <script type="text/javascript">
         $(function() {
-            // 底部导航拖动
-            $(".nav-item-container").sortable();
-            $(".nav-item-container").disableSelection();
-
-            
             // 导航样式调整
             $('.nav-list li').hover(
                 function() {

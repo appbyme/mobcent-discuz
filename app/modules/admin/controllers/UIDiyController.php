@@ -97,15 +97,20 @@ class UIDiyController extends AdminController
             foreach ($modules as $module) {
                 $module['leftTopbars'] = $this->_filterTopbars($module['leftTopbars']);
                 $module['rightTopbars'] = $this->_filterTopbars($module['rightTopbars']);
-                if ($module['type'] == AppbymeUIDiyModel::MODULE_TYPE_SUBNAV) {
-                    $tempComponentList = array();
-                    foreach ($module['componentList'] as $component) {
+                
+                $tempComponentList = array();
+                foreach ($module['componentList'] as $component) {
+                    $component = $this->_filterComponent($component);
+                    if ($module['type'] == AppbymeUIDiyModel::MODULE_TYPE_SUBNAV) {
                         if ($component['title'] != '') {
                             $tempComponentList[] = $component;
                         }
+                    } else {
+                        $tempComponentList[] = $component;
                     }
-                    $module['componentList'] = $tempComponentList;
-                }
+                }                    
+                $module['componentList'] = $tempComponentList;
+
                 $tempModules[] = $module;
             }
             AppbymeUIDiyModel::saveModules($tempModules);
@@ -133,5 +138,23 @@ class UIDiyController extends AdminController
             $topbar['type'] != AppbymeUIDiyModel::COMPONENT_TYPE_DEFAULT && $tempTopbars[] = $topbar;
         }
         return $tempTopbars;
+    }
+
+    private function _filterComponent($component) 
+    {
+        loadcache('forums');
+        global $_G;
+        $forums = $_G['cache']['forums'];
+
+        $tempComponent = $component;
+        $tempFastpostForumIds = array();
+        foreach ($component['extParams']['fastpostForumIds'] as $fid) {
+            $tempFastpostForumIds[] = array(
+                'fid' => $fid,
+                'title' => WebUtils::u($forums[$fid]['name']),
+            );
+        }
+        $tempComponent['extParams']['fastpostForumIds'] = $tempFastpostForumIds;
+        return $tempComponent;
     }
 }
