@@ -18,6 +18,24 @@ $(function () {
         };
     };
 
+    var sortArrayHelper = function (arr, fromIndex, toIndex) {
+        if (fromIndex == toIndex) {
+            return arr;
+        }
+        var tmp = arr[fromIndex];
+        if (toIndex > fromIndex) {
+            for (var i = fromIndex; i < toIndex; i++) {
+                arr[i] = arr[i+1];
+            }
+        } else {
+            for (var i = fromIndex; i > toIndex; i--) {
+                arr[i] = arr[i-1];
+            }
+        }
+        arr[toIndex] = tmp;
+        return arr;
+    };
+
     var localStorageWrapper = new LocalStorageWrapper();
 
     var APPBYME_UIDIY_AUTOSAVE = 'appbyme_uidiy_autosave';
@@ -314,6 +332,10 @@ $(function () {
             this.$el.html(this.template(this.model.attributes));
             this.changeShowHeader();
             this.changeShowHeaderMore();
+
+            // 添加风格区更多的组件
+            var view = new ComponentView({model: new ComponentModel(this.model.attributes.extParams.styleHeader.moreComponent)});
+            $('.component-view-container').html(view.render().el);
             return this;
         },
         toggle: function () {
@@ -324,22 +346,21 @@ $(function () {
             this.toggle();
             this.$el.html('');
         },
+        // 风格区submit
         submitStyleComponent: function (event) {
             event.preventDefault();
 
             var form = $('.style-edit-form')[0];
-            // var component = new ComponentModel();
-
+            var componentList = submitComponentHelper(form);
             var extParams = {
                 styleHeader: {
                     isShow: parseInt(form.isShowStyleHeader.value),
                     title: form.styleHeaderTitle.value,
                     position: parseInt(form.styleHeaderPosition.value),
                     isShowMore: parseInt(form.isShowStyleHeaderMore.value),
-                    // moreComponent: component,
+                    moreComponent: componentList[0].attributes,
                 },
             };
-            // console.log(extParams);
             
             this.model.set({
                 type: COMPONENT_TYPE_LAYOUT,
@@ -586,7 +607,6 @@ $(function () {
                         })
 
                     }
-
                     break;
                 case MODULE_TYPE_FASTPOST:
                     _.each(this.model.attributes.componentList, function (component) {
@@ -707,7 +727,22 @@ $(function () {
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
-            $('.carousel-example-generic_one').carousel();
+
+            // render 发现组件
+            if (this.model.id == MODULE_ID_DISCOVER) {
+                var componentList = this.model.attributes.componentList[0].attributes.componentList,
+                    sliderComponentList = componentList[0].attributes.componentList,
+                    fixComponentList = componentList[1].attributes.componentList,
+                    userComponentList = componentList[2].attributes.componentList;
+                // render fix
+                for (var i = 0; i < fixComponentList.length; i++) {
+                    var view = new DiscoverFixComponentItemView({model: fixComponentList[i]});
+                    $('.discover-fix-component-container').append(view.render().el);
+                }
+
+                $('.carousel-example-generic_one').carousel();
+            }
+
             return this;
         },
         selectTopbar: function (event) {
@@ -783,6 +818,45 @@ $(function () {
             newsComponentEditDlg.model = this.model;
             newsComponentEditDlg.render();
             newsComponentEditDlg.toggle();
+        },
+        removeItem: function () {
+            this.model.destroy();
+        },
+    });
+
+    // 发现固定组件view
+    var DiscoverFixComponentItemView = Backbone.View.extend({
+        className: 'list-group-item',
+        template: _.template($('#discover-fix-component-item-template').html()),
+        events: {
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+
+            return this;
+        },
+    });
+
+    // 发现用户可添加组件view
+    var DiscoverUserComponentItemView = Backbone.View.extend({
+        className: 'list-group-item',
+        template: _.template($('#discover-user-component-item-template').html()),
+        events: {
+            'click .edit-discover-item-btn': 'dlgEditComponent',
+            'click .remove-discover-item-btn': 'removeItem',
+        },
+        initialize: function () {
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'destroy', this.remove);
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        dlgEditComponent: function () {
+            // newsComponentEditDlg.model = this.model;
+            // newsComponentEditDlg.render();
+            // newsComponentEditDlg.toggle();
         },
         removeItem: function () {
             this.model.destroy();
@@ -1026,30 +1100,17 @@ $(function () {
 
             // 底部导航拖动
             var navSortStartIndex = 0;
-            $(".nav-item-container").sortable({
+            $('.nav-item-container').sortable({
                 revert: true,
                 opacity: 0.6,
                 start: function (event, ui) {
-                    navSortBeginIndex = ui.item.index();
+                    navSortStartIndex = ui.item.index();
                 },
                 update: function (event, ui) {
-                    // var navSortStopIndex = ui.item.index();
-                    // var tempNavItems = navItems.models;
-                    // if (navSortStopIndex > navSortStartIndex) {
-                    //     var tmpNavItem = tempNavItems[navSortStartIndex];
-                    //     for (var i = navSortStartIndex; i < navSortStopIndex; i++) {
-                    //         navItems[i] = tempNavItems[i+1];
-                    //     }
-                    //     navItems[navSortStopIndex] = tmpNavItem;
-                    // } else {
-                    //     // for (var i = navSortStopIndex+1; i <= navSortStartIndex; i++) {
-                    //     //     navItems[i] = tempNavItems[i-1];
-                    //     // }
-                    // }
-                    // console.log(navItems);
+                    sortArrayHelper(navItems.models, navSortStartIndex, ui.item.index());
                 },
             });
-            $(".nav-item-container").disableSelection();
+            $('.nav-item-container').disableSelection();
         },
         render: function () {
             return this;

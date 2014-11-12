@@ -17,7 +17,6 @@
             text-align: center;
         }
 
-
         .nav-item-container {
             display: -moz-box;
             display: -webkit-box;
@@ -38,7 +37,6 @@
     </style>
 </head>
 <body>
-
 <div class="covering"></div>
 
 <?php global $_G; ?>
@@ -316,9 +314,9 @@
     <script src="<?php echo $this->rootUrl; ?>/js/bootstrap-3.2.0.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/underscore-1.7.0.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/backbone-1.1.2.min.js"></script>
-    <script src="<?php echo $this->rootUrl; ?>/js/admin/uidiy.js"></script>
+    <script src="<?php echo $this->rootUrl; ?>/js/jquery-ui-1.11.2.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/bootstrap-switch-3.0.2.min.js"></script>
-    <script type="text/javascript" src="<?php echo $this->rootUrl; ?>/js/jquery-ui-1.11.2.min.js"></script>
+    <script src="<?php echo $this->rootUrl; ?>/js/admin/uidiy.js"></script>
     <!-- 底部导航模板 -->
     <script type="text/template" id="navitem-template">
     <div class="pull-left nav-column" style='background:url("<%= Appbyme.getNavIconUrl(icon) %>") no-repeat 50% 35%;background-size:70px 70px'>
@@ -535,43 +533,11 @@
         </div>
         <div class="found-content">
             <div class="fixed-content">
-                <div class="list-group text-left">
-                <% for (var i = 0; i < tmpComponentList.length; i++) { %>
-                <% var tmpInerComponentList = tmpComponentList[i].attributes.componentList; %>
-                    <% if (tmpComponentList[i].attributes.style == COMPONENT_STYLE_DISCOVER_DEFAULT) { %>
-                        <% for (var j = 0; j < tmpInerComponentList.length; j++) { %>
-                            <a class="list-group-item">
-                                <img class="img-circle pull-left" src="<%= tmpInerComponentList[j].attributes.icon %>">
-                                <div class="pull-left discover-title"><%= tmpInerComponentList[j].attributes.title %></div>
-                                <div class="pull-left oper-btn text-right">
-                                    <button type="button" class="btn btn-primary btn-xs show-hide-discover-item-btn">
-                                    <span class="show-discover-item-span <%= tmpInerComponentList[j].attributes.extParams.isHidden ? 'hidden' : '' %>">显示</span>
-                                    <span class="hide-discover-item-span <%= tmpInerComponentList[j].attributes.extParams.isHidden ? 'hidden' : '' %>">隐藏</span>
-                                    </button>
-                                </div>
-                            </a>
-                        <% } %>
-                    <% } %>
-                <% } %>
+                <div class="list-group text-left discover-fix-component-container">
                 </div>
             </div>
             <div class="user-content">
-                <div class="list-group text-left">
-                <% for (var i = 0; i < tmpComponentList.length; i++) { %>
-                <% var tmpInerComponentList = tmpComponentList[i].attributes.componentList; %>
-                    <% if (tmpComponentList[i].attributes.style == COMPONENT_STYLE_DISCOVER_CUSTOM) { %>
-                        <% for (var j = 0; j < tmpInerComponentList.length; j++) { %>
-                          <a class="list-group-item">
-                          <img class="img-circle pull-left" src="<%= tmpInerComponentList[j].attributes.icon %>">
-                          <div class="pull-left discover-title"><%= tmpInerComponentList[j].attributes.title %></div>
-                          <div class="pull-left oper-btn text-right">
-                              <button type="button" class="btn btn-primary btn-xs edit-discover-item-btn">编辑</button>
-                              <button type="button" class="btn btn-primary btn-xs  remove-discover-item-btn">删除</button>
-                          </div>
-                          </a>
-                        <% } %>
-                    <% } %>
-                <% } %>
+                <div class="list-group text-left discover-user-component-container">
                 </div>
             </div>
         </div>
@@ -922,6 +888,25 @@
             <button class="edit-news-component-item-btn btn btn-primary btn-xs">编辑</button>
             <button class="remove-news-component-item-btn btn btn-primary btn-xs">删除</button>
         </div>
+    </script>
+    <!-- 发现固定项在手机ui的组件模板 -->
+    <script type="text/template" id="discover-fix-component-item-template">
+        <img class="img-circle pull-left" src="<%= icon %>">
+        <div class="pull-left discover-title"><%= title %></div>
+        <div class="pull-left oper-btn text-right">
+            <div class="switch switch-small" data-on-label="显示" data-off-label="隐藏">
+                <input type="checkbox" class="discoverFixComponentHiddenCheckbox" <%= extParams.isHidden ? '' : 'checked' %> />
+            </div>         
+        </div>
+    </script>
+    <!-- 发现用户项在手机ui的组件模板 -->
+    <script type="text/template" id="discover-user-component-item-template">
+      <img class="img-circle pull-left" src="<%= icon %>">
+      <div class="pull-left discover-title"><%= title %></div>
+      <div class="pull-left oper-btn text-right">
+          <button type="button" class="btn btn-primary btn-xs edit-discover-item-btn">编辑</button>
+          <button type="button" class="btn btn-primary btn-xs remove-discover-item-btn">删除</button>
+      </div>
     </script>
     <!-- 添加/编辑 自定义模块 风格组件模板 -->
     <script type="text/template" id="custom-style-edit-dlg-template">
