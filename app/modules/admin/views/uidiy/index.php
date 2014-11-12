@@ -12,7 +12,8 @@
     <style type="text/css">
         .mobleShow {
             width: 380px;
-            background:url("<?php echo $this->rootUrl; ?>/images/admin/moble.png") no-repeat right top;
+            background:url("<?php echo $this->rootUrl; ?>/images/admin/mobile.png") no-repeat right top;
+            background-size: 380px 800px;
             text-align: center;
         }
 
@@ -38,7 +39,6 @@
 </head>
 <body>
 
-
 <div class="covering"></div>
 
 <?php global $_G; ?>
@@ -46,7 +46,7 @@
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href=".">Appbyme</a>
+          <a class="navbar-brand" href="http://www.appbyme.com" target="_blank">Appbyme</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav nav-list">
@@ -215,6 +215,9 @@
                         </div>
 
                         <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
+                        <div style="width:336px;height:550px" class="hidden">
+
+                        </div>
 
                         <!-- 模块于手机内的编辑视图 -->
                         <div id="module-edit-mobile-view">
@@ -319,7 +322,7 @@
     <!-- 底部导航模板 -->
     <script type="text/template" id="navitem-template">
     <div class="pull-left nav-column" style='background:url("<%= Appbyme.getNavIconUrl(icon) %>") no-repeat 50% 35%;background-size:70px 70px'>
-        <div class="navitem-title" style="margin-top:3px;"><%= title %></div>
+        <div class="navitem-title" style="margin-top:3px;color:white"><%= title %></div>
         <% if (moduleId != MODULE_ID_DISCOVER) { %>
         <div class="nav-edit hidden" style="margin-top:3px;">
             <a><span class="navitem-edit-btn"><small>编辑</a></small></span></a>
@@ -500,7 +503,7 @@
     <div class="found-module">
         <% var tmpComponentList = componentList[0].attributes.componentList; %>
         <div class="slide-img">
-        <div class="carousel slide carousel-example-generic_one" data-ride="carousel" data-interval="3000" style="width:320px;height:150px;">
+        <div class="carousel slide carousel-example-generic_one" data-ride="carousel" data-interval="3000" style="width:337px;height:150px;">
                 <!-- 圆点 -->
                 <ol class="carousel-indicators">
                     <li data-target=".carousel-example-generic_one" data-slide-to="0" class="active"></li>
@@ -509,13 +512,13 @@
                 <!-- 图片区域，item是一个图片 -->
                 <div class="carousel-inner">
                     <div class="item active">
-                        <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp1.jpg" alt="" style="width:320px;height:150px;">
+                        <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp1.jpg" alt="" style="width:337px;height:150px;">
                         <div class="carousel-caption">
                             <p>predecessor</p> 
                         </div>
                     </div>
                     <div class="item">
-                        <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp2.jpg" style="width:320px;height:150px;">
+                        <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp2.jpg" style="width:337px;height:150px;">
                         <div class="carousel-caption">
                             <p>Similar to the updates Samsung made to the Galaxy S4</p>
                         </div>
@@ -582,7 +585,7 @@
     <div class="pic-text list-group">
         <div class="news-component-item-container">
         </div>
-        <div class="text-center">
+        <div class="text-center" style="margin-top:10px;">
            <button type="button" class="btn btn-primary add-news-component-item-btn">点击添加更多</button>
         </div>
     </div>
@@ -1095,6 +1098,7 @@
                     $('.add-channel-pop').fadeToggle();
                 }
             })
+
         })
     </script>
 </body>

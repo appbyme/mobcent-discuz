@@ -32,7 +32,7 @@ $(function () {
     };
 
     var getNavIconUrl = function (icon) {
-        return uidiyGlobalObj.navItemIconUrlBasePath+'/'+icon+'_h.png'
+        return uidiyGlobalObj.navItemIconUrlBasePath+'/'+icon+'_n.png'
     };
     
     var toggleUICover = function () {
@@ -188,9 +188,17 @@ $(function () {
             this.listenTo(this.model, 'destroy', this.remove);
 
             this.$el.hover(function() {
+                var imgUrl = $(this).children('.nav-column').css('background-image'); 
+                var newImgUrl = imgUrl.replace(/_n.png/,'_h.png');
+                $(this).children('.nav-column').css('background-image', newImgUrl);
+
                 $(this).find('.navitem-title').addClass('hidden');
                 $(this).find('.nav-edit').removeClass('hidden');
             }, function () {
+                var imgUrl = $(this).children('.nav-column').css('background-image'); 
+                var newImgUrl = imgUrl.replace(/_h.png/,'_n.png');
+                $(this).children('.nav-column').css('background-image', newImgUrl);
+                
                 $(this).find('.navitem-title').removeClass('hidden');
                 $(this).find('.nav-edit').addClass('hidden');
             });
