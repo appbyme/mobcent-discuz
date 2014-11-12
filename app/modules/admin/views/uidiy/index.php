@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-3.2.0.min.css">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-theme-3.2.0.min.css">
+    <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-switch-3.0.2.min.css">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/appbyme-admin-uidiy.css">
     <style type="text/css">
         .mobleShow {
@@ -219,17 +220,22 @@
                 <div id="module-edit-dlg-view" class="module-play">
                 </div>
 
-                <div>
-                请点击<button class="uidiy-save-btn">保存</button>按钮来保存你的客户端UI配置, 或者可以勾选<label><input type="checkbox" id="autoSaveCheckbox">(自动保存)</label>
-                <p>PS: 这里仅仅保存你在后台的配置, 如果想同步到客户端, 请点击下面的同步按钮</p>
+                <div class="text-left">
+                    <p>
+                        请点击 <button class="btn btn-primary btn-xs uidiy-save-btn"> 保存 </button> 按钮来保存你的客户端UI配置, 或者可以勾选
+                        <label for="autoSaveCheckbox">
+                            <input type="checkbox" id="autoSaveCheckbox" class="align-text"> 自动保存
+                        </label>
+                    </p>
+                    <p>PS: 这里仅仅保存你在后台的配置, 如果想同步到客户端, 请点击 <a href="#save-btn" target"_self" class="save-btn">下面</a> 的同步按钮</p>
                 </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">选择导航样式</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="radio">
-                            <label><input type="radio"> 底部导航</label>
+                        <div class="checkbox">
+                            <label class="align-text"><input type="radio" > 底部导航</label>
                         </div>
                     </div>
                 </div>
@@ -251,7 +257,7 @@
                 <div id="foot">
                     <p class="text-center">
                         设置完成后请务必点击 
-                        <button type="button" class="btn btn-primary btn-sm uidiy-sync-btn">同 步</button> 保证您所添加或设置的内容能在客户端显示！
+                        <button id="save-btn" type="button" class="btn btn-primary btn-sm uidiy-sync-btn">同 步</button> 保证您所添加或设置的内容能在客户端显示！
                         恢复初始设置可以点击
                         <button type="button" class="btn btn-primary btn-sm uidiy-init-btn">默认设置</button> 来进行恢复！
                     </p>                     
@@ -288,6 +294,7 @@
     <script src="<?php echo $this->rootUrl; ?>/js/underscore-1.7.0.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/backbone-1.1.2.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/admin/uidiy.js"></script>
+    <script src="<?php echo $this->rootUrl; ?>/js/bootstrap-switch-3.0.2.min.js"></script>
     <script type="text/javascript" src="<?php echo $this->rootUrl; ?>/js/jquery-ui-1.11.2.min.js"></script>
     <!-- 底部导航模板 -->
     <script type="text/template" id="navitem-template">
@@ -547,7 +554,7 @@
     <% } else if (type == MODULE_TYPE_SUBNAV) { %>
     <% } else if (type == MODULE_TYPE_NEWS) { %>
     <!-- 左图右文 -->
-    <div class="pic-text">
+    <div class="pic-text list-group">
         <div class="news-component-item-container">
         </div>
         <div class="text-center">
@@ -656,13 +663,16 @@
         <div class="form-group">
             <label for="" class="col-sm-2 control-label">编辑图标：</label>
             <div class="col-sm-10">
-                <input type="file" name="componentIcon[]" value="<%= icon %>">
+                <input type="file" name="componentIcon[]" class="pic-file-<%= id %>" data-unique="<%= id %>" value="<%= icon %>">
                 <p class="help-block">请上传1:1比例的JPG或PNG格式图片作为图标</p>
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <img src="<%= icon %>" style="width:50px;height:50px;" class="img-rounded">
+            <!-- col-sm-offset-2 col-sm-10 -->
+            <div class="col-sm-offset-2 col-sm-10 pic-preview" style="position:relative;">
+                <img class="del-pic del-<%= id %> hidden" data-unique="<%= id %>" src="<?php echo $this->rootUrl; ?>/images/admin/del_pic.png">
+                <img src="<%= icon %>" data-src="" style="width:50px;height:50px;" class="img-rounded preview-area-<%= id %>">
+                <a class="btn btn-default btn-sm upload-pic-<%= id %>" data-unique="<%= id %>" >点击上传图片</a>
             </div>
         </div>
         <div class="form-group">
@@ -832,17 +842,15 @@
     </script>
     <!-- 左图右文模块 于手机ui的组件模板 -->
     <script type="text/template" id="news-component-item-template">
-    <div class="edit-list">
         <div class="pull-left"><img src="<%= icon %>" style="width:50px;height:50px" class="img-rounded"></div>
         <div class="pull-left text-left page-main">
             <div class="page-title"><strong><%= title || '此处显示为标题' %></strong></div>
             <div class="page-content"><%= desc || '此处显示为文字描述' %></div>
         </div>
-        <div class="text-left pull-left">
+        <div class="text-left pull-left page-btn">
             <button class="edit-news-component-item-btn btn btn-primary btn-xs">编辑</button>
             <button class="remove-news-component-item-btn btn btn-primary btn-xs">删除</button>
         </div>
-    </div>
     </script>
     <!-- 添加/编辑 自定义模块 风格组件模板 -->
     <script type="text/template" id="custom-style-edit-dlg-template">
@@ -984,7 +992,7 @@
     <div class="style-area">
         分割区示意
     </div>
-    <div class="text-left pull-left">
+    <div class="text-left">
         <button class="edit-style-component-item-btn btn btn-primary btn-xs">编辑</button>
         <button class="remove-style-component-item-btn btn btn-primary btn-xs">删除</button>
     </div>
@@ -1016,22 +1024,6 @@
                     $('.add-channel-pop').fadeToggle();
                 }
             })
-
-            // 点击图标之后把图片放入到下方的预览框
-            function clickIconCall() {
-                $('.nav-pic').on({
-                    click:function() {
-                        var selectNav = $(this).attr('src');
-                        $('.nav-pic-preview').attr('src', selectNav);
-                        $('.nav-icon').toggle( "drop" );
-                    },
-                    mousemove:function() {
-                        var selectNav = $(this).attr('src');
-                        $('.nav-pic-preview').attr('src', selectNav);
-                    }
-
-                })
-            }
         })
     </script>
 </body>

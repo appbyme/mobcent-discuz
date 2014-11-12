@@ -37,6 +37,29 @@ $(function () {
         })
     }
 
+    // 上传图片
+    function clickUpload(id) {
+        // console.log(thi);
+        alert(id);
+        var data = new FormData();
+        data.append('file', $('+id+')[0].files[0]);
+        $.ajax({
+            // timeout:2000,
+            type:"POST",
+            url:"<?php echo $this->rootUrl; ?>/index.php?r=admin/uidiy/UploadIcon",
+            data:data,
+            cache:false,
+            processData: false,
+            contentType: false,
+            success:function(msg) {
+                console.log(msg);
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        })
+    }
+
     var wrapComponent = function f(component) {
         var tmpComponentList = [];
         _.each(component.componentList, function (value) {
@@ -508,7 +531,76 @@ $(function () {
                         var model = componentList[i];
                         var view = new ComponentView({model: model});
                         $('.component-view-container').eq(i).html(view.render().el);
+                        // alert(model.id);
+                        $('.upload-pic-'+model.id).click(function () {
+                            var uniqueId = $(this).attr('data-unique');
+                            var data = new FormData();
+                            data.append('file', $('.pic-file-'+uniqueId)[0].files[0]);
+                            $.ajax({
+                                // timeout:2000,
+                                type:"POST",
+                                url:uidiyGlobalObj.rootUrl+"/index.php?r=admin/uidiy/UploadIcon",
+                                data:data,
+                                dataType:'json',
+                                cache:false,
+                                processData: false,
+                                contentType: false,
+                                success:function(msg) {
+                                    if (!msg.errCode) {
+                                        alert(msg.errMsg);
+                                        return false;
+                                    }
+                                    // 获取原来的图片，并且删除
+                                    var fileName = $('.preview-area-'+uniqueId).attr('data-src');
+  
+                                    $.ajax({
+                                        type:'GET',
+                                        url:uidiyGlobalObj.rootUrl+"/index.php?r=admin/uidiy/DelImgFile",
+                                        data:{'fileName':fileName},
+                                        success:function(msg) {
+                                           console.log(msg);
+                                        }
+                                    })
+                                    
+                                    $('.preview-area-'+uniqueId).attr('src', msg.errMsg);
+                                    alert('上传成功！');
+                                },
+                                error:function(XMLHttpRequest, textStatus, errorThrown) {
+                                    console.log(textStatus);
+                                }
+                            });
+                        });
+                        
+                        // input 框变化的时候出现预览框
+                        $('.pic-file-'+model.id).on({
+                            change:function() {
+                                var uniqueId = $(this).attr('data-unique');
+                                var imgSrc = $('.preview-area-'+uniqueId).attr('src');
+                                if ((imgSrc.indexOf('blob') == '-1') && (imgSrc.indexOf('module-default.png') == '-1')) {
+                                    $('.preview-area-'+uniqueId).attr('data-src', imgSrc);
+                                }
+
+                                var img = $(this)[0].files[0];
+                                var imgRes = window.URL.createObjectURL(img);
+                                $('.preview-area-'+uniqueId).attr('src', imgRes);
+                            }
+                        });
+                            
+                        // 删除图片
+                        $('.del-'+model.id).on({
+                            click:function() {
+                               var uniqueId = $(this).attr('data-unique');
+                               var fileName = $('.preview-area-'+uniqueId).attr('src');
+                               $.ajax({
+                                    type:'POST',
+                                    url:uidiyGlobalObj.rootUrl+"/index.php?r=admin/uidiy/delImgFile",
+
+                               })
+                            }
+                        })
+
                     }
+
                     break;
                 case MODULE_TYPE_FASTPOST:
                     _.each(this.model.attributes.componentList, function (component) {
@@ -687,7 +779,7 @@ $(function () {
     });
     
     var NewsComponentItemView = Backbone.View.extend({
-        className: 'news-component-item',
+        className: 'news-component-item list-group-item',
         template: _.template($('#news-component-item-template').html()),
         events: {
             'click .edit-news-component-item-btn': 'dlgEditNewsComponent',

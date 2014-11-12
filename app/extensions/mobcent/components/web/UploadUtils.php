@@ -14,13 +14,13 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 class UploadUtils {
 
     public static function getTempAvatarPath() {
-        return self::_makeBasePath(MOBCENT_RUNTIME_PATH.'/avatar');
+        return self::makeBasePath(MOBCENT_RUNTIME_PATH.'/avatar');
     }
 
     public static function getUploadImageBasePath($suffixPath='') {
         $tempPath = $suffixPath != '' ? '/'.$suffixPath : '';
         $basePath = sprintf('%s%s', MOBCENT_UPLOAD_PATH.'/image', $tempPath);
-        return self::_makeBasePath($basePath);
+        return self::makeBasePath($basePath);
     }
 
     public static function getUploadImageBaseUrlPath() {
@@ -34,10 +34,10 @@ class UploadUtils {
     public static function getUploadAudioBasePath($suffixPath='') {
         $tempPath = $suffixPath != '' ? '/'.$suffixPath : '';
         $basePath = sprintf('%s%s', MOBCENT_UPLOAD_PATH.'/audio', $tempPath);
-        return self::_makeBasePath($basePath);
+        return self::makeBasePath($basePath);
     }
     
-    private static function _makeBasePath($path) {
+    public static function makeBasePath($path) {
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }

@@ -65,9 +65,9 @@
                 <img src="<?php echo $this->rootUrl; ?>/images/logo.png" class="img-responsive img-circle" alt="Responsive image">
             </div>
         </div>
-        <form class="form-signin" role="form" action="" method="post">
-            <input type="text" name="username" class="form-control" placeholder="请输入用户名"  required autofocus >
-            <input type="password" name="password" class="form-control" placeholder="请输入密码" required >
+        <form class="form-signin" role="form" action="" method="post" autocomplete="off">
+            <input type="text" name="username" class="form-control" placeholder="请输入用户名" required autofocus >
+            <input type="password" name="password" class="form-control" placeholder="请输入密码" autocomplete="off" required >
             <button class="btn btn-primary  btn-lg btn-block" type="submit">登 录</button>
         </form>
     </div>

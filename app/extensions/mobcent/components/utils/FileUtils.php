@@ -34,7 +34,7 @@ class FileUtils {
         $fileName = '';
         while (true) {
             $fileName = sprintf('%s/%s', $path, self::getRandomFileName($prefix, $len, $suffix));
-            if (file_exists($fileName))
+            if (!file_exists($fileName))
                 break;
         }
         return $fileName;
