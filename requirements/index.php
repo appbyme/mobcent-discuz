@@ -65,6 +65,13 @@ $requirements=array(
         t('yii', ''),
     ),
     array(
+        t('yii', 'iconv 扩展模块'),
+        true,
+        function_exists('iconv'),
+        '<a href="http://www.yiiframework.com">Yii Framework</a>',
+        t('yii', ''),
+    ),
+    array(
         t('yii', 'cURL 扩展模块'),
         false,
         function_exists('curl_init'),

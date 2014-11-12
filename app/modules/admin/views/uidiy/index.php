@@ -15,6 +15,25 @@
             background:url("<?php echo $this->rootUrl; ?>/images/admin/moble.png") no-repeat right top;
             text-align: center;
         }
+
+
+        .nav-item-container {
+            display: -moz-box;
+            display: -webkit-box;
+            display: box;
+            float: left;
+        }
+
+        .nav-item-container .nav-item {
+            -moz-box-flex: 4;
+            -webkit-box-flex: 4;
+            box-flex: 4;
+            -webkit-box-orient: horizontal;
+            -moz-box-orient: horizontal;
+            -webkit-box-align: center;
+            -moz-box-align: center;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -27,7 +46,7 @@
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href=".">APPbyme</a>
+          <a class="navbar-brand" href=".">Appbyme</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav nav-list">
@@ -203,10 +222,10 @@
 
                         <!-- 手机底部导航 -->
                         <div class="moble-bottom-nav">
-                            <div class="nav-move">
-                                <div class="pull-left nav-add navitem-add-btn">
-                                    <img src="<?php echo $this->rootUrl; ?>/images/admin/icon1/mc_forum_main_bar_button17_h.png">
-                                </div>
+                            <div class="nav-item-container">
+                            </div>
+                            <div class="pull-left nav-add navitem-add-btn">
+                                <img src="<?php echo $this->rootUrl; ?>/images/admin/icon1/mc_forum_main_bar_button17_h.png">
                             </div>
                         </div>
 
@@ -274,6 +293,7 @@
     <script type="text/javascript">
     var uidiyGlobalObj = {
         rootUrl: '<?php echo $this->rootUrl; ?>',
+        navItemIconUrlBasePath: '<?php echo $this->navItemIconBaseUrlPath; ?>',
         moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule(), 'utf-8'); ?>,
         componentInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initComponent(), 'utf-8'); ?>,
         layoutInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initLayout(), 'utf-8'); ?>,
@@ -298,7 +318,7 @@
     <script type="text/javascript" src="<?php echo $this->rootUrl; ?>/js/jquery-ui-1.11.2.min.js"></script>
     <!-- 底部导航模板 -->
     <script type="text/template" id="navitem-template">
-    <div class="pull-left nav-column" style='background:url("<?php echo $this->rootUrl; ?>/images/admin/icon1/<%= icon %>.png") no-repeat 50% 35%;background-size:70px 70px'>
+    <div class="pull-left nav-column" style='background:url("<%= Appbyme.getNavIconUrl(icon) %>") no-repeat 50% 35%;background-size:70px 70px'>
         <div class="navitem-title" style="margin-top:3px;"><%= title %></div>
         <% if (moduleId != MODULE_ID_DISCOVER) { %>
         <div class="nav-edit hidden" style="margin-top:3px;">
@@ -359,9 +379,10 @@
             </div>
 
             <div class="nav-icon">
-                
+                <% for (var i = 1; i <= 49; i++) { %>
+                <img class="nav-pic" data-nav-icon="<%= NAV_ITEM_ICON+i %>" src="<%= Appbyme.getNavIconUrl(NAV_ITEM_ICON+i) %>">
+                <% } %>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label">导航图标：</label>
                 <div class="col-sm-4">
@@ -370,9 +391,10 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-4 text-left">
-                    <img src="" style="width:60px;height:60px;" class="img-rounded nav-pic-preview">
+                    <img src="<%= Appbyme.getNavIconUrl(icon) %>" style="width:60px;height:60px;" class="img-rounded nav-pic-preview">
                 </div>
             </div>
+            <input type="hidden" name="navItemIcon" id="navItemIcon" value="<%= icon %>">
             <div class="form-group">
                 <label class="col-sm-4 control-label">链接地址: </label>
                 <div class="col-sm-4">
@@ -519,7 +541,10 @@
                                 <img class="img-circle pull-left" src="<%= tmpInerComponentList[j].attributes.icon %>">
                                 <div class="pull-left discover-title"><%= tmpInerComponentList[j].attributes.title %></div>
                                 <div class="pull-left oper-btn text-right">
-                                    <button type="button" class="btn btn-primary btn-xs show-hide-discover-item-btn"><%= tmpInerComponentList[j].attributes.extParams.isHidden ? '显示' : '隐藏' %></button>
+                                    <button type="button" class="btn btn-primary btn-xs show-hide-discover-item-btn">
+                                    <span class="show-discover-item-span <%= tmpInerComponentList[j].attributes.extParams.isHidden ? 'hidden' : '' %>">显示</span>
+                                    <span class="hide-discover-item-span <%= tmpInerComponentList[j].attributes.extParams.isHidden ? 'hidden' : '' %>">隐藏</span>
+                                    </button>
                                 </div>
                             </a>
                         <% } %>
@@ -531,7 +556,7 @@
                 <div class="list-group text-left">
                 <% for (var i = 0; i < tmpComponentList.length; i++) { %>
                 <% var tmpInerComponentList = tmpComponentList[i].attributes.componentList; %>
-                    <% if (tmpComponentList[i].attributes.style == COMPONENT_STYLE_DISCOVER_DEFAULT) { %>
+                    <% if (tmpComponentList[i].attributes.style == COMPONENT_STYLE_DISCOVER_CUSTOM) { %>
                         <% for (var j = 0; j < tmpInerComponentList.length; j++) { %>
                           <a class="list-group-item">
                           <img class="img-circle pull-left" src="<%= tmpInerComponentList[j].attributes.icon %>">
@@ -652,6 +677,7 @@
             <label for="" class="col-sm-2 control-label">导航名称：</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control input-sm" name="componentTitle[]" value="<%= title %>">
+                <lable><input type="checkbox" name="isDefaultTitle[]" <%= extParams.isDefaultTitle ? 'checked' : '' %>>使用该名称作为下级页面的名称</lable>
             </div>
         </div>
         <div class="form-group">
@@ -679,6 +705,7 @@
             <label for="" class="col-sm-2 control-label">图标样式: </label>
             <div class="col-sm-10">
                 <select class="form-control" name="componentIconStyle[]">
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT ? 'selected' : '' %>>纯文字</option>
                     <option value="<%= COMPONENT_ICON_STYLE_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_IMAGE ? 'selected' : '' %>>单张图片</option>
                     <option value="<%= COMPONENT_ICON_STYLE_TEXT_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_IMAGE ? 'selected' : '' %>>上图下文</option>
                     <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN ? 'selected' : '' %>>文字覆盖在下</option>
@@ -705,13 +732,16 @@
             <select name="componentType[]" class="selectComponentType form-control">
                 <option value="<%= COMPONENT_TYPE_FORUMLIST %>" <%= type == COMPONENT_TYPE_FORUMLIST ? 'selected' : '' %>>版块列表</option>
                 <option value="<%= COMPONENT_TYPE_NEWSLIST %>" <%= type == COMPONENT_TYPE_NEWSLIST ? 'selected' : '' %>>资讯列表</option>
-                <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>简版帖子列表</option>
+                <!-- <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>帖子列表</option> -->
+                <option value="<%= COMPONENT_TYPE_TOPICLIST_SIMPLE %>" <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? 'selected' : '' %>>简版帖子列表</option>
+                <option value="<%= COMPONENT_TYPE_POSTLIST %>" <%= type == COMPONENT_TYPE_POSTLIST ? 'selected' : '' %>>帖子详情</option>
                 <option value="<%= COMPONENT_TYPE_MESSAGELIST %>" <%= type == COMPONENT_TYPE_MESSAGELIST ? 'selected' : '' %>>消息列表</option>
                 <option value="<%= COMPONENT_TYPE_SURROUDING_USERLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_USERLIST ? 'selected' : '' %>>周边用户</option>
                 <option value="<%= COMPONENT_TYPE_SURROUDING_POSTLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_POSTLIST ? 'selected' : '' %>>周边帖子</option>
                 <option value="<%= COMPONENT_TYPE_RECOMMEND_USERLIST %>" <%= type == COMPONENT_TYPE_RECOMMEND_USERLIST ? 'selected' : '' %>>推荐用户</option>
                 <option value="<%= COMPONENT_TYPE_SETTING %>" <%= type == COMPONENT_TYPE_SETTING ? 'selected' : '' %>>设置</option>
                 <option value="<%= COMPONENT_TYPE_ABOAT %>" <%= type == COMPONENT_TYPE_ABOAT ? 'selected' : '' %>>关于</option>
+                <option value="<%= COMPONENT_TYPE_MODULEREF %>" <%= type == COMPONENT_TYPE_MODULEREF ? 'selected' : '' %>>模块指向</option>
                 <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
                 <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %>>发表文字</option>
                 <option value="<%= COMPONENT_TYPE_FASTIMAGE %>" <%= type == COMPONENT_TYPE_FASTIMAGE ? 'selected' : '' %>>发表图片</option>
@@ -723,8 +753,8 @@
         </div>
 
         <div id="component-view-<% print(COMPONENT_TYPE_FORUMLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_FORUMLIST ? '' : 'hidden' %>">
-
-            <div class="form-group hidden">
+        <!--
+            <div class="form-group">
                 <label class="col-sm-2 control-label">设置样式：</label>
                 <div class="col-sm-10">
                     <div>
@@ -739,7 +769,7 @@
                     </div>
                 </div>
             </div>
-
+        --> 
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_NEWSLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_NEWSLIST ? '' : 'hidden' %>">
             <div class="form-group">
@@ -758,12 +788,34 @@
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">选择版块: </label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="forumId[]">
-                        <option value="0" <%= extParams.forumId == 0 ? 'selected' : '' %> class="hidden">全部版块</option>
+                    <select class="form-control" name="topicForumId[]">
+                        <option value="0" <%= extParams.forumId == 0 ? 'selected' : '' %> class="">全部版块</option>
+                    <?php foreach ($forumList as $fid => $title) { ?>
+                        <option value="<?php echo $fid ?>" <%= extParams.forumId == <?php echo $fid; ?> ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
+                    <?php } ?>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div id="component-view-<% print(COMPONENT_TYPE_TOPICLIST_SIMPLE+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? '' : 'hidden' %>">
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">选择版块: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="topicSimpleForumId[]">
+                        <option value="0" <%= extParams.forumId == 0 ? 'selected' : '' %> class="">全部版块</option>
                     <?php foreach ($forumList as $fid => $title) { ?>
                         <option value="<?php echo $fid ?>" <%= extParams.forumId == <?php echo $fid; ?> ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
                     <?php } ?>
                     </select> 
+                </div>
+            </div>
+        </div>
+        <!-- 帖子详情模板 -->
+        <div id="component-view-<% print(COMPONENT_TYPE_POSTLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_POSTLIST ? '' : 'hidden' %>">
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">主题id: </label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control input-sm" name="topicId[]" value="<%= extParams.topicId %>">
                 </div>
             </div>
         </div>
@@ -788,6 +840,20 @@
                 </div>
             </div>
         </div>
+        <!-- 模块指向 组件模板 -->
+        <div id="component-view-<% print(COMPONENT_TYPE_MODULEREF+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_MODULEREF ? '' : 'hidden' %>">
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">选择模块: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="moduleId[]">
+                    <% for (var i = 0; i < Appbyme.uiModules.length; i++) { %>
+                        <% var module = Appbyme.uiModules.models[i].attributes; %>
+                        <option value="<%= module.id %>" <%= extParams.moduleId == module.id ? 'selected' : '' %>><%= module.title %></option> 
+                    <% } %>
+                    </select>
+                </div>
+            </div>
+        </div>
         <!-- fasttext/fastimage/fastcamera/fastaudio 组件模板 -->
         <div id="component-view-fastpost-<%= id %>" class="component-view-item <%= type == COMPONENT_TYPE_FASTTEXT || type == COMPONENT_TYPE_FASTIMAGE || type == COMPONENT_TYPE_FASTCAMERA || type == COMPONENT_TYPE_FASTAUDIO ? '' : 'hidden' %>">
             <div class="form-group">
@@ -805,9 +871,11 @@
                     <label class="checkbox-inline">
                         <input type="checkbox" name="isShowTopicTitle[]" <%= extParams.isShowTopicTitle ? 'checked' : '' %>> 勾选则需用户填写标题
                     </label>
+                    <!-- 
                     <label class="checkbox-inline">
                         <input type="checkbox" name="isShowTopicSort[]" <%= extParams.isShowTopicSort ? 'checked' : '' %>> 勾选则显示主题分类
                     </label>
+                    -->
                 </div>
             </div>
         </div>
@@ -867,7 +935,7 @@
                     <select class="form-control input-sm" name="layoutStyle">
                         <option value="<%= COMPONENT_STYLE_LAYOUT_DEFAULT %>" <%= style == COMPONENT_STYLE_LAYOUT_DEFAULT ? 'selected' : '' %>>默认风格</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_IMAGE %>" <%= style == COMPONENT_STYLE_LAYOUT_IMAGE ? 'selected' : '' %>>图片墙风格</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_SUDOKU %>" <%= style == COMPONENT_STYLE_LAYOUT_SUDOKU ? 'selected' : '' %>>九宫格风格</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_LINE %>" <%= style == COMPONENT_STYLE_LAYOUT_LINE ? 'selected' : '' %>>线分割风格</option>
                     </select>
                 </div>
             </div>
@@ -938,18 +1006,24 @@
                     <select class="form-control input-sm layoutStyleSelect" name="layoutStyle">
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH ? 'selected' : '' %>>单栏样式(高)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW ? 'selected' : '' %>>单栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT ? 'selected' : '' %>>双栏文字</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH ? 'selected' : '' %>>双栏样式(高)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_MID ? 'selected' : '' %>>双栏样式(中)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_LOW ? 'selected' : '' %>>双栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT ? 'selected' : '' %>>三栏文字</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH ? 'selected' : '' %>>三栏样式(高)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_MID ? 'selected' : '' %>>三栏样式(中)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_LOW ? 'selected' : '' %>>三栏样式(低)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_FOUR_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_FOUR_COL ? 'selected' : '' %>>四栏样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW ? 'selected' : '' %>>1(大)+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW ? 'selected' : '' %>>1+2样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW ? 'selected' : '' %>>1+3样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW ? 'selected' : '' %>>2+1样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW ? 'selected' : '' %>>3+1样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL ? 'selected' : '' %>>1+1(大)样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL ? 'selected' : '' %>>2+1样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL ? 'selected' : '' %>>3+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_SLIDER %>" <%= style == COMPONENT_STYLE_LAYOUT_SLIDER ? 'selected' : '' %>>幻灯片样式</option>
+                        <!-- <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_AUTO %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_AUTO ? 'selected' : '' %>>列表自动样式</option> -->
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_MANUAL %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_MANUAL ? 'selected' : '' %>>列表手动样式</option>
                     </select>
                 </div>
             </div>
@@ -1001,9 +1075,6 @@
     <!-- 页面弹出样式用到的js -->
     <script type="text/javascript">
         $(function() {
-            // 底部导航拖动
-            // $(".nav-move").sortable();
-
             // 导航样式调整
             $('.nav-list li').hover(
                 function() {

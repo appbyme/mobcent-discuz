@@ -18,7 +18,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const NAV_KEY_TEMP = 'app_uidiy_nav_info_temp';
 
     const NAV_TYPE_BOTTOM = 'bottom';
-    const NAV_ITEM_ICON_1 = 'mc_forum_main_bar_button5_h';
+    const NAV_ITEM_ICON = 'mc_forum_main_bar_button';
 
     // module
     const MODULE_KEY = 'app_uidiy_modules';
@@ -36,9 +36,6 @@ class AppbymeUIDiyModel extends DiscuzAR
     const MODULE_STYLE_CARD = 'card';
     const MODULE_STYLE_FLAT = 'flat';
 
-    // mc_forum_top_bar_button5
-    // mc_forum_icon27
-    
     // component
     const COMPONENT_TYPE_DEFAULT = 'forumlist';
     const COMPONENT_TYPE_DISCOVER = 'discover';
@@ -51,6 +48,8 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_TYPE_FORUMLIST = 'forumlist';
     const COMPONENT_TYPE_NEWSLIST = 'newslist';
     const COMPONENT_TYPE_TOPICLIST = 'topiclist';
+    const COMPONENT_TYPE_TOPICLIST_SIMPLE = 'topiclistSimple';
+    const COMPONENT_TYPE_POSTLIST = 'postlist';
     const COMPONENT_TYPE_SIGN = 'sign';
     const COMPONENT_TYPE_MESSAGELIST = 'messagelist';
     const COMPONENT_TYPE_SETTING = 'setting';
@@ -63,6 +62,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_TYPE_SURROUDING_USERLIST = 'surroudingUserlist';
     const COMPONENT_TYPE_RECOMMEND_USERLIST = 'recommendUserlist';
 
+    const COMPONENT_ICON_STYLE_TEXT = 'text';
     const COMPONENT_ICON_STYLE_IMAGE = 'image';
     const COMPONENT_ICON_STYLE_TEXT_IMAGE = 'textImage';
     const COMPONENT_ICON_STYLE_TEXT_OVERLAP_UP = 'textOverlapUp';
@@ -78,18 +78,23 @@ class AppbymeUIDiyModel extends DiscuzAR
 
     const COMPONENT_STYLE_LAYOUT_DEFAULT = 'layoutDefault';
     const COMPONENT_STYLE_LAYOUT_IMAGE = 'layoutImage';
-    const COMPONENT_STYLE_LAYOUT_SUDOKU = 'layoutSudoku';
+    // const COMPONENT_STYLE_LAYOUT_SUDOKU = 'layoutSudoku';
     const COMPONENT_STYLE_LAYOUT_SLIDER = 'layoutSlider';
+    const COMPONENT_STYLE_LAYOUT_LINE = 'layoutLine';
+    const COMPONENT_STYLE_LAYOUT_NEWS_AUTO = 'layoutNewsAuto';
+    const COMPONENT_STYLE_LAYOUT_NEWS_MANUAL = 'layoutNewsManual';
 
     const COMPONENT_STYLE_LAYOUT_ONE_COL = 'layoutOneCol';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH = 'layoutOneCol_High';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_MID = 'layoutOneCol_Mid';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_LOW = 'layoutOneCol_Low';
     const COMPONENT_STYLE_LAYOUT_TWO_COL = 'layoutTwoCol';
+    const COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT = 'layoutTwoColText';
     const COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH = 'layoutTwoCol_High';
     const COMPONENT_STYLE_LAYOUT_TWO_COL_MID = 'layoutTwoCol_Mid';
     const COMPONENT_STYLE_LAYOUT_TWO_COL_LOW = 'layoutTwoCol_Low';
     const COMPONENT_STYLE_LAYOUT_THREE_COL = 'layoutThreeCol';
+    const COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT = 'layoutThreeColText';
     const COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH = 'layoutThreeCol_High';
     const COMPONENT_STYLE_LAYOUT_THREE_COL_MID = 'layoutThreeCol_Mid';
     const COMPONENT_STYLE_LAYOUT_THREE_COL_LOW = 'layoutThreeCol_Low';
@@ -97,14 +102,20 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_STYLE_LAYOUT_FOUR_COL_HIGH = 'layoutFourCol_High';
     const COMPONENT_STYLE_LAYOUT_FOUR_COL_MID = 'layoutFourCol_Mid';
     const COMPONENT_STYLE_LAYOUT_FOUR_COL_LOW = 'layoutFourCol_Low';
+    const COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW = 'layoutOneColOneRow';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW = 'layoutOneColTwoRow';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW = 'layoutOneColThreeRow';
-    const COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW = 'layoutTwoColOneRow';
-    const COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW = 'layoutThreeColOneRow';
+    const COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL = 'layoutOneRowOneCol';
+    const COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL = 'layoutTwoRowOneCol';
+    const COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL = 'layoutThreeRowOneCol';
 
     const COMPONENT_STYLE_DISCOVER_DEFAULT = 'discoverDefault';
     const COMPONENT_STYLE_DISCOVER_CUSTOM = 'discoverCustom';
     const COMPONENT_STYLE_DISCOVER_SLIDER = 'discoverSlider';
+
+    const COMPONENT_TITLE_POSITION_LEFT = 'left';
+    const COMPONENT_TITLE_POSITION_CENTER = 'center';
+    const COMPONENT_TITLE_POSITION_RIGHT = 'right';
 
     public static function initNavigation()
     {
@@ -121,7 +132,7 @@ class AppbymeUIDiyModel extends DiscuzAR
         return array(
             'moduleId' => 0,
             'title' => '',
-            'icon' => self::NAV_ITEM_ICON_1,
+            'icon' => self::NAV_ITEM_ICON . '1',
         );
     }
 
@@ -273,7 +284,18 @@ class AppbymeUIDiyModel extends DiscuzAR
             'iconStyle' => self::COMPONENT_ICON_STYLE_IMAGE,
             'componentList' => array(),
             'extParams' => array(
+                'titlePosition' => self::COMPONENT_TITLE_POSITION_LEFT,
+                // 'isShowForumIcon' => 1,
+                // 'isShowForumTwoCols' => 1,
+                'isDefaultTitle' => 1,
+                'newsModuleId' => 0,
+                'forumId' => 0,
+                'moduleId' => 0,
+                'topicId' => 0,
                 'fastpostForumIds' => array(),
+                'isShowTopicTitle' => 0,
+                // 'isShowTopicSort' => 0,
+                'redirect' => '',
             ),
         );
     }

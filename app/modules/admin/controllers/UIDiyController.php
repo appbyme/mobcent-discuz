@@ -3,7 +3,8 @@
 /**
  * UI Diy 控制器
  *
- * @author 谢建平 <jianping_xie@aliyun.com>  
+ * @author 谢建平 <jianping_xie@aliyun.com>
+ * @author HanPengyu
  * @copyright 2012-2014 Appbyme
  */
 
@@ -14,6 +15,15 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 // Mobcent::setErrors();
 class UIDiyController extends AdminController
 {
+    public $navItemIconBaseUrlPath = '';
+
+    public function init()
+    {
+        parent::init();
+
+        $this->navItemIconBaseUrlPath = $this->rootUrl . '/images/admin/icon1';
+    }
+
     public function actionIndex()
     {   
         $newsModules = AppbymePoralModule::getModuleList();
@@ -88,15 +98,20 @@ class UIDiyController extends AdminController
             foreach ($modules as $module) {
                 $module['leftTopbars'] = $this->_filterTopbars($module['leftTopbars']);
                 $module['rightTopbars'] = $this->_filterTopbars($module['rightTopbars']);
-                if ($module['type'] == AppbymeUIDiyModel::MODULE_TYPE_SUBNAV) {
-                    $tempComponentList = array();
-                    foreach ($module['componentList'] as $component) {
+                
+                $tempComponentList = array();
+                foreach ($module['componentList'] as $component) {
+                    $component = $this->_filterComponent($component);
+                    if ($module['type'] == AppbymeUIDiyModel::MODULE_TYPE_SUBNAV) {
                         if ($component['title'] != '') {
                             $tempComponentList[] = $component;
                         }
+                    } else {
+                        $tempComponentList[] = $component;
                     }
-                    $module['componentList'] = $tempComponentList;
-                }
+                }                    
+                $module['componentList'] = $tempComponentList;
+
                 $tempModules[] = $module;
             }
             AppbymeUIDiyModel::saveModules($tempModules);
@@ -110,6 +125,7 @@ class UIDiyController extends AdminController
         $res = WebUtils::initWebApiResult();
 
         AppbymeUIDiyModel::deleteNavInfo();
+        AppbymeUIDiyModel::deleteNavInfo(true);
         AppbymeUIDiyModel::deleteModules();
         AppbymeUIDiyModel::deleteModules(true);
 
@@ -125,6 +141,23 @@ class UIDiyController extends AdminController
         return $tempTopbars;
     }
 
+    private function _filterComponent($component) 
+    {
+        loadcache('forums');
+        global $_G;
+        $forums = $_G['cache']['forums'];
+
+        $tempComponent = $component;
+        $tempFastpostForumIds = array();
+        foreach ($component['extParams']['fastpostForumIds'] as $fid) {
+            $tempFastpostForumIds[] = array(
+                'fid' => $fid,
+                'title' => WebUtils::u($forums[$fid]['name']),
+            );
+        }
+        $tempComponent['extParams']['fastpostForumIds'] = $tempFastpostForumIds;
+        return $tempComponent;
+    }
 
     /**
      * 上传图片

@@ -22,44 +22,6 @@ $(function () {
 
     var APPBYME_UIDIY_AUTOSAVE = 'appbyme_uidiy_autosave';
 
-    // 添加导航弹出图片
-    function clickIconCall() {
-        $('.nav-pic').on({
-            click:function() {
-                var selectNav = $(this).attr('src');
-                $('.nav-pic-preview').attr('src', selectNav);
-                $('.nav-icon').toggle( "drop" );
-            },
-            mousemove:function() {
-                var selectNav = $(this).attr('src');
-                $('.nav-pic-preview').attr('src', selectNav);
-            }
-        })
-    }
-
-    // 上传图片
-    function clickUpload(id) {
-        // console.log(thi);
-        alert(id);
-        var data = new FormData();
-        data.append('file', $('+id+')[0].files[0]);
-        $.ajax({
-            // timeout:2000,
-            type:"POST",
-            url:"<?php echo $this->rootUrl; ?>/index.php?r=admin/uidiy/UploadIcon",
-            data:data,
-            cache:false,
-            processData: false,
-            contentType: false,
-            success:function(msg) {
-                console.log(msg);
-            },
-            error:function(XMLHttpRequest, textStatus, errorThrown) {
-                console.log(textStatus);
-            }
-        })
-    }
-
     var wrapComponent = function f(component) {
         var tmpComponentList = [];
         _.each(component.componentList, function (value) {
@@ -69,6 +31,10 @@ $(function () {
         return new ComponentModel(component);
     };
 
+    var getNavIconUrl = function (icon) {
+        return uidiyGlobalObj.navItemIconUrlBasePath+'/'+icon+'_h.png'
+    };
+    
     var toggleUICover = function () {
         $('.covering').fadeToggle();
     };
@@ -78,17 +44,20 @@ $(function () {
             componentTitle = $(form['componentTitle[]']),
             componentDesc = $(form['componentDesc[]']),
             // componentIcon = $(form['componentIcon[]']),
-            isShowForumIcon = $(form['isShowForumIcon[]']),
             componentIconStyle = $(form['componentIconStyle[]']),
-            isShowForumTwoCols = $(form['isShowForumTwoCols[]']),
+            // isShowForumIcon = $(form['isShowForumIcon[]']),
+            // isShowForumTwoCols = $(form['isShowForumTwoCols[]']),
+            isDefaultTitle = $(form['isDefaultTitle[]']),
             newsModuleId = $(form['newsModuleId[]']),
-            forumId = $(form['forumId[]']),
+            forumId = componentType == COMPONENT_TYPE_TOPICLIST ? $(form['topicForumId[]']) : $(form['topicSimpleForumId[]']),
+            moduleId = $(form['moduleId[]']),
+            topicId = $(form['topicId[]']),
             fastpostForumIds = $(form['fastpostForumIds[]']),
             isShowTopicTitle = $(form['isShowTopicTitle[]']),
-            isShowTopicSort = $(form['isShowTopicSort[]']),
+            // isShowTopicSort = $(form['isShowTopicSort[]']),
             componentRedirect = $(form['componentRedirect[]']),
             componentStyle = $(form['componentStyle[]']);
-
+        
         var componentList = [];
         for (var i = 0; i < componentType.length; i++) {
             var tempForumIds = [];
@@ -97,15 +66,20 @@ $(function () {
                 tempForumIds.push(parseInt(options[j].value));
             }
             var extParams = {
-                isShowForumIcon: isShowForumIcon[i].checked ? 1 : 0,
-                isShowForumTwoCols: isShowForumTwoCols[i].checked ? 1 : 0,
+                titlePosition: COMPONENT_TITLE_POSITION_LEFT,
+                // isShowForumIcon: isShowForumIcon[i].checked ? 1 : 0,
+                // isShowForumTwoCols: isShowForumTwoCols[i].checked ? 1 : 0,
+                isDefaultTitle: isDefaultTitle[i].checked ? 1 : 0,
                 newsModuleId: parseInt(newsModuleId[i].value),
                 forumId: parseInt(forumId[i].value),
+                moduleId: parseInt(moduleId[i].value),
+                topicId: parseInt(topicId[i].value) || 0,
                 fastpostForumIds: tempForumIds,
                 isShowTopicTitle: isShowTopicTitle[i].checked ? 1 : 0,
-                isShowTopicSort: isShowTopicSort[i].checked ? 1 : 0,
+                // isShowTopicSort: isShowTopicSort[i].checked ? 1 : 0,
                 redirect: componentRedirect[i].value,
             };
+
             var model = new ComponentModel({
                 type: componentType[i].value,
                 style: componentStyle[i].value,
@@ -452,25 +426,29 @@ $(function () {
                         size = 1;
                         break;
                     case COMPONENT_STYLE_LAYOUT_TWO_COL:
+                    case COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT:
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH:
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_MID:
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_LOW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL:
                         size = 2;
                         break;
                     case COMPONENT_STYLE_LAYOUT_THREE_COL:
+                    case COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT:
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH:
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_MID:
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_LOW:
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW:
-                    case COMPONENT_STYLE_LAYOUT_TWO_COL_ONE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL:
                         size = 3;
                         break;
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL:
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL_HIGH:
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL_MID:
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL_LOW:
-                    case COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW:
-                    case COMPONENT_STYLE_LAYOUT_THREE_COL_ONE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL:
                         size = 4;
                         break;
                     default:
@@ -947,17 +925,23 @@ $(function () {
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
+            // 弹出选择图标
             $('.select-nav-icon').on({
-                click:function() {
-                    var imgContent = '';
-                    for(var i=1;i<=49;i++){
-                        imgContent += "<img class='nav-pic' src="+uidiyGlobalObj.rootUrl+"/images/admin/icon1/mc_forum_main_bar_button"+i+"_h.png >";
-                    }
-                    $('.nav-icon').html(imgContent);
-                    $('.nav-icon').toggle("drop");
-                    clickIconCall();
+                click: function() {
+                    $('.nav-icon').toggle('drop');
                 }
             })
+            // 图标选择
+            $('.nav-pic').on({
+                click:function() {
+                    $('.nav-pic-preview').attr('src', $(this).attr('src'));
+                    $('#navItemIcon').val($(this).attr('data-nav-icon'));
+                    $('.nav-icon').toggle( "drop" );
+                },
+                mousemove:function() {
+                    $('.nav-pic-preview').attr('src', $(this).attr('src'));
+                },
+            });
             return this;
         },
         submitNavItem: function (event) {
@@ -968,7 +952,7 @@ $(function () {
             this.model.set({
                 title: form.navItemTitle.value,
                 moduleId: parseInt(form.navItemModuleId.value),
-                // icon: '',
+                icon: form.navItemIcon.value,
             });
 
             var error = this.model.validate(this.model.attributes);
@@ -1031,6 +1015,33 @@ $(function () {
             navItems.set(uidiyGlobalObj.navItemInitList);
 
             $('#autoSaveCheckbox')[0].checked = localStorageWrapper.getItem(APPBYME_UIDIY_AUTOSAVE) == 1;
+
+            // 底部导航拖动
+            var navSortStartIndex = 0;
+            $(".nav-item-container").sortable({
+                revert: true,
+                opacity: 0.6,
+                start: function (event, ui) {
+                    navSortBeginIndex = ui.item.index();
+                },
+                update: function (event, ui) {
+                    // var navSortStopIndex = ui.item.index();
+                    // var tempNavItems = navItems.models;
+                    // if (navSortStopIndex > navSortStartIndex) {
+                    //     var tmpNavItem = tempNavItems[navSortStartIndex];
+                    //     for (var i = navSortStartIndex; i < navSortStopIndex; i++) {
+                    //         navItems[i] = tempNavItems[i+1];
+                    //     }
+                    //     navItems[navSortStopIndex] = tmpNavItem;
+                    // } else {
+                    //     // for (var i = navSortStopIndex+1; i <= navSortStartIndex; i++) {
+                    //     //     navItems[i] = tempNavItems[i-1];
+                    //     // }
+                    // }
+                    // console.log(navItems);
+                },
+            });
+            $(".nav-item-container").disableSelection();
         },
         render: function () {
             return this;
@@ -1041,7 +1052,7 @@ $(function () {
         },
         addNavItem: function (navItem) {
             var view = new NavItemView({model: navItem});
-            $('.navitem-add-btn').before(view.render().el);   
+            $('.nav-item-container').append(view.render().el);   
         },
         dlgAddNavItem: function () {
             navItemEditDlg.model = new NavItemModel();
@@ -1111,6 +1122,11 @@ $(function () {
             }
         },
     });
+    
+    window.Appbyme = {
+        uiModules: modules,
+        getNavIconUrl: getNavIconUrl,
+    };
 
     var mainView = new MainView(),
         navItemEditDlg = new NavItemEditDlg(),
@@ -1123,8 +1139,4 @@ $(function () {
         moduleEditDetailView = new ModuleEditDetailView(),
         moduleEditMobileView = new ModuleEditMobileView(),
         moduleRemoveDlg = new ModuleRemoveDlg();
-
-    window.Appbyme = {
-        uiModules: modules,
-    }
 });
