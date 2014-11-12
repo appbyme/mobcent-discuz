@@ -287,7 +287,7 @@ class AppbymeUIDiyModel extends DiscuzAR
                 'titlePosition' => self::COMPONENT_TITLE_POSITION_LEFT,
                 // 'isShowForumIcon' => 1,
                 // 'isShowForumTwoCols' => 1,
-                'isDefaultTitle' => 1,
+                'isDefaultTitle' => 0,
                 'newsModuleId' => 0,
                 'forumId' => 0,
                 'moduleId' => 0,
