@@ -25,7 +25,7 @@ class UIDiyController extends AdminController
     }
 
     public function actionIndex()
-    {   
+    {
         $newsModules = AppbymePoralModule::getModuleList();
         $forumList = ForumUtils::getForumListForHtml();
 
@@ -88,7 +88,7 @@ class UIDiyController extends AdminController
         AppbymeUIDiyModel::saveNavigationInfo($navInfo, true);
         $isSync && AppbymeUIDiyModel::saveNavigationInfo($navInfo);
 
-        echo WebUtils::outputWebApi($res, '', false);
+        echo WebUtils::outputWebApi($res, 'utf-8', false);
     }
 
     public function actionSaveModules($modules, $isSync=false)
@@ -122,7 +122,7 @@ class UIDiyController extends AdminController
             AppbymeUIDiyModel::saveModules($tempModules);
         }
 
-        echo WebUtils::outputWebApi($res, '', false);
+        echo WebUtils::outputWebApi($res, 'utf-8', false);
     }
 
     public function actionInit()
@@ -134,7 +134,7 @@ class UIDiyController extends AdminController
         AppbymeUIDiyModel::deleteModules();
         AppbymeUIDiyModel::deleteModules(true);
 
-        echo WebUtils::outputWebApi($res, '', false);
+        echo WebUtils::outputWebApi($res, 'utf-8', false);
     }
 
     private function _filterTopbars($topbars)
@@ -160,7 +160,13 @@ class UIDiyController extends AdminController
                 'title' => WebUtils::u($forums[$fid]['name']),
             );
         }
-        $tempComponent['extParams']['fastpostForumIds'] = $tempFastpostForumIds;
+        $tempComponentList = array();
+        foreach ($component['componentList'] as $subComponent) {
+            if (!$subComponent['extParams']['isHidden']) {
+                $tempComponentList[] = $this->_filterComponent($subComponent);
+            }
+        }
+        $tempComponent['componentList'] = $tempComponentList;
         return $tempComponent;
     }
 
@@ -209,6 +215,7 @@ class UIDiyController extends AdminController
             }
 
             $fileName = $this->dzRootUrl.'/data/appbyme/upload/uidiy/'.$date.'/'.basename($fileName);
+            ImageUtils::getThumbImageEx($fileName, 10, false, false, true);
             self::makeResponse(1, $fileName);
         }
 
@@ -318,7 +325,7 @@ class UIDiyController extends AdminController
      * @return mixed 返回状态码和信息.
      *
      */
-    public function actionDelImgFile($fileName) {
+    public function actionDelIcon($fileName) {
         $basename = str_replace($this->dzRootUrl.'/data/appbyme/upload/', '', $fileName);
         $fileName = MOBCENT_UPLOAD_PATH.'/'.$basename;
         if (!file_exists($fileName)) {
@@ -336,7 +343,7 @@ class UIDiyController extends AdminController
         $res['errCode'] = $errCode;
         $res['errMsg'] = $errMsg;
         $res['data'] = array();
-        WebUtils::outputWebApi($res, '', true);
+        WebUtils::outputWebApi($res, 'utf-8', true);
     }
 
 }
