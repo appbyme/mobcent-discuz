@@ -85,7 +85,7 @@
         if (errorMsg != '') {
             $('.alert p').html(errorMsg);
             $('.alert').removeClass('hide');
-            setInterval(closeMsg, 3000);
+            setTimeout(closeMsg, 3000);
         }
     })
 

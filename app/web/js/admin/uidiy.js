@@ -210,8 +210,10 @@ $(function () {
                 var newImgUrl = imgUrl.replace(/_n.png/,'_h.png');
                 $(this).children('.nav-column').css('background-image', newImgUrl);
 
-                $(this).find('.navitem-title').addClass('hidden');
-                $(this).find('.nav-edit').removeClass('hidden');
+                if ($(this).find('.navitem-title').html() != '发现') {
+                    $(this).find('.navitem-title').addClass('hidden');
+                    $(this).find('.nav-edit').removeClass('hidden');
+                }
             }, function () {
                 var imgUrl = $(this).children('.nav-column').css('background-image'); 
                 var newImgUrl = imgUrl.replace(/_h.png/,'_n.png');
@@ -1021,9 +1023,19 @@ $(function () {
                     $('.nav-icon').toggle( "drop" );
                 },
                 mousemove:function() {
+                    $(this).css('background','#428bca');
                     $('.nav-pic-preview').attr('src', $(this).attr('src'));
                 },
+                mouseout:function() {
+                    $(this).css('background','');
+                }
             });
+            // 关闭图标选择
+            $('.nav-icon-close').on({
+                click:function() {
+                    $('.nav-icon').toggle( "drop" );
+                }
+            })
             return this;
         },
         submitNavItem: function (event) {

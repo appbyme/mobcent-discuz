@@ -38,7 +38,10 @@
 </head>
 <body>
 <div class="covering"></div>
-
+<div class="alert alert-darker text-center" style="display:none;background:#d9534f;color:white">
+   <a href="#" class="close" data-dismiss="alert">&times;</a>
+   <strong>友情提示：</strong>为了保证数据传输的正确性，最好使用最新版本的谷歌浏览器来进行操作。
+</div>
 <?php global $_G; ?>
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
@@ -226,7 +229,7 @@
                             <div class="nav-item-container">
                             </div>
                             <div class="pull-left nav-add navitem-add-btn">
-                                <img src="<?php echo $this->rootUrl; ?>/images/admin/icon1/mc_forum_main_bar_button17_h.png">
+                                <img src="<?php echo $this->rootUrl; ?>/images/admin/nav-add.png">
                             </div>
                         </div>
 
@@ -323,8 +326,8 @@
         <div class="navitem-title" style="margin-top:3px;color:white"><%= title %></div>
         <% if (moduleId != MODULE_ID_DISCOVER) { %>
         <div class="nav-edit hidden" style="margin-top:3px;">
-            <a><span class="navitem-edit-btn"><small>编辑</a></small></span></a>
-            <a><span class="navitem-remove-btn"><small>删除</small></span></a>
+            <a><span class="navitem-edit-btn">编辑</span></a>
+            <a><span class="navitem-remove-btn">删除</span></a>
         </div>
         <% } %>
     </div>
@@ -380,6 +383,7 @@
             </div>
 
             <div class="nav-icon">
+                <button type="button" class="close nav-icon-close">&times;</button>
                 <% for (var i = 1; i <= 49; i++) { %>
                 <img class="nav-pic" data-nav-icon="<%= NAV_ITEM_ICON+i %>" src="<%= Appbyme.getNavIconUrl(NAV_ITEM_ICON+i) %>">
                 <% } %>
@@ -392,7 +396,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-4 text-left">
-                    <img src="<%= Appbyme.getNavIconUrl(icon) %>" style="width:60px;height:60px;" class="img-rounded nav-pic-preview">
+                    <img src="<%= Appbyme.getNavIconUrl(icon) %>" style="width:60px;height:60px;background:#66ADE8" class="img-rounded nav-pic-preview">
                 </div>
             </div>
             <input type="hidden" name="navItemIcon" id="navItemIcon" value="<%= icon %>">
@@ -646,7 +650,7 @@
             <label for="" class="col-sm-2 control-label">导航名称：</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control input-sm" name="componentTitle[]" value="<%= title %>">
-                <lable><input type="checkbox" name="isDefaultTitle[]" <%= extParams.isDefaultTitle ? 'checked' : '' %>>使用该名称作为下级页面的名称</lable>
+                <input type="checkbox" name="isDefaultTitle[]" <%= extParams.isDefaultTitle ? 'checked' : '' %>> 使用该名称作为下级页面的名称
             </div>
         </div>
         <div class="form-group">
@@ -667,7 +671,7 @@
             <div class="col-sm-offset-2 col-sm-10 pic-preview" style="position:relative;">
                 <img class="del-pic del-<%= id %> hidden" data-unique="<%= id %>" src="<?php echo $this->rootUrl; ?>/images/admin/del_pic.png">
                 <img src="<%= icon %>" data-src="" style="width:50px;height:50px;" class="img-rounded preview-area-<%= id %>">
-                <a class="btn btn-default btn-sm upload-pic-<%= id %>" data-unique="<%= id %>" >点击上传图片</a>
+                <a class="btn btn-default btn-sm upload-pic-<%= id %>" data-unique="<%= id %>"  data-loading-text="Loading...">点击上传图片</a>
             </div>
         </div>
         <div class="form-group">
@@ -1084,6 +1088,11 @@
                 }
             })
 
+            var browserInfo = "<?php echo $browserInfo; ?>";
+            if (browserInfo < '37.0.2062.124') {
+                $('.alert-darker').toggle("drop");
+                setTimeout("$('.alert-darker').fadeOut(8000);", 1000);
+            }
         })
     </script>
 </body>
