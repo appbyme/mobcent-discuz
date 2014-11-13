@@ -25,7 +25,7 @@ class UIDiyController extends AdminController
     }
 
     public function actionIndex()
-    {   
+    {
         $newsModules = AppbymePoralModule::getModuleList();
         $forumList = ForumUtils::getForumListForHtml();
 
@@ -155,7 +155,13 @@ class UIDiyController extends AdminController
                 'title' => WebUtils::u($forums[$fid]['name']),
             );
         }
-        $tempComponent['extParams']['fastpostForumIds'] = $tempFastpostForumIds;
+        $tempComponentList = array();
+        foreach ($component['componentList'] as $subComponent) {
+            if (!$subComponent['extParams']['isHidden']) {
+                $tempComponentList[] = $this->_filterComponent($subComponent);
+            }
+        }
+        $tempComponent['componentList'] = $tempComponentList;
         return $tempComponent;
     }
 
@@ -313,7 +319,7 @@ class UIDiyController extends AdminController
      * @return mixed 返回状态码和信息.
      *
      */
-    public function actionDelImgFile($fileName) {
+    public function actionDelIcon($fileName) {
         $basename = str_replace($this->dzRootUrl.'/data/appbyme/upload/', '', $fileName);
         $fileName = MOBCENT_UPLOAD_PATH.'/'.$basename;
         if (!file_exists($fileName)) {

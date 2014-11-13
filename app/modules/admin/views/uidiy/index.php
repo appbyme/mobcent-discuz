@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-3.2.0.min.css">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-theme-3.2.0.min.css">
-    <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-switch-3.0.2.min.css">
+    <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-switch-3.2.1.min.css">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/appbyme-admin-uidiy.css">
     <style type="text/css">
         .mobleShow {
@@ -87,8 +87,8 @@
                         <div id="module-topbar-dlg-view" class="play-add-plug">
                         </div>
 
-                        <!-- 左图右文添加/编辑弹出框 -->
-                        <div id="news-component-edit-dlg-view" class="pic-text-pop">
+                        <!-- 单个组件添加/编辑弹出框 -->
+                        <div id="component-edit-dlg-view" class="pic-text-pop">
                         </div>
 
                         <!-- 添加风格区弹出框 -->
@@ -97,119 +97,6 @@
 
                         <!-- 自定义添加组件弹出框 -->
                         <div id="custom-style-component-edit-dlg-view" class="add-comp-pop">
-                        </div>
-
-                        <!-- 添加幻灯片弹出框 -->
-                        <div class="add-slide-pop">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title pull-left">添加幻灯片</h3>
-                                    <button type="button" class="close close-add-slide pull-right">&times;</button>
-                                </div>
-                                <form class="form-horizontal navitem-edit-form">
-                                    <div class="panel-body">
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label">上传图片: </label>
-                                            <div class="col-sm-4">
-                                                <input type="file" class="control-label">
-                                            </div>
-                                        </div>
-
-                                        <!-- 图片、链接地址、下拉框开始 -->
-                                        <div class="form-group slide-list">
-                                            <div class="pull-left">
-                                                <img src="" style="width:50px;height:50px;" class="img-rounded">
-                                            </div>
-                                            <!-- 中间class=”form-group是链接地址的开始“ -->
-                                            <div class="pull-left slide-select">
-
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label">链接地址: </label>
-                                                    <div class="col-sm-4">
-                                                        <select name="" class="form-control">
-                                                            <option value="">板块列表</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <!-- 图片、链接地址、下拉框结束 -->
-
-                                        <!-- 图片、链接地址、下拉框开始 -->
-                                        <div class="form-group slide-list">
-                                            <div class="pull-left">
-                                                <img src="" style="width:50px;height:50px;" class="img-rounded">
-                                            </div>
-                                            <!-- 中间class=”form-group是链接地址的开始“ -->
-                                            <div class="pull-left slide-select">
-
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label">链接地址: </label>
-                                                    <div class="col-sm-4">
-                                                        <select name="" class="form-control">
-                                                            <option value="">板块列表</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                        <!-- 图片、链接地址、下拉框结束 -->
-
-                                    </div>
-                                </form> 
-                                <div class="panel-footer text-right">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
-                                    <button type="button" class="btn btn-default btn-sm close-add-slide">取 消</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 添加频道弹出框 -->
-                        <!-- 和添加导航底部导航基本一样 -->
-                        <div class="add-channel-pop">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title pull-left">添加频道</h3>
-                                    <button type="button" class="close close-add-channel pull-right">&times;</button>
-                                </div>
-                                <form class="form-horizontal">
-                                <div class="panel-body">
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">频道名称：</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="" value="">
-                                            <p class="help-block">输入1-4个字母、数字或汉字</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">频道图标：</label>
-                                        <div class="col-sm-4">
-                                            <button type="button" class="btn btn-primary">选择图标</button>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-offset-4 col-sm-4 text-left">
-                                            <img src="" style="width:60px;height:60px;" class="img-rounded">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">链接地址: </label>
-                                        <div class="col-sm-4">
-                                            <select name="" class="form-control">
-                                                <option value="" >板块列表</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel-footer text-right">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
-                                    <button type="button" class="btn btn-default btn-sm close-add-channel">取 消</button>
-                                </div>
-                                </form> 
-                            </div>
                         </div>
 
                         <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
@@ -315,7 +202,7 @@
     <script src="<?php echo $this->rootUrl; ?>/js/underscore-1.7.0.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/backbone-1.1.2.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/jquery-ui-1.11.2.min.js"></script>
-    <script src="<?php echo $this->rootUrl; ?>/js/bootstrap-switch-3.0.2.min.js"></script>
+    <script src="<?php echo $this->rootUrl; ?>/js/bootstrap-switch-3.2.1.min.js"></script>
     <script src="<?php echo $this->rootUrl; ?>/js/admin/uidiy.js"></script>
     <!-- 底部导航模板 -->
     <script type="text/template" id="navitem-template">
@@ -541,7 +428,7 @@
                 </div>
             </div>
         </div>
-            <button type="button" class="btn btn-primary btn-xs">点击添加更多</button>
+            <button type="button" class="btn btn-primary btn-xs add-discover-user-component-item-btn">点击添加更多</button>
     </div>
     <% } else if (id == MODULE_ID_FASTPOST) { %>
     <% } else if (type == MODULE_TYPE_FULL) { %>
@@ -658,16 +545,17 @@
         <div class="form-group">
             <label for="" class="col-sm-2 control-label">编辑图标：</label>
             <div class="col-sm-10">
-                <input type="file" name="componentIcon[]" class="pic-file-<%= id %>" data-unique="<%= id %>" value="<%= icon %>">
+                <input type="file" class="componentIconFile">
+                <input type="hidden" class="componentIcon" name="componentIcon[]" value="<%= icon %>">
                 <p class="help-block">请上传1:1比例的JPG或PNG格式图片作为图标</p>
             </div>
         </div>
         <div class="form-group">
             <!-- col-sm-offset-2 col-sm-10 -->
             <div class="col-sm-offset-2 col-sm-10 pic-preview" style="position:relative;">
-                <img class="del-pic del-<%= id %> hidden" data-unique="<%= id %>" src="<?php echo $this->rootUrl; ?>/images/admin/del_pic.png">
-                <img src="<%= icon %>" data-src="" style="width:50px;height:50px;" class="img-rounded preview-area-<%= id %>">
-                <a class="btn btn-default btn-sm upload-pic-<%= id %>" data-unique="<%= id %>" >点击上传图片</a>
+                <img class="del-pic hidden" src="<?php echo $this->rootUrl; ?>/images/admin/del_pic.png">
+                <img src="<%= icon %>" style="width:50px;height:50px;" class="img-rounded component-icon-preview">
+                <a class="btn btn-default btn-sm upload-component-icon-btn">点击上传图片</a>
             </div>
         </div>
         <div class="form-group">
@@ -858,21 +746,21 @@
         </div>
     </div>
     </script>
-    <!-- 添加/编辑 左图右文模块 组件模板 -->
-    <script type="text/template" id="news-component-edit-dlg-template">
+    <!-- 单个组件编辑框 模板 -->
+    <script type="text/template" id="component-edit-dlg-template">
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title pull-left">添加内容</h3>
-            <button type="button" class="close news-component-close-btn pull-right">&times;</button>
+            <button type="button" class="close component-close-btn pull-right">&times;</button>
         </div>
-        <form class="form-horizontal news-component-edit-form">
+        <form class="form-horizontal component-edit-form">
         <div class="panel-body">
             <div class="component-view-container">
             </div>
         </div>
         <div class="panel-footer text-right">
             <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
-            <button type="button" class="btn btn-default btn-sm news-component-close-btn">取 消</button>
+            <button type="button" class="btn btn-default btn-sm component-close-btn">取 消</button>
         </div>
         </form>
     </div>
@@ -894,9 +782,7 @@
         <img class="img-circle pull-left" src="<%= icon %>">
         <div class="pull-left discover-title"><%= title %></div>
         <div class="pull-left oper-btn text-right">
-            <div class="switch switch-small" data-on-label="显示" data-off-label="隐藏">
-                <input type="checkbox" class="discoverFixComponentHiddenCheckbox" <%= extParams.isHidden ? '' : 'checked' %> />
-            </div>         
+            <input type="checkbox" data-on-text="显示" data-off-text="隐藏" data-size="mini" class="discover-item-switch" <%= extParams.isHidden ? '' : 'checked' %> />
         </div>
     </script>
     <!-- 发现用户项在手机ui的组件模板 -->
@@ -1059,7 +945,6 @@
         <button class="remove-style-component-item-btn btn btn-primary btn-xs">删除</button>
     </div>
     </script>
-
     <!-- 页面弹出样式用到的js -->
     <script type="text/javascript">
         $(function() {

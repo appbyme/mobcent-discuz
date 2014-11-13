@@ -280,7 +280,8 @@ class AppbymeUIDiyModel extends DiscuzAR
             'style' => self::COMPONENT_STYLE_FLAT,
             'title' => '',
             'desc' => '',
-            'icon' => Yii::app()->getController()->rootUrl.'/images/admin/module-default.png',
+            // 'icon' => Yii::app()->getController()->rootUrl.'/images/admin/module-default.png',
+            'icon' => '',
             'iconStyle' => self::COMPONENT_ICON_STYLE_IMAGE,
             'componentList' => array(),
             'extParams' => array(

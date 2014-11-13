@@ -36,6 +36,10 @@ $(function () {
         return arr;
     };
 
+    var scrollToBottomHelper = function (element) {
+        element.scrollTop = element.scrollHeight;
+    };
+
     var localStorageWrapper = new LocalStorageWrapper();
 
     var APPBYME_UIDIY_AUTOSAVE = 'appbyme_uidiy_autosave';
@@ -61,7 +65,7 @@ $(function () {
         var componentType = $(form['componentType[]']),
             componentTitle = $(form['componentTitle[]']),
             componentDesc = $(form['componentDesc[]']),
-            // componentIcon = $(form['componentIcon[]']),
+            componentIcon = $(form['componentIcon[]']),
             componentIconStyle = $(form['componentIconStyle[]']),
             // isShowForumIcon = $(form['isShowForumIcon[]']),
             // isShowForumTwoCols = $(form['isShowForumTwoCols[]']),
@@ -101,11 +105,11 @@ $(function () {
             var model = new ComponentModel({
                 type: componentType[i].value,
                 style: componentStyle[i].value,
-                // icon: '',
+                icon: componentIcon[i].value,
                 iconStyle: componentIconStyle[i].value,
                 title: componentTitle[i].value,
                 desc: componentDesc[i].value,
-                
+
                 extParams: extParams,
             });
             componentList.push(model);
@@ -160,6 +164,7 @@ $(function () {
             this.set({id: this.cid});
         },
         sync: function (method, model, options) {
+            console.log(method);
         },
         validate: function (attrs, options) {
             // if (attrs.title == '') {
@@ -207,14 +212,14 @@ $(function () {
 
             this.$el.hover(function() {
                 var imgUrl = $(this).children('.nav-column').css('background-image'); 
-                var newImgUrl = imgUrl.replace(/_n.png/,'_h.png');
+                var newImgUrl = imgUrl.replace(/_n.png/, '_h.png');
                 $(this).children('.nav-column').css('background-image', newImgUrl);
 
                 $(this).find('.navitem-title').addClass('hidden');
                 $(this).find('.nav-edit').removeClass('hidden');
             }, function () {
                 var imgUrl = $(this).children('.nav-column').css('background-image'); 
-                var newImgUrl = imgUrl.replace(/_h.png/,'_n.png');
+                var newImgUrl = imgUrl.replace(/_h.png/, '_n.png');
                 $(this).children('.nav-column').css('background-image', newImgUrl);
                 
                 $(this).find('.navitem-title').removeClass('hidden');
@@ -263,6 +268,8 @@ $(function () {
         events: {
             'change .selectComponentType': 'onChangeComponentType',
             'click .remove-component-btn': 'remove',
+            'click .upload-component-icon-btn': 'uploadIcon',
+            'change .componentIconFile': 'onChangeComponentIcon',
         },
         initialize: function() {
         },
@@ -275,14 +282,62 @@ $(function () {
             var type = $(event.currentTarget).val();
             $('#component-view-'+type+'-'+id).removeClass('hidden').siblings('.component-view-item').addClass('hidden');
         },
+        onChangeComponentIcon: function (event) {
+            if (URL) {
+                var objectURL = URL.createObjectURL(event.currentTarget.files[0]);
+                this.$el.find('.component-icon-preview').attr('src', objectURL);
+            }
+        },
+        uploadIcon: function () {
+            var data = new FormData();
+            data.append('file', this.$el.find(':file')[0].files[0]);
+            var _this = this.$el;
+            $.ajax({
+                timeout: 30000,
+                type: 'POST',
+                url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/uploadicon',
+                data: data,
+                dataType: 'json',
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(msg) {
+                    if (!msg.errCode) {
+                        alert(msg.errMsg);
+                        return false;
+                    }
+                    // 获取原来的图片，并且删除
+                    var fileName = _this.find('.componentIcon').val();
+                    if (fileName != '') {
+                        $.ajax({
+                            type: 'GET',
+                            url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/delicon',
+                            data: {'fileName': fileName},
+                            success: function(msg) {
+                               // console.log(msg);
+                            }
+                        });
+                    }
+                    
+                    _this.find('.componentIcon').val(msg.errMsg);
+                    _this.find('.component-icon-preview').attr('src', msg.errMsg);
+
+                    alert('上传成功！');
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    // console.log(textStatus);
+                }
+            });
+        },
     });
     
-    var NewsComponentEditDlg = Backbone.View.extend({
-        el: $("#news-component-edit-dlg-view"),
-        template: _.template($('#news-component-edit-dlg-template').html()),
+    // 单个组件编辑框
+    var ComponentEditDlg = Backbone.View.extend({
+        el: $("#component-edit-dlg-view"),
+        template: _.template($('#component-edit-dlg-template').html()),
         events: {
-            'click .news-component-close-btn': 'closeComponentDlg',
-            'submit .news-component-edit-form': 'submitNewsComponent',
+            'click .component-close-btn': 'closeComponentDlg',
+            'submit .component-edit-form': 'submitComponent',
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
@@ -298,21 +353,21 @@ $(function () {
             this.toggle();
             this.$el.html('');
         },
-        submitNewsComponent: function (event) {
+        submitComponent: function (event) {
             event.preventDefault();
 
-            var form = $('.news-component-edit-form')[0];
+            var form = $('.component-edit-form')[0];
             var componentList = submitComponentHelper(form);
 
-            this.model.set(componentList[0].attributes);
-
-            var error = this.model.validate(this.model.attributes);
+            var error = this.model.validate(componentList[0].attributes);
             if (error != '') {
                 alert(error);
                 return;
             }
 
-            moduleEditMobileView.model.tempComponentList.add(this.model, {merge: true, remove: false, add: true});
+            this.model.set(componentList[0].attributes);
+
+            typeof this.submitCallback == 'function' && this.submitCallback(this.model);
 
             this.closeComponentDlg();
         },
@@ -538,74 +593,6 @@ $(function () {
                         var model = componentList[i];
                         var view = new ComponentView({model: model});
                         $('.component-view-container').eq(i).html(view.render().el);
-                        // alert(model.id);
-                        $('.upload-pic-'+model.id).click(function () {
-                            var uniqueId = $(this).attr('data-unique');
-                            var data = new FormData();
-                            data.append('file', $('.pic-file-'+uniqueId)[0].files[0]);
-                            $.ajax({
-                                // timeout:2000,
-                                type:"POST",
-                                url:uidiyGlobalObj.rootUrl+"/index.php?r=admin/uidiy/UploadIcon",
-                                data:data,
-                                dataType:'json',
-                                cache:false,
-                                processData: false,
-                                contentType: false,
-                                success:function(msg) {
-                                    if (!msg.errCode) {
-                                        alert(msg.errMsg);
-                                        return false;
-                                    }
-                                    // 获取原来的图片，并且删除
-                                    var fileName = $('.preview-area-'+uniqueId).attr('data-src');
-  
-                                    $.ajax({
-                                        type:'GET',
-                                        url:uidiyGlobalObj.rootUrl+"/index.php?r=admin/uidiy/DelImgFile",
-                                        data:{'fileName':fileName},
-                                        success:function(msg) {
-                                           console.log(msg);
-                                        }
-                                    })
-                                    
-                                    $('.preview-area-'+uniqueId).attr('src', msg.errMsg);
-                                    alert('上传成功！');
-                                },
-                                error:function(XMLHttpRequest, textStatus, errorThrown) {
-                                    console.log(textStatus);
-                                }
-                            });
-                        });
-                        
-                        // input 框变化的时候出现预览框
-                        $('.pic-file-'+model.id).on({
-                            change:function() {
-                                var uniqueId = $(this).attr('data-unique');
-                                var imgSrc = $('.preview-area-'+uniqueId).attr('src');
-                                if ((imgSrc.indexOf('blob') == '-1') && (imgSrc.indexOf('module-default.png') == '-1')) {
-                                    $('.preview-area-'+uniqueId).attr('data-src', imgSrc);
-                                }
-
-                                var img = $(this)[0].files[0];
-                                var imgRes = window.URL.createObjectURL(img);
-                                $('.preview-area-'+uniqueId).attr('src', imgRes);
-                            }
-                        });
-                            
-                        // 删除图片
-                        $('.del-'+model.id).on({
-                            click:function() {
-                               var uniqueId = $(this).attr('data-unique');
-                               var fileName = $('.preview-area-'+uniqueId).attr('src');
-                               $.ajax({
-                                    type:'POST',
-                                    url:uidiyGlobalObj.rootUrl+"/index.php?r=admin/uidiy/delImgFile",
-
-                               })
-                            }
-                        })
-
                     }
                     break;
                 case MODULE_TYPE_FASTPOST:
@@ -646,7 +633,11 @@ $(function () {
                 case MODULE_TYPE_FULL:
                 case MODULE_TYPE_SUBNAV:
                 case MODULE_TYPE_FASTPOST:
-                    if (this.model.id != MODULE_ID_DISCOVER) {
+                    if (this.model.id == MODULE_ID_DISCOVER) {
+                        var discoverModel = moduleEditMobileView.model.attributes.componentList[0];
+                        var discoverModelComponentList = discoverModel.attributes.componentList;
+                        discoverModelComponentList[2].attributes.componentList = discoverModelComponentList[2].tempComponentList.models;
+                    } else {
                         this.model.attributes.componentList = submitComponentHelper(form);
                     }
                     break;
@@ -722,6 +713,7 @@ $(function () {
             'click .select-topbar-btn': 'selectTopbar',
             'click .add-news-component-item-btn': 'dlgAddNewsComponent',
             'click .add-style-btn': 'dlgAddStyleComponent',
+            'click .add-discover-user-component-item-btn': 'dlgAddDiscoverUserComponent',
         },
         initialize: function () { 
         },
@@ -739,8 +731,14 @@ $(function () {
                     var view = new DiscoverFixComponentItemView({model: fixComponentList[i]});
                     $('.discover-fix-component-container').append(view.render().el);
                 }
+                $('.discover-item-switch').bootstrapSwitch();
+                
+                // render user
+                componentList[2].tempComponentList = new ComponentList();
+                this.listenTo(componentList[2].tempComponentList, 'add', this.addDiscoverUserComponentItem);
+                componentList[2].tempComponentList.add(userComponentList, {merge: true, remove: false, add: true});
 
-                $('.carousel-example-generic_one').carousel();
+                // $('.carousel-example-generic_one').carousel();
             }
 
             return this;
@@ -771,9 +769,12 @@ $(function () {
             $('#topbarIndex').val(index);
         },
         dlgAddNewsComponent: function () {
-            newsComponentEditDlg.model = new ComponentModel();
-            newsComponentEditDlg.render();
-            newsComponentEditDlg.toggle();
+            componentEditDlg.model = new ComponentModel();
+            componentEditDlg.submitCallback = function (model) {
+                moduleEditMobileView.model.tempComponentList.add(model, {merge: true, remove: false, add: true});
+            };
+            componentEditDlg.render();
+            componentEditDlg.toggle();
         },
         addNewsComponentItem: function (component) {
             var view = new NewsComponentItemView({model: component});
@@ -797,6 +798,24 @@ $(function () {
             var view = new CustomStyleItemView({model: style});
             $('.custom-style-item-container').append(view.render().el);
         },
+        // 弹出添加自定义用户组件编辑框
+        dlgAddDiscoverUserComponent: function () {
+            componentEditDlg.model = new ComponentModel();
+            componentEditDlg.submitCallback = function (component) {
+                var moduleModel = moduleEditMobileView.model;
+                var componentList = moduleModel.attributes.componentList[0].attributes.componentList;
+                componentList[2].tempComponentList.add(component, {merge: true, remove: false, add: true});
+
+                scrollToBottomHelper($('.found-content')[0]);
+            };
+            componentEditDlg.render();
+            componentEditDlg.toggle();
+        },
+        // 添加自定义用户组件
+        addDiscoverUserComponentItem: function (component) {
+            var view = new DiscoverUserComponentItemView({model: component});
+            $('.discover-user-component-container').append(view.render().el);
+        },
     });
     
     var NewsComponentItemView = Backbone.View.extend({
@@ -815,9 +834,9 @@ $(function () {
             return this;
         },
         dlgEditNewsComponent: function () {
-            newsComponentEditDlg.model = this.model;
-            newsComponentEditDlg.render();
-            newsComponentEditDlg.toggle();
+            componentEditDlg.model = this.model;
+            componentEditDlg.render();
+            componentEditDlg.toggle();
         },
         removeItem: function () {
             this.model.destroy();
@@ -829,11 +848,15 @@ $(function () {
         className: 'list-group-item',
         template: _.template($('#discover-fix-component-item-template').html()),
         events: {
+            'switchChange.bootstrapSwitch .discover-item-switch': 'switchItem',
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
-
             return this;
+        },
+        // 显示/隐藏 组件
+        switchItem: function (event, state) {
+            this.model.attributes.extParams.isHidden = state ? 0 : 1;
         },
     });
 
@@ -854,9 +877,9 @@ $(function () {
             return this;
         },
         dlgEditComponent: function () {
-            // newsComponentEditDlg.model = this.model;
-            // newsComponentEditDlg.render();
-            // newsComponentEditDlg.toggle();
+            componentEditDlg.model = this.model;
+            componentEditDlg.render();
+            componentEditDlg.toggle();
         },
         removeItem: function () {
             this.model.destroy();
@@ -1015,12 +1038,12 @@ $(function () {
             })
             // 图标选择
             $('.nav-pic').on({
-                click:function() {
+                click: function() {
                     $('.nav-pic-preview').attr('src', $(this).attr('src'));
                     $('#navItemIcon').val($(this).attr('data-nav-icon'));
                     $('.nav-icon').toggle( "drop" );
                 },
-                mousemove:function() {
+                mousemove: function() {
                     $('.nav-pic-preview').attr('src', $(this).attr('src'));
                 },
             });
@@ -1202,7 +1225,7 @@ $(function () {
         navItemRemoveDlg = new NavItemRemoveDlg(),
         moduleEditDlg = new ModuleEditDlg(),
         moduleTopbarDlg = new ModuleTopbarDlg(),
-        newsComponentEditDlg = new NewsComponentEditDlg(),
+        componentEditDlg = new ComponentEditDlg(),
         customStyleEditDlg = new CustomStyleEditDlg(),
         customStyleComponentEditDlg = new CustomStyleComponentEditDlg(),
         moduleEditDetailView = new ModuleEditDetailView(),
