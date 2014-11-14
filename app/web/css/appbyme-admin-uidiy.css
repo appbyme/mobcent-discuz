@@ -485,7 +485,7 @@ label {
 /*右侧整体*/
 #operation {
     margin-top: 40px;
-    padding-top: 30px;
+    /*padding-top: 30px;*/
     font-size: 12px;
 }
 
@@ -676,6 +676,18 @@ label {
     padding:3px 6px;
 }
 
+/* home 按钮 */
+.home-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 500px;
+    outline: none;
+    position: absolute;
+    left:157px;
+    bottom: 20px;
+    outline: none;
+}
+
 /* 兼容代码，兼容左图右文弹出框样式、添加组件 */
 .pic-text-pop .col-sm-2, .add-comp-pop .col-sm-2, .add-style-pop .col-sm-2{
     padding-left: 15px;
@@ -717,9 +729,3 @@ label {
     background: #66ADE8;
 }
 
-.test {
-    width: 80px;
-    height: 80px;
-    border-radius: 500px;
-    outline: none;
-}
