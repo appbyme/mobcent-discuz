@@ -8,6 +8,42 @@
 
 $(function () {
 
+    var LocalStorageWrapper = function () {
+        this.available = typeof(Storage) !== 'undefined';
+        this.getItem = function (key) {
+            return this.available ? localStorage.getItem(key) : undefined;
+        };
+        this.setItem = function (key, value) {
+            this.available && localStorage.setItem(key, value);
+        };
+    };
+
+    var sortArrayHelper = function (arr, fromIndex, toIndex) {
+        if (fromIndex == toIndex) {
+            return arr;
+        }
+        var tmp = arr[fromIndex];
+        if (toIndex > fromIndex) {
+            for (var i = fromIndex; i < toIndex; i++) {
+                arr[i] = arr[i+1];
+            }
+        } else {
+            for (var i = fromIndex; i > toIndex; i--) {
+                arr[i] = arr[i-1];
+            }
+        }
+        arr[toIndex] = tmp;
+        return arr;
+    };
+
+    var scrollToBottomHelper = function (element) {
+        element.scrollTop = element.scrollHeight;
+    };
+
+    var localStorageWrapper = new LocalStorageWrapper();
+
+    var APPBYME_UIDIY_AUTOSAVE = 'appbyme_uidiy_autosave';
+
     var wrapComponent = function f(component) {
         var tmpComponentList = [];
         _.each(component.componentList, function (value) {
@@ -17,16 +53,89 @@ $(function () {
         return new ComponentModel(component);
     };
 
-    var coveringToggle = function (param) {
-        if (param == 'close') {
-            $('.covering').fadeOut();
-        } else {
-            $('.covering').fadeIn();
+    var getNavIconUrl = function (icon) {
+        return uidiyGlobalObj.navItemIconUrlBasePath+'/'+icon+'_n.png'
+    };
+    
+    var toggleUICover = function () {
+        $('.covering').fadeToggle();
+    };
+
+    var submitComponentHelper = function (form) {
+        var componentType = $(form['componentType[]']),
+            componentTitle = $(form['componentTitle[]']),
+            componentDesc = $(form['componentDesc[]']),
+            componentIcon = $(form['componentIcon[]']),
+            componentIconStyle = $(form['componentIconStyle[]']),
+            // isShowForumIcon = $(form['isShowForumIcon[]']),
+            // isShowForumTwoCols = $(form['isShowForumTwoCols[]']),
+            isDefaultTitle = $(form['isDefaultTitle[]']),
+            newsModuleId = $(form['newsModuleId[]']),
+            forumId = componentType == COMPONENT_TYPE_TOPICLIST ? $(form['topicForumId[]']) : $(form['topicSimpleForumId[]']),
+            moduleId = $(form['moduleId[]']),
+            topicId = $(form['topicId[]']),
+            fastpostForumIds = $(form['fastpostForumIds[]']),
+            isShowTopicTitle = $(form['isShowTopicTitle[]']),
+            // isShowTopicSort = $(form['isShowTopicSort[]']),
+            componentRedirect = $(form['componentRedirect[]']),
+            componentStyle = $(form['componentStyle[]']);
+        
+        var componentList = [];
+        for (var i = 0; i < componentType.length; i++) {
+            var tempForumIds = [];
+            var options = fastpostForumIds[i].selectedOptions;
+            for (var j = 0; j < options.length; j++) {
+                tempForumIds.push(parseInt(options[j].value));
+            }
+            var extParams = {
+                titlePosition: COMPONENT_TITLE_POSITION_LEFT,
+                // isShowForumIcon: isShowForumIcon[i].checked ? 1 : 0,
+                // isShowForumTwoCols: isShowForumTwoCols[i].checked ? 1 : 0,
+                isDefaultTitle: isDefaultTitle[i].checked ? 1 : 0,
+                newsModuleId: parseInt(newsModuleId[i].value),
+                forumId: parseInt(forumId[i].value),
+                moduleId: parseInt(moduleId[i].value),
+                topicId: parseInt(topicId[i].value) || 0,
+                fastpostForumIds: tempForumIds,
+                isShowTopicTitle: isShowTopicTitle[i].checked ? 1 : 0,
+                // isShowTopicSort: isShowTopicSort[i].checked ? 1 : 0,
+                redirect: componentRedirect[i].value,
+            };
+
+            var model = new ComponentModel({
+                type: componentType[i].value,
+                style: componentStyle[i].value,
+                icon: componentIcon[i].value,
+                iconStyle: componentIconStyle[i].value,
+                title: componentTitle[i].value,
+                desc: componentDesc[i].value,
+
+                extParams: extParams,
+            });
+            componentList.push(model);
         }
-    }
+        return componentList;
+    };
 
     var ModuleModel = Backbone.Model.extend({
         defaults: uidiyGlobalObj.moduleInitParams,
+        initialize: function () {
+            var tmpComponentList = [],
+                tmpLeftTopbars = [],
+                tmpRightTopbars = [];
+            _.each(this.attributes.componentList, function (component) {
+                tmpComponentList.push(wrapComponent(component));
+            });
+            _.each(this.attributes.leftTopbars, function (component) {
+                tmpLeftTopbars.push(wrapComponent(component));
+            });
+            _.each(this.attributes.rightTopbars, function (component) {
+                tmpRightTopbars.push(wrapComponent(component));
+            });
+            this.attributes.componentList = tmpComponentList;
+            this.attributes.leftTopbars = tmpLeftTopbars;
+            this.attributes.rightTopbars = tmpRightTopbars;
+        },
         sync: function (method, model, options) {
             switch (method) {
                 case 'delete':
@@ -55,6 +164,7 @@ $(function () {
             this.set({id: this.cid});
         },
         sync: function (method, model, options) {
+            console.log(method);
         },
         validate: function (attrs, options) {
             // if (attrs.title == '') {
@@ -78,12 +188,12 @@ $(function () {
         model: ModuleModel,
     });
 
-    var NavItemList = Backbone.Collection.extend({
-        model: NavItemModel,
-    });
-
     var ComponentList = Backbone.Collection.extend({
         model: ComponentModel,
+    });
+
+    var NavItemList = Backbone.Collection.extend({
+        model: NavItemModel,
     });
 
     var modules = new ModuleList();
@@ -95,15 +205,26 @@ $(function () {
         events: {
             'click .navitem-edit-btn': 'dlgEditNavItem',
             'click .navitem-remove-btn': 'dlgRemoveNavItem',
+            'click .nav-column': 'renderMobileUI',
         },
         initialize: function() {
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.remove);
 
             this.$el.hover(function() {
-                $(this).find('.navitem-title').addClass('hidden');
-                $(this).find('.nav-edit').removeClass('hidden');
+                var imgUrl = $(this).children('.nav-column').css('background-image'); 
+                var newImgUrl = imgUrl.replace(/_n.png/, '_h.png');
+                $(this).children('.nav-column').css('background-image', newImgUrl);
+
+                if ($(this).find('.navitem-title').html() != '发现') {
+                    $(this).find('.navitem-title').addClass('hidden');
+                    $(this).find('.nav-edit').removeClass('hidden');
+                }
             }, function () {
+                var imgUrl = $(this).children('.nav-column').css('background-image'); 
+                var newImgUrl = imgUrl.replace(/_h.png/, '_n.png');
+                $(this).children('.nav-column').css('background-image', newImgUrl);
+                
                 $(this).find('.navitem-title').removeClass('hidden');
                 $(this).find('.nav-edit').addClass('hidden');
             });
@@ -113,17 +234,31 @@ $(function () {
             return this;
         },
         dlgEditNavItem: function (event) {
+            event.stopPropagation();
             navItemEditDlg.model = this.model;
             navItemEditDlg.render();
             navItemEditDlg.toggle();
-            coveringToggle();
         },
         dlgRemoveNavItem: function (event) {
+            event.stopPropagation();
             navItemRemoveDlg.model = this.model;
             navItemRemoveDlg.render();
             navItemRemoveDlg.toggle();
-            coveringToggle();
         },
+        renderMobileUI: function () {
+            var module = modules.findWhere({id: this.model.attributes.moduleId});
+            Backbone.ajax({
+                url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/modulemobileui',
+                type: 'post',
+                dataType: 'html',
+                data: {
+                    module: JSON.stringify(module),
+                },
+                success: function (result, status, xhr) {
+                    $('.module-mobile-ui-view').html(result).removeClass('hidden');
+                }
+            });
+        }
     });
 
     var ModuleView = Backbone.View.extend({
@@ -142,14 +277,18 @@ $(function () {
         showModuleEdit: function (event) {
             moduleEditDlg.model = this.model;
             moduleEditDlg.render();
+            moduleEditDlg.toggle();
         },
     });
 
     var ComponentView = Backbone.View.extend({
+        className: 'component-view',
         template: _.template($('#component-template').html()),
         events: {
             'change .selectComponentType': 'onChangeComponentType',
             'click .remove-component-btn': 'remove',
+            'click .upload-component-icon-btn': 'uploadIcon',
+            'change .componentIconFile': 'onChangeComponentIcon',
         },
         initialize: function() {
         },
@@ -162,14 +301,62 @@ $(function () {
             var type = $(event.currentTarget).val();
             $('#component-view-'+type+'-'+id).removeClass('hidden').siblings('.component-view-item').addClass('hidden');
         },
+        onChangeComponentIcon: function (event) {
+            if (URL) {
+                var objectURL = URL.createObjectURL(event.currentTarget.files[0]);
+                this.$el.find('.component-icon-preview').attr('src', objectURL);
+            }
+        },
+        uploadIcon: function () {
+            var data = new FormData();
+            data.append('file', this.$el.find(':file')[0].files[0]);
+            var _this = this.$el;
+            $.ajax({
+                timeout: 30000,
+                type: 'POST',
+                url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/uploadicon',
+                data: data,
+                dataType: 'json',
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(msg) {
+                    if (!msg.errCode) {
+                        alert(msg.errMsg);
+                        return false;
+                    }
+                    // 获取原来的图片，并且删除
+                    var fileName = _this.find('.componentIcon').val();
+                    if (fileName != '') {
+                        $.ajax({
+                            type: 'GET',
+                            url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/delicon',
+                            data: {'fileName': fileName},
+                            success: function(msg) {
+                               // console.log(msg);
+                            }
+                        });
+                    }
+                    
+                    _this.find('.componentIcon').val(msg.errMsg);
+                    _this.find('.component-icon-preview').attr('src', msg.errMsg);
+
+                    alert('上传成功！');
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    // console.log(textStatus);
+                }
+            });
+        },
     });
     
-    var NewsComponentEditDlg = Backbone.View.extend({
-        el: $("#news-component-edit-dlg-view"),
-        template: _.template($('#news-component-edit-dlg-template').html()),
+    // 单个组件编辑框
+    var ComponentEditDlg = Backbone.View.extend({
+        el: $("#component-edit-dlg-view"),
+        template: _.template($('#component-edit-dlg-template').html()),
         events: {
-            'click .news-component-close-btn': 'closeComponentDlg',
-            'submit .news-component-edit-form': 'submitNewsComponent',
+            'click .component-close-btn': 'closeComponentDlg',
+            'submit .component-edit-form': 'submitComponent',
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
@@ -179,43 +366,79 @@ $(function () {
         },
         toggle: function () {
             this.$el.fadeToggle();
+            toggleUICover();
         },
         closeComponentDlg: function () {
-            this.$el.fadeOut();
+            this.toggle();
             this.$el.html('');
-            coveringToggle('close');
         },
-        submitNewsComponent: function (event) {
+        submitComponent: function (event) {
             event.preventDefault();
 
-            var form = $('.news-component-edit-form')[0],
-                componentType = $(form['componentType[]'])[0],
-                componentTitle = $(form['componentTitle[]'])[0],
-                componentDesc = $(form['componentDesc[]'])[0],
-                isShowForumIcon = $(form['isShowForumIcon[]'])[0],
-                isShowForumTwoCols = $(form['isShowForumTwoCols[]'])[0],
-                newsModuleId = $(form['newsModuleId[]'])[0],
-                forumId = $(form['forumId[]'])[0],
-                fastpostForumId = $(form['fastpostForumId[]'])[0],
-                isShowTopicTitle = $(form['isShowTopicTitle[]'])[0],
-                isShowTopicSort = $(form['isShowTopicSort[]'])[0],
-                componentRedirect = $(form['componentRedirect[]'])[0],
-                componentStyle = $(form['componentStyle[]'])[0];
+            var form = $('.component-edit-form')[0];
+            var componentList = submitComponentHelper(form);
 
+            var error = this.model.validate(componentList[0].attributes);
+            if (error != '') {
+                alert(error);
+                return;
+            }
+
+            this.model.set(componentList[0].attributes);
+
+            typeof this.submitCallback == 'function' && this.submitCallback(this.model);
+
+            this.closeComponentDlg();
+        },
+    });
+
+    // 自定义风格编辑框
+    var CustomStyleEditDlg = Backbone.View.extend({
+        el: $("#custom-style-edit-dlg-view"),
+        template: _.template($('#custom-style-edit-dlg-template').html()),
+        events: {
+            'click .style-close-btn': 'closeComponentDlg',
+            'submit .style-edit-form': 'submitStyleComponent',
+            'change .isShowStyleHeaderRadio' : 'changeShowHeader',
+            'change .isShowStyleHeaderMoreRadio' : 'changeShowHeaderMore',
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            this.changeShowHeader();
+            this.changeShowHeaderMore();
+
+            // 添加风格区更多的组件
+            var view = new ComponentView({model: new ComponentModel(this.model.attributes.extParams.styleHeader.moreComponent)});
+            $('.component-view-container').html(view.render().el);
+            return this;
+        },
+        toggle: function () {
+            this.$el.fadeToggle();
+            toggleUICover();
+        },
+        closeComponentDlg: function () {
+            this.toggle();
+            this.$el.html('');
+        },
+        // 风格区submit
+        submitStyleComponent: function (event) {
+            event.preventDefault();
+
+            var form = $('.style-edit-form')[0];
+            var componentList = submitComponentHelper(form);
             var extParams = {
-                isShowForumIcon: isShowForumIcon.checked ? 1 : 0,
-                isShowForumTwoCols: isShowForumTwoCols.checked ? 1 : 0,
-                newsModuleId: parseInt(newsModuleId.value),
-                forumId: parseInt(forumId.value),
-                isShowTopicTitle: isShowTopicTitle.checked ? 1 : 0,
-                isShowTopicSort: isShowTopicSort.checked ? 1 : 0,
-                redirect: componentRedirect.value,
+                styleHeader: {
+                    isShow: parseInt(form.isShowStyleHeader.value),
+                    title: form.styleHeaderTitle.value,
+                    position: parseInt(form.styleHeaderPosition.value),
+                    isShowMore: parseInt(form.isShowStyleHeaderMore.value),
+                    moreComponent: componentList[0].attributes,
+                },
             };
+            
             this.model.set({
-                title: componentTitle.value,
-                desc: componentDesc.value,
-                type: componentType.value,
-                style: componentStyle.value,
+                type: COMPONENT_TYPE_LAYOUT,
+                style: form.layoutStyle.value,
                 extParams: extParams,
             });
 
@@ -225,9 +448,126 @@ $(function () {
                 return;
             }
 
-            this.moduleModel.attributes.componentList.add(this.model, {merge: true, remove: false, add: true});
-
+            moduleEditMobileView.model.tempComponentList.add(this.model, {merge: true, remove: false, add: true});
+            
             this.closeComponentDlg();
+        },
+        changeShowHeader: function () {
+            $('.isShowStyleHeaderRadio')[0].checked ? $('.style-header-container').removeClass('hidden') : $('.style-header-container').addClass('hidden');
+        },
+        changeShowHeaderMore: function () {
+            $('.isShowStyleHeaderMoreRadio')[0].checked ? $('.component-view-container').removeClass('hidden') : $('.component-view-container').addClass('hidden');
+        },
+    });
+    
+    // 自定义风格组件编辑框
+    var CustomStyleComponentEditDlg = Backbone.View.extend({
+        el: $("#custom-style-component-edit-dlg-view"),
+        template: _.template($('#custom-style-component-edit-dlg-template').html()),
+        events: {
+            'click .style-component-close-btn': 'closeComponentDlg',
+            'click .add-component-item-btn': 'addComponentItem',
+            'submit .style-component-edit-form': 'submitStyleComponent',
+            'change .layoutStyleSelect': 'onChangeComponentStyle',
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            this.onChangeComponentStyle();
+            return this;
+        },
+        toggle: function () {
+            this.$el.fadeToggle();
+            toggleUICover();
+        },
+        closeComponentDlg: function () {
+            this.toggle();
+            this.$el.html('');
+        },
+        submitStyleComponent: function (event) {
+            event.preventDefault();
+
+            var form = $('.style-component-edit-form')[0];
+            
+            this.model.set({
+                type: COMPONENT_TYPE_LAYOUT,
+                style: form.layoutStyle.value,
+            });
+
+            this.model.attributes.componentList = submitComponentHelper(form);
+
+            var error = this.model.validate(this.model.attributes);
+            if (error != '') {
+                alert(error);
+                return;
+            }
+
+            this.styleModel.tempComponentList.add(this.model, {merge: true, remove: false, add: true});
+            this.styleModel.attributes.componentList = this.styleModel.tempComponentList.models;
+            
+            this.closeComponentDlg();
+        },
+        addComponentItem: function () {
+            event.preventDefault();
+            
+            var view = new ComponentView({model: new ComponentModel()});
+            $('.component-view-container').append(view.render().el);
+        },
+        onChangeComponentStyle: function () {
+            var layoutStyle = $('.layoutStyleSelect').val();
+            var layoutModel = this.model.attributes.style == layoutStyle ? this.model : new ComponentModel({type: COMPONENT_TYPE_DEFAULT, style: layoutStyle});
+
+            var componentList = [];
+            if (layoutStyle == this.model.attributes.style) {
+                componentList = this.model.attributes.componentList;
+            } else {
+                var size = 0;
+                switch (layoutStyle) {
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_MID:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_LOW:
+                        size = 1;
+                        break;
+                    case COMPONENT_STYLE_LAYOUT_TWO_COL:
+                    case COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT:
+                    case COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH:
+                    case COMPONENT_STYLE_LAYOUT_TWO_COL_MID:
+                    case COMPONENT_STYLE_LAYOUT_TWO_COL_LOW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL:
+                        size = 2;
+                        break;
+                    case COMPONENT_STYLE_LAYOUT_THREE_COL:
+                    case COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT:
+                    case COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH:
+                    case COMPONENT_STYLE_LAYOUT_THREE_COL_MID:
+                    case COMPONENT_STYLE_LAYOUT_THREE_COL_LOW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW:
+                    case COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL:
+                        size = 3;
+                        break;
+                    case COMPONENT_STYLE_LAYOUT_FOUR_COL:
+                    case COMPONENT_STYLE_LAYOUT_FOUR_COL_HIGH:
+                    case COMPONENT_STYLE_LAYOUT_FOUR_COL_MID:
+                    case COMPONENT_STYLE_LAYOUT_FOUR_COL_LOW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW:
+                    case COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL:
+                        size = 4;
+                        break;
+                    default:
+                        size = 0;
+                        break;
+                }
+                for (var i = 0; i < size; i++) {
+                    componentList.push(new ComponentModel());
+                }
+            }
+            $('.component-view-container').html('');
+            for (var i = 0; i < componentList.length; i++) {
+                var model = componentList[i];
+                var view = new ComponentView({model: model});
+                $('.component-view-container').append(view.render().el);
+            }
         },
     });
 
@@ -245,11 +585,14 @@ $(function () {
         render: function () {
             this.$el.html(this.template(this.model.attributes));
             this.onChangeModuleType();
+
+            $('.module-mobile-ui-view').addClass('hidden');
             return this;
         },
         onChangeModuleType: function (event) {
             var moduleType = $('#moduleType').val();
             var moduleModel = this.model.attributes.type == moduleType ? this.model : new ModuleModel({type: moduleType});
+
             moduleEditDetailView.model = moduleModel;
             moduleEditDetailView.render();
             moduleEditMobileView.model = moduleModel;
@@ -279,6 +622,20 @@ $(function () {
                         $('.fastpost-components-container').append(view.render().el);
                     });
                     break;
+                case MODULE_TYPE_NEWS:
+                case MODULE_TYPE_CUSTOM:
+                    var componentList = [];
+                    if (this.model.attributes.type == moduleType) {
+                        componentList = this.model.attributes.componentList;
+                    }
+                    moduleModel.tempComponentList = new ComponentList();
+                    if (moduleType == MODULE_TYPE_CUSTOM) {
+                        this.listenTo(moduleModel.tempComponentList, 'add', moduleEditMobileView.addCustomStyleItem);
+                    } else {
+                        this.listenTo(moduleModel.tempComponentList, 'add', moduleEditMobileView.addNewsComponentItem);
+                    }
+                    moduleModel.tempComponentList.set(componentList);
+                    break;
                 default:
                     break;
             }
@@ -286,20 +643,7 @@ $(function () {
         moduleSubmit: function (event) {
             event.preventDefault();
 
-            var form = $('.module-edit-form')[0],
-                componentType = $(form['componentType[]']),
-                componentTitle = $(form['componentTitle[]']),
-                componentDesc = $(form['componentDesc[]']),
-                isShowForumIcon = $(form['isShowForumIcon[]']),
-                isShowForumTwoCols = $(form['isShowForumTwoCols[]']),
-                newsModuleId = $(form['newsModuleId[]']),
-                forumId = $(form['forumId[]']),
-                fastpostForumId = $(form['fastpostForumId[]']),
-                isShowTopicTitle = $(form['isShowTopicTitle[]']),
-                isShowTopicSort = $(form['isShowTopicSort[]']),
-                componentRedirect = $(form['componentRedirect[]']),
-                componentStyle = $(form['componentStyle[]']);
-            
+            var form = $('.module-edit-form')[0];
             var moduleType = form.moduleType.value;
             this.model.set({
                 title: form.moduleTitle.value,
@@ -310,32 +654,17 @@ $(function () {
                 case MODULE_TYPE_FULL:
                 case MODULE_TYPE_SUBNAV:
                 case MODULE_TYPE_FASTPOST:
-                    if (this.model.id != MODULE_ID_DISCOVER) {
-                        var componentList = [];
-                        for (var i = 0; i < componentType.length; i++) {
-                            var extParams = {
-                                isShowForumIcon: isShowForumIcon[i].checked ? 1 : 0,
-                                isShowForumTwoCols: isShowForumTwoCols[i].checked ? 1 : 0,
-                                newsModuleId: parseInt(newsModuleId[i].value),
-                                forumId: parseInt(moduleType == MODULE_TYPE_FASTPOST ? fastpostForumId[i].value : forumId[i].value),
-                                isShowTopicTitle: isShowTopicTitle[i].checked ? 1 : 0,
-                                isShowTopicSort: isShowTopicSort[i].checked ? 1 : 0,
-                                redirect: componentRedirect[i].value,
-                            };
-                            var model = new ComponentModel({
-                                title: componentTitle[i].value,
-                                desc: componentDesc[i].value,
-                                type: componentType[i].value,
-                                style: componentStyle[i].value,
-                                extParams: extParams,
-                            });
-                            componentList.push(model);
-                        }
-                        this.model.attributes.componentList = componentList;
+                    if (this.model.id == MODULE_ID_DISCOVER) {
+                        var discoverModel = moduleEditMobileView.model.attributes.componentList[0];
+                        var discoverModelComponentList = discoverModel.attributes.componentList;
+                        discoverModelComponentList[2].attributes.componentList = discoverModelComponentList[2].tempComponentList.models;
+                    } else {
+                        this.model.attributes.componentList = submitComponentHelper(form);
                     }
                     break;
                 case MODULE_TYPE_NEWS:
-                    this.model.attributes.componentList = this.model.attributes.componentList.models;
+                case MODULE_TYPE_CUSTOM:
+                    this.model.attributes.componentList = moduleEditMobileView.model.tempComponentList.models;
                     break;
                 default:
                     break;
@@ -344,7 +673,6 @@ $(function () {
             var error = this.model.validate(this.model.attributes);
             if (error != '') {
                 alert(error);
-                this.model.destroy();
                 return;
             }
 
@@ -355,11 +683,17 @@ $(function () {
             modules.add(this.model, {merge: true, remove: false, add: true});
 
             this.closeModule();
+
+            if ($('#autoSaveCheckbox')[0].checked) {
+                mainView.saveUIDiy(false);
+            }
         },
         closeModule: function () {
-            $('.module-play').fadeToggle();
+            this.toggle();
             
             moduleEditMobileView.$el.html('');
+
+            $('.module-mobile-ui-view').removeClass('hidden');
         },
         selectFastpostItem: function () {
             event.preventDefault();
@@ -381,7 +715,10 @@ $(function () {
 
             var view = new ComponentView({model: model});
             $('.fastpost-components-container').append(view.render().el);
-        }
+        },
+        toggle: function () {
+            this.$el.fadeToggle();
+        },
     });
     
     var ModuleEditDetailView = Backbone.View.extend({
@@ -398,20 +735,35 @@ $(function () {
         events: {
             'click .select-topbar-btn': 'selectTopbar',
             'click .add-news-component-item-btn': 'dlgAddNewsComponent',
+            'click .add-style-btn': 'dlgAddStyleComponent',
+            'click .add-discover-user-component-item-btn': 'dlgAddDiscoverUserComponent',
         },
         initialize: function () { 
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
 
-            // module type 为news时, 转换 componentList对象为一个collection
-            if (this.model.attributes.type == MODULE_TYPE_NEWS) {
-                var componentList = this.model.attributes.componentList;
-                this.model.attributes.componentList = new ComponentList();
-                this.listenTo(this.model.attributes.componentList, 'add', this.addNewsComponentItem);
+            // render 发现组件
+            if (this.model.id == MODULE_ID_DISCOVER) {
+                var componentList = this.model.attributes.componentList[0].attributes.componentList,
+                    sliderComponentList = componentList[0].attributes.componentList,
+                    fixComponentList = componentList[1].attributes.componentList,
+                    userComponentList = componentList[2].attributes.componentList;
+                // render fix
+                for (var i = 0; i < fixComponentList.length; i++) {
+                    var view = new DiscoverFixComponentItemView({model: fixComponentList[i]});
+                    $('.discover-fix-component-container').append(view.render().el);
+                }
+                $('.discover-item-switch').bootstrapSwitch();
+                
+                // render user
+                componentList[2].tempComponentList = new ComponentList();
+                this.listenTo(componentList[2].tempComponentList, 'add', this.addDiscoverUserComponentItem);
+                componentList[2].tempComponentList.add(userComponentList, {merge: true, remove: false, add: true});
 
-                this.model.attributes.componentList.set(componentList);
+                // $('.carousel-example-generic_one').carousel();
             }
+
             return this;
         },
         selectTopbar: function (event) {
@@ -434,27 +786,63 @@ $(function () {
                     break;
             }
             moduleTopbarDlg.model = componentModel;
-            moduleTopbarDlg.moduleModel = module;
             moduleTopbarDlg.render();
             moduleTopbarDlg.toggle();
-            coveringToggle();
+
             $('#topbarIndex').val(index);
         },
         dlgAddNewsComponent: function () {
-            newsComponentEditDlg.model = new ComponentModel();
-            newsComponentEditDlg.moduleModel = this.model;
-            newsComponentEditDlg.render();
-            newsComponentEditDlg.toggle();
-            coveringToggle();
+            componentEditDlg.model = new ComponentModel();
+            componentEditDlg.submitCallback = function (model) {
+                moduleEditMobileView.model.tempComponentList.add(model, {merge: true, remove: false, add: true});
+            };
+            componentEditDlg.render();
+            componentEditDlg.toggle();
         },
         addNewsComponentItem: function (component) {
             var view = new NewsComponentItemView({model: component});
-            view.moduleModel = this.model;
             $('.news-component-item-container').append(view.render().el);
+        },
+        // 弹出添加风格区
+        dlgAddStyleComponent: function () {
+            var model = new ComponentModel(uidiyGlobalObj.layoutInitParams);
+            model.attributes.extParams.styleHeader = {
+                isShow: 1,
+                title: '',
+                position: 0,
+                isShowMore: 1,
+            };
+            customStyleEditDlg.model = model;
+            customStyleEditDlg.render();
+            customStyleEditDlg.toggle();
+        },
+        // 添加风格区
+        addCustomStyleItem: function (style) {
+            var view = new CustomStyleItemView({model: style});
+            $('.custom-style-item-container').append(view.render().el);
+        },
+        // 弹出添加自定义用户组件编辑框
+        dlgAddDiscoverUserComponent: function () {
+            componentEditDlg.model = new ComponentModel();
+            componentEditDlg.submitCallback = function (component) {
+                var moduleModel = moduleEditMobileView.model;
+                var componentList = moduleModel.attributes.componentList[0].attributes.componentList;
+                componentList[2].tempComponentList.add(component, {merge: true, remove: false, add: true});
+
+                scrollToBottomHelper($('.found-content')[0]);
+            };
+            componentEditDlg.render();
+            componentEditDlg.toggle();
+        },
+        // 添加自定义用户组件
+        addDiscoverUserComponentItem: function (component) {
+            var view = new DiscoverUserComponentItemView({model: component});
+            $('.discover-user-component-container').append(view.render().el);
         },
     });
     
     var NewsComponentItemView = Backbone.View.extend({
+        className: 'news-component-item list-group-item',
         template: _.template($('#news-component-item-template').html()),
         events: {
             'click .edit-news-component-item-btn': 'dlgEditNewsComponent',
@@ -469,10 +857,124 @@ $(function () {
             return this;
         },
         dlgEditNewsComponent: function () {
-            newsComponentEditDlg.model = this.model;
-            newsComponentEditDlg.moduleModel = this.moduleModel;
-            newsComponentEditDlg.render();
-            newsComponentEditDlg.toggle();
+            componentEditDlg.model = this.model;
+            componentEditDlg.render();
+            componentEditDlg.toggle();
+        },
+        removeItem: function () {
+            this.model.destroy();
+        },
+    });
+
+    // 发现固定组件view
+    var DiscoverFixComponentItemView = Backbone.View.extend({
+        className: 'list-group-item',
+        template: _.template($('#discover-fix-component-item-template').html()),
+        events: {
+            'switchChange.bootstrapSwitch .discover-item-switch': 'switchItem',
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        // 显示/隐藏 组件
+        switchItem: function (event, state) {
+            this.model.attributes.extParams.isHidden = state ? 0 : 1;
+        },
+    });
+
+    // 发现用户可添加组件view
+    var DiscoverUserComponentItemView = Backbone.View.extend({
+        className: 'list-group-item',
+        template: _.template($('#discover-user-component-item-template').html()),
+        events: {
+            'click .edit-discover-item-btn': 'dlgEditComponent',
+            'click .remove-discover-item-btn': 'removeItem',
+        },
+        initialize: function () {
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'destroy', this.remove);
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        dlgEditComponent: function () {
+            componentEditDlg.model = this.model;
+            componentEditDlg.render();
+            componentEditDlg.toggle();
+        },
+        removeItem: function () {
+            this.model.destroy();
+        },
+    });
+
+    // 自定义风格项视图
+    var CustomStyleItemView = Backbone.View.extend({
+        className: 'custom-style-item',
+        template: _.template($('#custom-style-item-template').html()),
+        events: {
+            'click .edit-custom-style-item-btn': 'dlgEditCustomStyle',
+            'click .add-style-component-btn': 'dlgAddStyleComponent',
+            'click .remove-custom-style-item-btn': 'removeItem',
+        },
+        initialize: function () {
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'destroy', this.remove);
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+
+            this.model.tempComponentList = new ComponentList();
+            this.listenTo(this.model.tempComponentList, 'add', this.addStyleComponentItem);
+            this.model.tempComponentList.add(this.model.attributes.componentList, {merge: true, remove: false, add: true});
+
+            return this;
+        },
+        dlgEditCustomStyle: function () {
+            customStyleEditDlg.model = this.model;
+            customStyleEditDlg.render();
+            customStyleEditDlg.toggle();
+        },
+        // 弹出添加风格区内组件
+        dlgAddStyleComponent: function () {
+            customStyleComponentEditDlg.model = new ComponentModel(uidiyGlobalObj.layoutInitParams);
+            customStyleComponentEditDlg.styleModel = this.model;
+            customStyleComponentEditDlg.render();
+            customStyleComponentEditDlg.toggle();
+        },
+        removeItem: function () {
+            this.model.destroy();
+        },
+        addStyleComponentItem: function (component) {
+            var view = new CustomStyleComponentItemView({model: component});
+            view.styleModel = this.model;
+            this.$el.find('.custom-style-component-item-container').append(view.render().el);
+        },
+    });
+    
+    // 自定义风格内组件项视图
+    var CustomStyleComponentItemView = Backbone.View.extend({
+        className: 'custom-style-component-item',
+        template: _.template($('#custom-style-component-item-template').html()),
+        events: {
+            'click .edit-style-component-item-btn': 'dlgEditItem',
+            'click .remove-style-component-item-btn': 'removeItem',
+            'click .add-style-component-item-btn': '',
+        },
+        initialize: function () {
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'destroy', this.remove);
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        dlgEditItem: function () {
+            customStyleComponentEditDlg.model = this.model;
+            customStyleComponentEditDlg.styleModel = this.styleModel;
+            customStyleComponentEditDlg.render();
+            customStyleComponentEditDlg.toggle();
         },
         removeItem: function () {
             this.model.destroy();
@@ -497,7 +999,7 @@ $(function () {
                 type = form.topbarComponentType.value,
                 index = parseInt(form.topbarIndex.value),
                 model = new ComponentModel({type: type}),
-                module = this.moduleModel;
+                module = moduleEditMobileView.model.attributes;
 
             switch (index) {
                 case 0:
@@ -508,18 +1010,8 @@ $(function () {
                     }
                     break;
                 case 2:
-                    if (type == COMPONENT_TYPE_DEFAULT) {
-                        module.rightTopbars.shift();
-                    } else {
-                        module.rightTopbars[0] = model;
-                    }
-                    break;
                 case 3:
-                    if (type == COMPONENT_TYPE_DEFAULT) {
-                        module.rightTopbars.length > 1 && module.rightTopbars.pop();
-                    } else {
-                        module.rightTopbars[module.rightTopbars.length > 0 ? 1 : 0] = model;
-                    }
+                    module.rightTopbars[index-2] = model;
                     break;
                 default:
                     break;
@@ -528,8 +1020,8 @@ $(function () {
             this.toggle();
         },
         toggle: function () {
-            coveringToggle('close');
             this.$el.fadeToggle();
+            toggleUICover();
         },
     });
 
@@ -561,6 +1053,34 @@ $(function () {
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
+            // 弹出选择图标
+            $('.select-nav-icon').on({
+                click: function() {
+                    $('.nav-icon').toggle('drop');
+                }
+            })
+            // 图标选择
+            $('.nav-pic').on({
+                click: function() {
+                    $('.nav-pic-preview').attr('src', $(this).attr('src'));
+                    $('#navItemIcon').val($(this).attr('data-nav-icon'));
+                    $('.nav-icon').toggle( "drop" );
+                },
+
+                mousemove: function() {
+                    $(this).css('background','#428bca');
+                    $('.nav-pic-preview').attr('src', $(this).attr('src'));
+                },
+                mouseout:function() {
+                    $(this).css('background','');
+                }
+            });
+            // 关闭图标选择
+            $('.nav-icon-close').on({
+                click:function() {
+                    $('.nav-icon').toggle( "drop" );
+                }
+            })
             return this;
         },
         submitNavItem: function (event) {
@@ -571,13 +1091,12 @@ $(function () {
             this.model.set({
                 title: form.navItemTitle.value,
                 moduleId: parseInt(form.navItemModuleId.value),
-                // icon: '',
+                icon: form.navItemIcon.value,
             });
 
             var error = this.model.validate(this.model.attributes);
             if (error != '') {
                 alert(error);
-                this.model.destroy();
                 return;
             }
 
@@ -586,8 +1105,8 @@ $(function () {
             this.toggle();
         },
         toggle: function () {
-            coveringToggle('close');
             this.$el.fadeToggle();
+            toggleUICover();
         },
     });
 
@@ -609,7 +1128,7 @@ $(function () {
         },
         toggle: function () {
             this.$el.fadeToggle();
-            coveringToggle('close');
+            toggleUICover();
         },
     });
 
@@ -619,34 +1138,36 @@ $(function () {
             'click .module-add-btn': 'dlgAddModule',
             'click .module-remove-btn': 'dlgRemoveModule',
             'click .navitem-add-btn': 'dlgAddNavItem',
+            'click .uidiy-save-btn': 'uidiySave',
             'click .uidiy-sync-btn': 'uidiySync',
             'click .uidiy-init-btn': 'uidiyInit',
+            'change #autoSaveCheckbox': 'onChangeAutoSave',
         },
         initialize: function() {
             this.listenTo(modules, 'add', this.addModule);
             this.listenTo(navItems, 'add', this.addNavItem);
 
-            // 转换module, component对象
             _.each(uidiyGlobalObj.moduleInitList, function (module) {
-                var tmpComponentList = [],
-                    tmpLeftTopbars = [],
-                    tmpRightTopbars = [];
-                _.each(module.componentList, function (component) {
-                    tmpComponentList.push(wrapComponent(component));
-                });
-                _.each(module.leftTopbars, function (component) {
-                    tmpLeftTopbars.push(wrapComponent(component));
-                });
-                _.each(module.rightTopbars, function (component) {
-                    tmpRightTopbars.push(wrapComponent(component));
-                });
-                module.componentList = tmpComponentList;
-                module.leftTopbars = tmpLeftTopbars;
-                module.rightTopbars = tmpRightTopbars;
                 modules.add(new ModuleModel(module));
             })
 
             navItems.set(uidiyGlobalObj.navItemInitList);
+
+            $('#autoSaveCheckbox')[0].checked = localStorageWrapper.getItem(APPBYME_UIDIY_AUTOSAVE) == 1;
+
+            // 底部导航拖动
+            var navSortStartIndex = 0;
+            $('.nav-item-container').sortable({
+                revert: true,
+                opacity: 0.6,
+                start: function (event, ui) {
+                    navSortStartIndex = ui.item.index();
+                },
+                update: function (event, ui) {
+                    sortArrayHelper(navItems.models, navSortStartIndex, ui.item.index());
+                },
+            });
+            $('.nav-item-container').disableSelection();
         },
         render: function () {
             return this;
@@ -657,30 +1178,34 @@ $(function () {
         },
         addNavItem: function (navItem) {
             var view = new NavItemView({model: navItem});
-            $('.navitem-add-btn').before(view.render().el);   
+            $('.nav-item-container').append(view.render().el);   
         },
         dlgAddNavItem: function () {
             navItemEditDlg.model = new NavItemModel();
             navItemEditDlg.render();
             navItemEditDlg.toggle();
-            coveringToggle();
         },
         dlgAddModule: function (event) {
             moduleEditDlg.model = new ModuleModel();
             moduleEditDlg.render();
+            moduleEditDlg.toggle();
         },
         dlgRemoveModule: function (event) {
             var moduleId = $(event.currentTarget).parents('div.module')[0].id.slice(10);
             moduleRemoveDlg.model = modules.get(moduleId);
             moduleRemoveDlg.render();
         },
-        uidiySync: function (event) {
+        onChangeAutoSave: function (event) {
+            localStorageWrapper.setItem(APPBYME_UIDIY_AUTOSAVE, event.currentTarget.checked ? 1 : 0);
+        },
+        saveUIDiy: function (isSync, success, error) {
             Backbone.ajax({
                 url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/savemodules',
                 type: 'post',
                 dataType: 'json',
                 data: {
                     modules: JSON.stringify(modules),
+                    isSync: isSync,
                 },
                 success: function (result,status,xhr) {
                     var navInfo = {
@@ -693,37 +1218,51 @@ $(function () {
                         dataType: 'json',
                         data: {
                             navInfo: JSON.stringify(navInfo),
+                            isSync: isSync,
                         },
-                        success: function (result,status,xhr) {
-                            alert('同步成功');
-                        }
+                        success: success,
                     });
                 }
             });
         },
-        uidiyInit: function () {
-            Backbone.ajax({
-                url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/init',
-                type: 'post',
-                success: function (result,status,xhr) {
-                    alert('初始化成功');
-                    location.href = uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy';
-                }
+        uidiySave: function () {
+            this.saveUIDiy(false, function () {
+                alert('保存成功');
             });
-        }
+        },
+        uidiySync: function () {
+            this.saveUIDiy(true, function () {
+                alert('同步成功');
+            });
+        },
+        uidiyInit: function () {
+            if (confirm('确定要初始化配置吗?')) {
+                Backbone.ajax({
+                    url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/init',
+                    type: 'post',
+                    success: function (result,status,xhr) {
+                        alert('初始化成功');
+                        location.href = uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy';
+                    }
+                });
+            }
+        },
     });
+    
+    window.Appbyme = {
+        uiModules: modules,
+        getNavIconUrl: getNavIconUrl,
+    };
 
     var mainView = new MainView(),
         navItemEditDlg = new NavItemEditDlg(),
         navItemRemoveDlg = new NavItemRemoveDlg(),
         moduleEditDlg = new ModuleEditDlg(),
         moduleTopbarDlg = new ModuleTopbarDlg(),
-        newsComponentEditDlg = new NewsComponentEditDlg(),
+        componentEditDlg = new ComponentEditDlg(),
+        customStyleEditDlg = new CustomStyleEditDlg(),
+        customStyleComponentEditDlg = new CustomStyleComponentEditDlg(),
         moduleEditDetailView = new ModuleEditDetailView(),
         moduleEditMobileView = new ModuleEditMobileView(),
         moduleRemoveDlg = new ModuleRemoveDlg();
-
-    window.Appbyme = {
-        uiModules: modules,
-    }
 });

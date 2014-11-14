@@ -252,6 +252,27 @@ class PortalUtils {
     public static function getArticleCount($aid) {
         return DzPortalArticle::getArticleCountByAid($aid);
     }
+
+    /**
+     * 门户资讯分类模块列表
+     * 
+     * @author HanPengyu
+     *
+     * @param mixed $count 截取列表的长度，老的接口使用6.
+     *
+     * @return array.
+     */
+    public static function getModuleList ($count) {
+        $moduleList = AppbymePoralModule::getModuleList();
+        $moduleList = array_slice($moduleList, 0, $count);
+        $lists = array();
+        foreach ($moduleList as $module) {
+            $list['moduleId'] = (int)$module['mid'];
+            $list['moduleName'] = (string)$module['name'];
+            $lists[] = $list;
+        }
+        return $lists;
+    }
 }
 
 function parseforumattach(&$post, $aids) {

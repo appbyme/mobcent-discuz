@@ -2,7 +2,7 @@
 /*重写了Bootstrap*/
 .container {
     width: 90%;
-    /*width: 1200px;*/
+    width: 1200px;
 }
  .form-group {
     margin-bottom: 5px;
@@ -31,9 +31,12 @@ label {
 }
 
 /* 对幻灯片样式的修改 */
+.carousel-example-generic_one {
+    margin-bottom: 5px;
+}
 .carousel-indicators {
     position: absolute;
-    left: 260px;
+    left: 275px;
     top: 130px;
 }
 .carousel-caption {
@@ -46,6 +49,12 @@ label {
     overflow:hidden;
 }
 
+/* 对复选框和单选框文字不对齐的处理 */
+.align-text {
+    vertical-align:middle;
+    margin: 0 5px 1px 0;
+    padding: 0;
+}
 
 
 /*面板和模态框一样的效果*/
@@ -63,7 +72,6 @@ label {
 }
 
 #uidiy-main-view {
-    /*background: #e3e3e3;*/
     border-radius: 5px;
 }
 
@@ -75,15 +83,17 @@ label {
     height: 800px;
     position: relative;
     font-size: 12px;
+    /*border: 1px solid green;*/
 }
 
 /*手机中间显示的内容*/
 .mobleShow .moble-content {
-    width: 320px;
-    margin: 118px 0px 0px 30px;
-    height: 570px;
-    background: #F8F8F8;
+    width: 337px;
+    margin: 95px 0px 0px 20px;
+    height: 611px;
+    /*background: #e3e3e3;*/
     overflow: hidden;
+    /*background: pink;*/
 }
 
 .moble-top-show {
@@ -103,85 +113,139 @@ label {
     font-weight: 200;
 }
 
-/*灰色的*/
-.module-show {
-    margin-top: 10px;
-}
-.module-show img {
-    width: 25px;
-    height: 25px;
-    margin: 1px 20px 0px 0px;
-}
-.module-show-one, .module-show-two, .module-show-three{
-    background: #CCCCCC;
-    height: 28px;
-    border: 1px solid #797979;
-    padding: 0px 20px 0px 25px;
-    line-height: 26px;
-}
-.module-show-one {
-    border-bottom: 0px;
-}
-.module-show-three {
-    border-top: 0px;
-    width: 300px;
-    border-radius: 5px;
-    margin-left: 10px;
-    padding: 0px 10px 0px 15px;
-}
-.module-show-one .pull-right, .module-show-two .pull-right, .module-show-three .pull-right{
-    margin-right: 10px;
-}
-
 /*发现模块*/
 .found-module {
-    height: 453px;
+    height: 545px;
+    /*border: 1px solid red;*/
+}
+
+/* 前面图标大小 */
+.found-content img {
+    width: 45px;
+    height: 45px;
+    margin-right: 20px;
+}
+
+.found-content {
+    margin: 10px 0px 10px 0px;
+    background: #e3e3e3;
+    height: 310px;
+    overflow-y:auto;
+    /*border: 1px solid blue;*/
+}
+
+.oper-btn {
+    margin-top:10px;
+    margin-left:40px;
+    width: 80px;
+}
+
+.discover-title {
+    margin-top:10px;
+    width:80px;
+    overflow:hidden;
+}
+
+.fixed-content {
+    /*margin-top:10px;*/
+    /*height: 160px;*/
+
+}
+
+.user-content {
+    /*height: 100px;*/
+    /*margin-bottom: 10px;*/
+}
+
+/* 覆盖一些列表组的样式 */
+
+.found-content .list-group {
+    margin-bottom: 10px;
+}
+
+.found-content .list-group-item {
+    height: 60px;
+    border: 1px solid #e3e3e3;
+    padding:5px 0px 5px 30px;
+}
+
+.found-content .list-group-item:hover {
+    background: #F5F5F5;
 }
 
 /*左图右文*/
 .pic-text {
-    width: 320px;
-    height: 500px;
+    width: 336px;
+    height: 545px;
     overflow-y: auto;
+    overflow-x:hidden;
     padding: 5px;
+    /*border: 1px solid blue;*/
 }
 
-.edit-list {
+.pic-text .list-group-item {
+    height: 70px;
+}
+
+.pic-text .list-group-item:hover {
+    background: #F5F5F5;
+}
+
+.news-component-item-container {
+    width: 330px;
+    /*height: 440px;*/
+    max-height: 485px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    margin:0 auto;
+}
+
+/*.edit-list {
     width: 300px;
-    height: 80px;
+    height: 70px;
     border: 1px solid #DDDDDD;
     border-radius: 5px;
     padding:8px 0px 0px 8px;
     margin: 0 auto;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     background: #F5F5F5;
-}
+}*/
+
+/*.edit-list:hover {
+    background: #F5F5F5;
+}*/
 
 .page-main {
-    width:230px;
+    width:145px;
     height:50px;
-    padding-left:10px
+    padding-left:10px;
 }
 
 .page-title {
-    width: 150px;
+    width: 140px;
     height: 18px;
     overflow: hidden;
 }
 
 .page-content {
     height: 36px;
+    width: 115px;
+    word-break:break-all;
     overflow: hidden;
+}
+
+.page-btn {
+    padding:10px 0px 0px 0px;
 }
 
 /*添加页面弹出框*/
 .pic-text-pop {
-    width: 300px;
+    width: 335px;
     height: 300px;
     border-radius: 5px;
     position: absolute;
-    right: 38px;
-    top: 174px;
+    right: 22px;
+    top: 95px;
     z-index: 100;
     display:none;
     font-size: 12px;
@@ -189,21 +253,30 @@ label {
 
 /*添加风格*/
 .add-style {
-    width: 320px;
-    height: 502px;
+    width: 336px;
+    height: 545px;
     overflow-y: auto;
     overflow-x:hidden;
     padding: 5px;
 }
 
+/* 控制中间的高度 */
+.add-style .custom-style-item-container {
+    width: 326px;
+    /*height: 400px;*/
+    max-height: 470px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
 .add-style-btn, .add-style-comp {
     width: 200px;
-    margin-top: 50px;
+    margin-top: 10px;
 }
 
 /* 风格区域 */
 .single-style {
-    width: 310px;
+    width: 326px;
     /*height: 200px;*/
     margin: 5px auto 5px;
     padding-bottom: 5px;
@@ -221,23 +294,25 @@ label {
 .style-title {
     height: 30px;
     width: 300px;
+    margin: 5px 0px 5px;
 }
 
 .style-area {
     width: 300px;
     height: 60px;
     background: #e3e3e3;
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
+    margin: 7px 0px 5px;
 }
 
 /*添加风格弹出框*/
 .add-style-pop {
-    width: 300px;
+    width: 337px;
     height: 300px;
     border-radius: 5px;
     position: absolute;
-    right: 38px;
-    top: 174px;
+    right: 21px;
+    top: 30px;
     z-index: 100;
     display:none;
     font-size: 12px;
@@ -245,45 +320,122 @@ label {
 
 /*添加组件弹出框*/
 .add-comp-pop {
-    width: 300px;
+    width: 337px;
+    /*height: 600px;*/
+    border-radius: 5px;
+    position: absolute;
+    right: 20px;
+    top: 95px;
+    z-index: 100;
+    display:none;
+    font-size: 12px;
+}
+
+.add-comp-pop .panel-body {
+    height: 500px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+/* 添加幻灯片弹出框 */
+.add-slide-pop {
+    width: 335px;
     height: 300px;
     border-radius: 5px;
     position: absolute;
-    right: 38px;
+    right: 22px;
     top: 174px;
     z-index: 100;
     display:none;
     font-size: 12px;
 }
 
+.slide-list {
+    padding-left: 50px;
+}
+
+.slide-list select {
+    width: 120px;
+}
+
+.slide-select {
+    padding-top: 10px;
+}
+
+/* 添加频道弹出框 */
+.add-channel-pop{
+    width: 335px;
+    height: 300px;
+    border-radius: 5px;
+    position: absolute;
+    right: 22px;
+    top: 174px;
+    z-index: 100;
+    display:none;
+    font-size: 12px;
+}
+
+
 /*手机底部的导航*/
 .moble-bottom-nav {
-    height: 50px;
-    width: 320px;
-    background: #CCCCCC;
-    border-top: 1px solid #797979;
+    height: 60px;
+    width: 337px;
+    background: #66ADE8;
+    /*border-top: 1px solid #797979;*/
     margin: 0px 0px 0px 0px;
     overflow:hidden;
+
 }
 
 .moble-bottom-nav .nav-column {
-    width: 62px;
-    height: 50px;
-    padding-top:30px;
+    width: 67px;
+    height: 60px;
+    padding-top:40px;
     overflow:hidden;
-    font-size: 11px;
+    font-size: 12px;
+    /*border: 1px solid red;*/
 }
 
-.moble-bottom-nav .nav-column img {
+.nav-edit a {
+    cursor:pointer;
+}
+
+/*.moble-bottom-nav .nav-column img {
     width: 80px;
     height: 80px;
-    border: 1px solid red;
-}
+}*/
 
 .moble-bottom-nav .nav-add img{
-    width:30px;
-    height: 30px;
+    width:40px;
+    height: 40px;
     margin:10px 10px 0px 15px;
+    border-radius: 5px;
+
+}
+
+.nav-icon {
+    /*padding: 5px 5px; */
+    background: #66ADE8; 
+    width: 460px;
+    height: 222px;
+    border-radius: 5px;
+    position: absolute;
+    bottom:200px;
+    left: 115px;
+    display: none;
+}
+
+.nav-icon .nav-icon-close {
+    position: absolute;
+    left: 440px;
+}
+
+.nav-pic {
+    margin: 2px;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    float: left;
 }
 
 /*底部添加导航*/
@@ -301,12 +453,12 @@ label {
 }
 
 .play-border-add input[type=text], .pic-text-pop input[type=text], .add-style-pop input[type=text],
-.add-comp-pop input[type=text]
+.add-comp-pop input[type=text], .add-channel-pop input[type=text]
 {
-    width: 150px;
+    width: 170px;
 }
-.play-border-add select, .pic-text-pop select, .add-style-pop select,.add-comp-pop select{
-    width: 150px;
+.play-border-add select, .pic-text-pop select, .add-style-pop select,.add-comp-pop select, .add-channel-pop select {
+    width: 170px;
 }
 /*重写面板*/
 .play-border-add .panel {
@@ -318,12 +470,12 @@ label {
 
 /*三个加号*/
 .play-add-plug {
-    width: 310px;
+    width: 335px;
     height: 300px;
     border-radius: 5px;
     position: absolute;
-    right: 32px;
-    top: 188px;
+    right: 22px;
+    top: 160px;
     z-index: 100;
     display:none;
     font-size: 12px;
@@ -417,6 +569,7 @@ label {
     border-radius: 5px;
     margin: 5px 0px 5px 0px;
     padding: 5px 0px 5px 0px;
+    border: 1px solid rgba(0,0,0,0.1);
 }
 
 /*新写的模块编辑填出框*/
@@ -431,6 +584,15 @@ label {
     overflow-y:auto;
     overflow-x:hidden;
     z-index: 49;
+    display: none;
+}
+
+.del-pic {
+    width:20px;
+    height:20px;
+    position:absolute;
+    left:50px;
+    top:-8px;
 }
 
 .module-play .panel-body {
@@ -440,7 +602,7 @@ label {
 }
 /*主要是弹出框面板的标题*/
 .module-play .panel-heading, .play-add-plug .panel-heading, .play-border-add .panel-heading, .pic-text-pop .panel-heading,
-.add-style-pop .panel-heading, .add-comp-pop .panel-heading {
+.add-style-pop .panel-heading, .add-comp-pop .panel-heading, .add-slide-pop .panel-heading, .add-channel-pop .panel-heading {
     width: 100%;
     height: 40px;
 }
@@ -452,8 +614,7 @@ label {
 .add-nav-list .component-view-container {
     border-radius: 5px;
     margin: 5px 0px 5px 0px;
-    padding: 5px 0px 5px 0px;
-    border: 1px solid rgba(0,0,0,0.1);
+    /*padding: 5px 0px 5px 0px;*/
 }
 
 /* 设置滚动条的样式 */
@@ -496,7 +657,7 @@ label {
 }
 
 /* 对用到的按钮增加阴影的操作 */
-.btn-primary, .btn-default {
+.btn-primary, .btn-default, .moble-bottom-nav {
     /*background: #66ADE8;*/
    -webkit-border-radius: 4px;
    -moz-border-radius: 4px;
@@ -515,28 +676,48 @@ label {
     padding:3px 6px;
 }
 
-/* 兼容代码，兼容左图右文弹出框样式 */
-.pic-text-pop .col-sm-2 {
+/* 兼容代码，兼容左图右文弹出框样式、添加组件 */
+.pic-text-pop .col-sm-2, .add-comp-pop .col-sm-2, .add-style-pop .col-sm-2{
     padding-left: 15px;
     width: 99px;
 }
 
-.pic-text-pop .col-sm-10 {
-    width: 150px;
+/* 为了兼容上传图片下面的预览框 */
+.pic-text-pop .col-sm-offset-2, .add-comp-pop .col-sm-offset-2, .add-style-pop .col-sm-offset-2 {
+    padding-left: 40px;
 }
 
-.pic-text-pop .form-group textarea {
-    width: 150px;
+.pic-text-pop .col-sm-10, .add-comp-pop .col-sm-10, .add-style-pop .col-sm-10 {
+    width: 215px;
 }
+
+.pic-text-pop .form-group textarea, .add-comp-pop textarea, .add-style-pop textarea {
+    width: 170px;
+}
+
+/* 兼容图片上传图标 */
+.pic-text-pop .del-pic, .add-comp-pop .del-pic {
+    position: absolute;
+    left: 100px;
+}
+
+/* 兼容图片预览区域 */
+.pic-text-pop .pic-preview, .add-comp-pop .pic-preview, .add-style-pop .pic-preview {
+    position:relative;
+    width: 225px;
+    padding-left: 60px;
+}
+
 
 /* 整体颜色的修改，主要是针对bootstrap的面板进行修改 */
 .panel-primary {
     border-color:#e3e3e3;
 }
 .panel-primary .panel-heading{
-    background: #66ADE8
+    background: #66ADE8;
 }
 
+<<<<<<< HEAD
 .btn-primary {
     background: #5FA7E5;
 }

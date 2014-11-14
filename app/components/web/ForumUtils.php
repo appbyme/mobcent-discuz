@@ -612,7 +612,8 @@ class ForumUtils {
         }
 
         // 转换超链接
-        $post['message'] = preg_replace_callback('/\[url=(.*?)\](.*?)\[\\/url\]/', create_function('$matches', '
+        $post['message'] = preg_replace_callback('/\[url=?(.*?)\](.*?)\[\\/url\]/', create_function('$matches', '
+                $matches[1] || $matches[1] = $matches[2];
                 $matches[1] = WebUtils::getHttpFileName($matches[1]);
                 return "[mobcent_br]\r\n[mobcent_url={$matches[1]}(title={$matches[2]})]\r\n";
             '),
