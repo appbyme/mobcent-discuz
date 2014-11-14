@@ -51,7 +51,15 @@ class TopicListAction extends MobcentAction {
         $cache = $this->getCacheInfo();
         if (!$cache['enable'] || ($res = Yii::app()->cache->get($key)) === false) {
             // var_dump('no cache');
-            $res = WebUtils::outputWebApi($this->getResult($params), '', false);
+            if ($params['sort'] == 'photo') {
+                $_GET = array_merge($_GET, $params);
+                ob_start();
+                $this->getController()->forward('forum/photogallery', false);
+                $res = WebUtils::jsonDecode(ob_get_clean());
+                $res = WebUtils::outputWebApi($res, 'utf-8', false);
+            } else {
+                $res = WebUtils::outputWebApi($this->getResult($params), '', false);
+            }
             if ($page == 1) {
                 if ($fid > 0 && $sort != 'top') {
                     $sql = '
@@ -90,14 +98,6 @@ class TopicListAction extends MobcentAction {
     }
 
     protected function getResult($params=array()) {
-        if ($params['sort'] == 'photo') {
-            $_GET = array_merge($_GET, $params);
-            ob_start();
-            $this->getController()->forward('forum/photogallery', false);
-            $res = ob_get_clean();
-            $list = WebUtils::jsonDecode($res);
-            return $list;
-        }
         extract($params);
 
         $res = WebUtils::initWebApiArray_oldVersion();

@@ -68,8 +68,8 @@ class UIDiyController extends AdminController
         array_unshift($modules, $discoverModule, $fastpostModule);
 
         // 检测浏览器信息
-        $test = new Mobile_Detect();
-        $browserInfo = $test->version('Chrome');
+        $mobileDetect = new Mobile_Detect();
+        $browserInfo = $mobileDetect->version('Chrome');
 
         $this->renderPartial('index', array(
             'navInfo' => $navInfo,

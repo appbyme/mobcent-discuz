@@ -99,7 +99,7 @@ class AppbymePortalModuleSource extends DiscuzAR {
     // 获取 bid 下面的内容
     public static function getDataByBid($bid) {
         return DbUtils::getDzDbUtils(true)->queryAll('
-            SELECT id, idtype
+            SELECT id, idtype, title
             FROM %t
             WHERE bid=%d
             AND idtype IN (%n)

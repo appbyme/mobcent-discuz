@@ -485,7 +485,7 @@ label {
 /*右侧整体*/
 #operation {
     margin-top: 40px;
-    padding-top: 30px;
+    /*padding-top: 30px;*/
     font-size: 12px;
 }
 
@@ -676,6 +676,18 @@ label {
     padding:3px 6px;
 }
 
+/* home 按钮 */
+.home-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 500px;
+    outline: none;
+    position: absolute;
+    left:157px;
+    bottom: 20px;
+    outline: none;
+}
+
 /* 兼容代码，兼容左图右文弹出框样式、添加组件 */
 .pic-text-pop .col-sm-2, .add-comp-pop .col-sm-2, .add-style-pop .col-sm-2{
     padding-left: 15px;
@@ -715,37 +727,4 @@ label {
 }
 .panel-primary .panel-heading{
     background: #66ADE8;
-}
-
-<<<<<<< HEAD
-.btn-primary {
-    background: #5FA7E5;
-}
-
-#module-list .btn-xs {
-    padding:3px 6px;
-}
-
-/*手机页面显示，首页*/
-.content-list {
-    width:314px;
-    height:255px;
-    margin:5px auto 0px;
-    /*border:1px solid rgba(0,0,0,0.1);*/
-    border-radius:5px;
-    overflow:hidden;
-    /*background: green;*/
-}
-
-.content-list .list-group-item {
-    height:85px;
-    padding:5px 10px 5px 5px;
-}
-
-.content-list .list-group-item-text {
-    height:50px;
-    width:210px;
-    overflow:hidden; 
-    line-height:17px;
-    text-indent:25px;
 }

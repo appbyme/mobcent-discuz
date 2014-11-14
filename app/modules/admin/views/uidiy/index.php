@@ -111,6 +111,8 @@
                         <div id="module-edit-mobile-view">
                         </div>
 
+                        <button type="button" class="home-btn"></button>
+
                         <!-- 手机底部导航 -->
                         <div class="moble-bottom-nav">
                             <div class="nav-item-container">
