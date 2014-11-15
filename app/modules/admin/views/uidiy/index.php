@@ -1,3 +1,18 @@
+<?php
+
+/**
+ * UI Diy index view
+ *
+ * @author 谢建平 <jianping_xie@aliyun.com>
+ * @author HanPengyu
+ * @copyright 2012-2014 Appbyme
+ */
+
+if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
+    exit('Access Denied');
+}
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -98,6 +113,10 @@
                         <div id="custom-style-edit-dlg-view" class="add-style-pop">
                         </div>
 
+                        <!-- 发现添加幻灯片弹出框 -->
+                        <div id="discover-slider-component-edit-dlg-view" class="add-slide-pop">
+                        </div>
+
                         <!-- 自定义添加组件弹出框 -->
                         <div id="custom-style-component-edit-dlg-view" class="add-comp-pop">
                         </div>
@@ -145,7 +164,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="checkbox">
-                            <label class="align-text"><input type="radio" > 底部导航</label>
+                            <label class="align-text"><input type="radio" checked> 底部导航</label>
                         </div>
                     </div>
                 </div>
@@ -390,49 +409,22 @@
     </div>
     <% if (id == MODULE_ID_DISCOVER) { %>
     <div class="found-module">
-        <% var tmpComponentList = componentList[0].attributes.componentList; %>
-        <div class="slide-img">
-        <div class="carousel slide carousel-example-generic_one" data-ride="carousel" data-interval="3000" style="width:337px;height:150px;">
-                <!-- 圆点 -->
-                <ol class="carousel-indicators">
-                    <li data-target=".carousel-example-generic_one" data-slide-to="0" class="active"></li>
-                    <li data-target=".carousel-example-generic_one" data-slide-to="1" class=""></li>
-                </ol>
-                <!-- 图片区域，item是一个图片 -->
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp1.jpg" alt="" style="width:337px;height:150px;">
-                        <div class="carousel-caption">
-                            <p>predecessor</p> 
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp2.jpg" style="width:337px;height:150px;">
-                        <div class="carousel-caption">
-                            <p>Similar to the updates Samsung made to the Galaxy S4</p>
-                        </div>
-                    </div>
-                </div>
-                <a class="left carousel-control" href=".carousel-example-generic_one" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </a>
-                <a class="right carousel-control" href=".carousel-example-generic_one" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
+        <div class="slide-img ">
+            <div class="discover-slider-component-container">
             </div>
-            <button type="button" class="btn btn-primary btn-xs">点击添加更多幻灯片</button>
+            <button type="button" class="btn btn-primary btn-xs add-discover-slider-component-item-btn">点击添加更多幻灯片</button>
         </div>
         <div class="found-content">
             <div class="fixed-content">
-                <div class="list-group text-left discover-fix-component-container">
+                <div class="list-group text-left discover-default-component-container">
                 </div>
             </div>
             <div class="user-content">
-                <div class="list-group text-left discover-user-component-container">
+                <div class="list-group text-left discover-custom-component-container">
                 </div>
             </div>
         </div>
-            <button type="button" class="btn btn-primary btn-xs add-discover-user-component-item-btn">点击添加更多</button>
+        <button type="button" class="btn btn-primary btn-xs add-discover-custom-component-item-btn">点击添加更多</button>
     </div>
     <% } else if (id == MODULE_ID_FASTPOST) { %>
     <% } else if (type == MODULE_TYPE_FULL) { %>
@@ -537,7 +529,7 @@
             <label for="" class="col-sm-2 control-label">导航名称：</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control input-sm" name="componentTitle[]" value="<%= title %>">
-                <input type="checkbox" name="isDefaultTitle[]" <%= extParams.isDefaultTitle ? 'checked' : '' %>> 使用该名称作为下级页面的名称
+                <input type="checkbox" name="isDefaultTitle[]" <%= extParams.isDefaultTitle ? 'checked' : '' %>> 不使用该名称作为下级页面的名称
             </div>
         </div>
         <div class="form-group">
@@ -781,8 +773,70 @@
             <button class="remove-news-component-item-btn btn btn-primary btn-xs">删除</button>
         </div>
     </script>
+    <!-- 发现幻灯片组件模板 -->
+    <script type="text/template" id="discover-slider-component-template">
+    <% if (componentList.length > 0)  { %>
+    <div class="carousel slide carousel-example-generic_one" data-ride="carousel" data-interval="3000" style="width:337px;height:150px;">
+        <!-- 圆点 -->
+        <ol class="carousel-indicators">
+        <% for (var i = 0; i < componentList.length; i++) { %>
+            <li data-target=".carousel-example-generic_one" data-slide-to="<%= i %>" class="<%= i == 0 ? 'active' : '' %>"></li>
+        <% } %>
+        </ol>
+        <!-- 图片区域，item是一个图片 -->
+        <div class="carousel-inner">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+            <div class="item <%= i == 0 ? 'active' : '' %>">
+                <img src="<%= component.icon %>" alt="" style="width:337px;height:150px;">
+                <div class="carousel-caption">
+                    <p><%= component.title %></p> 
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <% if (componentList.length > 1) { %>
+        <a class="left carousel-control" href=".carousel-example-generic_one" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href=".carousel-example-generic_one" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+        <% } %>
+    </div>
+    <% } %>
+    </script>
+    <!-- 发现幻灯片 添加/编辑 对话框 模板 -->
+    <script type="text/template" id="discover-slider-component-edit-dlg-template">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title pull-left">添加幻灯片</h3>
+            <button type="button" class="close pull-right component-close-btn">&times;</button>
+        </div>
+        <form class="form-horizontal component-edit-form">
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="col-sm-10">
+                <input type="hidden" name="layoutStyleSelect" value="<%= COMPONENT_STYLE_DISCOVER_SLIDER %>">
+                </div>
+            </div>
+
+            <div class="component-view-container">
+            </div>
+
+            <div class="form-group">
+                <button class="add-component-item-btn btn btn-info btn-sm" style="width:280px;">添加组件</button>
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+            <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
+            <button type="button" class="btn btn-default btn-sm component-close-btn">取 消</button>
+        </div>
+        </form>
+    </div>
+    </script>
     <!-- 发现固定项在手机ui的组件模板 -->
-    <script type="text/template" id="discover-fix-component-item-template">
+    <script type="text/template" id="discover-default-component-item-template">
         <img class="img-circle pull-left" src="<%= icon %>">
         <div class="pull-left discover-title"><%= title %></div>
         <div class="pull-left oper-btn text-right">
@@ -790,7 +844,7 @@
         </div>
     </script>
     <!-- 发现用户项在手机ui的组件模板 -->
-    <script type="text/template" id="discover-user-component-item-template">
+    <script type="text/template" id="discover-custom-component-item-template">
       <img class="img-circle pull-left" src="<%= icon %>">
       <div class="pull-left discover-title"><%= title %></div>
       <div class="pull-left oper-btn text-right">
@@ -961,18 +1015,7 @@
                     $(this).toggleClass('active');
                 }
             )
-
-            $('.close-add-slide').on({
-                click:function() {
-                    $('.add-slide-pop').fadeToggle();
-                }
-            })
-            $('.close-add-channel').on({
-                click:function() {
-                    $('.add-channel-pop').fadeToggle();
-                }
-            })
-
+            
             var browserInfo = "<?php echo $browserInfo; ?>";
             if (browserInfo < '37.0.2062.124') {
                 $('.alert-darker').toggle("drop");

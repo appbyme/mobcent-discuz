@@ -16,6 +16,7 @@ class RegisterAction extends MobcentAction{
     public function run($username, $password, $email) {
         $username = WebUtils::t(rawurldecode($username));
         $password = rawurldecode($password);
+        $email = rawurldecode($email);
         $res = $this->initWebApiArray();
         $res = $this->_register($res, $username, $password, $email);
         echo WebUtils::outputWebApi($res, '', false);
