@@ -172,6 +172,14 @@ $(function () {
             // }
             return '';
         },
+        getDiscoverComponentList: function (style, isInner) {
+            var tempMap = {};
+            tempMap[COMPONENT_STYLE_DISCOVER_SLIDER] = 0;
+            tempMap[COMPONENT_STYLE_DISCOVER_DEFAULT] = 1;
+            tempMap[COMPONENT_STYLE_DISCOVER_CUSTOM] = 2;
+            var tempComponentList = this.attributes.componentList[tempMap[style]];
+            return isInner ? tempComponentList.attributes.componentList : tempComponentList;
+        },
     });
 
     var NavItemModel = Backbone.Model.extend({
@@ -305,6 +313,8 @@ $(function () {
             if (URL) {
                 var objectURL = URL.createObjectURL(event.currentTarget.files[0]);
                 this.$el.find('.component-icon-preview').attr('src', objectURL);
+                this.$el.find('.component-icon-preview').css('opacity', 0.3);
+                this.$el.find('.upload-component-icon-btn').addClass('btn-default').removeClass('btn-primary').html('点击上传图片');
             }
         },
         uploadIcon: function () {
@@ -340,8 +350,11 @@ $(function () {
                     
                     _this.find('.componentIcon').val(msg.errMsg);
                     _this.find('.component-icon-preview').attr('src', msg.errMsg);
-
-                    alert('上传成功！');
+                    _this.find('.component-icon-preview').animate({opacity:'10'}, 3000);
+                    _this.find('.upload-component-icon-btn').html('上传成功！');
+                    _this.find('.upload-component-icon-btn').addClass('btn-primary').removeClass('btn-default');
+                    
+                    // alert('上传成功！');
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     // console.log(textStatus);
@@ -385,6 +398,59 @@ $(function () {
             }
 
             this.model.set(componentList[0].attributes);
+
+            typeof this.submitCallback == 'function' && this.submitCallback(this.model);
+
+            this.closeComponentDlg();
+        },
+    });
+        
+    // 发现幻灯片编辑框
+    var DiscoverSliderComponentEditDlg = Backbone.View.extend({
+        el: $("#discover-slider-component-edit-dlg-view"),
+        template: _.template($('#discover-slider-component-edit-dlg-template').html()),
+        events: {
+            'click .component-close-btn': 'closeComponentDlg',
+            'click .add-component-item-btn': 'addComponentItem',
+            'submit .component-edit-form': 'submitComponent',
+        },
+        render: function () {
+            this.$el.html(this.template(this.model.attributes));
+
+            var componentList = this.model.attributes.componentList;
+            for (var i = 0; i < componentList.length; i++) {
+                var model = componentList[i];
+                var view = new ComponentView({model: model});
+                $('.component-view-container').append(view.render().el);
+            }
+            return this;
+        },
+        toggle: function () {
+            this.$el.fadeToggle();
+            toggleUICover();
+        },
+        closeComponentDlg: function () {
+            this.toggle();
+            this.$el.html('');
+        },
+        addComponentItem: function () {   
+            event.preventDefault();
+
+            var view = new ComponentView({model: new ComponentModel()});
+            $('.component-view-container').append(view.render().el);
+        },
+        submitComponent: function (event) {
+            event.preventDefault();
+
+            var form = $('.component-edit-form')[0];
+
+            this.model.attributes.componentList = submitComponentHelper(form);
+
+            var error = this.model.validate(this.model.attributes);
+            if (error != '') {
+                alert(error);
+                return;
+            }
 
             typeof this.submitCallback == 'function' && this.submitCallback(this.model);
 
@@ -586,7 +652,7 @@ $(function () {
             this.$el.html(this.template(this.model.attributes));
             this.onChangeModuleType();
 
-            $('.module-mobile-ui-view').addClass('hidden');
+            $('.module-mobile-ui-view').html('').addClass('hidden');
             return this;
         },
         onChangeModuleType: function (event) {
@@ -656,8 +722,8 @@ $(function () {
                 case MODULE_TYPE_FASTPOST:
                     if (this.model.id == MODULE_ID_DISCOVER) {
                         var discoverModel = moduleEditMobileView.model.attributes.componentList[0];
-                        var discoverModelComponentList = discoverModel.attributes.componentList;
-                        discoverModelComponentList[2].attributes.componentList = discoverModelComponentList[2].tempComponentList.models;
+                        var discoverModelCustomComponentList = discoverModel.getDiscoverComponentList(COMPONENT_STYLE_DISCOVER_CUSTOM);
+                        discoverModelCustomComponentList.attributes.componentList = discoverModelCustomComponentList.tempComponentList.models;
                     } else {
                         this.model.attributes.componentList = submitComponentHelper(form);
                     }
@@ -685,7 +751,7 @@ $(function () {
             this.closeModule();
 
             if ($('#autoSaveCheckbox')[0].checked) {
-                mainView.saveUIDiy(false);
+                mainView.saveUIDiy(0);
             }
         },
         closeModule: function () {
@@ -736,7 +802,8 @@ $(function () {
             'click .select-topbar-btn': 'selectTopbar',
             'click .add-news-component-item-btn': 'dlgAddNewsComponent',
             'click .add-style-btn': 'dlgAddStyleComponent',
-            'click .add-discover-user-component-item-btn': 'dlgAddDiscoverUserComponent',
+            'click .add-discover-custom-component-item-btn': 'dlgAddDiscoverCustomComponent',
+            'click .add-discover-slider-component-item-btn': 'dlgAddDiscoverSliderComponent',
         },
         initialize: function () { 
         },
@@ -745,23 +812,25 @@ $(function () {
 
             // render 发现组件
             if (this.model.id == MODULE_ID_DISCOVER) {
-                var componentList = this.model.attributes.componentList[0].attributes.componentList,
-                    sliderComponentList = componentList[0].attributes.componentList,
-                    fixComponentList = componentList[1].attributes.componentList,
-                    userComponentList = componentList[2].attributes.componentList;
-                // render fix
-                for (var i = 0; i < fixComponentList.length; i++) {
-                    var view = new DiscoverFixComponentItemView({model: fixComponentList[i]});
-                    $('.discover-fix-component-container').append(view.render().el);
+                var discoverModel = this.model.attributes.componentList[0];
+                    sliderComponentList = discoverModel.getDiscoverComponentList(COMPONENT_STYLE_DISCOVER_SLIDER),
+                    defaultComponentList = discoverModel.getDiscoverComponentList(COMPONENT_STYLE_DISCOVER_DEFAULT, true),
+                    customComponentList = discoverModel.getDiscoverComponentList(COMPONENT_STYLE_DISCOVER_CUSTOM);
+                // render default
+                for (var i = 0; i < defaultComponentList.length; i++) {
+                    var view = new DiscoverDefaultComponentItemView({model: defaultComponentList[i]});
+                    $('.discover-default-component-container').append(view.render().el);
                 }
                 $('.discover-item-switch').bootstrapSwitch();
                 
-                // render user
-                componentList[2].tempComponentList = new ComponentList();
-                this.listenTo(componentList[2].tempComponentList, 'add', this.addDiscoverUserComponentItem);
-                componentList[2].tempComponentList.add(userComponentList, {merge: true, remove: false, add: true});
+                // render custom
+                customComponentList.tempComponentList = new ComponentList();
+                this.listenTo(customComponentList.tempComponentList, 'add', this.addDiscoverCustomComponentItem);
+                customComponentList.tempComponentList.add(discoverModel.getDiscoverComponentList(COMPONENT_STYLE_DISCOVER_CUSTOM, true), {merge: true, remove: false, add: true});
 
-                // $('.carousel-example-generic_one').carousel();
+                // render slider
+                discoverSliderComponentView.model = sliderComponentList;
+                discoverSliderComponentView.render();
             }
 
             return this;
@@ -821,23 +890,32 @@ $(function () {
             var view = new CustomStyleItemView({model: style});
             $('.custom-style-item-container').append(view.render().el);
         },
-        // 弹出添加自定义用户组件编辑框
-        dlgAddDiscoverUserComponent: function () {
+        dlgAddDiscoverCustomComponent: function () {
             componentEditDlg.model = new ComponentModel();
             componentEditDlg.submitCallback = function (component) {
-                var moduleModel = moduleEditMobileView.model;
-                var componentList = moduleModel.attributes.componentList[0].attributes.componentList;
-                componentList[2].tempComponentList.add(component, {merge: true, remove: false, add: true});
+                var discoverModel = moduleEditMobileView.model.attributes.componentList[0];
+                var discoverCustomComponentList = discoverModel.getDiscoverComponentList(COMPONENT_STYLE_DISCOVER_CUSTOM);
+                discoverCustomComponentList.tempComponentList.add(component, {merge: true, remove: false, add: true});
 
                 scrollToBottomHelper($('.found-content')[0]);
             };
             componentEditDlg.render();
             componentEditDlg.toggle();
         },
-        // 添加自定义用户组件
-        addDiscoverUserComponentItem: function (component) {
-            var view = new DiscoverUserComponentItemView({model: component});
-            $('.discover-user-component-container').append(view.render().el);
+        // 弹出添加发现幻灯组件编辑框
+        dlgAddDiscoverSliderComponent: function () {
+            var discoverModel = moduleEditMobileView.model.attributes.componentList[0];
+            discoverSliderComponentEditDlg.model = discoverModel.getDiscoverComponentList(COMPONENT_STYLE_DISCOVER_SLIDER);
+            discoverSliderComponentEditDlg.submitCallback = function (model) {
+                discoverSliderComponentView.model = model;
+                discoverSliderComponentView.render();
+            };
+            discoverSliderComponentEditDlg.render();
+            discoverSliderComponentEditDlg.toggle();
+        },
+        addDiscoverCustomComponentItem: function (component) {
+            var view = new DiscoverCustomComponentItemView({model: component});
+            $('.discover-custom-component-container').append(view.render().el);
         },
     });
     
@@ -866,10 +944,20 @@ $(function () {
         },
     });
 
-    // 发现固定组件view
-    var DiscoverFixComponentItemView = Backbone.View.extend({
+    // 发现用户可添加组件view
+    var DiscoverSliderComponentView = Backbone.View.extend({
+        template: _.template($('#discover-slider-component-template').html()),
+        render: function () {
+            $('.discover-slider-component-container').html(this.template(this.model.attributes));
+            $('.carousel-example-generic_one').carousel();
+            return this;
+        },
+    });
+
+    // 发现默认组件view
+    var DiscoverDefaultComponentItemView = Backbone.View.extend({
         className: 'list-group-item',
-        template: _.template($('#discover-fix-component-item-template').html()),
+        template: _.template($('#discover-default-component-item-template').html()),
         events: {
             'switchChange.bootstrapSwitch .discover-item-switch': 'switchItem',
         },
@@ -884,9 +972,9 @@ $(function () {
     });
 
     // 发现用户可添加组件view
-    var DiscoverUserComponentItemView = Backbone.View.extend({
+    var DiscoverCustomComponentItemView = Backbone.View.extend({
         className: 'list-group-item',
-        template: _.template($('#discover-user-component-item-template').html()),
+        template: _.template($('#discover-custom-component-item-template').html()),
         events: {
             'click .edit-discover-item-btn': 'dlgEditComponent',
             'click .remove-discover-item-btn': 'removeItem',
@@ -944,7 +1032,9 @@ $(function () {
             customStyleComponentEditDlg.toggle();
         },
         removeItem: function () {
-            this.model.destroy();
+            if (confirm('确定要删除该风格区吗?')) {
+                this.model.destroy();
+            }
         },
         addStyleComponentItem: function (component) {
             var view = new CustomStyleComponentItemView({model: component});
@@ -1064,21 +1154,21 @@ $(function () {
                 click: function() {
                     $('.nav-pic-preview').attr('src', $(this).attr('src'));
                     $('#navItemIcon').val($(this).attr('data-nav-icon'));
-                    $('.nav-icon').toggle( "drop" );
+                    $('.nav-icon').toggle('drop');
                 },
 
                 mousemove: function() {
-                    $(this).css('background','#428bca');
+                    $(this).css('background', '#428bca');
                     $('.nav-pic-preview').attr('src', $(this).attr('src'));
                 },
-                mouseout:function() {
-                    $(this).css('background','');
+                mouseout: function() {
+                    $(this).css('background', '');
                 }
             });
             // 关闭图标选择
             $('.nav-icon-close').on({
-                click:function() {
-                    $('.nav-icon').toggle( "drop" );
+                click: function() {
+                    $('.nav-icon').toggle('drop');
                 }
             })
             return this;
@@ -1226,12 +1316,12 @@ $(function () {
             });
         },
         uidiySave: function () {
-            this.saveUIDiy(false, function () {
+            this.saveUIDiy(0, function () {
                 alert('保存成功');
             });
         },
         uidiySync: function () {
-            this.saveUIDiy(true, function () {
+            this.saveUIDiy(1, function () {
                 alert('同步成功');
             });
         },
@@ -1260,9 +1350,11 @@ $(function () {
         moduleEditDlg = new ModuleEditDlg(),
         moduleTopbarDlg = new ModuleTopbarDlg(),
         componentEditDlg = new ComponentEditDlg(),
+        discoverSliderComponentEditDlg = new DiscoverSliderComponentEditDlg(),
         customStyleEditDlg = new CustomStyleEditDlg(),
         customStyleComponentEditDlg = new CustomStyleComponentEditDlg(),
         moduleEditDetailView = new ModuleEditDetailView(),
         moduleEditMobileView = new ModuleEditMobileView(),
+        discoverSliderComponentView = new DiscoverSliderComponentView(),
         moduleRemoveDlg = new ModuleRemoveDlg();
 });

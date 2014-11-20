@@ -80,7 +80,7 @@ class UIDiyController extends AdminController
         ));
     }
 
-    public function actionSaveNavInfo($navInfo, $isSync=false)
+    public function actionSaveNavInfo($navInfo, $isSync=0)
     {
         $res = WebUtils::initWebApiResult();
 
@@ -91,7 +91,7 @@ class UIDiyController extends AdminController
         echo WebUtils::outputWebApi($res, 'utf-8', false);
     }
 
-    public function actionSaveModules($modules, $isSync=false)
+    public function actionSaveModules($modules, $isSync=0)
     {
         $res = WebUtils::initWebApiResult();
 
@@ -149,6 +149,7 @@ class UIDiyController extends AdminController
     // render 组件手机视图
     public function actionComponentmobileui($component) 
     {   
+        $component = rawurldecode($component);
         $component = WebUtils::jsonDecode($component);
         $this->renderPartial('component_mobile_ui', array(
             'component' => $component,
@@ -178,6 +179,7 @@ class UIDiyController extends AdminController
                 'title' => WebUtils::u($forums[$fid]['name']),
             );
         }
+        $tempComponent['extParams']['fastpostForumIds'] = $tempFastpostForumIds;
         $tempComponentList = array();
         foreach ($component['componentList'] as $subComponent) {
             if (!$subComponent['extParams']['isHidden']) {
@@ -232,7 +234,8 @@ class UIDiyController extends AdminController
                 self::makeResponse(0, '上传图片失败！');
             }
 
-            $fileName = $this->dzRootUrl.'/data/appbyme/upload/uidiy/'.$date.'/'.basename($fileName);
+            // $fileName = $this->dzRootUrl.'/data/appbyme/upload/uidiy/'.$date.'/'.basename($fileName);
+            $fileName = 'http://192.168.1.112/25u'.'/data/appbyme/upload/uidiy/'.$date.'/'.basename($fileName);
             ImageUtils::getThumbImageEx($fileName, 10, false, false, true);
             self::makeResponse(1, $fileName);
         }

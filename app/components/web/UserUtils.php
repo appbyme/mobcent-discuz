@@ -220,7 +220,8 @@ class UserUtils {
         global $_G;
         $tempGroupAllowPostImage = $_G['group']['allowpostimage'];
         $tempGroupAllowPostAttach = $_G['group']['allowpostattach'];
-
+        $tempGroupAttachExtensions = $_G['group']['attachextensions'];
+        
         $forumInfos = ForumUtils::getForumInfos($fids);
         foreach ($forumInfos as $forum) {
             $fid = (int)$forum['fid'];
@@ -231,6 +232,7 @@ class UserUtils {
             $_G['forum']['allowpostimage'] = isset($_G['forum']['allowpostimage']) ? $_G['forum']['allowpostimage'] : '';
             $_G['group']['allowpostimage'] = $tempGroupAllowPostImage;
             $_G['group']['allowpostimage'] = $_G['forum']['allowpostimage'] != -1 && ($_G['forum']['allowpostimage'] == 1 || (!$_G['forum']['postimageperm'] && $_G['group']['allowpostimage']) || ($_G['forum']['postimageperm'] && forumperm($_G['forum']['postimageperm'])));
+            $_G['group']['attachextensions'] = $tempGroupAttachExtensions;
             require_once libfile('function/upload');
             $swfconfig = getuploadconfig($_G['uid'], $_G['fid']);
             $imgexts = str_replace(array(';', '*.'), array(', ', ''), $swfconfig['imageexts']['ext']);
