@@ -313,6 +313,8 @@ $(function () {
             if (URL) {
                 var objectURL = URL.createObjectURL(event.currentTarget.files[0]);
                 this.$el.find('.component-icon-preview').attr('src', objectURL);
+                this.$el.find('.component-icon-preview').css('opacity', 0.3);
+                this.$el.find('.upload-component-icon-btn').addClass('btn-default').removeClass('btn-primary').html('点击上传图片');
             }
         },
         uploadIcon: function () {
@@ -348,8 +350,11 @@ $(function () {
                     
                     _this.find('.componentIcon').val(msg.errMsg);
                     _this.find('.component-icon-preview').attr('src', msg.errMsg);
-
-                    alert('上传成功！');
+                    _this.find('.component-icon-preview').animate({opacity:'10'}, 3000);
+                    _this.find('.upload-component-icon-btn').html('上传成功！');
+                    _this.find('.upload-component-icon-btn').addClass('btn-primary').removeClass('btn-default');
+                    
+                    // alert('上传成功！');
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     // console.log(textStatus);

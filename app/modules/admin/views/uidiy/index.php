@@ -131,6 +131,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         <div id="module-edit-mobile-view">
                         </div>
 
+                        <button type="button" class="home-btn uidiy-sync-btn"></button>
+
                         <!-- 手机底部导航 -->
                         <div class="moble-bottom-nav">
                             <div class="nav-item-container">
@@ -556,7 +558,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             </div>
         </div>
         <div class="form-group">
-            <label for="" class="col-sm-2 control-label">图标样式: </label>
+            <label for="" class="col-sm-2 control-label">图标样式： </label>
             <div class="col-sm-10">
                 <select class="form-control" name="componentIconStyle[]">
                     <option value="<%= COMPONENT_ICON_STYLE_TEXT %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT ? 'selected' : '' %>>纯文字</option>
@@ -690,7 +692,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">wap地址：</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control input-sm" name="componentRedirect[]" value="<%= extParams.redirect %>">
+                    <input type="text" class="form-control input-sm" name="componentRedirect[]" value="<%= extParams.redirect %>" placeholder="http://bbs.appbyme.com">
                 </div>
             </div>
         </div>
@@ -838,7 +840,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     </script>
     <!-- 发现固定项在手机ui的组件模板 -->
     <script type="text/template" id="discover-default-component-item-template">
-        <img class="img-circle pull-left" src="<%= icon %>">
+        <img class="img-rounded pull-left" src="<%= icon %>">
         <div class="pull-left discover-title"><%= title %></div>
         <div class="pull-left oper-btn text-right">
             <input type="checkbox" data-on-text="显示" data-off-text="隐藏" data-size="mini" class="discover-item-switch" <%= extParams.isHidden ? '' : 'checked' %> />
@@ -846,7 +848,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     </script>
     <!-- 发现用户项在手机ui的组件模板 -->
     <script type="text/template" id="discover-custom-component-item-template">
-      <img class="img-circle pull-left" src="<%= icon %>">
+      <img class="img-rounded pull-left" src="<%= icon %>">
       <div class="pull-left discover-title"><%= title %></div>
       <div class="pull-left oper-btn text-right">
           <button type="button" class="btn btn-primary btn-xs edit-discover-item-btn">编辑</button>

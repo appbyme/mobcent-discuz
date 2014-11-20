@@ -170,10 +170,17 @@ class NewsListAction extends MobcentAction {
         foreach ($handInfos as $hand) {
             if ($hand['idtype'] == 'tid') {
                 $topicSummary = ForumUtils::getTopicSummary($hand['id'], 'portal');
-                $rows[] = $this->_getListField(ForumUtils::getTopicInfo($hand['id']), $topicSummary, 'topic', $hand['id']);
+                $topicInfo = ForumUtils::getTopicInfo($hand['id']);
+
+                //  add:在添加自定义内容的时候，手动修改的帖子标题 
+                $hand['title'] && $topicInfo['subject'] = $hand['title'];
+                $rows[] = $this->_getListField($topicInfo, $topicSummary, 'topic', $hand['id']);
             } elseif($hand['idtype'] == 'aid') {
                 $articleSummary = PortalUtils::getArticleSummary($hand['id']);
                 $articleInfo = $this->_getArticleByAid($hand['id']);
+
+                //  add:在添加自定义内容的时候，手动修改的文章标题 
+                $hand['title'] && $articleInfo['title'] = $hand['title'];
                 $rows[] = $this->_getListField($articleInfo, $articleSummary, 'news', $hand['id']);
             }
         }
