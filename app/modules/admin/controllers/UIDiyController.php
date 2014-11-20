@@ -234,8 +234,7 @@ class UIDiyController extends AdminController
                 self::makeResponse(0, '上传图片失败！');
             }
 
-            // $fileName = $this->dzRootUrl.'/data/appbyme/upload/uidiy/'.$date.'/'.basename($fileName);
-            $fileName = 'http://192.168.1.112/25u'.'/data/appbyme/upload/uidiy/'.$date.'/'.basename($fileName);
+            $fileName = $this->dzRootUrl.'/data/appbyme/upload/uidiy/'.$date.'/'.basename($fileName);
             ImageUtils::getThumbImageEx($fileName, 10, false, false, true);
             self::makeResponse(1, $fileName);
         }

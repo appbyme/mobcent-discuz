@@ -60,7 +60,6 @@ label {
     padding: 0;
 }
 
-
 /*面板和模态框一样的效果*/
 .panel {
     -webkit-border-radius: 6px;
@@ -97,7 +96,6 @@ label {
     height: 611px;
     /*background: #e3e3e3;*/
     overflow: hidden;
-    /*background: pink;*/
 }
 
 .moble-top-show {
@@ -114,7 +112,6 @@ label {
 .moble-top-title img {
     width: 22px;
     height: 22px;
-    /*margin-top: 3px;*/
     cursor: pointer;
 }
 .moble-top-title span {
@@ -361,8 +358,6 @@ label {
     height: 60px;
     width: 337px;
     background: #66ADE8;
-    /*border-top: 1px solid #797979;*/
-    margin: 0px 0px 0px 0px;
     overflow:hidden;
 
 }
@@ -373,24 +368,17 @@ label {
     padding-top:40px;
     overflow:hidden;
     font-size: 12px;
-    /*border: 1px solid red;*/
 }
 
 .nav-edit a {
     cursor:pointer;
 }
 
-/*.moble-bottom-nav .nav-column img {
-    width: 80px;
-    height: 80px;
-}*/
-
 .moble-bottom-nav .nav-add img{
     width:40px;
     height: 40px;
     margin:10px 10px 0px 15px;
     border-radius: 5px;
-
 }
 
 .nav-icon {
@@ -437,8 +425,15 @@ label {
 {
     width: 170px;
 }
+
 .play-border-add select, .pic-text-pop select, .add-style-pop select,.add-comp-pop select, 
 .add-channel-pop select, .add-slide-pop select
+{
+    width: 170px;
+}
+
+.play-border-add input[type=number], .pic-number-pop input[type=number], .add-style-pop input[type=number],
+.add-comp-pop input[type=number], .add-channel-pop input[type=number], .add-slide-pop input[type=number]
 {
     width: 170px;
 }
@@ -463,10 +458,9 @@ label {
     font-size: 12px;
 }
 
-
 /*右侧整体*/
 #operation {
-    margin-top: 40px;
+    margin-top: 15px;
     /*padding-top: 30px;*/
     font-size: 12px;
 }
@@ -678,7 +672,6 @@ label {
 .pic-preview {
     padding-top: 8px;
 }
-
 
 /* 兼容代码，兼容左图右文弹出框样式、添加组件、添加幻灯片 */
 .pic-text-pop .col-sm-2, .add-comp-pop .col-sm-2, .add-style-pop .col-sm-2, .add-slide-pop .col-sm-2{

@@ -52,7 +52,7 @@ $countSliderComponentList = count($sliderComponentList);
             <div class="list-group text-left discover-default-component-container">
             <?php foreach ($defaultComponentList as $component) { ?>
                 <div class="list-group-item uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>">
-                    <img class="img-circle pull-left" src="<?php echo $component['icon']; ?>">
+                    <img class="img-rounded pull-left" src="<?php echo $component['icon']; ?>">
                     <div class="pull-left discover-title"><?php echo $component['title']; ?></div>
                 </div>
             <?php } ?>
@@ -62,7 +62,7 @@ $countSliderComponentList = count($sliderComponentList);
             <div class="list-group text-left discover-custom-component-container">
             <?php foreach ($customComponentList as $component) { ?>
                 <div class="list-group-item uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>">
-                    <img class="img-circle pull-left" src="<?php echo $component['icon']; ?>">
+                    <img class="img-rounded pull-left" src="<?php echo $component['icon']; ?>">
                     <div class="pull-left discover-title"><?php echo $component['title']; ?></div>
                 </div>
             <?php } ?>
