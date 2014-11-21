@@ -1,3 +1,12 @@
+    <?php 
+/**
+ * component_mobile_ui_setting view
+ *
+ * @author hongliang
+ * @copyright 2012-2014 Appbyme
+ */
+?>
+
     <style type="text/css">
         .msg-list {
             position: relative;
