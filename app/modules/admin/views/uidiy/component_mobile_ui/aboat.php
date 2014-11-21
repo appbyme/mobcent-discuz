@@ -1,4 +1,11 @@
-
+<?php 
+/**
+ * component_mobile_ui_aboat view
+ *
+ * @author hongliang
+ * @copyright 2012-2014 Appbyme
+ */
+?>
       <div class="content-list-ui">
            <ul class="list-unstyled container-fluid" style="padding-left: 0;padding-right: 0;">
                 <li  class="list-group-item" style="height: 65px;"><p class="ull-left text-left" >应用介绍：这是一个神奇的APP，由安米全力打造免费提供给各位用户使用的APP</p></li>
