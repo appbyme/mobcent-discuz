@@ -36,7 +36,7 @@
     <div class="list-group">
         <?php foreach($info['list'] as $k =>
         $v){ ?>
-        <div style="height:95px;padding-left: 10px;border-bottom: 1px solid #C9C9C9;margin-top:8px;">
+        <div onclick = "redirPostListUrl();" style="height:95px;padding-left: 10px;border-bottom: 1px solid #C9C9C9;margin-top:8px;">
             <h5 class="list-group-item-heading text-left">
                 <?php echo mb_substr($v['title'],0,66);?></h5>
             <div>
@@ -70,6 +70,21 @@
         var moduleInfo =  <?php  echo WebUtils::jsonEncode($component,'utf-8');?>;
         moduleInfo['sortby'] = order;
         $.ajax({
+                        type:"POST",
+                        url: "<?php echo $this->rootUrl; ?>/index.php?r=admin/uidiy/componentmobileui",
+                        data:{
+                            component: JSON.stringify(moduleInfo),
+                        },
+                        dataTyle:"html",
+                        success:function(msg) {
+                            $('.module-mobile-ui-view').html(msg);
+                        }
+                    });
+        }
+
+        function redirPostListUrl(){
+              var moduleInfo =  <?php  $component['title'] = '帖子详情';  $component['type'] = 'postlist'; echo WebUtils::jsonEncode($component,'utf-8');?>;
+               $.ajax({
                         type:"POST",
                         url: "<?php echo $this->rootUrl; ?>/index.php?r=admin/uidiy/componentmobileui",
                         data:{
