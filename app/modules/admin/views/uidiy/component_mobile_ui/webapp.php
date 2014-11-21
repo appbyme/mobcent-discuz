@@ -8,5 +8,10 @@
  */
 
 ?>
-
- <iframe src="<?php echo $component['extParams']['redirect']; ?>"></iframe>
+<style type="text/css">
+    .wap-iframe {
+        width: 335px;
+        height: 550px;
+    }
+</style>
+<iframe src="<?php echo $component['extParams']['redirect']; ?>" class="wap-iframe"></iframe>

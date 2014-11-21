@@ -268,18 +268,7 @@ $(function () {
             navItemRemoveDlg.toggle();
         },
         renderMobileUI: function () {
-            var module = modules.findWhere({id: this.model.attributes.moduleId});
-            Backbone.ajax({
-                url: getAjaxApiUrl('admin/uidiy/modulemobileui'),
-                type: 'post',
-                dataType: 'html',
-                data: {
-                    module: JSON.stringify(module),
-                },
-                success: function (result, status, xhr) {
-                    $('.module-mobile-ui-view').html(result).removeClass('hidden');
-                }
-            });
+            mainView.renderMobileUI(this.model.attributes.moduleId);
         }
     });
 
@@ -376,6 +365,8 @@ $(function () {
             if (URL) {
                 var objectURL = URL.createObjectURL(event.currentTarget.files[0]);
                 this.$el.find('.component-icon-preview').attr('src', objectURL);
+                this.$el.find('.component-icon-preview').css('opacity', 0.3);
+                this.$el.find('.upload-component-icon-btn').addClass('btn-default').removeClass('btn-primary').html('点击上传图片');
             }
         },
         uploadIcon: function () {
@@ -411,8 +402,11 @@ $(function () {
                     
                     _this.find('.componentIcon').val(msg.errMsg);
                     _this.find('.component-icon-preview').attr('src', msg.errMsg);
-
-                    alert('上传成功！');
+                    _this.find('.component-icon-preview').animate({opacity:'10'}, 3000);
+                    _this.find('.upload-component-icon-btn').html('上传成功！');
+                    _this.find('.upload-component-icon-btn').addClass('btn-primary').removeClass('btn-default');
+                    
+                    // alert('上传成功！');
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     // console.log(textStatus);
@@ -429,6 +423,14 @@ $(function () {
     }
 
     var createComponentViewDiscoverSlider = function(model) {
+        return new ComponentView({model: model, uiconfig: {
+            isShow_icon: 1,
+            isShow_desc: 1,
+            isShow_delete: 1,
+        }});
+    }
+
+    var createComponentViewSlider = function(model) {
         return new ComponentView({model: model, uiconfig: {
             isShow_icon: 1,
             isShow_desc: 1,
@@ -708,7 +710,7 @@ $(function () {
         addComponentItem: function () {
             event.preventDefault();
             
-            var view = new ComponentView({model: new ComponentModel()});
+            var view = createComponentViewSlider(new ComponentModel());
             $('.component-view-container').append(view.render().el);
         },
         onChangeComponentStyle: function () {
@@ -844,8 +846,12 @@ $(function () {
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT:
                         uiconfig.isShow_iconStyleText = 1;
                         break;
+                    case COMPONENT_STYLE_LAYOUT_SLIDER:
+                        uiconfig.isShow_delete = 1;
+                        uiconfig.isShow_iconStyle = 0;
+                        break;
                     default:
-                        uiconfig.isShow_icon = 0;
+                        uiconfig.isShow_iconStyle = 0;
                         break;
                 }
                 var view = new ComponentView({model: model, uiconfig: uiconfig});
@@ -1554,11 +1560,13 @@ $(function () {
             });
         },
         uidiySync: function () {
-            this.saveUIDiy(1, function () {
-                alert('同步成功');
-            }, function () {
-                alert('同步失败');
-            });
+            if (confirm('确定要现在同步吗?')) {
+                this.saveUIDiy(1, function () {
+                    alert('同步成功');
+                }, function () {
+                    alert('同步失败');
+                });
+            }
         },
         uidiyInit: function () {
             if (confirm('确定要初始化配置吗?')) {
@@ -1571,6 +1579,20 @@ $(function () {
                     }
                 });
             }
+        },
+        renderMobileUI: function (moduleId) {
+            var module = modules.findWhere({id: moduleId});
+            Backbone.ajax({
+                url: getAjaxApiUrl('admin/uidiy/modulemobileui'),
+                type: 'post',
+                dataType: 'html',
+                data: {
+                    module: JSON.stringify(module),
+                },
+                success: function (result, status, xhr) {
+                    $('.module-mobile-ui-view').html(result).removeClass('hidden');
+                }
+            });
         },
     });
     
@@ -1594,4 +1616,8 @@ $(function () {
         moduleEditMobileView = new ModuleEditMobileView(),
         discoverSliderComponentView = new DiscoverSliderComponentView(),
         moduleRemoveDlg = new ModuleRemoveDlg();
+
+    if (navItems.length) {
+        mainView.renderMobileUI(navItems.models[0].attributes.moduleId);
+    }
 });

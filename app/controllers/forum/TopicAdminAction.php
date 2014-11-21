@@ -571,6 +571,14 @@ class TopicAdminAction extends MobcentAction{
                 }
             }
 
+            // author:HanPengyu Date:2014/11/20 针对x3版本的抢楼帖回帖限制控制
+            if (isset($rushinfo['replylimit']) && $rushinfo['replylimit'] > 0) {
+                $replycount = C::t('forum_post')->count_by_tid_invisible_authorid($thread['tid'], $_G['uid']);
+                if ($replycount >= $rushinfo['replylimit']) {
+                    return WebUtils::makeErrorInfo_oldVersion($res, lang('message', 'noreply_replynum_error'));
+                }
+            }
+
         }
 
         if($thread['closed'] && !$_G['forum']['ismoderator'] && !$thread['isgroup']) {

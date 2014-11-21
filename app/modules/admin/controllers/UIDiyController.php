@@ -28,6 +28,17 @@ class UIDiyController extends AdminController
         $this->componentIconDiscoverBaseUrlPath = $this->rootUrl . '/images/admin/icon3';
     }
 
+    public function getComponentIconUrl($icon)
+    {
+        if (strpos($icon, AppbymeUIDiyModel::COMPONENT_ICON_DISCOVER_DEFAULT) !== false) {
+            return $this->componentIconDiscoverBaseUrlPath.'/'.$icon.'.png';
+        } else if (strpos($icon, AppbymeUIDiyModel::COMPONENT_ICON_FASTPOST) !== false) {
+            return $this->componentFastpostIconBaseUrlPath.'/'.$icon.'_n.png';
+        } else {
+            return $icon;    
+        }
+    }
+
     public function actionIndex()
     {
         $newsModules = AppbymePoralModule::getModuleList();
@@ -72,8 +83,8 @@ class UIDiyController extends AdminController
         array_unshift($modules, $discoverModule, $fastpostModule);
 
         // 检测浏览器信息
-        $test = new Mobile_Detect();
-        $browserInfo = $test->version('Chrome');
+        $mobileDetect = new Mobile_Detect();
+        $browserInfo = $mobileDetect->version('Chrome');
 
         $this->renderPartial('index', array(
             'navInfo' => $navInfo,

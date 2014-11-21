@@ -20,6 +20,10 @@
     font-size: 12px;
 }
 
+.form-group input[type=number] {
+    width: 225px;
+}
+
 .form-group label {
     padding-right: 0px;
 }
@@ -55,7 +59,6 @@ label {
     margin: 0 5px 1px 0;
     padding: 0;
 }
-
 
 /*面板和模态框一样的效果*/
 .panel {
@@ -93,20 +96,23 @@ label {
     height: 611px;
     /*background: #e3e3e3;*/
     overflow: hidden;
-    /*background: pink;*/
 }
 
 .moble-top-show {
     width: 320px;
 }
 .moble-top-title {
-    /*margin-top: 10px;*/
-    height: 40px;
+    margin-top: 5px;
+    margin:5px 0px 0px 0px;
+    height: 30px;
+    background: #66ADE8;
+    color: white;
+    padding: 5px 0px 0px 5px;
 }
 .moble-top-title img {
     width: 22px;
     height: 22px;
-    /*border: 1px solid blue;*/
+    cursor: pointer;
 }
 .moble-top-title span {
     font-size: 16px;
@@ -115,8 +121,7 @@ label {
 
 /*发现模块*/
 .found-module {
-    height: 545px;
-    /*border: 1px solid red;*/
+    height: 555px;
 }
 
 /* 前面图标大小 */
@@ -131,7 +136,6 @@ label {
     background: #e3e3e3;
     height: 310px;
     overflow-y:auto;
-    /*border: 1px solid blue;*/
 }
 
 .oper-btn {
@@ -144,17 +148,6 @@ label {
     margin-top:10px;
     width:80px;
     overflow:hidden;
-}
-
-.fixed-content {
-    /*margin-top:10px;*/
-    /*height: 160px;*/
-
-}
-
-.user-content {
-    /*height: 100px;*/
-    /*margin-bottom: 10px;*/
 }
 
 /* 覆盖一些列表组的样式 */
@@ -176,11 +169,10 @@ label {
 /*左图右文*/
 .pic-text {
     width: 336px;
-    height: 545px;
+    height: 555px;
     overflow-y: auto;
     overflow-x:hidden;
     padding: 5px;
-    /*border: 1px solid blue;*/
 }
 
 .pic-text .list-group-item {
@@ -199,21 +191,6 @@ label {
     overflow-x:hidden;
     margin:0 auto;
 }
-
-/*.edit-list {
-    width: 300px;
-    height: 70px;
-    border: 1px solid #DDDDDD;
-    border-radius: 5px;
-    padding:8px 0px 0px 8px;
-    margin: 0 auto;
-    margin-bottom: 5px;
-    background: #F5F5F5;
-}*/
-
-/*.edit-list:hover {
-    background: #F5F5F5;
-}*/
 
 .page-main {
     width:145px;
@@ -254,7 +231,7 @@ label {
 /*添加风格*/
 .add-style {
     width: 336px;
-    height: 545px;
+    height: 560px;
     overflow-y: auto;
     overflow-x:hidden;
     padding: 5px;
@@ -381,8 +358,6 @@ label {
     height: 60px;
     width: 337px;
     background: #66ADE8;
-    /*border-top: 1px solid #797979;*/
-    margin: 0px 0px 0px 0px;
     overflow:hidden;
 
 }
@@ -393,24 +368,17 @@ label {
     padding-top:40px;
     overflow:hidden;
     font-size: 12px;
-    /*border: 1px solid red;*/
 }
 
 .nav-edit a {
     cursor:pointer;
 }
 
-/*.moble-bottom-nav .nav-column img {
-    width: 80px;
-    height: 80px;
-}*/
-
 .moble-bottom-nav .nav-add img{
     width:40px;
     height: 40px;
     margin:10px 10px 0px 15px;
     border-radius: 5px;
-
 }
 
 .nav-icon {
@@ -453,11 +421,20 @@ label {
 }
 
 .play-border-add input[type=text], .pic-text-pop input[type=text], .add-style-pop input[type=text],
-.add-comp-pop input[type=text], .add-channel-pop input[type=text]
+.add-comp-pop input[type=text], .add-channel-pop input[type=text], .add-slide-pop input[type=text]
 {
     width: 170px;
 }
-.play-border-add select, .pic-text-pop select, .add-style-pop select,.add-comp-pop select, .add-channel-pop select {
+
+.play-border-add select, .pic-text-pop select, .add-style-pop select,.add-comp-pop select, 
+.add-channel-pop select, .add-slide-pop select
+{
+    width: 170px;
+}
+
+.play-border-add input[type=number], .pic-number-pop input[type=number], .add-style-pop input[type=number],
+.add-comp-pop input[type=number], .add-channel-pop input[type=number], .add-slide-pop input[type=number]
+{
     width: 170px;
 }
 /*重写面板*/
@@ -481,11 +458,10 @@ label {
     font-size: 12px;
 }
 
-
 /*右侧整体*/
 #operation {
-    margin-top: 40px;
-    padding-top: 30px;
+    margin-top: 15px;
+    /*padding-top: 30px;*/
     font-size: 12px;
 }
 
@@ -676,38 +652,61 @@ label {
     padding:3px 6px;
 }
 
-/* 兼容代码，兼容左图右文弹出框样式、添加组件 */
-.pic-text-pop .col-sm-2, .add-comp-pop .col-sm-2, .add-style-pop .col-sm-2{
+/* home 按钮 */
+.home-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 500px;
+    outline: none;
+    position: absolute;
+    left:157px;
+    bottom: 20px;
+    outline: none;
+}
+
+/* 上传图片 */
+.upload-component-icon-btn {
+    /*margin-top: 8px;*/
+}
+
+.pic-preview {
+    padding-top: 8px;
+}
+
+/* 兼容代码，兼容左图右文弹出框样式、添加组件、添加幻灯片 */
+.pic-text-pop .col-sm-2, .add-comp-pop .col-sm-2, .add-style-pop .col-sm-2, .add-slide-pop .col-sm-2{
     padding-left: 15px;
     width: 99px;
 }
 
 /* 为了兼容上传图片下面的预览框 */
-.pic-text-pop .col-sm-offset-2, .add-comp-pop .col-sm-offset-2, .add-style-pop .col-sm-offset-2 {
+.pic-text-pop .col-sm-offset-2, .add-comp-pop .col-sm-offset-2, .add-style-pop .col-sm-offset-2, 
+.add-slide-pop .col-sm-offset-2
+{
     padding-left: 40px;
 }
 
-.pic-text-pop .col-sm-10, .add-comp-pop .col-sm-10, .add-style-pop .col-sm-10 {
+.pic-text-pop .col-sm-10, .add-comp-pop .col-sm-10, .add-style-pop .col-sm-10, .add-slide-pop .col-sm-10 {
     width: 215px;
 }
 
-.pic-text-pop .form-group textarea, .add-comp-pop textarea, .add-style-pop textarea {
+.pic-text-pop .form-group textarea, .add-comp-pop textarea, .add-style-pop textarea, .add-slide-pop textarea {
     width: 170px;
 }
 
 /* 兼容图片上传图标 */
-.pic-text-pop .del-pic, .add-comp-pop .del-pic {
+.pic-text-pop .del-pic, .add-comp-pop .del-pic, .add-slide-pop .del-pic {
     position: absolute;
     left: 100px;
 }
 
 /* 兼容图片预览区域 */
-.pic-text-pop .pic-preview, .add-comp-pop .pic-preview, .add-style-pop .pic-preview {
+.pic-text-pop .pic-preview, .add-comp-pop .pic-preview, .add-style-pop .pic-preview, .add-slide-pop .pic-preview {
     position:relative;
     width: 225px;
     padding-left: 60px;
+    /*text-align: left;*/
 }
-
 
 /* 整体颜色的修改，主要是针对bootstrap的面板进行修改 */
 .panel-primary {
@@ -717,14 +716,7 @@ label {
     background: #66ADE8;
 }
 
-<<<<<<< HEAD
-.btn-primary {
-    background: #5FA7E5;
-}
 
-#module-list .btn-xs {
-    padding:3px 6px;
-}
 
 /*手机页面显示，首页*/
 .content-list {
@@ -749,3 +741,4 @@ label {
     line-height:17px;
     text-indent:25px;
 }
+
