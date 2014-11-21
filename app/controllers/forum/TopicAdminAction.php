@@ -268,9 +268,10 @@ class TopicAdminAction extends MobcentAction{
         foreach ($jsonInfo['content'] as $k => $v ) {
             switch ($v ["type"]) {
                 case 0 :
-                // 解析文本的超链接, 暂时不处理 
+                // 解析文本的超链接 
                 // @author: xjp
-                // $v['infor'] = preg_replace('/(https?:\/\/\S+)/i', '[url=$1]$1[/url]', $v['infor']);
+                $v['infor'] = preg_replace('/(https?:\/\/\S+)/i', '[url=$1]$1[/url]', $v['infor']);
+                
                 $message .= $v["infor"]."\r\n";
                    break;
                case 1 :

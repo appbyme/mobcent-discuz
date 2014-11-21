@@ -20,7 +20,7 @@ $this->renderPartial('module_mobile_ui/' . $module['type'], array(
 <script>
 $('.uidiy-mobileui-component').click(function () {
     Backbone.ajax({
-        url: uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy/componentmobileui',
+        url: getAjaxApiUrl('admin/uidiy/componentmobileui'),
         type: 'post',
         data: {component: $(this).data('componentData')},
         dataType: 'html',

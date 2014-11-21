@@ -16,12 +16,16 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 class UIDiyController extends AdminController
 {
     public $navItemIconBaseUrlPath = '';
+    public $componentFastpostIconBaseUrlPath = '';
+    public $componentIconDiscoverBaseUrlPath = '';
 
     public function init()
     {
         parent::init();
 
         $this->navItemIconBaseUrlPath = $this->rootUrl . '/images/admin/icon1';
+        $this->componentFastpostIconBaseUrlPath = $this->rootUrl . '/images/admin/icon2';
+        $this->componentIconDiscoverBaseUrlPath = $this->rootUrl . '/images/admin/icon3';
     }
 
     public function actionIndex()
@@ -129,10 +133,8 @@ class UIDiyController extends AdminController
     {
         $res = WebUtils::initWebApiResult();
 
-        AppbymeUIDiyModel::deleteNavInfo();
-        AppbymeUIDiyModel::deleteNavInfo(true);
-        AppbymeUIDiyModel::deleteModules();
-        AppbymeUIDiyModel::deleteModules(true);
+        AppbymeUIDiyModel::saveNavigationInfo(AppbymeUIDiyModel::initNavigation(), true);
+        AppbymeUIDiyModel::saveModules(AppbymeUIDiyModel::initModules(), true);
 
         echo WebUtils::outputWebApi($res, 'utf-8', false);
     }

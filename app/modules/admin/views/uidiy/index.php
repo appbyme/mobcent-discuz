@@ -121,8 +121,6 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         <div id="custom-style-component-edit-dlg-view" class="add-comp-pop">
                         </div>
 
-                        <img class="hidden" src="<?php echo $this->rootUrl; ?>/images/admin/moble-bg.png">
-
                         <div style="width:336px;height:550px" class="module-mobile-ui-view hidden">
                         </div>
 
@@ -203,7 +201,10 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     <script type="text/javascript">
     var uidiyGlobalObj = {
         rootUrl: '<?php echo $this->rootUrl; ?>',
+        apphash: '<?php echo MobcentDiscuz::getAppHashValue(); ?>',
         navItemIconUrlBasePath: '<?php echo $this->navItemIconBaseUrlPath; ?>',
+        componentFastpostIconBaseUrlPath: '<?php echo $this->componentFastpostIconBaseUrlPath; ?>',
+        componentIconDiscoverBaseUrlPath: '<?php echo $this->componentIconDiscoverBaseUrlPath; ?>',
         moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule(), 'utf-8'); ?>,
         componentInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initComponent(), 'utf-8'); ?>,
         layoutInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initLayout(), 'utf-8'); ?>,
@@ -400,7 +401,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     </script>
     <!-- 模块于手机内的编辑模板 -->
     <script type="text/template" id="module-edit-mobile-template">
-    <img class="moble-top-show" src="<?php echo $this->rootUrl; ?>/images/admin/moble-nav.png">
+    <img class="moble-top-show" src="<?php echo $this->rootUrl; ?>/images/admin/mobile-nav.png">
     <div class="moble-top-title">
         <img class="pull-left select-topbar-btn" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
         <span><%= title %></span>
@@ -529,60 +530,48 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <label for="" class="col-sm-2 control-label">导航名称：</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control input-sm" name="componentTitle[]" value="<%= title %>">
-                <input type="checkbox" name="isDefaultTitle[]" <%= extParams.isDefaultTitle ? 'checked' : '' %>> 不使用该名称作为下级页面的名称
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group <%= this.uiconfig.isShow_desc ? '' : 'hidden' %>">
             <label class="col-sm-2 control-label">内容简介：</label>
             <div class="col-sm-10">
                 <textarea class="form-control" name="componentDesc[]" rows="3" style="resize:none;margin-bottom:8px;"><%= desc %></textarea>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group <%= this.uiconfig.isShow_icon ? '' : 'hidden' %>">
             <label for="" class="col-sm-2 control-label">编辑图标：</label>
             <div class="col-sm-10">
                 <input type="file" class="componentIconFile">
                 <input type="hidden" class="componentIcon" name="componentIcon[]" value="<%= icon %>">
-                <p class="help-block">请上传1:1比例的JPG或PNG格式图片作为图标</p>
+                <p class="help-block">请上传适当比例的JPG或PNG格式图片作为图标</p>
             </div>
         </div>
-        <div class="form-group">
-            <!-- col-sm-offset-2 col-sm-10 -->
+        <div class="form-group <%= this.uiconfig.isShow_icon ? '' : 'hidden' %>">
             <div class="col-sm-offset-2 col-sm-10 pic-preview" style="position:relative;">
                 <img class="del-pic hidden" src="<?php echo $this->rootUrl; ?>/images/admin/del_pic.png">
-                <img src="<%= icon %>" style="width:50px;height:50px;" class="img-rounded component-icon-preview">
+                <img src="<%= Appbyme.getComponentIconUrl(icon) %>" style="width:50px;height:50px;" class="img-rounded component-icon-preview">
                 <a class="btn btn-default btn-sm upload-component-icon-btn">点击上传图片</a>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group <%= this.uiconfig.isShow_iconStyle ? '' : 'hidden' %>">
             <label for="" class="col-sm-2 control-label">图标样式: </label>
             <div class="col-sm-10">
                 <select class="form-control" name="componentIconStyle[]">
-                    <option value="<%= COMPONENT_ICON_STYLE_TEXT %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT ? 'selected' : '' %>>纯文字</option>
-                    <option value="<%= COMPONENT_ICON_STYLE_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_IMAGE ? 'selected' : '' %>>单张图片</option>
-                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_IMAGE ? 'selected' : '' %>>上图下文</option>
-                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN ? 'selected' : '' %>>文字覆盖在下</option>
-                    <option value="<%= COMPONENT_ICON_STYLE_CIRCLE %>" <%= iconStyle == COMPONENT_ICON_STYLE_CIRCLE ? 'selected' : '' %>>圆形</option>
-                    <option value="<%= COMPONENT_ICON_STYLE_NEWS %>" <%= iconStyle == COMPONENT_ICON_STYLE_NEWS ? 'selected' : '' %>>左图右文</option>
-                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_UP_VIDEO %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_UP_VIDEO ? 'selected' : '' %>>视频_文字覆盖在上</option>
-                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN_VIDEO %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN_VIDEO ? 'selected' : '' %>>视频_文字覆盖在下</option>
-                </select> 
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="" class="col-sm-2 control-label">页面样式：</label>
-            <div class="col-sm-10">
-                <select class="form-control" name="componentStyle[]">
-                    <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
-                    <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
-                    <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleText ? '' : 'hidden' %>">纯文字</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_IMAGE ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleImage ? '' : 'hidden' %>">单张图片</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_IMAGE ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleTextImage ? '' : 'hidden' %>">上图下文</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleTextOverlapDown ? '' : 'hidden' %>">文字覆盖在下</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_CIRCLE %>" <%= iconStyle == COMPONENT_ICON_STYLE_CIRCLE ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleCircle ? '' : 'hidden' %>">圆形</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_NEWS %>" class="hidden" <%= iconStyle == COMPONENT_ICON_STYLE_NEWS ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleNews ? '' : 'hidden' %>">左图右文</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_UP_VIDEO %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_UP_VIDEO ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleTextOverlapUpVideo ? '' : 'hidden' %>">视频_文字覆盖在上</option>
+                    <option value="<%= COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN_VIDEO %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN_VIDEO ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleTextOverlapDownVideo ? '' : 'hidden' %>">视频_文字覆盖在下</option>
                 </select> 
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">链接地址：</label>
             <div class="col-sm-10">
-            <select name="componentType[]" class="selectComponentType form-control">
+            <select name="componentType[]" class="selectComponentType form-control" <%= this.uiconfig.isShow_typeSelect ? '' : 'disabled' %>>
                 <option value="<%= COMPONENT_TYPE_FORUMLIST %>" <%= type == COMPONENT_TYPE_FORUMLIST ? 'selected' : '' %>>版块列表</option>
                 <option value="<%= COMPONENT_TYPE_NEWSLIST %>" <%= type == COMPONENT_TYPE_NEWSLIST ? 'selected' : '' %>>资讯列表</option>
                 <!-- <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>帖子列表</option> -->
@@ -596,11 +585,11 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <option value="<%= COMPONENT_TYPE_ABOAT %>" <%= type == COMPONENT_TYPE_ABOAT ? 'selected' : '' %>>关于</option>
                 <option value="<%= COMPONENT_TYPE_MODULEREF %>" <%= type == COMPONENT_TYPE_MODULEREF ? 'selected' : '' %>>模块指向</option>
                 <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
-                <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %>>发表文字</option>
-                <option value="<%= COMPONENT_TYPE_FASTIMAGE %>" <%= type == COMPONENT_TYPE_FASTIMAGE ? 'selected' : '' %>>发表图片</option>
-                <option value="<%= COMPONENT_TYPE_FASTCAMERA %>" <%= type == COMPONENT_TYPE_FASTCAMERA ? 'selected' : '' %>>拍照发表</option>
-                <option value="<%= COMPONENT_TYPE_FASTAUDIO %>" <%= type == COMPONENT_TYPE_FASTAUDIO ? 'selected' : '' %>>发表语音</option>
-                <option value="<%= COMPONENT_TYPE_SIGN %>" <%= type == COMPONENT_TYPE_SIGN ? 'selected' : '' %>>签到</option>
+                <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %> class="hidden">发表文字</option>
+                <option value="<%= COMPONENT_TYPE_FASTIMAGE %>" <%= type == COMPONENT_TYPE_FASTIMAGE ? 'selected' : '' %> class="hidden">发表图片</option>
+                <option value="<%= COMPONENT_TYPE_FASTCAMERA %>" <%= type == COMPONENT_TYPE_FASTCAMERA ? 'selected' : '' %> class="hidden">拍照发表</option>
+                <option value="<%= COMPONENT_TYPE_FASTAUDIO %>" <%= type == COMPONENT_TYPE_FASTAUDIO ? 'selected' : '' %> class="hidden">发表语音</option>
+                <option value="<%= COMPONENT_TYPE_SIGN %>" <%= type == COMPONENT_TYPE_SIGN ? 'selected' : '' %> class="hidden">签到</option>
             </select>
             </div>
         </div>
@@ -735,7 +724,17 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <!-- sign 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_SIGN+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SIGN ? '' : 'hidden' %>">
         </div>
-        <div class="form-group">
+        <div class="form-group component-style-select-div">
+            <label for="" class="col-sm-2 control-label">页面样式：</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="componentStyle[]">
+                    <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
+                    <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
+                    <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式</option>
+                </select> 
+            </div>
+        </div>
+        <div class="form-group <%= this.uiconfig.isShow_delete ? '' : 'hidden' %>">
             <div class="col-sm-offset-2 col-sm-4">
                 <button class="remove-component-btn btn btn-primary btn-sm" style="width:200px;">删　除</button>
             </div>
@@ -837,7 +836,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     </script>
     <!-- 发现固定项在手机ui的组件模板 -->
     <script type="text/template" id="discover-default-component-item-template">
-        <img class="img-circle pull-left" src="<%= icon %>">
+        <img class="img-circle pull-left" src="<%= Appbyme.getComponentIconUrl(icon) %>">
         <div class="pull-left discover-title"><%= title %></div>
         <div class="pull-left oper-btn text-right">
             <input type="checkbox" data-on-text="显示" data-off-text="隐藏" data-size="mini" class="discover-item-switch" <%= extParams.isHidden ? '' : 'checked' %> />
@@ -936,26 +935,27 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <label class="col-sm-2 control-label">选择视窗类型: </label>
                 <div class="col-sm-10">
                     <select class="form-control input-sm layoutStyleSelect" name="layoutStyle">
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH ? 'selected' : '' %>>单栏样式(高)</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW ? 'selected' : '' %>>单栏样式(低)</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT ? 'selected' : '' %>>双栏文字</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH ? 'selected' : '' %>>双栏样式(高)</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_MID ? 'selected' : '' %>>双栏样式(中)</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_LOW ? 'selected' : '' %>>双栏样式(低)</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT ? 'selected' : '' %>>三栏文字</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH ? 'selected' : '' %>>三栏样式(高)</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_MID ? 'selected' : '' %>>三栏样式(中)</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_LOW ? 'selected' : '' %>>三栏样式(低)</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_FOUR_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_FOUR_COL ? 'selected' : '' %>>四栏样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW ? 'selected' : '' %>>1(大)+1样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW ? 'selected' : '' %>>1+2样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW ? 'selected' : '' %>>1+3样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL ? 'selected' : '' %>>1+1(大)样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL ? 'selected' : '' %>>2+1样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL ? 'selected' : '' %>>3+1样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_SLIDER %>" <%= style == COMPONENT_STYLE_LAYOUT_SLIDER ? 'selected' : '' %>>幻灯片样式</option>
-                        <!-- <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_AUTO %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_AUTO ? 'selected' : '' %>>列表自动样式</option> -->
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutOneColHigh ? '' : 'hidden' %>">单栏样式(高)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutOneColLow ? '' : 'hidden' %>">单栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutTwoColText ? '' : 'hidden' %>">双栏文字</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutTwoColHigh ? '' : 'hidden' %>">双栏样式(高)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_MID ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutTwoColMid ? '' : 'hidden' %>">双栏样式(中)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_LOW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutTwoColLow ? '' : 'hidden' %>">双栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutThreeColText ? '' : 'hidden' %>">三栏文字</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutThreeColHigh ? '' : 'hidden' %>">三栏样式(高)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_MID ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutThreeColMid ? '' : 'hidden' %>">三栏样式(中)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_COL_LOW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutThreeColLow ? '' : 'hidden' %>">三栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_FOUR_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_FOUR_COL ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutFourCol ? '' : 'hidden' %>">四栏样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutOneColOneRow ? '' : 'hidden' %>">1(大)+1样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutOneColTwoRow ? '' : 'hidden' %>">1+2样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutOneColThreeRow ? '' : 'hidden' %>">1+3样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutOneRowOneCol ? '' : 'hidden' %>">1+1(大)样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutTwoRowOneCol ? '' : 'hidden' %>">2+1样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutThreeRowOneCol ? '' : 'hidden' %>">3+1样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_SLIDER %>" <%= style == COMPONENT_STYLE_LAYOUT_SLIDER ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutSlider ? '' : 'hidden' %>">幻灯片样式</option>
+                        <!-- <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_AUTO %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_AUTO ? 'selected' : '' %>>列表自动样式</option> 
                         <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_MANUAL %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_MANUAL ? 'selected' : '' %>>列表手动样式</option>
+                        -->
                     </select>
                 </div>
             </div>

@@ -127,7 +127,8 @@ class WebUtils {
         $params = array_merge(array(
                 'sdkVersion' => MOBCENT_VERSION,
                 'accessToken' => isset($_GET['accessToken']) ? $_GET['accessToken'] : '',    
-                'accessSecret' => isset($_GET['accessSecret']) ? $_GET['accessSecret'] : '',    
+                'accessSecret' => isset($_GET['accessSecret']) ? $_GET['accessSecret'] : '',
+                'apphash' => isset($_GET['apphash']) ? $_GET['apphash'] : '',
             ), 
             $params
         );

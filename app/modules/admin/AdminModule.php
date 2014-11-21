@@ -25,6 +25,8 @@ class AdminModule extends CWebModule
         ));
 
         header("Content-Type: text/html; charset=utf-8");
+        header("Cache-Control: no-cache, must-revalidate");
+        header('Pragma: no-cache');
     }
 
     public function beforeControllerAction($controller, $action)

@@ -117,11 +117,30 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_TITLE_POSITION_CENTER = 'center';
     const COMPONENT_TITLE_POSITION_RIGHT = 'right';
 
+    const COMPONENT_ICON_FASTPOST = 'mc_forum_ico';
+    const COMPONENT_ICON_DISCOVER_DEFAULT = 'mc_forum_squre_icon';
+
     public static function initNavigation()
     {
         return array(
             'type' => self::NAV_TYPE_BOTTOM,
             'navItemList' => array(
+                array_merge(self::initNavItem(), array(
+                    'moduleId' => 3,
+                    'title' => '首页',
+                    'icon' => self::NAV_ITEM_ICON . '1',
+                )),
+                array_merge(self::initNavItem(), array(
+                    'moduleId' => 4,
+                    'title' => '社区',
+                    'icon' => self::NAV_ITEM_ICON . '2',
+                )),
+                self::initNavItemFastpost(),
+                array_merge(self::initNavItem(), array(
+                    'moduleId' => 5,
+                    'title' => '消息',
+                    'icon' => self::NAV_ITEM_ICON . '4',
+                )),
                 self::initNavItemDiscover(),
             ),
         );
@@ -143,6 +162,19 @@ class AppbymeUIDiyModel extends DiscuzAR
             array(
                 'moduleId' => self::MODULE_ID_DISCOVER,
                 'title' => '发现',
+                'icon' => self::NAV_ITEM_ICON . '5',
+            )
+        );
+    }
+
+    public static function initNavItemFastpost()
+    {
+        return array_merge(
+            self::initNavItem(),
+            array(
+                'moduleId' => self::MODULE_ID_FASTPOST,
+                'title' => '快速发表',
+                'icon' => self::NAV_ITEM_ICON . '17',
             )
         );
     }
@@ -179,6 +211,55 @@ class AppbymeUIDiyModel extends DiscuzAR
             DbUtils::getDzDbUtils(true)->update('appbyme_config', $appUIDiyNavInfo, array('ckey' => $key));
         }
         return true;
+    }
+
+    public static function initModules()
+    {
+        return array(
+            self::initDiscoverModule(),
+            self::initFastpostModule(),
+            array_merge(self::initModule(), array(
+                'id' => 3,
+                'title' => '首页',
+                'type' => self::MODULE_TYPE_SUBNAV,
+                'rightTopbars' => array(
+                    array_merge(self::initComponent(), array(
+                        'type' => self::COMPONENT_TYPE_USERINFO,
+                    )),
+                    self::initComponent(),
+                ),
+            )),
+            array_merge(self::initModule(), array(
+                'id' => 4,
+                'title' => '社区',
+                'type' => self::MODULE_TYPE_SUBNAV,
+                'componentList' => array(
+                    array_merge(self::initComponent(), array(
+                        'type' => self::COMPONENT_TYPE_FORUMLIST,
+                        'title' => '版块',
+                    )),
+                    self::initComponent(),
+                    self::initComponent(),
+                    self::initComponent(),
+                ),
+                'rightTopbars' => array(
+                    array_merge(self::initComponent(), array(
+                        'type' => self::COMPONENT_TYPE_SEARCH,
+                    )),
+                    self::initComponent(),
+                ),
+            )),
+            array_merge(self::initModule(), array(
+                'id' => 5,
+                'title' => '消息',
+                'type' => self::MODULE_TYPE_FULL,
+                'componentList' => array(
+                    array_merge(self::initComponent(), array(
+                        'type' => self::COMPONENT_TYPE_MESSAGELIST,
+                    )),
+                ),
+            )),
+        );
     }
 
     public static function initModule()
@@ -218,7 +299,33 @@ class AppbymeUIDiyModel extends DiscuzAR
             'id' => self::MODULE_ID_FASTPOST,
             'title' => '快速发表',
             'type' => self::MODULE_TYPE_FASTPOST,
-            // 'icon' => Yii::app()->getController()->rootUrl.'/images/admin/module-fastpost.png',
+            'componentList' => array(
+                array_merge(self::initComponent(), array(
+                    'type' => self::COMPONENT_TYPE_FASTTEXT,
+                    'title' => '文字',
+                    'icon' => self::COMPONENT_ICON_FASTPOST . '27',
+                )),
+                array_merge(self::initComponent(), array(
+                    'type' => self::COMPONENT_TYPE_FASTIMAGE,
+                    'title' => '图片',
+                    'icon' => self::COMPONENT_ICON_FASTPOST . '28',
+                )),
+                array_merge(self::initComponent(), array(
+                    'type' => self::COMPONENT_TYPE_FASTCAMERA,
+                    'title' => '拍照',
+                    'icon' => self::COMPONENT_ICON_FASTPOST . '29',
+                )),
+                array_merge(self::initComponent(), array(
+                    'type' => self::COMPONENT_TYPE_FASTAUDIO,
+                    'title' => '语音',
+                    'icon' => self::COMPONENT_ICON_FASTPOST . '45',
+                )),
+                // array_merge(self::initComponent(), array(
+                //     'type' => self::COMPONENT_TYPE_SIGN,
+                //     'title' => '签到',
+                //     'icon' => self::COMPONENT_ICON_FASTPOST . '30',
+                // )),
+            ),
         ));
     }
 
@@ -288,7 +395,7 @@ class AppbymeUIDiyModel extends DiscuzAR
                 'titlePosition' => self::COMPONENT_TITLE_POSITION_LEFT,
                 // 'isShowForumIcon' => 1,
                 // 'isShowForumTwoCols' => 1,
-                'isDefaultTitle' => 0,
+                'pageTitle' => '',
                 'newsModuleId' => 0,
                 'forumId' => 0,
                 'moduleId' => 0,
@@ -317,22 +424,27 @@ class AppbymeUIDiyModel extends DiscuzAR
                         array_merge(self::initComponent(), array(
                             'title' => '个人中心',
                             'type' => self::COMPONENT_TYPE_USERINFO,
+                            'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '9',
                         )),
                         array_merge(self::initComponent(), array(
                             'title' => '周边用户',
                             'type' => self::COMPONENT_TYPE_SURROUDING_USERLIST,
+                            'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '4',
                         )),
                         array_merge(self::initComponent(), array(
                             'title' => '周边帖子',
                             'type' => self::COMPONENT_TYPE_SURROUDING_POSTLIST,
+                            'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '5',
                         )),
                         array_merge(self::initComponent(), array(
                             'title' => '推荐用户',
                             'type' => self::COMPONENT_TYPE_RECOMMEND_USERLIST,
+                            'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '6',
                         )),
                         array_merge(self::initComponent(), array(
                             'title' => '设置',
                             'type' => self::COMPONENT_TYPE_SETTING,
+                            'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '7',
                         )),
                         // array_merge(self::initComponent(), array(
                         //     'title' => '关于',

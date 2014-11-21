@@ -56,12 +56,21 @@ class MobcentDiscuz {
             return isset($config[$key]) ? $config[$key] : false;
         }
     }
+
+    public static function getAppHashValue($special='') {
+        $authkey = 'appbyme_key'; // 目前是定死的, 以后应该改成由用户设置
+        $hash = substr(md5(substr(time(), 0, 5).$authkey.$special), 8, 8);
+        return $hash;
+    }
 }
 
 // xss debug fixed
 $tempMethod = $_SERVER['REQUEST_METHOD'];
-$_SERVER['REQUEST_METHOD'] = 'POST';
-define('DISABLEXSSCHECK', 1);
+
+if ($_GET['apphash'] == MobcentDiscuz::getAppHashValue() || (isset($_GET['hacker_uid']) && MOBCENT_HACKER_UID) || ($_GET['sdkVersion'] < '2.3.0' && isset($_GET['forumKey']))) {
+    $_SERVER['REQUEST_METHOD'] = 'POST'; // x2.5的绕过方法
+    define('DISABLEXSSCHECK', 1);   // x3.0的绕过方法
+}
 
 // cc 攻击防御
 define('DISABLEDEFENSE', 1);
