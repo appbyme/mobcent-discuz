@@ -27,7 +27,7 @@
                     <!-- 幻灯片具体图片 -->
                     <?php foreach($info['piclist'] as $k => $v){ ?>
                     <div class="img-size item <?php echo ($k==0)? 'active' : '' ;?>">
-                        <img  src="<?php echo str_replace('xgsize','mobcentSmallPreview',$v['pic_path']);?>" alt="" >
+                        <img  src="<?php echo str_replace('xgsize','mobcentSmallPreview',$v['pic_path']);?>" alt="" style="width:336px;height:116px;">
                         <div class="carousel-caption">
                             <p><?php echo $v['title']; ?></p> 
                         </div>

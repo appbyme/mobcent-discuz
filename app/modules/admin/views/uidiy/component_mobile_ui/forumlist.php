@@ -83,13 +83,15 @@
 </div>
 <script type="text/javascript">
     function redirtopicListUrl(fid){
-        var moduleInfo =  <?php   $component['title']='帖子列表';
+        var moduleInfo =
+    <?php   $component['title']='帖子列表';
         $component['type'] = 'topiclist';
-        echo WebUtils::jsonEncode($component,'utf-8');?>;
+        echo WebUtils::jsonEncode($component,'utf-8');?>    
+    ;
         moduleInfo['extParams']['forumId'] = fid;
         $.ajax({
                         type:"POST",
-                        url: "<?php echo $this->rootUrl; ?>/index.php?r=admin/uidiy/componentmobileui",
+                        url:Appbyme.getAjaxApiUrl('admin/uidiy/componentmobileui'),
                         data:{
                             component: JSON.stringify(moduleInfo),
                         },

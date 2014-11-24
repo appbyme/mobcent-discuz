@@ -5,8 +5,15 @@
  * @author hongliang
  * @copyright 2012-2014 Appbyme
  */
+
 $title = $module['title'];
+foreach($module['componentList'] as $k =>$v){
+    if(!$v['title']){
+        unset($module['componentList'][$k]);
+    }
+}
 $subnavInfo = $module['componentList'];
+
 $j = $module['select'] ? intval($module['select']) : 0;
 ?>
 <ul class="nav nav-justified" style="background-color: #545354;height:37px;">
@@ -23,11 +30,13 @@ $j = $module['select'] ? intval($module['select']) : 0;
 
  <script>
 function getProtalInfo(i){
-       var moduleInfo =  <?php echo WebUtils::jsonEncode($module,'utf-8');?>;
+       var moduleInfo =
+<?php echo WebUtils::jsonEncode($module,'utf-8');?>
+;
        moduleInfo['select'] = i;
         $.ajax({
                         type:"POST",
-                        url: "<?php echo $this->rootUrl; ?>/index.php?r=admin/uidiy/modulemobileui",
+                        url:Appbyme.getAjaxApiUrl('admin/uidiy/modulemobileui'),
                         data:{
                             module: JSON.stringify(moduleInfo),
                         },

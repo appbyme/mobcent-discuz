@@ -13,9 +13,9 @@ $component = $module;
             $count = count($component['componentList']);
             if($count == 6 || $count == 3){
                      foreach($component['componentList'] as $k => $v){   $icon = $v['icon'];?>
-                    <div style="width:33%;height:110px;float: left;padding-top: 15px;">
+                    <div onclick="redirfastUrl(<?php echo $k;?>);" style="width:33%;height:110px;float: left;padding-top: 15px;">
                         <div>
-                            <img style="width:70px;height: 70px;" src="<?php echo $v['icon']?>">
+                            <img style="width:70px;height: 70px;" src="<?php echo $this->getComponentIconUrl($icon);?>">
                         </div>
                         <div style="height: 30px;padding-top:5px;"><?php echo mb_substr($v['title'],0,6);?></div>
                     </div>
@@ -24,7 +24,7 @@ $component = $module;
                      <?php foreach($component['componentList'] as $k => $v){  $icon = $v['icon']; ?>
                         <div onclick="redirfastUrl(<?php echo $k;?>);" style="width:50%;height:110px;float: left;margin: 0 auto;">
                             <div>
-                                <img style="width:70px;height: 70px;" src="<?php echo $icon; ?>">
+                                <img style="width:70px;height: 70px;" src="<?php echo $this->getComponentIconUrl($icon);?>">
                             </div>
                             <div style="height: 30px;padding-top:5px;"><?php echo mb_substr($v['title'],0,6);?></div>
                         </div>
@@ -32,9 +32,9 @@ $component = $module;
                    </div>
                    <?php }else if($count == 1){ 
                          foreach($component['componentList'] as $k => $v){   $icon= $v['icon']; ?>
-                         <div style="margin: 0 auto;height:110px;">
+                         <div onclick="redirfastUrl(<?php echo $k;?>);" style="margin: 0 auto;height:110px;">
                             <div>
-                                <img style="width:70px;height: 70px;" src="<?php echo $icon; ?>">
+                                <img style="width:70px;height: 70px;" src="<?php echo $this->getComponentIconUrl($icon);?>">
                             </div>
                             <div style="height: 30px;padding-top:5px;"><?php echo mb_substr($v['title'],0,6);?></div>
                         </div>
@@ -43,14 +43,14 @@ $component = $module;
                               if($k <=2){?>
                              <div onclick="redirfastUrl(<?php echo $k;?>);" style="width:33%;height:110px;float: left;padding-top: 15px;">
                                 <div>
-                                    <img style="width:70px;height: 70px;" src="<?php echo $icon; ?>">
+                                    <img style="width:70px;height: 70px;" src="<?php echo $this->getComponentIconUrl($icon);?>">
                                 </div>
                                 <div style="height: 30px;padding-top:5px;"><?php echo mb_substr($v['title'],0,6);?></div>
                             </div>
                             <?php }else{?>
                                <div onclick="redirfastUrl(<?php echo $k;?>);"  style="width:40%;height:110px;float: left;padding-left:50px;">
                                   <div>
-                                      <img style="width:70px;height: 70px;" src="<?php echo $icon; ?>">
+                                      <img style="width:70px;height: 70px;" src="<?php echo $this->getComponentIconUrl($icon);?>">
                                   </div>
                                   <div style="height: 30px;padding-top:5px;"><?php echo mb_substr($v['title'],0,6); ?></div>
                                </div>
@@ -60,11 +60,13 @@ $component = $module;
 
 <script>
     function redirfastUrl(i){
-       var moduleInfo =  <?php echo WebUtils::jsonEncode($module,'utf-8');?>;
+       var moduleInfo =
+    <?php echo WebUtils::jsonEncode($module,'utf-8');?>    
+    ;
        var moduleInfo = moduleInfo['componentList'][i];
         $.ajax({
                         type:"POST",
-                        url: "<?php echo $this->rootUrl; ?>/index.php?r=admin/uidiy/componentmobileui",
+                        url:Appbyme.getAjaxApiUrl('admin/uidiy/componentmobileui'),
                         data:{
                             component: JSON.stringify(moduleInfo),
                         },

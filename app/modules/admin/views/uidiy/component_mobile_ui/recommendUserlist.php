@@ -5,12 +5,14 @@
  * @author hongliang
  * @copyright 2012-2014 Appbyme
  */
-    $url   = $this->rootUrl."/index.php?r=user/userlist&type=recommend&pageSize=10&page=1&accessToken=8d5478c77477933169ab8cfde10b5&accessSecret=a57002aab240f3ff831d868b623ff";
+    /*$url   = $this->rootUrl."/index.php?r=user/userlist&type=recommend&pageSize=10&page=1&accessToken=8d5478c77477933169ab8cfde10b5&accessSecret=a57002aab240f3ff831d868b623ff";
     $info = WebUtils::httpRequest($url, 30);
-    $info = WebUtils::jsondecode($info);
+    $info = WebUtils::jsondecode($info);*/
 ?>
-
-<div class="content-list-ui content-list-add">
+<div class="content-list-ui">
+    <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp/recommenduserlist.png" style="width:336px;height: 493px;">
+</div>
+<!--<div class="content-list-ui content-list-add">
     <?php foreach($info['list'] as $k =>
     $v){?>
     <div class="div-line">
@@ -30,4 +32,4 @@
         </div>
     </div>
     <?php }?>
-</div>
+</div>-->

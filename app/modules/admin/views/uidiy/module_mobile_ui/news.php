@@ -25,11 +25,13 @@ $newInfo = $module['componentList'];
 </div>
 <script>
     function redirUrl(i){
-       var moduleInfo =  <?php echo WebUtils::jsonEncode($module,'utf-8');?>;
+       var moduleInfo =
+    <?php echo WebUtils::jsonEncode($module,'utf-8');?>    
+    ;
        var moduleInfo = moduleInfo['componentList'][i];
         $.ajax({
                         type:"POST",
-                        url: "<?php echo $this->rootUrl; ?>/index.php?r=admin/uidiy/componentmobileui",
+                        url:Appbyme.getAjaxApiUrl('admin/uidiy/componentmobileui'),
                         data:{
                             component: JSON.stringify(moduleInfo),
                         },
