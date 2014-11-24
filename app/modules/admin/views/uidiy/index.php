@@ -63,7 +63,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="http://www.appbyme.com" target="_blank">Appbyme</a>
+          <a class="navbar-brand" href="http://www.appbyme.com" target="_blank" style="background:url(<?php echo $this->rootUrl; ?>/images/admin/login.png);width:140px;height:50px;"></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav nav-list">
@@ -431,8 +431,11 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <button type="button" class="btn btn-primary btn-xs add-discover-custom-component-item-btn">点击添加更多</button>
     </div>
     <% } else if (id == MODULE_ID_FASTPOST) { %>
+        <div style="height:560px;"></div>
     <% } else if (type == MODULE_TYPE_FULL) { %>
+        <div style="height:560px;"></div>
     <% } else if (type == MODULE_TYPE_SUBNAV) { %>
+        <div style="height:560px;"></div>
     <% } else if (type == MODULE_TYPE_NEWS) { %>
     <!-- 左图右文 -->
     <div class="pic-text list-group">

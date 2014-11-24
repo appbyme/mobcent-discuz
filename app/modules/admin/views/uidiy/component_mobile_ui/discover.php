@@ -51,10 +51,12 @@ $countSliderComponentList = count($sliderComponentList);
         <div class="fixed-content">
             <div class="list-group text-left discover-default-component-container">
             <?php foreach ($defaultComponentList as $component) { ?>
+                <?php if (!$component['extParams']['isHidden']) { ?>
                 <div class="list-group-item uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>">
                     <img class="img-rounded pull-left" src="<?php echo $this->getComponentIconUrl($component['icon']); ?>">
                     <div class="pull-left discover-title"><?php echo $component['title']; ?></div>
                 </div>
+                <?php } ?>
             <?php } ?>
             </div>
         </div>
