@@ -1620,4 +1620,6 @@ $(function () {
     if (navItems.length) {
         mainView.renderMobileUI(navItems.models[0].attributes.moduleId);
     }
+
+    Appbyme.mainView = mainView;
 });
