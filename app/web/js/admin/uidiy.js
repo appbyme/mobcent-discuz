@@ -924,6 +924,22 @@ $(function () {
                         this.listenTo(moduleModel.tempComponentList, 'add', moduleEditMobileView.addNewsComponentItem);
                     }
                     moduleModel.tempComponentList.set(componentList);
+
+                    if (moduleType == MODULE_TYPE_NEWS) {
+                        // 左图右文排序
+                        var newsItemSortStartIndex = 0;
+                        $('.news-component-item-container').sortable({
+                            revert: true,
+                            opacity: 0.6,
+                            start: function (event, ui) {
+                                newsItemSortStartIndex = ui.item.index();
+                            },
+                            update: function (event, ui) {
+                                sortArrayHelper(moduleModel.tempComponentList.models, newsItemSortStartIndex, ui.item.index());
+                            },
+                        });
+                        $('.news-component-item-container').disableSelection();
+                    }
                     break;
                 default:
                     break;
