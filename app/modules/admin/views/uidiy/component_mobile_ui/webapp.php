@@ -11,7 +11,8 @@
 <style type="text/css">
     .wap-iframe {
         width: 335px;
-        height: 550px;
+        height: 498px;
+        overflow-y:hidden;
     }
 </style>
 <iframe src="<?php echo $component['extParams']['redirect']; ?>" class="wap-iframe"></iframe>

@@ -121,7 +121,7 @@ label {
 
 /*发现模块*/
 .found-module {
-    height: 555px;
+    height: 560px;
 }
 
 /* 前面图标大小 */
@@ -134,7 +134,7 @@ label {
 .found-content {
     margin: 10px 0px 10px 0px;
     background: #e3e3e3;
-    height: 310px;
+    height: 330px;
     overflow-y:auto;
 }
 
