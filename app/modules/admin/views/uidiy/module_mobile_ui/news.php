@@ -3,42 +3,26 @@
  * module_mobile_ui_news view
  *
  * @author hongliang
+ * @author 牛存晖 <niucunhui@gmail.com>
  * @copyright 2012-2014 Appbyme
  */
 $title = $module['title'];
 $newInfo = $module['componentList'];
 ?>
 
-<div class="content-list-ui content-list-add">
-    <?php foreach($newInfo as $k => $v){ $icon = $v['icon'];?>
-<div class="div-img" onclick="redirUrl(<?php echo $k; ?>)">
-            <img class="pull-left div-img-size"  src="<?php echo $icon; ?>">
-            <div class="pull-left summary">
-               <div class="wz-size"><?php echo $v['title']; ?></div>
-               <div><?php echo mb_substr($v['desc'],0,72);?></div>
+<div class="pic-text list-group">
+    <div class="news-component-item-container ui-sortable">
+        <?php foreach ($newInfo as $key => $component) { $icon = $component['icon']; ?>
+        <div class="news-component-item list-group-item uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>">        
+        <div class="pull-left"><img src="<?php echo $icon; ?>" style="width:50px;height:50px" class="img-rounded"></div>
+            <div class="pull-left text-left page-main">
+                <div class="page-title"><strong><?php echo $component['title']; ?></strong></div>
+                <div class="page-content"><?php echo mb_substr($component['desc'],0,72); ?></div>
             </div>
             <div class="pull-right">
-                 <span  class="pull-right glyphicon glyphicon-chevron-right"></span>
-            </div>
+                <span  class="pull-right glyphicon glyphicon-chevron-right"></span>
+            </div>       
+        </div>
+        <?php } ?>
+    </div>
 </div>
-<?php }?>
-</div>
-<script>
-    function redirUrl(i){
-       var moduleInfo =
-    <?php echo WebUtils::jsonEncode($module,'utf-8');?>    
-    ;
-       var moduleInfo = moduleInfo['componentList'][i];
-        $.ajax({
-                        type:"POST",
-                        url:Appbyme.getAjaxApiUrl('admin/uidiy/componentmobileui'),
-                        data:{
-                            component: JSON.stringify(moduleInfo),
-                        },
-                        dataTyle:"html",
-                        success:function(msg) {
-                            $('.module-mobile-ui-view').html(msg);
-                        }
-                    });
-        }
-</script>

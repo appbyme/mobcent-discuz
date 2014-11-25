@@ -13,13 +13,14 @@ foreach($module['componentList'] as $k =>$v){
     }
 }
 $subnavInfo = $module['componentList'];
-
 $j = $module['select'] ? intval($module['select']) : 0;
+if(!empty($subnavInfo)){
 ?>
+<div style="max-height:496px;overflow:hidden;">
 <ul class="nav nav-justified" style="background-color: #545354;height:37px;">
 	<?php foreach($subnavInfo as $k =>$v){?>
 	<li onclick="getProtalInfo(<?php echo $k; ?>);" >
-		<a  data-toggle="tab" ><?php echo $v['title']; ?></a>
+		<a  data-toggle="tab" ><?php echo mb_substr($v['title'],0,12); ?></a>
 	</li>
 	<?php } ?>
 </ul>
@@ -27,7 +28,8 @@ $j = $module['select'] ? intval($module['select']) : 0;
             'component' => $subnavInfo[$j],
             ));
  ?>
-
+</div>
+<?php }?>
  <script>
 function getProtalInfo(i){
        var moduleInfo =

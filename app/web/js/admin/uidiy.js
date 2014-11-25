@@ -18,7 +18,7 @@ $(function () {
         };
     };
 
-    var sortArrayHelper = function (arr, fromIndex, toIndex) {
+    var sortArray = function (arr, fromIndex, toIndex) {
         if (fromIndex == toIndex) {
             return arr;
         }
@@ -34,6 +34,21 @@ $(function () {
         }
         arr[toIndex] = tmp;
         return arr;
+    };
+
+    var sortableHelper = function ($el, list) {
+        var sortStartIndex = 0;
+        $el.sortable({
+            revert: true,
+            opacity: 0.6,
+            start: function (event, ui) {
+                sortStartIndex = ui.item.index();
+            },
+            update: function (event, ui) {
+                sortArray(list, sortStartIndex, ui.item.index());
+            },
+        });
+        $el.disableSelection();
     };
 
     var scrollToBottomHelper = function (element) {
@@ -763,6 +778,13 @@ $(function () {
                     componentList.push(new ComponentModel());
                 }
             }
+
+            if (layoutStyle == COMPONENT_STYLE_LAYOUT_SLIDER) {
+                $('.style-component-edit-form').find('.add-component-item-btn').show();
+            } else {
+                $('.style-component-edit-form').find('.add-component-item-btn').hide();    
+            }
+            
             $('.component-view-container').html('');
             var uiconfig = {
                 isShow_desc: 1,
@@ -927,18 +949,11 @@ $(function () {
 
                     if (moduleType == MODULE_TYPE_NEWS) {
                         // 左图右文排序
-                        var newsItemSortStartIndex = 0;
-                        $('.news-component-item-container').sortable({
-                            revert: true,
-                            opacity: 0.6,
-                            start: function (event, ui) {
-                                newsItemSortStartIndex = ui.item.index();
-                            },
-                            update: function (event, ui) {
-                                sortArrayHelper(moduleModel.tempComponentList.models, newsItemSortStartIndex, ui.item.index());
-                            },
-                        });
-                        $('.news-component-item-container').disableSelection();
+                        sortableHelper($('.news-component-item-container'), moduleModel.tempComponentList.models);
+                    }
+                    if (moduleType == MODULE_TYPE_CUSTOM) {
+                        // 风格区排序
+                        sortableHelper($('.custom-style-item-container'), moduleModel.tempComponentList.models);
                     }
                     break;
                 default:
@@ -1078,6 +1093,8 @@ $(function () {
                 customComponentList.tempComponentList = new ComponentList();
                 this.listenTo(customComponentList.tempComponentList, 'add', this.addDiscoverCustomComponentItem);
                 customComponentList.tempComponentList.add(discoverModel.getDiscoverComponentList(COMPONENT_STYLE_DISCOVER_CUSTOM, true), {merge: true, remove: false, add: true});
+                // 添加排序
+                sortableHelper($('.discover-custom-component-container'), customComponentList.tempComponentList.models);
 
                 // render slider
                 discoverSliderComponentView.model = sliderComponentList;
@@ -1267,6 +1284,22 @@ $(function () {
             this.model.tempComponentList = new ComponentList();
             this.listenTo(this.model.tempComponentList, 'add', this.addStyleComponentItem);
             this.model.tempComponentList.add(this.model.attributes.componentList, {merge: true, remove: false, add: true});
+
+            // 风格区内组件拖动
+            var compSortStartIndex = 0;
+            var _this = this;
+            this.$el.find('.custom-style-component-item-container').sortable({
+                revert: true,
+                opacity: 0.6,
+                start: function (event, ui) {
+                    compSortStartIndex = ui.item.index();
+                },
+                update: function (event, ui) {
+                    sortArray(_this.model.tempComponentList.models, compSortStartIndex, ui.item.index());
+                    _this.model.attributes.componentList = _this.model.tempComponentList.models;
+                },
+            });
+            this.$el.find('.custom-style-component-item-container').disableSelection();
 
             return this;
         },
@@ -1497,18 +1530,7 @@ $(function () {
             $('#autoSaveCheckbox')[0].checked = localStorageWrapper.getItem(APPBYME_UIDIY_AUTOSAVE) == 1;
 
             // 底部导航拖动
-            var navSortStartIndex = 0;
-            $('.nav-item-container').sortable({
-                revert: true,
-                opacity: 0.6,
-                start: function (event, ui) {
-                    navSortStartIndex = ui.item.index();
-                },
-                update: function (event, ui) {
-                    sortArrayHelper(navItems.models, navSortStartIndex, ui.item.index());
-                },
-            });
-            $('.nav-item-container').disableSelection();
+            sortableHelper($('.nav-item-container'), navItems.models);
         },
         render: function () {
             return this;

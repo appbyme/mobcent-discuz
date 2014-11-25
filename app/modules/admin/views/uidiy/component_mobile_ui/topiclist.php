@@ -11,24 +11,21 @@
     $info = WebUtils::httpRequest($url, 30);
     $info = WebUtils::jsondecode($info);
 ?>
-<img class="moble-top-show" src="<?php echo $this->rootUrl; ?>/images/admin/moble-nav.png">
-    <div class="moble-top-title">
-        <img class="pull-left select-topbar-btn" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
-        <span><?php echo $component['title'];?></span>
-        <img class="pull-right select-topbar-btn" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
-        <img class="pull-right select-topbar-btn" src="<?php echo $this->rootUrl; ?>/images/admin/module-add.png">
-      </div>
 <ul class="nav nav-justified" style="background-color: #545354">
-            <li onclick="redirtopicNewListUrl('all');">
+            <li class="uidiy-mobileui-component" data-component-data="<?php $component['sortby']='all';
+        echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>">
                 <a data-toggle="tab">全部</a>
             </li>
-            <li onclick="redirtopicNewListUrl('all');">
+            <li class="uidiy-mobileui-component" data-component-data="<?php $component['sortby']='new';
+        echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>">
                 <a data-toggle="tab">最新</a>
             </li>
-            <li onclick="redirtopicNewListUrl('marrow');">
+            <li class="uidiy-mobileui-component" data-component-data="<?php $component['sortby']='marrow';
+        echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>">
                 <a data-toggle="tab">精华</a>
             </li>
-            <li onclick="redirtopicNewListUrl('top');">
+            <li class="uidiy-mobileui-component" data-component-data="<?php $component['sortby']='top';
+        echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>">
                 <a data-toggle="tab">置顶</a>
             </li>
 </ul>
@@ -36,9 +33,10 @@
     <div class="list-group">
         <?php foreach($info['list'] as $k =>
         $v){ ?>
-        <div onclick = "redirPostListUrl();" style="height:95px;padding-left: 10px;border-bottom: 1px solid #C9C9C9;margin-top:8px;">
+        <div class="uidiy-mobileui-component" data-component-data="<?php $component['title'] = '帖子详情';  $component['type'] = 'postlist';
+        echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>" style="height:95px;padding-left: 10px;border-bottom: 1px solid #C9C9C9;margin-top:8px;">
             <h5 class="list-group-item-heading text-left">
-                <?php echo mb_substr($v['title'],0,66);?></h5>
+                <?php echo WebUtils::subString($v['title'],0,22);?></h5>
             <div>
                 <?php if($v['pic_path']){?>
                 <img src="<?php echo str_replace('xgsize','mobcentSmallPreview',$v['pic_path']);?>
@@ -50,7 +48,7 @@
                     <?php echo $v['subject'];?></p>
                 <?php } ?></div>
             <div class="footer-icon">
-                <span class="pull-left span-left">5小时前</span>
+                <span class="pull-left span-left"><?php echo date("Y-m-d H:i:s", str_replace('000','',$v['last_reply_date'])); ?></span>
                 <div class="pull-right">
                     <img class="footer-img" src="<?php echo $this->
                     rootUrl;?>/images/admin/tmp/view.png">
@@ -65,39 +63,3 @@
         </div>
         <?php } ?></div>
 </div>
-<script>
-    function redirtopicNewListUrl(order){
-        var moduleInfo =
-    <?php  echo WebUtils::jsonEncode($component,'utf-8');?>    
-    ;
-        moduleInfo['sortby'] = order;
-        $.ajax({
-                        type:"POST",
-                        url: Appbyme.getAjaxApiUrl('admin/uidiy/componentmobileui'),
-                        data:{
-                            component: JSON.stringify(moduleInfo),
-                        },
-                        dataTyle:"html",
-                        success:function(msg) {
-                            $('.module-mobile-ui-view').html(msg);
-                        }
-                    });
-        }
-
-        function redirPostListUrl(){
-              var moduleInfo =
-    <?php  $component['title'] = '帖子详情';  $component['type'] = 'postlist'; echo WebUtils::jsonEncode($component,'utf-8');?>    
-    ;
-               $.ajax({
-                        type:"POST",
-                        url: Appbyme.getAjaxApiUrl('admin/uidiy/componentmobileui'),
-                        data:{
-                            component: JSON.stringify(moduleInfo),
-                        },
-                        dataTyle:"html",
-                        success:function(msg) {
-                            $('.module-mobile-ui-view').html(msg);
-                        }
-                    });
-        }
-</script>

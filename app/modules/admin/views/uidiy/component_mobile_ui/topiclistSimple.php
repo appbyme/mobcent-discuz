@@ -17,7 +17,7 @@
         $v){ ?>
         <div onclick="redirPostListUrl();" style="height:95px;padding-left: 10px;border-bottom: 1px solid #C9C9C9;margin-top:8px;">
             <h5 class="list-group-item-heading text-left">
-                <?php echo mb_substr($v['title'],0,57);?></h5>
+                <?php echo WebUtils::subString($v['title'],0,22);?></h5>
             <div>
                 <?php if($v['pic_path']){?>
                 <img src="<?php echo str_replace('xgsize','mobcentSmallPreview',$v['pic_path']);?>
@@ -29,7 +29,7 @@
                     <?php echo $v['subject'];?></p>
                 <?php } ?></div>
             <div class="footer-icon">
-                <span class="pull-left span-left">5小时前</span>
+                <span class="pull-left span-left"><?php echo date("Y-m-d H:i:s", str_replace('000','',$v['last_reply_date'])); ?></span>
                 <div class="pull-right">
                     <img class="footer-img" src="<?php echo $this->
                     rootUrl;?>/images/admin/tmp/view.png">

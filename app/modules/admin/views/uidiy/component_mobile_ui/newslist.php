@@ -45,7 +45,7 @@
                 </a>
             </div>
             <!-- 内容 -->
-             <div class="content-list-add" style="height:376px;">
+             <div class="content-list-add" style="height: 380px;">
                     <div class="list-group">
                      <?php foreach($info['list'] as $k => $v){ ?>
                      <div style="height:92px;padding-left: 10px;border-bottom: 1px solid #C9C9C9;margin-top:8px;">
@@ -63,7 +63,7 @@
                             <?php } ?>
                         </div>
                         <div class="icon-size">
-                            <span class="pull-left span-left">5小时前</span>
+                            <span class="pull-left span-left"><?php echo date("Y-m-d H:i:s", str_replace('000','',$v['last_reply_date'])); ?></span>
                             <div class="pull-right">
                                 <img class="footer-img span-left" src="<?php echo $this->rootUrl;?>/images/admin/tmp/view.png">
                                 <span class="span-left"><?php echo $v['hits']; ?></span>
@@ -78,7 +78,7 @@
         </div>
     </div>
     <?php }else{?>
-            <div class="content-list-ui content-list-add">
+            <div class="content-list-add" style="height: 495px;">
                     <div class="list-group">
                      <?php foreach($info['list'] as $k => $v){ ?>
                      <div style="height:95px;padding-left: 10px;border-bottom: 1px solid #C9C9C9;margin-top:8px;">
@@ -96,7 +96,7 @@
                         <?php } ?>
                         </div>
                         <div class="footer-icon">
-                            <span class="pull-left span-left">5小时前</span>
+                            <span class="pull-left span-left"><?php echo date("Y-m-d H:i:s", str_replace('000','',$v['last_reply_date'])); ?></span>
                             <div class="pull-right">
                                 <img class="footer-img" src="<?php echo $this->rootUrl;?>/images/admin/tmp/view.png">
                                 <span class="span-left"><?php echo $v['hits']; ?></span>

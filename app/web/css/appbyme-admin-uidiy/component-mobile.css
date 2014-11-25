@@ -1,6 +1,6 @@
 .content-list-ui{
 	width:336px;
-	height:498px;
+	height:496px;
 }
 
 /*÷‹±ﬂ”√ªß*/
@@ -130,4 +130,7 @@
 .glyphicon {
 	float: right;
 	margin: 50px 20px 0px 25px;
+}
+.glyphicon-chevron-right {
+	margin-top: 18px;
 }

@@ -429,12 +429,12 @@ class AppbymeUIDiyModel extends DiscuzAR
                         array_merge(self::initComponent(), array(
                             'title' => '周边用户',
                             'type' => self::COMPONENT_TYPE_SURROUDING_USERLIST,
-                            'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '4',
+                            'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '5',
                         )),
                         array_merge(self::initComponent(), array(
                             'title' => '周边帖子',
                             'type' => self::COMPONENT_TYPE_SURROUDING_POSTLIST,
-                            'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '5',
+                            'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '4',
                         )),
                         array_merge(self::initComponent(), array(
                             'title' => '推荐用户',
