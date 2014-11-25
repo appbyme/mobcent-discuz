@@ -190,6 +190,10 @@ class ForumUtils {
             if (!empty($types['types'])) {
                 $infos['requireTypes'] = $types['required'];
                 foreach ($types['types'] as $key => $value) {
+                    // 控制管理组专用@xushaowei
+                    if ($types['moderators'][$key] == 1) {
+                        continue;
+                    }
                     $infos['types'][] = array(
                         'classificationType_id' => $key,
                         'classificationType_name' => WebUtils::emptyHtml($value),
@@ -877,7 +881,7 @@ class ForumUtils {
 
         // 转换优酷 .swf
         $tempMatches = array();
-        preg_match("#^http://player\.youku\.com/player\.php/sid/(\w+?)/v\.swf#s", $video, $tempMatches);
+        preg_match("#^http://player\.youku\.com/player\.php\S*/sid/(\w+?)/v\.swf#s", $video, $tempMatches);
         if (!empty($tempMatches)) {
             $videoUrl = "http://v.youku.com/v_show/id_{$tempMatches[1]}.html";
         }
