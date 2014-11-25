@@ -1578,7 +1578,7 @@ $(function () {
         uidiySync: function () {
             if (confirm('确定要现在同步吗?')) {
                 this.saveUIDiy(1, function () {
-                    alert('同步成功');
+                    alert('同步成功，实际的样式请以客户端为准！');
                 }, function () {
                     alert('同步失败');
                 });

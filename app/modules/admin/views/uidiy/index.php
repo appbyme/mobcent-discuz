@@ -416,7 +416,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <div class="slide-img ">
             <div class="discover-slider-component-container">
             </div>
-            <button type="button" class="btn btn-primary btn-xs add-discover-slider-component-item-btn">点击添加更多幻灯片</button>
+            <button type="button" class="btn btn-primary btn-xs add-discover-slider-component-item-btn" style="margin-top:5px;">点击添加更多幻灯片</button>
         </div>
         <div class="found-content">
             <div class="fixed-content">

@@ -1,3 +1,11 @@
+<?php
+/**
+ * 自定义页面模板 
+ *
+ * @author HanPengyu
+ * @copyright 2012-2014 Appbyme
+ */
+?>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->rootUrl; ?>/css/appbyme-admin-uidiy/module-custom.css">
 <!-- 自定义页面样式开始 -->
 <div class="custom" >
@@ -413,3 +421,8 @@
     <?php endforeach; ?>
 
 </div><!-- 自定义页面整体结束 -->
+<script type="text/javascript">
+    $(function() {
+        $('.carousel-example-generic_one').carousel();
+    })
+</script>

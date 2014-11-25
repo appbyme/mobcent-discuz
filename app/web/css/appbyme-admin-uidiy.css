@@ -160,6 +160,7 @@ label {
     height: 60px;
     border: 1px solid #e3e3e3;
     padding:5px 0px 5px 30px;
+    cursor: pointer;
 }
 
 .found-content .list-group-item:hover {
@@ -433,7 +434,8 @@ label {
 }
 
 .play-border-add input[type=number], .pic-number-pop input[type=number], .add-style-pop input[type=number],
-.add-comp-pop input[type=number], .add-channel-pop input[type=number], .add-slide-pop input[type=number]
+.add-comp-pop input[type=number], .add-channel-pop input[type=number], .add-slide-pop input[type=number],
+.pic-text-pop input[type=number]
 {
     width: 170px;
 }
