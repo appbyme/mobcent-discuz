@@ -16,36 +16,35 @@ $subnavInfo = $module['componentList'];
 $j = $module['select'] ? intval($module['select']) : 0;
 if(!empty($subnavInfo)){
 ?>
-<div style="max-height:496px;overflow:hidden;">
+<div style="max-height:496px; overflow:hidden;">
 <ul class="nav nav-justified" style="background-color: #545354;height:37px;">
-	<?php foreach($subnavInfo as $k =>$v){?>
+	<?php foreach($subnavInfo as $k =>$v) { ?>
 	<li onclick="getProtalInfo(<?php echo $k; ?>);" >
 		<a  data-toggle="tab" ><?php echo mb_substr($v['title'],0,12); ?></a>
 	</li>
 	<?php } ?>
 </ul>
- <?php $this->renderPartial('component_mobile_ui', array(
-            'component' => $subnavInfo[$j],
-            ));
- ?>
+<?php $this->renderPartial('component_mobile_ui', array(
+        'component' => $subnavInfo[$j],
+        ));
+?>
 </div>
-<?php }?>
- <script>
+<?php } ?>
+<script>
 function getProtalInfo(i){
-       var moduleInfo =
-<?php echo WebUtils::jsonEncode($module,'utf-8');?>
-;
-       moduleInfo['select'] = i;
+        var moduleInfo =
+        <?php echo WebUtils::jsonEncode($module,'utf-8'); ?>;
+        moduleInfo['select'] = i;
         $.ajax({
-                        type:"POST",
-                        url:Appbyme.getAjaxApiUrl('admin/uidiy/modulemobileui'),
-                        data:{
-                            module: JSON.stringify(moduleInfo),
-                        },
-                        dataTyle:"html",
-                        success:function(msg) {
-                            $('.module-mobile-ui-view').html(msg);
-                        }
-                    });
+                type:"POST",
+                url:Appbyme.getAjaxApiUrl('admin/uidiy/modulemobileui'),
+                data:{
+                    module: JSON.stringify(moduleInfo),
+                },
+                dataTyle:"html",
+                success:function(msg) {
+                    $('.module-mobile-ui-view').html(msg);
+                }
+            });
         }
- </script>
+</script>

@@ -9,5 +9,3 @@
 <div class="content-list-ui">
     <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp/fasttext.jpg" style="width:336px;height: 550px;">
 </div>
-
-
