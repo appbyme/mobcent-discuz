@@ -19,7 +19,8 @@
             </div>
             <?php foreach($v['board_list'] as $kk => $vv){
                      if($v['board_category_type'] == 2){?>
-            <div  class="col-xs-6 double-div" onclick="redirtopicListUrl(<?php echo $vv['board_id'];?>)">
+            <div  class="col-xs-6 double-div uidiy-mobileui-component" data-component-data="<?php $component['title']='帖子列表';
+        $component['type'] = 'topiclist';$component['extParams']['forumId']=$v['board_id'];echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>" >
                 <div class="row">
                     <?php if($vv['board_img']){?>
                     <div class="col-xs-3">
@@ -28,7 +29,7 @@
                         </div>
                     </div>
                     <div class="col-xs-6 board-content">
-                        <div><?php echo mb_substr($vv['board_name'],0,12);?></div>
+                        <div><?php echo WebUtils::subString($vv['board_name'],0,4);?></div>
                         <div><?php echo date("m-d", $vv['last_posts_date'] ? str_replace('000','',$vv['last_posts_date']) : time());?></div>
                     </div>
                     <div class="col-xs-3 post-num">
@@ -37,7 +38,7 @@
                 <?php }else{?>
                     
                     <div class="col-xs-8 board-content">
-                        <div><?php echo mb_substr($vv['board_name'],0,12);?></div>
+                        <div><?php echo WebUtils::subString($vv['board_name'],0,4);?></div>
                         <div><?php echo date("m-d", $vv['last_posts_date'] ? str_replace('000','',$vv['last_posts_date']) : time());?></div>
                     </div>
                     <div class="col-xs-4 post-num">
@@ -48,7 +49,8 @@
                 </div>
             </div>
             <?php }else{ ?>
-                <div onclick="redirtopicListUrl(<?php echo $vv['board_id'];?>)">
+                <div class="uidiy-mobileui-component"  data-component-data="<?php $component['title']='帖子列表';
+        $component['type'] = 'topiclist';$component['extParams']['forumId']=$v['board_id'];echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>">
                 <div class="col-xs-9 double-div">
                     <div class="row">
                         <?php if($vv['board_img']){?>
@@ -58,7 +60,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-10 one-div">
-                                <p><?php echo $vv['board_name'];?></p>
+                                <p><?php echo WebUtils::subString($vv['board_name'],0,7);?></p>
                                 <p><?php echo '最近更新：'.date("m-d", $vv['last_posts_date'] ? str_replace('000','',$vv['last_posts_date']) : time());?></p>
                             </div>
                             <?php }else{?>
@@ -81,24 +83,3 @@
     </div>
 <?php  } ?>
 </div>
-<script type="text/javascript">
-    function redirtopicListUrl(fid){
-        var moduleInfo =
-    <?php   $component['title']='帖子列表';
-        $component['type'] = 'topiclist';
-        echo WebUtils::jsonEncode($component,'utf-8');?>    
-    ;
-        moduleInfo['extParams']['forumId'] = fid;
-        $.ajax({
-                        type:"POST",
-                        url:Appbyme.getAjaxApiUrl('admin/uidiy/componentmobileui'),
-                        data:{
-                            component: JSON.stringify(moduleInfo),
-                        },
-                        dataTyle:"html",
-                        success:function(msg) {
-                            $('.module-mobile-ui-view').html(msg);
-                        }
-                    });
-        }
-</script>
