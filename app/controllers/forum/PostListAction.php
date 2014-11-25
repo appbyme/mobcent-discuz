@@ -277,7 +277,9 @@ class PostListAction extends MobcentAction {
         $voteInfo = ForumUtils::getTopicVoteInfo($tid);
 
         $vote['deadline'] = $voteInfo['expiration'];
-        $vote['is_visible'] = $voteInfo['visiblepoll'] ? 1 : 0;
+        // $vote['is_visible'] = $voteInfo['visiblepoll'] ? 1 : 0;
+        // 投票后暂时永远结果可见xushaowei，老大让改的，
+        $vote['is_visible'] = 1;
         $vote['voters'] = (int)$voteInfo['voterscount'];
         $vote['type'] = (int)$voteInfo['maxchoices'];
         $vote['poll_status'] = $voteInfo['status'];
