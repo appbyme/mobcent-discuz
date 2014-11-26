@@ -385,7 +385,7 @@
                     <!-- 圆点 -->
                     <ol class="carousel-indicators">
                         <?php foreach ($component['componentList'] as $key => $comp): ?>
-                            <li data-target=".carousel-example-generic_one" data-slide-to="0" class="<?php echo ($key == 0) ? 'active' : '' ?>"></li>
+                            <li data-target=".carousel-example-generic_one" data-slide-to="<?php echo $key; ?>" class="<?php echo ($key == 0) ? 'active' : '' ?>"></li>
                         <?php endforeach; ?>
                     </ol>
                     <!-- 图片区域，item是一个图片 -->

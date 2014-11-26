@@ -1022,6 +1022,16 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 }
             )
             
+            $('.save-btn').on({
+                click:function() {
+                  $('#foot').effect('bounce', '2000', callback);
+                }
+            })
+
+            function callback() {
+                $('#save-btn').effect('pulsate', '2000');
+            }
+
             var browserInfo = "<?php echo $browserInfo; ?>";
             if (browserInfo < '37.0.2062.124') {
                 $('.alert-darker').toggle("drop");
