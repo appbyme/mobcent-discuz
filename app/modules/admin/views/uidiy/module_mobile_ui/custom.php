@@ -15,7 +15,7 @@
         <!-- 标题是否显示 -->
         <?php if ($customStyle['extParams']['styleHeader']['isShow'] == 1 && $customStyle['extParams']['styleHeader']['position'] == 1): ?>
         <div class="custom-style-title">
-            <p class="pull-left"><?php echo WebUtils::subString($customStyle['extParams']['styleHeader']['title'], 0, 15); ?></p>
+            <p class="pull-left"><?php echo WebUtils::subString($customStyle['extParams']['styleHeader']['title'], 0, 15, 'UTF-8'); ?></p>
             <?php if ($customStyle['extParams']['styleHeader']['isShowMore'] == 1): ?>
                 <p class="pull-right moreComponent uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($customStyle['extParams']['styleHeader']['moreComponent'], 'utf-8')); ?>">更多</p>
             <?php endif; ?>
@@ -31,12 +31,12 @@
                     <img src="<?php echo $comp['icon'] ?>" style="width:320px;height:320px;" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                 <?php elseif($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <img src="<?php echo $comp['icon'] ?>" class="img-rounded textImage uidiy-mobileui-component" style="width:320px;height:300px" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
-                    <p class="textImage-title text-left"><?php echo WebUtils::subString($comp['desc'], 0, 15); ?></p>
+                    <p class="textImage-title text-left"><?php echo WebUtils::subString($comp['desc'], 0, 15, 'UTF-8'); ?></p>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="textOverlapDown">
                         <img src="<?php echo $comp['icon'] ?>" style="width:320px;height:320px;" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                         <div class="textOverlapDown-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 15); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 15, 'UTF-8'); ?></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -50,12 +50,12 @@
                     <img src="<?php echo $comp['icon'] ?>" style="width:320px;height:160px;" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <img src="<?php echo $comp['icon'] ?>" class="img-rounded textImage uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
-                    <p class="textImage-title text-left"><?php echo WebUtils::subString($comp['desc'], 0, 15); ?></p>
+                    <p class="textImage-title text-left"><?php echo WebUtils::subString($comp['desc'], 0, 15, 'UTF-8'); ?></p>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="textOverlapDown">
                         <img src="<?php echo $comp['icon'] ?>" style="width:320px;height:160px;" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                         <div class="textOverlapDown-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 15); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 15, 'UTF-8'); ?></div>
                         </div>
                     </div>                    
                 <?php endif; ?>
@@ -65,7 +65,7 @@
             <!-- 双栏文字 -->
             <div class="custom-layouttwocoltext">
                 <?php foreach ($component['componentList'] as $comp): ?>
-                    <div class="layouttwocoltext-title uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>"><?php echo WebUtils::subString($comp['desc'], 0, 10); ?></div>
+                    <div class="layouttwocoltext-title uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>"><?php echo WebUtils::subString($comp['desc'], 0, 10, 'UTF-8'); ?></div>
                 <?php endforeach; ?>
             </div>
             <?php elseif ($component['style'] == AppbymeUIDiyModel::COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH): ?>
@@ -79,13 +79,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                 <div class="layouttwocol-hight-img">
                     <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:155px;height:135px;">
-                    <div><?php echo WebUtils::subString($comp['desc'], 0, 8); ?></div>
+                    <div><?php echo WebUtils::subString($comp['desc'], 0, 8, 'UTF-8'); ?></div>
                 </div>                    
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                 <div class="layouttwocol-hight-img">
                     <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:155px;height:155px;">
                     <div class="custom-covering-title">
-                        <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 8); ?></div>
+                        <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 8, 'UTF-8'); ?></div>
                     </div>
                 </div>
                 <?php endif; ?>
@@ -101,13 +101,13 @@
                     </div>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>    <div class="custom-style-layout-two-col-mid">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:155px;height:110px;">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, 8); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, 8, 'UTF-8'); ?></div>
                     </div>         
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="custom-style-layout-two-col-mid">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:155px;height:130px;">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 8); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 8, 'UTF-8'); ?></div>
                         </div>
                     </div>      
                 <?php endif; ?>
@@ -124,13 +124,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <div class="custom-style-layout-two-col-low">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:155px;height:50px;">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, 8); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, 8, 'UTF-8'); ?></div>
                     </div>
                 <?php elseif($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="custom-style-layout-two-col-low">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:155px;height:70px;">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 8); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 8, 'UTF-8'); ?></div>
                         </div>
                     </div>   
                 <?php endif; ?>
@@ -140,7 +140,7 @@
             <!-- 三栏文字 -->
             <div class="custom-layoutThreeColText">
                 <?php foreach ($component['componentList'] as $comp): ?>
-                    <div class="layoutthreecoltext-title uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>"><?php echo WebUtils::subString($comp['desc'], 0, 6); ?></div>
+                    <div class="layoutthreecoltext-title uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>"><?php echo WebUtils::subString($comp['desc'], 0, 6, 'UTF-8'); ?></div>
                 <?php endforeach; ?>
             </div> 
             <?php elseif ($component['style'] == AppbymeUIDiyModel::COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH): ?>
@@ -154,13 +154,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <div class="custom-style-layout-three-col-high">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:100px;height:110px;">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, 5); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, 5, 'UTF-8'); ?></div>
                     </div>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>   
                     <div class="custom-style-layout-three-col-high">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:100px;height:130px;">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 5); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 5, 'UTF-8'); ?></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -177,13 +177,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <div class="custom-style-layout-three-col-mid">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:100px;height:80px;">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, 5); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, 5, 'UTF-8'); ?></div>
                     </div>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="custom-style-layout-three-col-mid">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:100px;height:100px;">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 5); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 5, 'UTF-8'); ?></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -200,13 +200,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <div class="custom-style-layout-three-col-low">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:100px;height:50px;">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, 5); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, 5, 'UTF-8'); ?></div>
                     </div>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="custom-style-layout-three-col-low">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:100px;height:70px;">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 5); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 5, 'UTF-8'); ?></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -223,13 +223,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <div class="custom-style-layout-four-col">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:75px;height:55px;">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, 4); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, 4, 'UTF-8'); ?></div>
                     </div>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="custom-style-layout-four-col">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:75px;height:75px;">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 4); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 4, 'UTF-8'); ?></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -247,13 +247,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <div class="custom-style-layout-one-col-one-row-<?php echo $className ?>">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-col-one-row-<?php echo $className; ?>-text-image uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                     </div>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="custom-style-layout-one-col-one-row-<?php echo $className; ?>">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-col-one-row-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -271,13 +271,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <div class="custom-style-layout-one-col-two-row-<?php echo $className; ?>">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-col-two-row-<?php echo $className; ?>-text-image uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                     </div>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="custom-style-layout-one-col-two-row-<?php echo $className; ?>">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-col-two-row-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -295,13 +295,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <div class="custom-style-layout-one-col-three-row-<?php echo $className; ?>">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-col-three-row-<?php echo $className; ?>-text-image uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                     </div>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="custom-style-layout-one-col-three-row-<?php echo $className; ?>">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-col-three-row-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -319,13 +319,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <div class="custom-style-layout-one-row-one-col-<?php echo $className; ?>">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-row-one-col-<?php echo $className; ?>-text-image uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                     </div>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="custom-style-layout-one-row-one-col-<?php echo $className; ?>">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-row-one-col-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
                     </div> 
                 <?php endif; ?> 
@@ -343,13 +343,13 @@
                     <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                         <div class="custom-style-layout-two-row-one-col-<?php echo $className; ?>">
                             <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-two-row-one-col-<?php echo $className; ?>-text-image uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
-                            <div><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                            <div><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
                     <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                         <div class="custom-style-layout-two-row-one-col-<?php echo $className; ?>">
                             <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-two-row-one-col-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                             <div class="custom-covering-title">
-                                <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                                <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -367,13 +367,13 @@
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_IMAGE): ?>
                     <div class="custom-style-layout-three-row-one-col-<?php echo $className; ?>">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-three-row-one-col-<?php echo $className; ?>-text-image uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
-                        <div><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                        <div><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                     </div>
                 <?php elseif ($comp['iconStyle'] == AppbymeUIDiyModel::COMPONENT_ICON_STYLE_TEXT_OVERLAP_DOWN): ?>
                     <div class="custom-style-layout-three-row-one-col-<?php echo $className; ?>">
                         <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-three-row-one-col-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                         <div class="custom-covering-title">
-                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count); ?></div>
+                            <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -394,7 +394,7 @@
                         <div class="item <?php echo ($key == 0) ? 'active' : '' ?>">
                             <img src="<?php echo $comp['icon']; ?>" alt="" style="width:337px;height:150px;" class="uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                             <div class="carousel-caption">
-                                <p><?php echo WebUtils::subString($comp['desc'], 0, 10); ?></p> 
+                                <p><?php echo WebUtils::subString($comp['desc'], 0, 10, 'UTF-8'); ?></p> 
                             </div>
                         </div>
                         <?php endforeach; ?>
@@ -411,7 +411,7 @@
 
         <?php if ($customStyle['extParams']['styleHeader']['isShow'] == 1 && $customStyle['extParams']['styleHeader']['position'] == 0): ?>
         <div class="custom-style-title">
-            <p class="pull-left"><?php echo WebUtils::subString($customStyle['extParams']['styleHeader']['title'], 0, 15); ?></p>
+            <p class="pull-left"><?php echo WebUtils::subString($customStyle['extParams']['styleHeader']['title'], 0, 15, 'UTF-8'); ?></p>
             <?php if ($customStyle['extParams']['styleHeader']['isShowMore'] == 1): ?>
                 <p class="pull-right moreComponent uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($customStyle['extParams']['styleHeader']['moreComponent'], 'utf-8')); ?>">更多</p>
             <?php endif; ?>

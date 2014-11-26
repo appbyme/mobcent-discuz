@@ -32,7 +32,7 @@ class IndexController extends AdminController
 
             $errorMsg = '';
             if ($result['errcode']) {
-                $errorMsg = $result['message'];
+                $errorMsg = WebUtils::u($result['message']);
             } else {
                 if (UserUtils::isInAppbymeAdminGroup()) {
                     $this->redirect(Yii::app()->createAbsoluteUrl('admin/index'));

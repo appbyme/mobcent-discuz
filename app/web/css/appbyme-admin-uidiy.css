@@ -240,7 +240,7 @@ label {
 
 /* 控制中间的高度 */
 .add-style .custom-style-item-container {
-    width: 326px;
+    width: 330px;
     /*height: 400px;*/
     max-height: 470px;
     overflow-y:auto;

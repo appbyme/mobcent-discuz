@@ -1235,7 +1235,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <% } %>
         </div>
     <% } %>
-    <div class="text-left">
+    <div class="text-left" style="margin-bottom:5px;">
         <button class="edit-style-component-item-btn btn btn-primary btn-xs">编辑</button>
         <button class="remove-style-component-item-btn btn btn-primary btn-xs">删除</button>
     </div>
