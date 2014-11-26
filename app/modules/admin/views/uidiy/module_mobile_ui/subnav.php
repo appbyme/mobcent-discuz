@@ -20,7 +20,7 @@ if(!empty($subnavInfo)){
 <ul class="nav nav-justified" style="background-color: #545354;height:37px;">
 	<?php foreach($subnavInfo as $k =>$v) { ?>
 	<li onclick="getProtalInfo(<?php echo $k; ?>);" >
-		<a  data-toggle="tab" ><?php echo mb_substr($v['title'],0,12); ?></a>
+		<a  data-toggle="tab" ><?php echo WebUtils::subString($v['title'],0,4,'utf-8'); ?></a>
 	</li>
 	<?php } ?>
 </ul>

@@ -20,7 +20,7 @@
         <div class="uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>"
             style="height:95px;padding-left: 10px;border-bottom: 1px solid #C9C9C9;margin-top:8px;">
             <h5 class="list-group-item-heading text-left">
-                <?php echo WebUtils::subString($v['title'],0,22); ?>
+                <?php echo WebUtils::subString($v['title'],0,22,'utf-8'); ?>
             </h5>
             <div>
                 <?php if($v['pic_path']) { ?>

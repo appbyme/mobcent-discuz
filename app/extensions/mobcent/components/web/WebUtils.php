@@ -152,8 +152,9 @@ class WebUtils {
         return CJSON::decode($str, $useArray);
     }
 
-    public static function subString($str, $start, $length=100) {
-        return mb_substr($str, $start, $length, Yii::app()->charset);
+    public static function subString($str, $start, $length=100, $charset='') {
+        $charset != '' or $charset = Yii::app()->charset;
+        return mb_substr($str, $start, $length, $charset);
     }
 
     public static function replaceLineMark($str) {

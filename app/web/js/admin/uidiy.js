@@ -337,6 +337,7 @@ $(function () {
                 isShow_typeModuleRef: 1,
                 isShow_typePostlist: 1,
                 isShow_typeMessagelist: 1,
+                isShow_typeUserinfo: 0,
                 iconRatio: '适当',
                 iconRatioCircle: '80*80',
             };
@@ -447,6 +448,7 @@ $(function () {
             isShow_title: 0,
             isShow_typeModuleRef: 0,
             isShow_typePostlist: 0,
+            isShow_typeUserinfo: 1,
         }});
     };
 
