@@ -32,19 +32,18 @@ if(!empty($subnavInfo)){
 <?php } ?>
 <script>
 function getProtalInfo(i){
-        var moduleInfo =
-        <?php echo WebUtils::jsonEncode($module,'utf-8'); ?>;
+    var moduleInfo = <?php echo WebUtils::jsonEncode($module,'utf-8'); ?>;
         moduleInfo['select'] = i;
         $.ajax({
-                type:"POST",
-                url:Appbyme.getAjaxApiUrl('admin/uidiy/modulemobileui'),
-                data:{
-                    module: JSON.stringify(moduleInfo),
-                },
-                dataTyle:"html",
-                success:function(msg) {
-                    $('.module-mobile-ui-view').html(msg);
-                }
-            });
-        }
+            type:"POST",
+            url:Appbyme.getAjaxApiUrl('admin/uidiy/modulemobileui'),
+            data:{
+                module: JSON.stringify(moduleInfo),
+            },
+            dataTyle:"html",
+            success:function(msg) {
+                $('.module-mobile-ui-view').html(msg);
+            }
+        });
+    }
 </script>

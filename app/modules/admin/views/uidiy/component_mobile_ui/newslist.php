@@ -17,7 +17,7 @@
         <!-- 幻灯片，id使用的为bootstrap默认的id -->
         <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
             <!-- 幻灯片上面的圆点 -->
-            <ol class="carousel-indicators">
+            <ol class="carousel-indicators" style="top:95px;">
                 <?php foreach($info['piclist'] as $k => $v){ ?>
                 <li data-target="#carousel-example-generic" data-slide-to="<?php echo $k; ?>" class="<?php echo ($k==0)? 'active' : '' ;?>"></li>
                <?php } ?>

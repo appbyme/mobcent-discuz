@@ -7,5 +7,5 @@
  */
 ?>
 <div class="content-list-ui">
-    <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp/fastimage.png" style="width:336px;height: 550px;">
+    <img src="<?php echo $this->rootUrl; ?>/images/admin/tmp/fastimage.png" style="width:336px;height: 498px;">
 </div>
