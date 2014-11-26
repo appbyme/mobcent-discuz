@@ -39,6 +39,8 @@
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 15, 'UTF-8'); ?></div>
                         </div>
                     </div>
+                <?php else: ?>
+                    <img src="<?php echo $comp['icon'] ?>" style="width:320px;height:320px;" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                 <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -57,7 +59,9 @@
                         <div class="textOverlapDown-title">
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 15, 'UTF-8'); ?></div>
                         </div>
-                    </div>                    
+                    </div>
+                <?php else: ?>                    
+                    <img src="<?php echo $comp['icon'] ?>" style="width:320px;height:160px;" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                 <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -88,6 +92,10 @@
                         <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 8, 'UTF-8'); ?></div>
                     </div>
                 </div>
+                <?php else: ?>
+                <div class="layouttwocol-hight-img">
+                    <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:155px;height:155px;">
+                </div>
                 <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -109,7 +117,11 @@
                         <div class="custom-covering-title">
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 8, 'UTF-8'); ?></div>
                         </div>
-                    </div>      
+                    </div>
+                <?php else: ?>     
+                    <div class="custom-style-layout-two-col-mid">
+                        <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:155px;height:130px;">
+                    </div>
                 <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -132,7 +144,11 @@
                         <div class="custom-covering-title">
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 8, 'UTF-8'); ?></div>
                         </div>
-                    </div>   
+                    </div>
+                <?php else: ?>   
+                    <div class="custom-style-layout-two-col-low">
+                        <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:155px;height:70px;">
+                    </div>
                 <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -186,6 +202,10 @@
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 5, 'UTF-8'); ?></div>
                         </div>
                     </div>
+                <?php else: ?>
+                    <div class="custom-style-layout-three-col-mid">
+                        <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:100px;height:100px;">
+                    </div>
                 <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -209,6 +229,10 @@
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 5, 'UTF-8'); ?></div>
                         </div>
                     </div>
+                <?php else: ?>
+                    <div class="custom-style-layout-three-col-low">
+                        <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:100px;height:70px;">
+                    </div>
                 <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -231,6 +255,10 @@
                         <div class="custom-covering-title">
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, 4, 'UTF-8'); ?></div>
                         </div>
+                    </div>
+                <?php else: ?>
+                    <div class="custom-style-layout-four-col">
+                        <img src="<?php echo $comp['icon'] ?>" class="img-rounded uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>" style="width:75px;height:75px;">
                     </div>
                 <?php endif; ?>
                 <?php endforeach; ?>
@@ -256,6 +284,10 @@
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
                     </div>
+                <?php else: ?>
+                    <div class="custom-style-layout-one-col-one-row-<?php echo $className; ?>">
+                        <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-col-one-row-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
+                    </div>
                 <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -279,6 +311,10 @@
                         <div class="custom-covering-title">
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
+                    </div>
+                <?php else: ?>
+                    <div class="custom-style-layout-one-col-two-row-<?php echo $className; ?>">
+                        <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-col-two-row-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                     </div>
                 <?php endif; ?>
                 <?php endforeach; ?>
@@ -304,6 +340,10 @@
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
                     </div>
+                <?php else: ?>
+                    <div class="custom-style-layout-one-col-three-row-<?php echo $className; ?>">
+                        <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-col-three-row-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
+                    </div>
                 <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -327,7 +367,11 @@
                         <div class="custom-covering-title">
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
-                    </div> 
+                    </div>
+                <?php else: ?> 
+                    <div class="custom-style-layout-one-row-one-col-<?php echo $className; ?>">
+                        <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-one-row-one-col-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
+                    </div>
                 <?php endif; ?> 
                 <?php endforeach; ?>
             </div>
@@ -352,6 +396,10 @@
                                 <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                             </div>
                         </div>
+                    <?php else: ?>
+                        <div class="custom-style-layout-two-row-one-col-<?php echo $className; ?>">
+                            <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-two-row-one-col-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
+                        </div>
                     <?php endif; ?>
                 <?php endforeach; ?>                    
             </div>
@@ -375,6 +423,10 @@
                         <div class="custom-covering-title">
                             <div class="textoverlapdown-color"><?php echo WebUtils::subString($comp['desc'], 0, $count, 'UTF-8'); ?></div>
                         </div>
+                    </div>
+                <?php else: ?>
+                    <div class="custom-style-layout-three-row-one-col-<?php echo $className; ?>">
+                        <img src="<?php echo $comp['icon'] ?>" class="img-rounded layout-three-row-one-col-<?php echo $className; ?> uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($comp, 'utf-8')); ?>">
                     </div>
                 <?php endif; ?>
                 <?php endforeach; ?>
