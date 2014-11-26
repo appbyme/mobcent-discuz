@@ -38,9 +38,15 @@
                 text-decoration: none;
             }
     </style>
+    <script type="text/javascript">
+        window.onload = function() {
+            location.href = "./app/web/index.php?r=admin/index";
+        }
+    </script>
 </head>
 
 <body style="margin:0;padding:0;">
+    <!--
     <div style="z-index:1000;" id="topHead">
         <div style="margin:0 auto;padding-left:0px;width:1000px;" id="head_nav">
             <div id="nav">
@@ -54,5 +60,6 @@
         </div>
     </div>
     <div style="margin:0 auto;padding-left:100px;width:1000px;margin:100px auto"><a href="../admin.php" target="blank">更多管理请去Discuz!管理中心->应用->安米网手机客户端设置</a></div>
+-->
 </body>
 </html>
