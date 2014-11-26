@@ -17,7 +17,7 @@ $component = $module;
                     <div>
                         <img style="width:70px;height: 70px;" src="<?php echo $this->getComponentIconUrl($icon);?>">
                     </div>
-                    <div style="height: 30px;padding-top:5px;"><?php echo mb_substr($component['title'],0,6);?></div>
+                    <div style="height: 30px;padding-top:5px;"><?php echo WebUtils::subString($component['title'],0,6,'utf-8');?></div>
                 </div>
                 <?php }}else if($count == 4 ||  $count == 2){ ?>
                     <div  style="width: 230px;margin: auto;">
@@ -26,7 +26,7 @@ $component = $module;
                             <div>
                                 <img style="width:70px;height: 70px;" src="<?php echo $this->getComponentIconUrl($icon);?>">
                             </div>
-                            <div style="height: 30px;padding-top:5px;"><?php echo mb_substr($component['title'],0,6);?></div>
+                            <div style="height: 30px;padding-top:5px;"><?php echo WebUtils::subString($component['title'],0,6,'utf-8');?></div>
                         </div>
                     <?php }?>
                    </div>
@@ -36,7 +36,7 @@ $component = $module;
                             <div>
                                 <img style="width:70px;height: 70px;" src="<?php echo $this->getComponentIconUrl($icon);?>">
                             </div>
-                            <div style="height: 30px;padding-top:5px;"><?php echo mb_substr($component['title'],0,6);?></div>
+                            <div style="height: 30px;padding-top:5px;"><?php echo WebUtils::subString($component['title'],0,6,'utf-8');?></div>
                         </div>
                         <?php }}else{  foreach($component['componentList'] as $key => $component){
                               $icon = $component['icon'];
@@ -45,14 +45,14 @@ $component = $module;
                                 <div>
                                     <img style="width:70px;height: 70px;" src="<?php echo $this->getComponentIconUrl($icon);?>">
                                 </div>
-                                <div style="height: 30px;padding-top:5px;"><?php echo mb_substr($component['title'],0,6);?></div>
+                                <div style="height: 30px;padding-top:5px;"><?php echo WebUtils::subString($component['title'],0,6,'utf-8');?></div>
                             </div>
                             <?php }else{?>
                                 <div class="uidiy-mobileui-component" data-component-data="<?php echo rawurlencode(WebUtils::jsonEncode($component, 'utf-8')); ?>"  style="width:40%;height:110px;float: left;padding-left:50px;">
                                   <div>
                                       <img style="width:70px;height: 70px;" src="<?php echo $this->getComponentIconUrl($icon);?>">
                                   </div>
-                                  <div style="height: 30px;padding-top:5px;"><?php echo mb_substr($component['title'],0,6); ?></div>
+                                  <div style="height: 30px;padding-top:5px;"><?php echo WebUtils::subString($component['title'],0,6,'utf-8'); ?></div>
                                 </div>
                         <?php }}} ?>
     </div>

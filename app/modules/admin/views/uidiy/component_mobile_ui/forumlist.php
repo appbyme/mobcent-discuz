@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="col-xs-6 board-content">
-                            <div><?php echo WebUtils::subString($vv['board_name'],0,4); ?></div>
+                            <div><?php echo WebUtils::subString($vv['board_name'],0,4,'utf-8'); ?></div>
                             <div><?php echo date("m-d", $vv['last_posts_date'] ? str_replace('000','',$vv['last_posts_date']) : time()); ?></div>
                         </div>
                         <div class="col-xs-3 post-num">
@@ -37,7 +37,7 @@
                         </div>
                     <?php } else { ?> 
                         <div class="col-xs-8 board-content">
-                            <div><?php echo WebUtils::subString($vv['board_name'],0,4); ?></div>
+                            <div><?php echo WebUtils::subString($vv['board_name'],0,4,'utf-8'); ?></div>
                             <div><?php echo date("m-d", $vv['last_posts_date'] ? str_replace('000','',$vv['last_posts_date']) : time()); ?></div>
                         </div>
                         <div class="col-xs-4 post-num">
@@ -58,7 +58,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-10 one-div">
-                                <p><?php echo WebUtils::subString($vv['board_name'],0,7);?></p>
+                                <p><?php echo WebUtils::subString($vv['board_name'],0,7,'utf-8');?></p>
                                 <p><?php echo '最近更新：'.date("m-d", $vv['last_posts_date'] ? str_replace('000','',$vv['last_posts_date']) : time()); ?></p>
                             </div>
                             <?php } else { ?>
