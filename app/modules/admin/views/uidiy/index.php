@@ -25,6 +25,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-switch-3.2.1.min.css">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/appbyme-admin-uidiy.css">
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/appbyme-admin-uidiy/component-mobile.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $this->rootUrl; ?>/css/appbyme-admin-uidiy/module-custom.css">
     <style type="text/css">
         .mobleShow {
             width: 380px;
@@ -369,31 +370,40 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         </div>
         <form class="module-edit-form form-horizontal">
         <div class="panel-body">
-                <div class="form-group">
-                    <label for="" class="col-sm-2 control-label">模块名称：</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control sm" name="moduleTitle" value="<%- title %>" placeholder="">
-                        <p class="help-block">请输入1-4个字母、数字或汉字作为名称</p>
-                    </div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">模块名称：</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control sm" name="moduleTitle" value="<%- title %>" placeholder="">
+                    <p class="help-block">请输入1-4个字母、数字或汉字作为名称</p>
                 </div>
+            </div>
 
-                <% var isModuleTypeSelect = id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER; %>
-                <div class="<%= !isModuleTypeSelect ? 'hidden' : '' %> form-group">
-                    <label class="col-sm-2 control-label">模块样式: </label>
-                    <div class="col-sm-10">
-                    <select id="moduleType" name="moduleType" class="form-control">
-                        <option value="<%= MODULE_TYPE_FASTPOST %>" <%= type == MODULE_TYPE_FASTPOST ? 'selected' : '' %> class="<%= isModuleTypeSelect ? 'hidden' : '' %>">快速发帖</option>
-                        <option value="<%= MODULE_TYPE_FULL %>" <%= type == MODULE_TYPE_FULL ? 'selected' : '' %>>单页面</option>
-                        <option value="<%= MODULE_TYPE_SUBNAV %>" <%= type == MODULE_TYPE_SUBNAV ? 'selected' : '' %>>二级导航</option>
-                        <option value="<%= MODULE_TYPE_NEWS %>" <%= type == MODULE_TYPE_NEWS ? 'selected' : '' %>>左图右文</option>
-                        <option value="<%= MODULE_TYPE_CUSTOM %>" <%= type == MODULE_TYPE_CUSTOM ? 'selected' : '' %>>自定义页面</option>
-                    </select>
-                    </div>
+            <% var isModuleTypeSelect = id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER; %>
+            <div class="<%= !isModuleTypeSelect ? 'hidden' : '' %> form-group">
+                <label class="col-sm-2 control-label">模块类型：</label>
+                <div class="col-sm-10">
+                <select id="moduleType" name="moduleType" class="form-control">
+                    <option value="<%= MODULE_TYPE_FASTPOST %>" <%= type == MODULE_TYPE_FASTPOST ? 'selected' : '' %> class="<%= isModuleTypeSelect ? 'hidden' : '' %>">快速发帖</option>
+                    <option value="<%= MODULE_TYPE_FULL %>" <%= type == MODULE_TYPE_FULL ? 'selected' : '' %>>单页面</option>
+                    <option value="<%= MODULE_TYPE_SUBNAV %>" <%= type == MODULE_TYPE_SUBNAV ? 'selected' : '' %>>二级导航</option>
+                    <option value="<%= MODULE_TYPE_NEWS %>" <%= type == MODULE_TYPE_NEWS ? 'selected' : '' %>>左图右文</option>
+                    <option value="<%= MODULE_TYPE_CUSTOM %>" <%= type == MODULE_TYPE_CUSTOM ? 'selected' : '' %>>自定义页面</option>
+                </select>
                 </div>
+            </div>
 
-                <div id="module-edit-detail-view">
+            <div class="form-group module-style-select-div">
+                <label for="" class="col-sm-2 control-label">模块样式：</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="moduleStyle">
+                        <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
+                        <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
+                    </select> 
                 </div>
+            </div>
 
+            <div id="module-edit-detail-view">
+            </div>
         </div>
         <div class="panel-footer text-right">
             <input type="submit" class="btn btn-primary" value="确定" >  
@@ -532,7 +542,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     <script type="text/template" id="component-template">
     <div class="quick-edit" id="component-view-<%= id %>">
 
-        <div class="form-group">
+        <div class="form-group <%= this.uiconfig.isShow_title ? '' : 'hidden' %>">
             <label for="" class="col-sm-2 control-label">导航名称：</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control input-sm" name="componentTitle[]" value="<%= title %>">
@@ -549,7 +559,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <div class="col-sm-10">
                 <input type="file" class="componentIconFile">
                 <input type="hidden" class="componentIcon" name="componentIcon[]" value="<%= icon %>">
-                <p class="help-block">请上传适当比例的JPG或PNG格式图片作为图标</p>
+                <p class="help-block">请上传<span class="componentIconRatio"><%= this.uiconfig.iconRatio %></span>比例的JPG或PNG格式图片作为图标</p>
             </div>
         </div>
         <div class="form-group <%= this.uiconfig.isShow_icon ? '' : 'hidden' %>">
@@ -562,7 +572,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <div class="form-group <%= this.uiconfig.isShow_iconStyle ? '' : 'hidden' %>">
             <label for="" class="col-sm-2 control-label">图标样式: </label>
             <div class="col-sm-10">
-                <select class="form-control" name="componentIconStyle[]">
+                <select class="form-control componentIconStyle" name="componentIconStyle[]">
                     <option value="<%= COMPONENT_ICON_STYLE_TEXT %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleText ? '' : 'hidden' %>">纯文字</option>
                     <option value="<%= COMPONENT_ICON_STYLE_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_IMAGE ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleImage ? '' : 'hidden' %>">单张图片</option>
                     <option value="<%= COMPONENT_ICON_STYLE_TEXT_IMAGE %>" <%= iconStyle == COMPONENT_ICON_STYLE_TEXT_IMAGE ? 'selected' : '' %> class="<%= this.uiconfig.isShow_iconStyleTextImage ? '' : 'hidden' %>">上图下文</option>
@@ -582,14 +592,14 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <option value="<%= COMPONENT_TYPE_NEWSLIST %>" <%= type == COMPONENT_TYPE_NEWSLIST ? 'selected' : '' %>>资讯列表</option>
                 <!-- <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>帖子列表</option> -->
                 <option value="<%= COMPONENT_TYPE_TOPICLIST_SIMPLE %>" <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? 'selected' : '' %>>简版帖子列表</option>
-                <option value="<%= COMPONENT_TYPE_POSTLIST %>" <%= type == COMPONENT_TYPE_POSTLIST ? 'selected' : '' %>>帖子详情</option>
-                <option value="<%= COMPONENT_TYPE_MESSAGELIST %>" <%= type == COMPONENT_TYPE_MESSAGELIST ? 'selected' : '' %>>消息列表</option>
+                <option value="<%= COMPONENT_TYPE_POSTLIST %>" <%= type == COMPONENT_TYPE_POSTLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typePostlist ? '' : 'hidden' %>">帖子详情</option>
+                <option value="<%= COMPONENT_TYPE_MESSAGELIST %>" <%= type == COMPONENT_TYPE_MESSAGELIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeMessagelist ? '' : 'hidden' %>">消息列表</option>
                 <option value="<%= COMPONENT_TYPE_SURROUDING_USERLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_USERLIST ? 'selected' : '' %>>周边用户</option>
                 <option value="<%= COMPONENT_TYPE_SURROUDING_POSTLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_POSTLIST ? 'selected' : '' %>>周边帖子</option>
                 <option value="<%= COMPONENT_TYPE_RECOMMEND_USERLIST %>" <%= type == COMPONENT_TYPE_RECOMMEND_USERLIST ? 'selected' : '' %>>推荐用户</option>
                 <option value="<%= COMPONENT_TYPE_SETTING %>" <%= type == COMPONENT_TYPE_SETTING ? 'selected' : '' %>>设置</option>
                 <option value="<%= COMPONENT_TYPE_ABOAT %>" <%= type == COMPONENT_TYPE_ABOAT ? 'selected' : '' %>>关于</option>
-                <option value="<%= COMPONENT_TYPE_MODULEREF %>" <%= type == COMPONENT_TYPE_MODULEREF ? 'selected' : '' %>>模块指向</option>
+                <option value="<%= COMPONENT_TYPE_MODULEREF %>" <%= type == COMPONENT_TYPE_MODULEREF ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeModuleRef ? '' : 'hidden' %>">模块指向</option>
                 <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
                 <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %> class="hidden">发表文字</option>
                 <option value="<%= COMPONENT_TYPE_FASTIMAGE %>" <%= type == COMPONENT_TYPE_FASTIMAGE ? 'selected' : '' %> class="hidden">发表图片</option>
@@ -1001,9 +1011,230 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     </script>
     <!-- 自定义模块 于手机ui的组件模板 -->
     <script type="text/template" id="custom-style-component-item-template">
-    <div class="style-area">
-        分割区示意
-    </div>
+    <% if (style == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH) { %>
+        <div class="layout-one-col-high">
+        <% for (var i = 0; i < componentList.length; i++) { %>
+        <% var component = componentList[i].attributes; %>
+            <div class="textOverlapDown">
+                <img src="<%= component['icon'] %>" style="width:320px;height:320px;" class="img-rounded">
+                <div class="textOverlapDown-title">
+                    <div class="textoverlapdown-color"><%= component['title'] %></div>
+                </div>
+            </div>
+        <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW) { %>
+        <div class="custom-style-layout-one-col-low">
+        <% for (var i = 0; i < componentList.length; i++) { %>
+        <% var component = componentList[i].attributes; %>
+            <div class="textOverlapDown">
+                <img src="<%= component['icon'] %>" style="width:320px;height:160px;" class="img-rounded">
+                <div class="textOverlapDown-title">
+                    <div class="textoverlapdown-color"><%= component['title'] %></div>
+                </div>
+            </div>
+        <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT) { %>
+        <div class="custom-layouttwocoltext">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="layouttwocoltext-title"><%= component['title'] %></div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH) { %>
+        <div class="layouttwocol-high">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="layouttwocol-hight-img">
+                    <img src="<%= component['icon'] %>" class="img-rounded" style="width:155px;height:155px;">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_TWO_COL_MID) { %>
+        <div class="layouttwocol-mid">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-two-col-mid">
+                    <img src="<%= component['icon'] %>" class="img-rounded" style="width:155px;height:130px;">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_TWO_COL_LOW) { %>
+        <div class="layout-two-col-low">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-two-col-low">
+                    <img src="<%= component['icon'] %>" class="img-rounded" style="width:155px;height:70px;">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT) { %>
+        <div class="custom-layoutThreeColText">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="layoutthreecoltext-title"><%= component['title'] %></div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH) { %>
+        <div class="layout-three-col-high">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-three-col-high">
+                    <img src="<%= component['icon'] %>" class="img-rounded" style="width:100px;height:130px;">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_THREE_COL_MID) { %>
+        <div class="layout-three-col-mid">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-three-col-mid">
+                    <img src="<%= component['icon'] %>" class="img-rounded" style="width:100px;height:100px;">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_THREE_COL_LOW) { %>
+        <div class="layout-three-col-low">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-three-col-low">
+                    <img src="<%= component['icon'] %>" class="img-rounded" style="width:100px;height:70px;">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_FOUR_COL) { %>
+        <div class="layout-four-col">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-four-col">
+                    <img src="<%= component['icon'] %>" class="img-rounded" style="width:75px;height:75px;">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW) { %>
+        <div class="layout-one-col-one-row">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-one-col-one-row-<%= i == 0 ? 'left' : 'right' %>">
+                    <img src="<%= component['icon'] %>" class="img-rounded layout-one-col-one-row-<%= i == 0 ? 'left' : 'right' %>">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW) { %>
+        <div class="layout-one-col-two-row">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-one-col-two-row-<%= i == 0 ? 'left' : 'right' %>">
+                    <img src="<%= component['icon'] %>" class="img-rounded layout-one-col-two-row-<%= i == 0 ? 'left' : 'right' %>">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW) { %>
+        <div class="layout-one-col-three-row">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-one-col-three-row-<%= i == 0 ? 'left' : 'right' %>">
+                    <img src="<%= component['icon'] %>" class="img-rounded layout-one-col-three-row-<%= i == 0 ? 'left' : 'right' %>">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL) { %>
+        <div class="layout-one-row-one-col">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-one-row-one-col-<%= i == 0 ? 'left' : 'right' %>">
+                    <img src="<%= component['icon'] %>" class="img-rounded layout-one-row-one-col-<%= i == 0 ? 'left' : 'right' %>">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL) { %>
+        <div class="layout-two-row-one-col">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-two-row-one-col-<%= i != 2 ? 'left' : 'right' %>">
+                    <img src="<%= component['icon'] %>" class="img-rounded layout-two-row-one-col-<%= i != 2 ? 'left' : 'right' %>">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL) { %>
+        <div class="layout-three-row-one-col">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+            <% var component = componentList[i].attributes; %>
+                <div class="custom-style-layout-three-row-one-col-<%= i != 3 ? 'left' : 'right' %>">
+                    <img src="<%= component['icon'] %>" class="img-rounded layout-three-row-one-col-<%= i != 3 ? 'left' : 'right' %>">
+                    <div class="custom-covering-title">
+                        <div class="textoverlapdown-color"><%= component['title'] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_SLIDER) { %>
+        <div class="carousel slide carousel-example-generic_one" data-ride="carousel" data-interval="3000" style="width:337px;height:150px;">
+            <!-- 圆点 -->
+            <ol class="carousel-indicators">
+            <% for (var i = 0; i < componentList.length; i++) { %>
+                <li data-target=".carousel-example-generic_one" data-slide-to="<%= i %>" class="<%= i == 0 ? 'active' : '' %>"></li>
+            <% } %>
+            </ol>
+            <!-- 图片区域，item是一个图片 -->
+            <div class="carousel-inner">
+                <% for (var i = 0; i < componentList.length; i++) { %>
+                <% var component = componentList[i].attributes; %>
+                <div class="item <%= i == 0 ? 'active' : '' %>">
+                    <img src="<%= component.icon %>" alt="" style="width:337px;height:150px;">
+                    <div class="carousel-caption">
+                        <p><%= component.title %></p> 
+                    </div>
+                </div>
+                <% } %>
+            </div>
+            <% if (componentList.length > 1) { %>
+            <a class="left carousel-control" href=".carousel-example-generic_one" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" href=".carousel-example-generic_one" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+            <% } %>
+        </div>
+    <% } %>
     <div class="text-left">
         <button class="edit-style-component-item-btn btn btn-primary btn-xs">编辑</button>
         <button class="remove-style-component-item-btn btn btn-primary btn-xs">删除</button>

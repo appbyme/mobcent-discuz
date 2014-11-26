@@ -401,7 +401,7 @@ class AppbymeUIDiyModel extends DiscuzAR
                 'moduleId' => 0,
                 'topicId' => 0,
                 'fastpostForumIds' => array(),
-                'isShowTopicTitle' => 0,
+                'isShowTopicTitle' => 1,
                 // 'isShowTopicSort' => 0,
                 'redirect' => '',
             ),

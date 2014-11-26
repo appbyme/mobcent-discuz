@@ -4,7 +4,7 @@
 }
 
 
-/*周边用户*/
+/*鍛ㄨ竟鐢ㄦ埛*/
 .header-title{
 	height: 30px;
 	background-color:#4BC27D;
@@ -44,7 +44,7 @@
 	width: 50px;
 	padding-right:10px;
 }
-/*帖子列表*/
+/*甯栧瓙鍒楄〃*/
 .middle-div{
 	height: 50px;
 }
@@ -59,7 +59,7 @@
 .span-left{
 	padding-left: 2px;
 }
-/*版块列表*/
+/*鐗堝潡鍒楄〃*/
 .board-name{
 	background-color: #E3F4FF;
 	height:20px;
@@ -97,7 +97,7 @@
 	height:30px;
 }
 
-/*门户列表*/
+/*闂ㄦ埛鍒楄〃*/
 .img-size{
 	width:336px;
 	height:116px;
@@ -107,7 +107,7 @@
 	margin-top:4px;
 }
 
-/*左图右文*/
+/*宸﹀浘鍙虫枃*/
 .div-img{
 	height:100px;
 	border-bottom:1px solid #C9C9C9;
