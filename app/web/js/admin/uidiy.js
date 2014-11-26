@@ -36,7 +36,7 @@ $(function () {
         return arr;
     };
 
-    var sortableHelper = function ($el, list) {
+    var sortableHelper = function ($el, list, update) {
         var sortStartIndex = 0;
         $el.sortable({
             revert: true,
@@ -46,6 +46,7 @@ $(function () {
             },
             update: function (event, ui) {
                 sortArray(list, sortStartIndex, ui.item.index());
+                typeof update == 'function' && update(list, sortStartIndex, ui.item.index());
             },
         });
         $el.disableSelection();
@@ -315,6 +316,7 @@ $(function () {
             'click .remove-component-btn': 'remove',
             'click .upload-component-icon-btn': 'uploadIcon',
             'change .componentIconFile': 'onChangeComponentIcon',
+            'change .componentIconStyle': 'onChangeComponentIconStyle',
         },
         initialize: function(options) {
             this.initUIConfig();
@@ -326,11 +328,17 @@ $(function () {
         },
         initUIConfig: function () {
             this.uiconfig = {
+                isShow_title: 1,
                 isShow_delete: 0,
                 isShow_icon: 0,
                 isShow_iconStyle: 0,
                 isShow_desc: 0,
                 isShow_typeSelect: 1,
+                isShow_typeModuleRef: 1,
+                isShow_typePostlist: 1,
+                isShow_typeMessagelist: 1,
+                iconRatio: '适当',
+                iconRatioCircle: '80*80',
             };
         },
         render: function () {
@@ -384,6 +392,10 @@ $(function () {
                 this.$el.find('.upload-component-icon-btn').addClass('btn-default').removeClass('btn-primary').html('点击上传图片');
             }
         },
+        onChangeComponentIconStyle: function (event) {
+            var ratio = event.currentTarget.value == COMPONENT_ICON_STYLE_CIRCLE ? this.uiconfig.iconRatioCircle : this.uiconfig.iconRatio;
+            this.$el.find('.componentIconRatio').text(ratio);
+        },
         uploadIcon: function () {
             var data = new FormData();
             data.append('file', this.$el.find(':file')[0].files[0]);
@@ -430,28 +442,46 @@ $(function () {
         },
     });
     
+    var createComponentViewFull = function(model) {
+        return new ComponentView({model: model, uiconfig: {
+            isShow_title: 0,
+            isShow_typeModuleRef: 0,
+            isShow_typePostlist: 0,
+        }});
+    };
+
+    var createComponentViewSubnav = function(model) {
+        return new ComponentView({model: model, uiconfig: {
+            isShow_typeModuleRef: 0,
+            isShow_typePostlist: 0,
+            isShow_typeMessagelist: 0,
+        }});
+    };
+
     var createComponentViewFastpost = function(model) {
         return new ComponentView({model: model, uiconfig: {
             isShow_typeSelect: 0,
             isShow_delete: 1,
         }});
-    }
+    };
 
     var createComponentViewDiscoverSlider = function(model) {
         return new ComponentView({model: model, uiconfig: {
             isShow_icon: 1,
             isShow_desc: 1,
             isShow_delete: 1,
+            iconRatio: '2:1',
         }});
-    }
+    };
 
     var createComponentViewSlider = function(model) {
         return new ComponentView({model: model, uiconfig: {
             isShow_icon: 1,
             isShow_desc: 1,
             isShow_delete: 1,
+            iconRatio: '2:1',
         }});
-    }
+    };
 
     // 单个组件编辑框
     var ComponentEditDlg = Backbone.View.extend({
@@ -594,19 +624,19 @@ $(function () {
                     moreComponent: componentList[0].attributes,
                 },
             };
-            
-            this.model.set({
+            var model = {
                 type: COMPONENT_TYPE_LAYOUT,
                 style: form.layoutStyle.value,
                 extParams: extParams,
-            });
+            }
 
-            var error = this.model.validate(this.model.attributes);
+            var error = this.model.validate(model);
             if (error != '') {
                 alert(error);
                 return;
             }
 
+            this.model.set(model);
             moduleEditMobileView.model.tempComponentList.add(this.model, {merge: true, remove: false, add: true});
             
             this.closeComponentDlg();
@@ -703,20 +733,20 @@ $(function () {
             event.preventDefault();
 
             var form = $('.style-component-edit-form')[0];
-            
-            this.model.set({
+            var model = {
                 type: COMPONENT_TYPE_LAYOUT,
                 style: form.layoutStyle.value,
-            });
+                title: (new Date()).getTime().toString(), // 为了让风格区组件重新render
+            }
+            model.componentList = submitComponentHelper(form);
 
-            this.model.attributes.componentList = submitComponentHelper(form);
-
-            var error = this.model.validate(this.model.attributes);
+            var error = this.model.validate(model);
             if (error != '') {
                 alert(error);
                 return;
             }
 
+            this.model.set(model);
             this.styleModel.tempComponentList.add(this.model, {merge: true, remove: false, add: true});
             this.styleModel.attributes.componentList = this.styleModel.tempComponentList.models;
             
@@ -731,6 +761,7 @@ $(function () {
         onChangeComponentStyle: function () {
             var layoutStyle = $('.layoutStyleSelect').val();
             var layoutModel = this.model.attributes.style == layoutStyle ? this.model : new ComponentModel({type: COMPONENT_TYPE_DEFAULT, style: layoutStyle});
+            var style = this.styleModel.attributes.style;
 
             var componentList = [];
             if (layoutStyle == this.model.attributes.style) {
@@ -802,35 +833,89 @@ $(function () {
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
                         uiconfig.isShow_iconStyleTextOverlapUpVideo = 1;
                         uiconfig.isShow_iconStyleTextOverlapDownVideo = 1;
+                        uiconfig.iconRatio = layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH ? '640*640' : '320*640';
                         break;
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH:
                         uiconfig.isShow_iconStyleImage = 1;
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
                         uiconfig.isShow_iconStyleTextOverlapUpVideo = 1;
                         uiconfig.isShow_iconStyleTextOverlapDownVideo = 1;
+
+                        var iconRatioMap = {};
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = '284*284';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = '284*284';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = '320*314';
+                        uiconfig.iconRatio = iconRatioMap[style];
                         break;
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_MID:
                         uiconfig.isShow_iconStyleImage = 1;
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
                         uiconfig.isShow_iconStyleTextOverlapDownVideo = 1;
+
+                        var iconRatioMap = {};
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = '284*240';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = '284*240';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = '320*272';
+                        uiconfig.iconRatio = iconRatioMap[style];
                         break;
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_LOW:
                         uiconfig.isShow_iconStyleImage = 1;
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
                         uiconfig.isShow_iconStyleTextOverlapDownVideo = 1;
                         uiconfig.isShow_iconStyleCircle = 1;
+
+                        var iconRatioMap = {};
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = '284*130';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = '284*130';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = '320*160';
+                        uiconfig.iconRatio = iconRatioMap[style];
                         break;
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_HIGH:
                         uiconfig.isShow_iconStyleImage = 1;
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
+
+                        var iconRatioMap = {};
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = '184*240';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = '184*240';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = '214*272';
+                        uiconfig.iconRatio = iconRatioMap[style];
                         break;
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_MID:
+                        uiconfig.isShow_iconStyleImage = 1;
+                        uiconfig.isShow_iconStyleTextOverlapDown = 1;
+                        uiconfig.isShow_iconStyleTextOverlapDownVideo = 1;
+                        uiconfig.isShow_iconStyleCircle = 1;
+
+                        var iconRatioMap = {};
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = '184*184';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = '200*200';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = '214*214';
+                        uiconfig.iconRatio = iconRatioMap[style];
+                        uiconfig.iconRatioCircle = '110*110';
+                        break;
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_LOW:
+                        uiconfig.isShow_iconStyleImage = 1;
+                        uiconfig.isShow_iconStyleTextOverlapDown = 1;
+                        uiconfig.isShow_iconStyleTextOverlapDownVideo = 1;
+                        uiconfig.isShow_iconStyleCircle = 1;
+
+                        var iconRatioMap = {};
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = '184*138';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = '184*138';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = '214*160';
+                        uiconfig.iconRatio = iconRatioMap[style];
+                        break;
                     case COMPONENT_STYLE_LAYOUT_FOUR_COL:
                         uiconfig.isShow_iconStyleImage = 1;
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
                         uiconfig.isShow_iconStyleTextOverlapDownVideo = 1;
                         uiconfig.isShow_iconStyleCircle = 1;
+
+                        var iconRatioMap = {};
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = '130*130';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = '130*130';
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = '160*160';
+                        uiconfig.iconRatio = iconRatioMap[style];
                         break;
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW:
                     case COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL:
@@ -838,6 +923,15 @@ $(function () {
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
                         uiconfig.isShow_iconStyleTextOverlapDownVideo = 1;
                         uiconfig.isShow_iconStyleCircle = 1;
+
+                        var isCol = (layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_ONE_ROW && i == 0) || 
+                            (layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_ROW_ONE_COL && i == 1);
+
+                        var iconRatioMap = {};
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = ['410*220', '220*220'];
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = ['410*220', '220*220'];
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = ['410*220', '220*220'];
+                        uiconfig.iconRatio = iconRatioMap[style][isCol ? 0 : 1];
                         break;
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW:
                     case COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL:
@@ -849,6 +943,12 @@ $(function () {
                             (layoutStyle == COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL && i == 2);
                         uiconfig.isShow_iconStyleTextOverlapUpVideo = isCol ? 1 : 0;
                         uiconfig.isShow_iconStyleCircle = isCol ? 0 : 1;
+
+                        var iconRatioMap = {};
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = ['284*340', '284*160'];
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = ['410*410', '200*200'];
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = ['320*372', '320*186'];
+                        uiconfig.iconRatio = iconRatioMap[style][isCol ? 0 : 1];
                         break;
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW:
                     case COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL:
@@ -856,12 +956,17 @@ $(function () {
                         uiconfig.isShow_iconStyleTextOverlapUp = 1;
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
 
-                        var isCol = (layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_TWO_ROW && i == 0) || 
-                            (layoutStyle == COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL && i == 3);
+                        var isCol = (layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_THREE_ROW && i == 0) || 
+                            (layoutStyle == COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL && i == 3);
                         uiconfig.isShow_iconStyleTextImage = isCol ? 1 : 0;
                         uiconfig.isShow_iconStyleTextOverlapDownVideo = isCol ? 1 : 0;
                         uiconfig.isShow_iconStyleTextOverlapUpVideo = isCol ? 1 : 0;
-            
+                        
+                        var iconRatioMap = {};
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = ['430*450', '144*150'];
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = ['430*450', '144*150'];
+                        iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = ['460*480', '180*160'];
+                        uiconfig.iconRatio = iconRatioMap[style][isCol ? 0 : 1];
                         uiconfig.isShow_iconStyleCircle = isCol ? 0 : 1;
                         break;
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT:
@@ -871,6 +976,7 @@ $(function () {
                     case COMPONENT_STYLE_LAYOUT_SLIDER:
                         uiconfig.isShow_delete = 1;
                         uiconfig.isShow_iconStyle = 0;
+                        uiconfig.iconRatio = '2:1';
                         break;
                     default:
                         uiconfig.isShow_iconStyle = 0;
@@ -909,6 +1015,12 @@ $(function () {
             moduleEditMobileView.model = moduleModel;
             moduleEditMobileView.render();
 
+            if (moduleType == MODULE_TYPE_SUBNAV) {
+                this.$el.find('.module-style-select-div').show();
+            } else {
+                this.$el.find('.module-style-select-div').hide();
+            }
+
             switch (moduleType) {
                 case MODULE_TYPE_FULL:
                 case MODULE_TYPE_SUBNAV:
@@ -923,7 +1035,7 @@ $(function () {
                     }
                     for (var i = 0; i < componentList.length; i++) {
                         var model = componentList[i];
-                        var view = new ComponentView({model: model});
+                        var view = moduleType == MODULE_TYPE_FULL ? createComponentViewFull(model) : createComponentViewSubnav(model);
                         $('.component-view-container').eq(i).html(view.render().el);
                     }
                     break;
@@ -968,6 +1080,7 @@ $(function () {
             this.model.set({
                 title: form.moduleTitle.value,
                 type: moduleType,
+                style: form.moduleStyle.value,
             });
 
             switch (moduleType) {
@@ -1286,20 +1399,10 @@ $(function () {
             this.model.tempComponentList.add(this.model.attributes.componentList, {merge: true, remove: false, add: true});
 
             // 风格区内组件拖动
-            var compSortStartIndex = 0;
             var _this = this;
-            this.$el.find('.custom-style-component-item-container').sortable({
-                revert: true,
-                opacity: 0.6,
-                start: function (event, ui) {
-                    compSortStartIndex = ui.item.index();
-                },
-                update: function (event, ui) {
-                    sortArray(_this.model.tempComponentList.models, compSortStartIndex, ui.item.index());
-                    _this.model.attributes.componentList = _this.model.tempComponentList.models;
-                },
+            sortableHelper(this.$el.find('.custom-style-component-item-container'), _this.model.tempComponentList.models, function () {
+                _this.model.attributes.componentList = _this.model.tempComponentList.models;
             });
-            this.$el.find('.custom-style-component-item-container').disableSelection();
 
             return this;
         },
@@ -1461,19 +1564,19 @@ $(function () {
             event.preventDefault();
 
             var form = $('.navitem-edit-form')[0];
-            
-            this.model.set({
+            var model = {
                 title: form.navItemTitle.value,
                 moduleId: parseInt(form.navItemModuleId.value),
                 icon: form.navItemIcon.value,
-            });
+            };
 
-            var error = this.model.validate(this.model.attributes);
+            var error = this.model.validate(model);
             if (error != '') {
                 alert(error);
                 return;
             }
 
+            this.model.set(model);
             navItems.add(this.model, {merge: true, remove: false, add: true});
 
             this.toggle();

@@ -1,5 +1,10 @@
 <?php
+// xss debug fixed
+$tempMethod = $_SERVER['REQUEST_METHOD'];
+$_SERVER['REQUEST_METHOD'] = 'POST';
+define('DISABLEXSSCHECK', 1);
 require_once ('../../source/class/class_core.php');
+$_SERVER['REQUEST_METHOD'] = $tempMethod;
 require_once ('../../source/discuz_version.php');
 define ( 'ROOT_PATH', dirname ( __FILE__ ) . '/../' );
 define ( 'CONFIG', '../config/config_global.php' );
