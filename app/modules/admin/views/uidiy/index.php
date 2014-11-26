@@ -593,14 +593,15 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <!-- <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>帖子列表</option> -->
                 <option value="<%= COMPONENT_TYPE_TOPICLIST_SIMPLE %>" <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? 'selected' : '' %>>简版帖子列表</option>
                 <option value="<%= COMPONENT_TYPE_POSTLIST %>" <%= type == COMPONENT_TYPE_POSTLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typePostlist ? '' : 'hidden' %>">帖子详情</option>
+                <option value="<%= COMPONENT_TYPE_MODULEREF %>" <%= type == COMPONENT_TYPE_MODULEREF ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeModuleRef ? '' : 'hidden' %>">模块指向</option>
+                <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
+                <option value="<%= COMPONENT_TYPE_USERINFO %>" <%= type == COMPONENT_TYPE_USERINFO ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeUserinfo ? '' : 'hidden' %>">用户中心</option>
                 <option value="<%= COMPONENT_TYPE_MESSAGELIST %>" <%= type == COMPONENT_TYPE_MESSAGELIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeMessagelist ? '' : 'hidden' %>">消息列表</option>
                 <option value="<%= COMPONENT_TYPE_SURROUDING_USERLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_USERLIST ? 'selected' : '' %>>周边用户</option>
                 <option value="<%= COMPONENT_TYPE_SURROUDING_POSTLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_POSTLIST ? 'selected' : '' %>>周边帖子</option>
                 <option value="<%= COMPONENT_TYPE_RECOMMEND_USERLIST %>" <%= type == COMPONENT_TYPE_RECOMMEND_USERLIST ? 'selected' : '' %>>推荐用户</option>
                 <option value="<%= COMPONENT_TYPE_SETTING %>" <%= type == COMPONENT_TYPE_SETTING ? 'selected' : '' %>>设置</option>
                 <option value="<%= COMPONENT_TYPE_ABOAT %>" <%= type == COMPONENT_TYPE_ABOAT ? 'selected' : '' %>>关于</option>
-                <option value="<%= COMPONENT_TYPE_MODULEREF %>" <%= type == COMPONENT_TYPE_MODULEREF ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeModuleRef ? '' : 'hidden' %>">模块指向</option>
-                <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
                 <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %> class="hidden">发表文字</option>
                 <option value="<%= COMPONENT_TYPE_FASTIMAGE %>" <%= type == COMPONENT_TYPE_FASTIMAGE ? 'selected' : '' %> class="hidden">发表图片</option>
                 <option value="<%= COMPONENT_TYPE_FASTCAMERA %>" <%= type == COMPONENT_TYPE_FASTCAMERA ? 'selected' : '' %> class="hidden">拍照发表</option>
