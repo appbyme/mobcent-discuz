@@ -589,7 +589,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <div class="col-sm-10">
             <select name="componentType[]" class="selectComponentType form-control" <%= this.uiconfig.isShow_typeSelect ? '' : 'disabled' %>>
                 <option value="<%= COMPONENT_TYPE_FORUMLIST %>" <%= type == COMPONENT_TYPE_FORUMLIST ? 'selected' : '' %>>版块列表</option>
-                <option value="<%= COMPONENT_TYPE_NEWSLIST %>" <%= type == COMPONENT_TYPE_NEWSLIST ? 'selected' : '' %>>资讯列表</option>
+                <option value="<%= COMPONENT_TYPE_NEWSLIST %>" <%= type == COMPONENT_TYPE_NEWSLIST ? 'selected' : '' %>>门户模块列表</option>
                 <!-- <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>帖子列表</option> -->
                 <option value="<%= COMPONENT_TYPE_TOPICLIST_SIMPLE %>" <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? 'selected' : '' %>>简版帖子列表</option>
                 <option value="<%= COMPONENT_TYPE_POSTLIST %>" <%= type == COMPONENT_TYPE_POSTLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typePostlist ? '' : 'hidden' %>">帖子详情</option>
@@ -632,7 +632,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_NEWSLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_NEWSLIST ? '' : 'hidden' %>">
             <div class="form-group">
-                <label for="" class="col-sm-2 control-label">选择门户：</label>
+                <label for="" class="col-sm-2 control-label">选择模块：</label>
                 <div class="col-sm-10">
                     <select class="form-control" name="newsModuleId[]">
                         <option value="0" <%= extParams.newsModuleId == 0 ? 'selected' : '' %> class="hidden">请选择模块</option>

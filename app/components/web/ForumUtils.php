@@ -963,8 +963,9 @@ class ForumUtils {
         list($ratelogs, $postlist, $postcache) = self::fetch_postrate_by_pid(array($pid), $postlist, $postcache, $_G['setting']['ratelogrecord']);
 
         if(empty($postlist)) {
-            // return array();
-            return null;
+            return array(
+                'padding' => '',
+            );
         }
 
         // 评分人数和评分栏目的控制
