@@ -57,7 +57,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 <div class="covering"></div>
 <div class="alert alert-darker text-center" style="display:none;background:#d9534f;color:white">
    <a href="#" class="close" data-dismiss="alert">&times;</a>
-   <strong>友情提示：</strong>为了保证数据传输的正确性，最好使用最新版本的谷歌浏览器来进行操作。
+   <strong>友情提示: </strong>为了保证数据传输的正确性，最好使用最新版本的谷歌浏览器来进行操作。
 </div>
 <?php global $_G; ?>
     <!-- Static navbar -->
@@ -286,7 +286,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <form class="form-horizontal navitem-edit-form">
         <div class="panel-body">
             <div class="form-group">
-                <label class="col-sm-4 control-label">导航名字：</label>
+                <label class="col-sm-4 control-label">导航名字: </label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control" name="navItemTitle" value="<%= title %>">
                     <p class="help-block">输入1-4个字母、数字或汉字</p>
@@ -300,7 +300,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <% } %>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label">导航图标：</label>
+                <label class="col-sm-4 control-label">导航图标: </label>
                 <div class="col-sm-4">
                     <button type="button" class="btn btn-primary select-nav-icon">选择图标</button>
                 </div>
@@ -371,7 +371,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <form class="module-edit-form form-horizontal">
         <div class="panel-body">
             <div class="form-group">
-                <label for="" class="col-sm-2 control-label">模块名称：</label>
+                <label for="" class="col-sm-2 control-label">模块名称: </label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control sm" name="moduleTitle" value="<%- title %>" placeholder="">
                     <p class="help-block">请输入1-4个字母、数字或汉字作为名称</p>
@@ -380,7 +380,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
             <% var isModuleTypeSelect = id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER; %>
             <div class="<%= !isModuleTypeSelect ? 'hidden' : '' %> form-group">
-                <label class="col-sm-2 control-label">模块类型：</label>
+                <label class="col-sm-2 control-label">模块类型: </label>
                 <div class="col-sm-10">
                 <select id="moduleType" name="moduleType" class="form-control">
                     <option value="<%= MODULE_TYPE_FASTPOST %>" <%= type == MODULE_TYPE_FASTPOST ? 'selected' : '' %> class="<%= isModuleTypeSelect ? 'hidden' : '' %>">快速发帖</option>
@@ -393,7 +393,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             </div>
 
             <div class="form-group module-style-select-div">
-                <label for="" class="col-sm-2 control-label">模块样式：</label>
+                <label for="" class="col-sm-2 control-label">模块样式: </label>
                 <div class="col-sm-10">
                     <select class="form-control" name="moduleStyle">
                         <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
@@ -472,7 +472,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
     <div class="edit">
         <div class="form-group">
-            <label for="" class="col-sm-2 control-label">编辑内容：</label>
+            <label for="" class="col-sm-2 control-label">编辑内容: </label>
         </div>
         <div class="fastpost-components-container">
         </div>
@@ -481,7 +481,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <div>
         <div class="form-group fastpost-item-select-div hidden">
             <div class="col-sm-offset-2 col-sm-7">
-                <label for="" class="control-label">选择发表项：</label>
+                <label for="" class="control-label">选择发表项: </label>
                 <select class="input-sm" name="fastpostItemSelect">
                     <option value="<%= COMPONENT_TYPE_FASTTEXT %>">发表文字</option>
                     <option value="<%= COMPONENT_TYPE_FASTIMAGE %>">发表图片</option>
@@ -543,19 +543,19 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     <div class="quick-edit" id="component-view-<%= id %>">
 
         <div class="form-group <%= this.uiconfig.isShow_title ? '' : 'hidden' %>">
-            <label for="" class="col-sm-2 control-label">导航名称：</label>
+            <label for="" class="col-sm-2 control-label">导航名称: </label>
             <div class="col-sm-10">
                 <input type="text" class="form-control input-sm" name="componentTitle[]" value="<%= title %>">
             </div>
         </div>
         <div class="form-group <%= this.uiconfig.isShow_desc ? '' : 'hidden' %>">
-            <label class="col-sm-2 control-label">内容简介：</label>
+            <label class="col-sm-2 control-label">内容简介: </label>
             <div class="col-sm-10">
                 <textarea class="form-control" name="componentDesc[]" rows="3" style="resize:none;margin-bottom:8px;"><%= desc %></textarea>
             </div>
         </div>
         <div class="form-group <%= this.uiconfig.isShow_icon ? '' : 'hidden' %>">
-            <label for="" class="col-sm-2 control-label">编辑图标：</label>
+            <label for="" class="col-sm-2 control-label">编辑图标: </label>
             <div class="col-sm-10">
                 <input type="file" class="componentIconFile">
                 <input type="hidden" class="componentIcon" name="componentIcon[]" value="<%= icon %>">
@@ -585,7 +585,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">链接地址：</label>
+            <label class="col-sm-2 control-label">链接地址: </label>
             <div class="col-sm-10">
             <select name="componentType[]" class="selectComponentType form-control" <%= this.uiconfig.isShow_typeSelect ? '' : 'disabled' %>>
                 <option value="<%= COMPONENT_TYPE_FORUMLIST %>" <%= type == COMPONENT_TYPE_FORUMLIST ? 'selected' : '' %>>版块列表</option>
@@ -593,6 +593,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <!-- <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>帖子列表</option> -->
                 <option value="<%= COMPONENT_TYPE_TOPICLIST_SIMPLE %>" <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? 'selected' : '' %>>简版帖子列表</option>
                 <option value="<%= COMPONENT_TYPE_POSTLIST %>" <%= type == COMPONENT_TYPE_POSTLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typePostlist ? '' : 'hidden' %>">帖子详情</option>
+                <option value="<%= COMPONENT_TYPE_NEWSVIEW %>" <%= type == COMPONENT_TYPE_NEWSVIEW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeNewsview ? '' : 'hidden' %>">文章详情</option>
                 <option value="<%= COMPONENT_TYPE_MODULEREF %>" <%= type == COMPONENT_TYPE_MODULEREF ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeModuleRef ? '' : 'hidden' %>">模块指向</option>
                 <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
                 <option value="<%= COMPONENT_TYPE_USERINFO %>" <%= type == COMPONENT_TYPE_USERINFO ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeUserinfo ? '' : 'hidden' %>">用户中心</option>
@@ -614,7 +615,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <div id="component-view-<% print(COMPONENT_TYPE_FORUMLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_FORUMLIST ? '' : 'hidden' %>">
         <!--
             <div class="form-group">
-                <label class="col-sm-2 control-label">设置样式：</label>
+                <label class="col-sm-2 control-label">设置样式: </label>
                 <div class="col-sm-10">
                     <div>
                     <label class="checkbox-inline">
@@ -632,7 +633,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_NEWSLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_NEWSLIST ? '' : 'hidden' %>">
             <div class="form-group">
-                <label for="" class="col-sm-2 control-label">选择模块：</label>
+                <label for="" class="col-sm-2 control-label">选择模块: </label>
                 <div class="col-sm-10">
                     <select class="form-control" name="newsModuleId[]">
                         <option value="0" <%= extParams.newsModuleId == 0 ? 'selected' : '' %> class="hidden">请选择模块</option>
@@ -678,6 +679,15 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 </div>
             </div>
         </div>
+        <!-- 文章详情模板 -->
+        <div id="component-view-<% print(COMPONENT_TYPE_NEWSVIEW+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_NEWSVIEW ? '' : 'hidden' %>">
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">文章id: </label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control input-sm" name="articleId[]" value="<%= extParams.articleId %>">
+                </div>
+            </div>
+        </div>
         <div id="component-view-<% print(COMPONENT_TYPE_MESSAGELIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_MESSAGELIST ? '' : 'hidden' %>">
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_SURROUDING_USERLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SURROUDING_USERLIST ? '' : 'hidden' %>">
@@ -693,7 +703,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <!-- wepapp 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_WEBAPP+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_WEBAPP ? '' : 'hidden' %>">
             <div class="form-group">
-                <label for="" class="col-sm-2 control-label">wap地址：</label>
+                <label for="" class="col-sm-2 control-label">wap地址: </label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control input-sm" name="componentRedirect[]" value="<%= extParams.redirect %>" placeholder="http://bbs.appbyme.com">
                 </div>
@@ -716,7 +726,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <!-- fasttext/fastimage/fastcamera/fastaudio 组件模板 -->
         <div id="component-view-fastpost-<%= id %>" class="component-view-item <%= type == COMPONENT_TYPE_FASTTEXT || type == COMPONENT_TYPE_FASTIMAGE || type == COMPONENT_TYPE_FASTCAMERA || type == COMPONENT_TYPE_FASTAUDIO ? '' : 'hidden' %>">
             <div class="form-group">
-                <label class="col-sm-2 control-label">发表板块：</label>
+                <label class="col-sm-2 control-label">发表板块: </label>
                 <div class="col-sm-10">
                     <select class="input-sm" name="fastpostForumIds[]" multiple>
                         <?php foreach ($forumList as $fid => $title) { ?>
@@ -742,7 +752,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <div id="component-view-<% print(COMPONENT_TYPE_SIGN+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SIGN ? '' : 'hidden' %>">
         </div>
         <div class="form-group component-style-select-div">
-            <label for="" class="col-sm-2 control-label">页面样式：</label>
+            <label for="" class="col-sm-2 control-label">页面样式: </label>
             <div class="col-sm-10">
                 <select class="form-control" name="componentStyle[]">
                     <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
@@ -888,7 +898,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label">是否显示标题：</label>
+                <label class="col-sm-4 control-label">是否显示标题: </label>
                 <div class="col-sm-8 text-left">
                     <label class="radio-inline">
                     <input class="isShowStyleHeaderRadio" type="radio" name="isShowStyleHeader" <%= extParams.styleHeader.isShow ? 'checked' : '' %> value="1">是</label>
@@ -900,7 +910,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <div class="style-header-container">
 
             <div class="form-group">
-                <label class="col-sm-4 control-label">风格区标题：</label>
+                <label class="col-sm-4 control-label">风格区标题: </label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control input-sm" name="styleHeaderTitle" value="<%= extParams.styleHeader.title %>">
                     <p class="help-block">输入1-9个汉字、数字或字母</p>
@@ -908,7 +918,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             </div>
 
             <div class="form-group">
-                <label class="col-sm-4 control-label">标题位置：</label>
+                <label class="col-sm-4 control-label">标题位置: </label>
                 <div class="col-sm-8" style="padding:0px 0px 0px 15px;">
                     <label class="radio-inline pull-left">
                     <input type="radio" name="styleHeaderPosition" <%= extParams.styleHeader.position ? 'checked' : '' %> value="1">风格区顶部</label>

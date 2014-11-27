@@ -50,6 +50,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_TYPE_TOPICLIST = 'topiclist';
     const COMPONENT_TYPE_TOPICLIST_SIMPLE = 'topiclistSimple';
     const COMPONENT_TYPE_POSTLIST = 'postlist';
+    const COMPONENT_TYPE_NEWSVIEW = 'newsview';
     const COMPONENT_TYPE_SIGN = 'sign';
     const COMPONENT_TYPE_MESSAGELIST = 'messagelist';
     const COMPONENT_TYPE_SETTING = 'setting';
@@ -400,6 +401,7 @@ class AppbymeUIDiyModel extends DiscuzAR
                 'forumId' => 0,
                 'moduleId' => 0,
                 'topicId' => 0,
+                'articleId' => 0,
                 'fastpostForumIds' => array(),
                 'isShowTopicTitle' => 1,
                 // 'isShowTopicSort' => 0,

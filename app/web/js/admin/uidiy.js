@@ -104,6 +104,7 @@ $(function () {
             forumId = componentType == COMPONENT_TYPE_TOPICLIST ? $(form['topicForumId[]']) : $(form['topicSimpleForumId[]']),
             moduleId = $(form['moduleId[]']),
             topicId = $(form['topicId[]']),
+            articleId = $(form['articleId[]']),
             fastpostForumIds = $(form['fastpostForumIds[]']),
             isShowTopicTitle = $(form['isShowTopicTitle[]']),
             // isShowTopicSort = $(form['isShowTopicSort[]']),
@@ -126,6 +127,7 @@ $(function () {
                 forumId: parseInt(forumId[i].value),
                 moduleId: parseInt(moduleId[i].value),
                 topicId: parseInt(topicId[i].value) || 0,
+                articleId: parseInt(articleId[i].value) || 0,
                 fastpostForumIds: tempForumIds,
                 isShowTopicTitle: isShowTopicTitle[i].checked ? 1 : 0,
                 // isShowTopicSort: isShowTopicSort[i].checked ? 1 : 0,
@@ -336,6 +338,7 @@ $(function () {
                 isShow_typeSelect: 1,
                 isShow_typeModuleRef: 1,
                 isShow_typePostlist: 1,
+                isShow_typeNewsview: 1,
                 isShow_typeMessagelist: 1,
                 isShow_typeUserinfo: 0,
                 iconRatio: '适当',
@@ -448,6 +451,7 @@ $(function () {
             isShow_title: 0,
             isShow_typeModuleRef: 0,
             isShow_typePostlist: 0,
+            isShow_typeNewsview: 0,
             isShow_typeUserinfo: 1,
         }});
     };
@@ -456,6 +460,7 @@ $(function () {
         return new ComponentView({model: model, uiconfig: {
             isShow_typeModuleRef: 0,
             isShow_typePostlist: 0,
+            isShow_typeNewsview: 0,
             isShow_typeMessagelist: 0,
         }});
     };
