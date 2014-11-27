@@ -67,7 +67,13 @@ class MobcentDiscuz {
 // xss debug fixed
 $tempMethod = $_SERVER['REQUEST_METHOD'];
 
-if ($_GET['apphash'] == MobcentDiscuz::getAppHashValue() || (isset($_GET['hacker_uid']) && MOBCENT_HACKER_UID) || ($_GET['sdkVersion'] < '2.3.0' && isset($_GET['forumKey']))) {
+!isset($_GET['apphash']) && $_GET['apphash'] = isset($_POST['apphash']) ? $_POST['apphash'] : '';
+!isset($_GET['sdkVersion']) && $_GET['sdkVersion'] = isset($_POST['sdkVersion']) ? $_POST['sdkVersion'] : '';
+if ($_GET['sdkVersion'] === '') unset($_GET['sdkVersion']);
+
+if ($_GET['apphash'] == MobcentDiscuz::getAppHashValue() || 
+    (isset($_GET['hacker_uid']) && MOBCENT_HACKER_UID) || 
+    (isset($_GET['sdkVersion']) && $_GET['sdkVersion'] < '2.3.0')) {
     $_SERVER['REQUEST_METHOD'] = 'POST'; // x2.5的绕过方法
     define('DISABLEXSSCHECK', 1);   // x3.0的绕过方法
 }

@@ -49,7 +49,7 @@ class Mobcent {
 
     public static function setErrors($open=1, $level=E_ALL) {
         @ini_set('display_errors', $open);
-        @error_reporting($level);
+        error_reporting($level);
     }
 
     public static function dumpSql() {

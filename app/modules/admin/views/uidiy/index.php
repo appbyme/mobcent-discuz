@@ -705,7 +705,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">wap地址: </label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control input-sm" name="componentRedirect[]" value="<%= extParams.redirect %>" placeholder="http://bbs.appbyme.com">
+                    <input type="text" class="form-control input-sm" name="componentRedirect[]" value="<%= extParams.redirect %>" placeholder="http://xxx">
                 </div>
             </div>
         </div>

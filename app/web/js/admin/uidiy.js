@@ -979,6 +979,7 @@ $(function () {
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT:
                     case COMPONENT_STYLE_LAYOUT_THREE_COL_TEXT:
                         uiconfig.isShow_iconStyleText = 1;
+                        model.attributes.iconStyle = COMPONENT_ICON_STYLE_TEXT;
                         break;
                     case COMPONENT_STYLE_LAYOUT_SLIDER:
                         uiconfig.isShow_delete = 1;
