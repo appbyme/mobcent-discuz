@@ -8,6 +8,8 @@
  * @author Xie Jianping <xiejianping@mobcent.com>
  */
 
+// connect.php
+
 if($_GET['mod'] == 'register') {
     $_GET['mod'] = 'connect';
     $_GET['action'] = 'register';
@@ -28,8 +30,8 @@ if(!in_array($mod, array('config', 'login', 'feed', 'check', 'user'))) {
 }
 
 global $_G;
-$QQLoginBaseUrl = Yii::app()->getBaseUrl(true) . '/index.php/user/qqlogin';
-$_G['connect']['callback_url'] = $QQLoginBaseUrl . '?mod=login&op=callback';
+$QQLoginBaseUrl = Yii::app()->getBaseUrl(true) . '/index.php?r=user/qqlogin';
+$_G['connect']['callback_url'] = $QQLoginBaseUrl . '&mod=login&op=callback';
 
 if(!$_G['setting']['connect']['allow']) {
     showmessage('qqconnect:qqconnect_closed');

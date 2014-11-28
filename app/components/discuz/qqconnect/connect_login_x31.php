@@ -6,6 +6,43 @@
  * @author Xie Jianping <xiejianping@mobcent.com>
  */
 
+// connect.php
+
+if($_GET['mod'] == 'register') {
+    $_GET['mod'] = 'connect';
+    $_GET['action'] = 'register';
+    require_once 'member.php';
+    exit;
+}
+
+define('APPTYPEID', 126);
+define('CURSCRIPT', 'connect');
+
+// require_once './source/class/class_core.php';
+require_once DISCUZ_ROOT.'/source/function/function_home.php';
+
+$discuz = C::app();
+
+$mod = $discuz->var['mod'];
+$discuz->init();
+
+if(!in_array($mod, array('config', 'login', 'feed', 'check', 'user'))) {
+    showmessage('undefined_action');
+}
+
+global $_G;
+$QQLoginBaseUrl = Yii::app()->getBaseUrl(true) . '/index.php?r=user/qqlogin';
+$_G['connect']['callback_url'] = $QQLoginBaseUrl . '&mod=login&op=callback';
+
+if(!$_G['setting']['connect']['allow']) {
+    showmessage('qqconnect:qqconnect_closed');
+}
+
+define('CURMODULE', $mod);
+runhooks();
+
+$connectService = Cloud::loadClass('Service_Connect');
+
 if(!defined('IN_DISCUZ')) {
     exit('Access Denied');
 }
