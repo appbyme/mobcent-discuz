@@ -260,7 +260,17 @@ class TestController extends MobcentController {
                 'title' => 'api/app: app/servernotify 服务器事件通知接口',
                 'route' => 'app/servernotify',
                 'params' => array('event' => 'updateApp', 'appKey' => ''),
-            ),            
+            ),      
+            array(
+                'title' => 'api/portal: 门户模块列表',
+                'route' => 'portal/modulelist',
+                'params' => array(),
+            ), 
+            array(
+                'title' => 'api/portal: 门户模块内容',
+                'route' => 'portal/newslist',
+                'params' => array('moduleId' => 1),
+            ),         
         );
         $this->renderPartial('debug', array('testApiList' => $testApiList));
     } 

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?php echo $this->rootUrl; ?>/css/bootstrap-theme-3.2.0.min.css">
     <style type="text/css">
         body {
-          padding-top: 40px;
+          /*padding-top: 40px;*/
           padding-bottom: 40px;
           /*background-color: #eee;*/
         }
@@ -51,18 +51,20 @@
             background-position:50% 50%;
         }  
 
-
-        .alert {
+        .login-failure {
             width: 25%;
             margin: 0 auto;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="alert alert-info text-center"><a href="#" class="close" data-dismiss="alert">&times;</a>
+   <strong>提示！</strong>请使用Discuz!的管理员账号，或者是安米插件配置允许的用户进行登录。
+</div>
+    <div class="container" style="margin-top:10px;">
         <div class="row">
             <div class="col-md-12" align="center">
-                <img src="<?php echo $this->rootUrl; ?>/images/logo.png" class="img-responsive img-circle" alt="Responsive image">
+            <a href="http://www.appbyme.com"><img src="<?php echo $this->rootUrl; ?>/images/logo.png" class="img-responsive img-circle"></a>
             </div>
         </div>
         <form class="form-signin" role="form" action="" method="post" autocomplete="off">
@@ -71,11 +73,10 @@
             <button class="btn btn-primary  btn-lg btn-block" type="submit">登 录</button>
         </form>
     </div>
-    
-    <div class="alert alert-info fade in hide ">
-        <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong>登录失败！</strong><p>您的网络连接有问题。</p>
-    </div>
+
+<div class="alert alert-info fade in hide login-failure"><a href="#" class="close" data-dismiss="alert">&times;</a>
+    <strong>登录失败！</strong><p>您的网络连接有问题。</p>
+</div>
 <script src="<?php echo $this->rootUrl; ?>/js/jquery-2.0.3.min.js"></script>
 <script src="<?php echo $this->rootUrl; ?>/js/bootstrap-3.2.0.min.js"></script>
 <script>
@@ -92,6 +93,8 @@
     function closeMsg() {
         $('.alert').alert('close')
     }
+    
+    setTimeout("$('.alert-info').fadeOut(18000);", 1000);
 </script>
 
 </body>

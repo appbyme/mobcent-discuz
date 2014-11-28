@@ -190,6 +190,14 @@ class NewsListAction extends MobcentAction {
 
     // 通过fids来取出数据
     private function _autoFidData($fids, $offset, $pageSize, $params) {
+        // [add]板块设置用户组权限后，针对当前用户进行过滤（在列表中是否显示）Author：HanPengyu，Data：14.11.28
+        require_once libfile('function/forumlist');
+        foreach ($fids as $fid) {
+            $forum = DzForumForum::getForumFieldByFid($fid);
+            forum($forum) && $tmpFids[] = $fid;
+        }
+        $fids = $tmpFids;
+        
         $lists = DzForumThread::getByFidData($fids, $offset, $pageSize, $params);
         foreach ($lists as $list) {
             $topicSummary = ForumUtils::getTopicSummary($list['tid'], 'portal');
@@ -204,7 +212,7 @@ class NewsListAction extends MobcentAction {
         $rows = array();
         foreach ($lists as $list) {
 
-            // // [add]考虑文章是通过帖子来发布的时候的评论数问题 Author：HanPengyu，Data：14.09.28
+            // [add]考虑文章是通过帖子来发布的时候的评论数问题 Author：HanPengyu，Data：14.09.28
             if ($list['idtype'] == 'tid') {
                 $topicInfo = ForumUtils::getTopicInfo($list['id']);
                 $list['commentnum'] = (int)$topicInfo['replies'];
