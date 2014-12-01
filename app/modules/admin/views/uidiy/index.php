@@ -235,12 +235,12 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     <script type="text/template" id="navitem-template">
     <div class="pull-left nav-column" style='background:url("<%= Appbyme.getNavIconUrl(icon) %>") no-repeat 50% 35%;background-size:70px 70px'>
         <div class="navitem-title" style="margin-top:3px;color:white"><%= title %></div>
-        <% if (moduleId != MODULE_ID_DISCOVER) { %>
         <div class="nav-edit hidden" style="margin-top:3px;">
             <a><span class="navitem-edit-btn">编辑</span></a>
+            <% if (moduleId != MODULE_ID_DISCOVER) { %>
             <a><span class="navitem-remove-btn">删除</span></a>
+            <% } %>
         </div>
-        <% } %>
     </div>
     </script>
     <!-- topbar 编辑模板 -->
@@ -311,16 +311,15 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 </div>
             </div>
             <input type="hidden" name="navItemIcon" id="navItemIcon" value="<%= icon %>">
-            <div class="form-group">
+            <div class="form-group <%= moduleId == MODULE_ID_DISCOVER ? 'hidden' : '' %>">
                 <label class="col-sm-4 control-label">链接地址: </label>
                 <div class="col-sm-4">
                     <select name="navItemModuleId" class="form-control">
                     <% for (var i = 0; i < Appbyme.uiModules.models.length; i++) {
                         var module = Appbyme.uiModules.models[i]; 
-                        if (module.id != MODULE_ID_DISCOVER) {
                     %>
-                        <option value="<%= module.id %>" <%= moduleId == module.id ? 'selected' : '' %>><%= module.attributes.title %></option>
-                    <% }} %>
+                        <option value="<%= module.id %>" <%= moduleId == module.id ? 'selected' : '' %> class="<%= module.id == MODULE_ID_DISCOVER ? 'hidden' : '' %>"><%= module.attributes.title %></option>
+                    <% } %>
                     </select>
                 </div>
             </div>

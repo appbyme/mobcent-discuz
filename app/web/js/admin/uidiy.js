@@ -256,10 +256,8 @@ $(function () {
                 var newImgUrl = imgUrl.replace(/_n.png/, '_h.png');
                 $(this).children('.nav-column').css('background-image', newImgUrl);
 
-                if ($(this).find('.navitem-title').html() != '发现') {
-                    $(this).find('.navitem-title').addClass('hidden');
-                    $(this).find('.nav-edit').removeClass('hidden');
-                }
+                $(this).find('.navitem-title').addClass('hidden');
+                $(this).find('.nav-edit').removeClass('hidden');
             }, function () {
                 var imgUrl = $(this).children('.nav-column').css('background-image'); 
                 var newImgUrl = imgUrl.replace(/_h.png/, '_n.png');
@@ -469,6 +467,7 @@ $(function () {
         return new ComponentView({model: model, uiconfig: {
             isShow_typeSelect: 0,
             isShow_delete: 1,
+            isShow_icon: 1,
         }});
     };
 
