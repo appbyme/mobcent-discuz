@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `cdb_appbyme_user_setting` (
 # 设置表
 CREATE TABLE IF NOT EXISTS `cdb_appbyme_config` (
   `ckey` varchar(255) NOT NULL DEFAULT '' COMMENT '设置键名',
-  `cvalue` text NOT NULL COMMENT '设置值',
+  `cvalue` mediumtext NOT NULL COMMENT '设置值',
   PRIMARY KEY (`ckey`)
 ) ENGINE=MyISAM;
 
@@ -84,6 +84,8 @@ CREATE TABLE IF NOT EXISTS `cdb_appbyme_portal_module_source` (
     KEY `mid` (`mid`, `type`, `idtype`, `imgtype`),
     KEY `displayorder` (`mid`, `type`, `displayorder`)
 ) ENGINE=MyISAM;
+
+ALTER TABLE `cdb_appbyme_config` CHANGE cvalue cvalue MEDIUMTEXT;
 
 EOF;
 
