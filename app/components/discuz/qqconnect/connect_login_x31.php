@@ -110,7 +110,8 @@ if($op == 'init') {
 
     if(!isset($params['receive'])) {
         $utilService = Cloud::loadClass('Service_Util');
-        echo '<script type="text/javascript">setTimeout("window.location.href=\'connect.php?receive=yes&'.str_replace("'", "\'", $utilService->httpBuildQuery($_GET, '', '&')).'\'", 1)</script>';
+        //echo '<script type="text/javascript">setTimeout("window.location.href=\'connect.php?receive=yes&'.str_replace("'", "\'", $utilService->httpBuildQuery($_GET, '', '&')).'\'", 1)</script>';
+        echo '<script type="text/javascript">setTimeout("window.location.href=\'' . $QQLoginBaseUrl . '&receive=yes&'.str_replace("'", "\'", $utilService->httpBuildQuery($_GET, '', '&')).'\'", 1)</script>';
         exit;
     }
 
@@ -145,6 +146,9 @@ if($op == 'init') {
 
         $conuintoken = $response['access_token'];
         $conopenid = strtoupper($response['openid']);
+        /*把openid与oauth_token信息拼接到地址url里返给客户端做截取用*/
+        echo '<script type="text/javascript">setTimeout("window.location.href=\'' . $QQLoginBaseUrl . '&openid='. $conopenid .'&oauth_token='. $conuintoken . '&receive=yes&mod=login&op=callback&code=&state' .'\'", 1)</script>';
+        exit;
         if(!$conuintoken || !$conopenid) {
             showmessage('qqconnect:connect_get_access_token_failed', $referer);
         }
