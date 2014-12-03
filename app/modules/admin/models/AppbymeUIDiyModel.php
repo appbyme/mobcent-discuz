@@ -56,12 +56,11 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_TYPE_SETTING = 'setting';
     const COMPONENT_TYPE_ABOAT = 'aboat';
     const COMPONENT_TYPE_USERINFO = 'userinfo';
+    const COMPONENT_TYPE_USERLIST = 'userlist';
     const COMPONENT_TYPE_MODULEREF = 'moduleRef';
     const COMPONENT_TYPE_WEBAPP = 'webapp';
     const COMPONENT_TYPE_LAYOUT = 'layout';
     const COMPONENT_TYPE_SURROUDING_POSTLIST = 'surroudingPostlist';
-    const COMPONENT_TYPE_SURROUDING_USERLIST = 'surroudingUserlist';
-    const COMPONENT_TYPE_RECOMMEND_USERLIST = 'recommendUserlist';
 
     const COMPONENT_ICON_STYLE_TEXT = 'text';
     const COMPONENT_ICON_STYLE_IMAGE = 'image';
@@ -120,6 +119,17 @@ class AppbymeUIDiyModel extends DiscuzAR
 
     const COMPONENT_ICON_FASTPOST = 'mc_forum_ico';
     const COMPONENT_ICON_DISCOVER_DEFAULT = 'mc_forum_squre_icon';
+
+    const USERLIST_FILTER_ALL = 'all';
+    const USERLIST_FILTER_FRIEND = 'friend';
+    const USERLIST_FILTER_FOLLOW = 'follow';
+    const USERLIST_FILTER_FOLLOWED = 'followed';
+    const USERLIST_FILTER_RECOMMAND = 'recommand';
+    const USERLIST_ORDERBY_DATELINE = 'dateline';
+    const USERLIST_ORDERBY_REGISTER = 'register';
+    const USERLIST_ORDERBY_LOGIN = 'login';
+    const USERLIST_ORDERBY_FOLLOWED = 'followed';
+    const USERLIST_ORDERBY_DISTANCE = 'distance';
 
     public static function initNavigation()
     {
@@ -405,6 +415,9 @@ class AppbymeUIDiyModel extends DiscuzAR
                 'fastpostForumIds' => array(),
                 'isShowTopicTitle' => 1,
                 // 'isShowTopicSort' => 0,
+                'isShowMessagelist' => 1,
+                'filter' => '',
+                'orderby' => '',
                 'redirect' => '',
             ),
         );
@@ -430,8 +443,12 @@ class AppbymeUIDiyModel extends DiscuzAR
                         )),
                         array_merge(self::initComponent(), array(
                             'title' => '周边用户',
-                            'type' => self::COMPONENT_TYPE_SURROUDING_USERLIST,
+                            'type' => self::COMPONENT_TYPE_USERLIST,
                             'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '5',
+                            'extParams' => array(
+                                'filter' => self::USERLIST_FILTER_ALL,
+                                'orderby' => self::USERLIST_ORDERBY_DISTANCE,
+                            ),
                         )),
                         array_merge(self::initComponent(), array(
                             'title' => '周边帖子',
@@ -440,8 +457,12 @@ class AppbymeUIDiyModel extends DiscuzAR
                         )),
                         array_merge(self::initComponent(), array(
                             'title' => '推荐用户',
-                            'type' => self::COMPONENT_TYPE_RECOMMEND_USERLIST,
+                            'type' => self::COMPONENT_TYPE_USERLIST,
                             'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '6',
+                            'extParams' => array(
+                                'filter' => self::USERLIST_FILTER_RECOMMAND,
+                                'orderby' => self::USERLIST_ORDERBY_DATELINE,
+                            )
                         )),
                         array_merge(self::initComponent(), array(
                             'title' => '设置',

@@ -135,6 +135,7 @@ class NewsListAction extends MobcentAction {
             $res = array_merge($res, $pageInfo);
             $res['list'] = array();
         }
+
         return $res;
     }
 

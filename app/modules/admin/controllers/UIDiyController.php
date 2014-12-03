@@ -185,6 +185,8 @@ class UIDiyController extends AdminController
         $forums = $_G['cache']['forums'];
 
         $tempComponent = $component;
+
+        // 转换fastpostForumIds结构
         $tempFastpostForumIds = array();
         foreach ($component['extParams']['fastpostForumIds'] as $fid) {
             $tempFastpostForumIds[] = array(
@@ -193,10 +195,44 @@ class UIDiyController extends AdminController
             );
         }
         $tempComponent['extParams']['fastpostForumIds'] = $tempFastpostForumIds;
+
+        // 转换componentList结构
         $tempComponentList = array();
-        foreach ($component['componentList'] as $subComponent) {
-            if (!$subComponent['extParams']['isHidden']) {
-                $tempComponentList[] = $this->_filterComponent($subComponent);
+        if ($tempComponent['style'] == AppbymeUIDiyModel::COMPONENT_STYLE_LAYOUT_NEWS_AUTO && 
+            count($tempComponent['componentList']) > 0 &&
+            $tempComponent['componentList'][0]['type'] == AppbymeUIDiyModel::COMPONENT_TYPE_NEWSLIST) {
+            $newslist = WebUtils::httpRequestAppAPI('portal/newslist', array('moduleId' => $tempComponent['componentList'][0]['extParams']['newsModuleId']));
+            if ($newslist = WebUtils::jsonDecode($newslist)) {
+                foreach ($newslist['list'] as $key => $value) {
+                    $tempParam = array(
+                        'title' => $value['title'],
+                        'desc' => $value['summary'],
+                        'icon' => $value['pic_path'],
+                    );
+                    if ($value['source_type'] == 'topic') {
+                        $tempParam = array_merge($tempParam, array(
+                            'type' => AppbymeUIDiyModel::COMPONENT_TYPE_POSTLIST,
+                            'extParams' => array('topicId' => $value['source_id']),
+                        ));
+                    } else if ($value['source_type'] == 'weblink') {
+                        $tempParam = array_merge($tempParam, array(
+                            'type' => AppbymeUIDiyModel::COMPONENT_TYPE_WEBAPP,
+                            'extParams' => array('redirect' => $value['redirectUrl']),
+                        ));
+                    } else if ($value['source_type'] == 'news') {
+                        $tempParam = array_merge($tempParam, array(
+                            'type' => AppbymeUIDiyModel::COMPONENT_TYPE_NEWSVIEW,
+                            'extParams' => array('articleId' => $value['source_id']),
+                        ));
+                    }
+                    $tempComponentList[] = array_merge(AppbymeUIDiyModel::initComponent(), $tempParam);
+                }
+            }
+        } else {
+            foreach ($component['componentList'] as $subComponent) {
+                if (!$subComponent['extParams']['isHidden']) {
+                    $tempComponentList[] = $this->_filterComponent($subComponent);
+                }
             }
         }
         $tempComponent['componentList'] = $tempComponentList;

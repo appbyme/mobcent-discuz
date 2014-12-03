@@ -6,7 +6,7 @@
  * @copyright 2012-2014 Appbyme
  */
     $moduleId = $component['extParams']['newsModuleId'];
-    $url = $this->rootUrl."/index.php?r=portal/newslist&sdkVersion=1.2.2&page=1&pageSize=20&moduleId=". $moduleId;
+    $url = $this->rootUrl."/index.php?r=portal/newslist&hacker_uid=1&sdkVersion=1.2.2&page=1&pageSize=20&moduleId=". $moduleId;
     $info = WebUtils::httpRequest($url, 30);
     $info = WebUtils::jsondecode($info);
 ?>
