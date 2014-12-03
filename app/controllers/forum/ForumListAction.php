@@ -109,6 +109,7 @@ class ForumListAction extends MobcentAction {
 
         $dateline = $this->_getDateLine($forum);
 
+        // 判断该版块是否有权限访问
         if (!forum($forum))  {
             return array();
         }
