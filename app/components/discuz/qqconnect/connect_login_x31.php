@@ -146,12 +146,13 @@ if($op == 'init') {
 
         $conuintoken = $response['access_token'];
         $conopenid = strtoupper($response['openid']);
-        /*��openid��oauth_token��Ϣƴ�ӵ���ַurl�ﷵ���ͻ�������ȡ��*/
-        echo '<script type="text/javascript">setTimeout("window.location.href=\'' . $QQLoginBaseUrl . '&openid='. $conopenid .'&oauth_token='. $conuintoken . '&receive=yes&mod=login&op=callback&code=&state' .'\'", 1)</script>';
-        exit;
         if(!$conuintoken || !$conopenid) {
             showmessage('qqconnect:connect_get_access_token_failed', $referer);
         }
+
+        // 把openid与oauth_token信息拼接到地址url里返给客户端做截取用
+        echo '<script type="text/javascript">setTimeout("window.location.href=\'' . $QQLoginBaseUrl . '&openid='. $conopenid .'&oauth_token='. $conuintoken . '&receive=yes&mod=login&op=callback&code=&state' .'\'", 1)</script>';
+        exit;
     }
 
     loadcache('connect_blacklist');
@@ -239,7 +240,7 @@ if($op == 'init') {
                 )
             );
 
-        } else { // debug µ±Ç°µÇÂ¼µÄÂÛÌ³ÕËºÅ²¢Ã»ÓÐ°ó¶¨ÈÎºÎQQºÅ£¬Ôò¿ÉÒÔ°ó¶¨µ±Ç°µÄÕâ¸öQQºÅ
+        } else { // debug 当前登录的论坛账号并没有绑定任何QQ号，则可以绑定当前的这个QQ号
             if(empty($current_connect_member)) {
                 C::t('#qqconnect#common_member_connect')->insert(
                     !$_G['setting']['connect']['oauth2'] ? array(
@@ -316,7 +317,7 @@ if($op == 'init') {
 
     } else {
 
-        if($connect_member) { // debug ´Ë·ÖÖ§ÊÇÓÃ»§Ö±½Óµã»÷QQµÇÂ¼£¬²¢ÇÒÕâ¸öQQºÅÒÑ¾­°óºÃÒ»¸öÂÛÌ³ÕËºÅÁË£¬½«Ö±½ÓµÇ½øÂÛÌ³ÁË
+        if($connect_member) { // debug 此分支是用户直接点击QQ登录，并且这个QQ号已经绑好一个论坛账号了，将直接登进论坛了
             C::t('#qqconnect#common_member_connect')->update($connect_member['uid'],
                 !$_G['setting']['connect']['oauth2'] ? array(
                     'conuin' => $conuin,
@@ -347,7 +348,7 @@ if($op == 'init') {
             dsetcookie('stats_qc_login', 3, 86400);
             showmessage('login_succeed', $referer, $param, array('extrajs' => $ucsynlogin));
 
-        } else { // debug ´Ë·ÖÖ§ÊÇÓÃ»§Ö±½Óµã»÷QQµÇÂ¼£¬²¢ÇÒÕâ¸öQQºÅ»¹Î´°ó¶¨ÈÎºÎÂÛÌ³ÕËºÅ£¬½«½«Ìø×ªµ½Ò»¸öÐÂÒ³Òýµ¼ÓÃ»§×¢²á¸öÐÂÂÛÌ³ÕËºÅ»ò°óÒ»¸öÒÑÓÐµÄÂÛÌ³ÕËºÅ
+        } else { // debug 此分支是用户直接点击QQ登录，并且这个QQ号还未绑定任何论坛账号，将将跳转到一个新页引导用户注册个新论坛账号或绑一个已有的论坛账号
 
             $auth_hash = authcode($conopenid, 'ENCODE');
             $insert_arr = !$_G['setting']['connect']['oauth2'] ? array(
