@@ -261,10 +261,11 @@ class ForumUtils {
      * @param int $tid 帖子id
      * @param string $type forum为论坛模块，portal为门户模块
      * @param bool $transBr 是否要转换换行
-     * @return array array('msg' => '', 'image' => '')
+     * @param array $options 参数选项, 可选值: array('imageList' => 1, 'imageListLen' => 9, 'imageListThumb' => 1)
+     * @return array array('msg' => '', 'image' => '', 'imageList' => array())
      */
-    public static function getTopicSummary($tid, $type='forum', $transBr=true) {
-        $summary = array('msg' => '', 'image' => '');
+    public static function getTopicSummary($tid, $type='forum', $transBr=true, $options=array()) {
+        $summary = array('msg' => '', 'image' => '', 'imageList' => array());
 
         $summaryLength = WebUtils::getDzPluginAppbymeAppConfig($type == 'forum' ? 'forum_summary_length' : 'portal_summary_length');
         $allowImage = WebUtils::getDzPluginAppbymeAppConfig($type == 'forum' ? 'forum_allow_image' : 'portal_allow_image');
@@ -275,12 +276,27 @@ class ForumUtils {
 
         $content = self::getTopicContent($tid);
         if (!empty($content['main'])) {
-            $isFindImage = false;
             $msg = '';
+            $isFindImage = false;
+            $isFindImageList = false;
+            $getImageList = isset($options['imageList']) ? $options['imageList'] : 0;
+            $imageListLen = isset($options['imageListLen']) ? $options['imageListLen'] : 9;
+            $imageListThumb = isset($options['imageListThumb']) ? $options['imageListThumb'] : 1;
+            $imageListCount = 0;
             foreach ($content['main'] as $line) {
-                if (!$isFindImage && $line['type'] == 'image') {
-                    $allowImage && $summary['image'] = $line['content'];
+                if ($line['type'] == 'image' && !$isFindImageList) {
+                    $imageListCount++;
+                    if ($allowImage) {
+                        !$isFindImage && $summary['image'] = $line['content'];
+                        if ($getImageList && !$isFindImageList) {
+                            $imageListThumb && $line['content'] = ImageUtils::getThumbImage($line['content']);
+                            $summary['imageList'][] = $line['content'];
+                        }
+                    }
                     $isFindImage = true;
+
+                    !$getImageList && $isFindImageList = true;
+                    $imageListCount == $imageListLen && $isFindImageList = true;
                 }
                 if ($line['type'] == 'text') {
                     $msg .= $line['content'] . "\r\n";
@@ -293,6 +309,7 @@ class ForumUtils {
             $summaryLength === false && $summaryLength = 40;
             $summary['msg'] = (string)WebUtils::subString($msg, 0, $summaryLength);
         }
+        
         return $summary;
     }
 

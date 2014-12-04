@@ -1686,6 +1686,7 @@ $(function () {
             'click .uidiy-save-btn': 'uidiySave',
             'click .uidiy-sync-btn': 'uidiySync',
             'click .uidiy-init-btn': 'uidiyInit',
+            'click .uidiy-config-import-btn': 'uidiyImportConfig',
             'change #autoSaveCheckbox': 'onChangeAutoSave',
         },
         initialize: function() {
@@ -1801,6 +1802,28 @@ $(function () {
                 success: function (result, status, xhr) {
                     $('.module-mobile-ui-view').html(result).removeClass('hidden');
                 }
+            });
+        },
+        uidiyImportConfig: function () {
+            var data = new FormData();
+            data.append('file', $('.uidiy-config-file')[0].files[0]);
+            $.ajax({
+                url: getAjaxApiUrl('admin/uidiy/importconfig'),
+                type: 'post',
+                dataType: 'json',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result, status, xhr) {
+                    alert(result.errMsg);
+                    if (result.errCode == 0) {
+                        location.href = uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy';
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(status);
+                    console.error(error);
+                },
             });
         },
     });

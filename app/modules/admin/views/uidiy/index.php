@@ -151,6 +151,12 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <div id="module-edit-dlg-view" class="module-play">
                 </div>
 
+                <div class="uidiy-config-admin">
+                    <input type="file" class="uidiy-config-file">
+                    <button class="uidiy-config-import-btn">导入配置</button> 
+                    <a href="<?php echo WebUtils::createUrl_oldVersion('admin/uidiy/exportconfig') ?>">导出配置</a> (仅导出当前已保存的配置)
+                </div>
+
                 <div class="text-left">
                     <p>
                         请点击 <button class="btn btn-primary btn-xs uidiy-save-btn"> 保存 </button> 按钮来保存你的客户端UI配置, 或者可以勾选

@@ -169,6 +169,70 @@ class UIDiyController extends AdminController
         ));
     }
 
+    // 导入配置
+    public function actionImportConfig() 
+    {
+        $res = WebUtils::initWebApiResult();
+
+        $errMsgs = array(
+            0 => '导入配置成功',
+            1 => '导入配置失败',
+        );
+        $res = WebUtils::makeWebApiResult($res, 1, $errMsgs[1]);
+
+        if (!empty($_FILES) && count($_FILES) && is_uploaded_file($_FILES['file']['tmp_name']) && !$_FILES['file']['error']) {
+            $config = $this->_decodeConfig(file_get_contents($_FILES['file']['tmp_name']));
+            if (!empty($config)) {
+                AppbymeUIDiyModel::saveNavigationInfo($config['navigation'], true);
+                AppbymeUIDiyModel::saveModules($config['moduleList'], true);
+                $res = WebUtils::makeWebApiResult($res, 0, $errMsgs[0]);
+            }
+        }
+
+        WebUtils::outputWebApi($res, 'utf-8');
+    }
+
+    // 导出配置
+    public function actionExportConfig() 
+    {   
+        header('Pragma: public');
+        header('Expires: 0'); 
+        header('Accept-Ranges: bytes'); 
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0, max-age=0');  
+        header('Content-Type: application/octet-stream');
+        header('Content-Transfer-Encoding: binary');
+        header(sprintf('Content-Disposition: attachment; filename="%s"', 'appbyme_uidiy.config'));
+
+        file_put_contents('php://output', $this->_encodeConfig());
+    }
+
+    private function _encodeConfig() {
+        $config = array(
+            'version' => AppbymeUIDiyModel::CONFIG_VERSION,
+            'dataChecksum' => '',
+            'data' => array(
+                'navigation' => AppbymeUIDiyModel::getNavigationInfo(true),
+                'moduleList' => AppbymeUIDiyModel::getModules(true),
+            ),
+        );
+        $config['dataChecksum'] = md5(WebUtils::jsonEncode($config['data'], 'utf-8'));
+        $config = (string)WebUtils::jsonEncode($config, 'utf-8');
+        return base64_encode($config);
+    }
+
+    private function _decodeConfig($config) {
+        $res = array();
+
+        $tmpConfig = base64_decode($config);
+        $tmpConfig = WebUtils::jsonDecode($tmpConfig);
+        if (isset($tmpConfig['data']) && isset($tmpConfig['dataChecksum']) && 
+            $tmpConfig['dataChecksum'] == md5(WebUtils::jsonEncode($tmpConfig['data'], 'utf-8'))) {
+            $res = $tmpConfig['data'];
+        }
+
+        return $res;
+    }
+
     private function _filterTopbars($topbars)
     {
         $tempTopbars = array();

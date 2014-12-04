@@ -13,6 +13,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
 class AppbymeUIDiyModel extends DiscuzAR
 {
+    const CONFIG_VERSION = '1.0';
+    
     // navigator
     const NAV_KEY = 'app_uidiy_nav_info';
     const NAV_KEY_TEMP = 'app_uidiy_nav_info_temp';

@@ -47,6 +47,12 @@ class WebUtils {
         );
     }
 
+    public static function makeWebApiResult($res, $code=0, $msg='') {
+        $res['errCode'] = $code;
+        $res['errMsg'] = $msg;
+        return $res;
+    }
+
     public static function makeErrorInfo($res, $message, $params=array()) {
         $errInfo = explode(':', Yii::t('mobcent', $message, $params), 2);
         if (count($errInfo) == 1) {
