@@ -744,3 +744,18 @@ label {
     text-indent:25px;
 }
 
+/* 导入导出配置 */
+.uidiy-config-admin {
+    position: absolute;
+    right: 80px;
+    top:3px;
+}
+
+.uidiy-config-admin input[type=file] {
+    width: 170px;
+}
+
+.newsauto-component-item {
+    /*border:1px solid red;*/
+    height: 55px;
+}

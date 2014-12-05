@@ -534,3 +534,8 @@
     opacity:0.7;
     cursor: pointer;
 }
+
+/*列表自动样式*/
+.custom-style .newsauto-component-item {
+    margin-left: 10px;
+}

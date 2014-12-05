@@ -87,7 +87,6 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     </nav>
     
 
-
     <div id="uidiy-main-view">
 
     <div class="container" style="width:1200px;height:800px;">
@@ -152,9 +151,15 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 </div>
 
                 <div class="uidiy-config-admin">
-                    <input type="file" class="uidiy-config-file">
-                    <button class="uidiy-config-import-btn">导入配置</button> 
-                    <a href="<?php echo WebUtils::createUrl_oldVersion('admin/uidiy/exportconfig') ?>">导出配置</a> (仅导出当前已保存的配置)
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="file" class="uidiy-config-file">
+                        </div>
+                        <div class="form-group">
+                            <button class="uidiy-config-import-btn btn btn-default btn-xs">导入配置</button> 
+                            <a href="<?php echo WebUtils::createUrl_oldVersion('admin/uidiy/exportconfig') ?>" class="btn btn-default btn-xs">导出配置</a> (仅导出当前已保存的配置)
+                        </div>
+                    </div>
                 </div>
 
                 <div class="text-left">
@@ -695,26 +700,39 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         </div>
         <!-- 用户中心模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_USERINFO+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_USERINFO ? '' : 'hidden' %>">
-            <lable><input type="checkbox" name="isShowMessagelist[]" <%= extParams.isShowMessagelist ? 'checked' : '' %>>是否显示我的消息</lable>
+
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <lable><input type="checkbox" name="isShowMessagelist[]" <%= extParams.isShowMessagelist ? 'checked' : '' %>>     是否显示我的消息</lable>
+                </div>
+            </div>
         </div>
         <!-- 用户列表 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_USERLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_USERLIST ? '' : 'hidden' %>">
-            条件选择
-            <select name="userlistFilter[]">
-                <option value="<%= USERLIST_FILTER_ALL %>" <%= extParams.filter == USERLIST_FILTER_ALL ? 'selected' : '' %>>全部</option> 
-                <option value="<%= USERLIST_FILTER_FRIEND %>" <%= extParams.filter == USERLIST_FILTER_FRIEND ? 'selected' : '' %>>好友</option> 
-                <option value="<%= USERLIST_FILTER_FOLLOW %>" <%= extParams.filter == USERLIST_FILTER_FOLLOW ? 'selected' : '' %>>关注</option> 
-                <option value="<%= USERLIST_FILTER_FOLLOWED %>" <%= extParams.filter == USERLIST_FILTER_FOLLOWED ? 'selected' : '' %>>粉丝</option> 
-                <option value="<%= USERLIST_FILTER_RECOMMAND %>" <%= extParams.filter == USERLIST_FILTER_RECOMMAND ? 'selected' : '' %>>推荐</option> 
-            </select>
-            排序方式
-            <select name="userlistOrderby[]">
-                <option value="<%= USERLIST_ORDERBY_DATELINE %>" <%= extParams.orderby == USERLIST_ORDERBY_DATELINE ? 'selected' : '' %>>按默认排序</option> 
-                <option value="<%= USERLIST_ORDERBY_REGISTER %>" <%= extParams.orderby == USERLIST_ORDERBY_REGISTER ? 'selected' : '' %>>按注册时间倒序排序</option> 
-                <option value="<%= USERLIST_ORDERBY_LOGIN %>" <%= extParams.orderby == USERLIST_ORDERBY_LOGIN ? 'selected' : '' %>>按登陆时间倒序排序</option> 
-                <option value="<%= USERLIST_ORDERBY_FOLLOWED %>" <%= extParams.orderby == USERLIST_ORDERBY_FOLLOWED ? 'selected' : '' %>>按粉丝最多倒序排序</option> 
-                <option value="<%= USERLIST_ORDERBY_DISTANCE %>" <%= extParams.orderby == USERLIST_ORDERBY_DISTANCE ? 'selected' : '' %>>按距离倒序排序</option> 
-            </select>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">条件选择:</label>
+                <div class="col-sm-10">
+                    <select name="userlistFilter[]" class="form-control">
+                        <option value="<%= USERLIST_FILTER_ALL %>" <%= extParams.filter == USERLIST_FILTER_ALL ? 'selected' : '' %>>全部</option> 
+                        <option value="<%= USERLIST_FILTER_FRIEND %>" <%= extParams.filter == USERLIST_FILTER_FRIEND ? 'selected' : '' %>>好友</option> 
+                        <option value="<%= USERLIST_FILTER_FOLLOW %>" <%= extParams.filter == USERLIST_FILTER_FOLLOW ? 'selected' : '' %>>关注</option> 
+                        <option value="<%= USERLIST_FILTER_FOLLOWED %>" <%= extParams.filter == USERLIST_FILTER_FOLLOWED ? 'selected' : '' %>>粉丝</option> 
+                        <option value="<%= USERLIST_FILTER_RECOMMAND %>" <%= extParams.filter == USERLIST_FILTER_RECOMMAND ? 'selected' : '' %>>推荐</option> 
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序方式:</label>
+                <div class="col-sm-10">
+                    <select name="userlistOrderby[]" class="form-control">
+                        <option value="<%= USERLIST_ORDERBY_DATELINE %>" <%= extParams.orderby == USERLIST_ORDERBY_DATELINE ? 'selected' : '' %>>按默认排序</option> 
+                        <option value="<%= USERLIST_ORDERBY_REGISTER %>" <%= extParams.orderby == USERLIST_ORDERBY_REGISTER ? 'selected' : '' %>>按注册时间倒序排序</option> 
+                        <option value="<%= USERLIST_ORDERBY_LOGIN %>" <%= extParams.orderby == USERLIST_ORDERBY_LOGIN ? 'selected' : '' %>>按登陆时间倒序排序</option> 
+                        <option value="<%= USERLIST_ORDERBY_FOLLOWED %>" <%= extParams.orderby == USERLIST_ORDERBY_FOLLOWED ? 'selected' : '' %>>按粉丝最多倒序排序</option> 
+                        <option value="<%= USERLIST_ORDERBY_DISTANCE %>" <%= extParams.orderby == USERLIST_ORDERBY_DISTANCE ? 'selected' : '' %>>按距离倒序排序</option> 
+                    </select>
+                </div>
+            </div>
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_MESSAGELIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_MESSAGELIST ? '' : 'hidden' %>">
         </div>
