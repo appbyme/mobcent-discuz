@@ -108,6 +108,9 @@ $(function () {
             fastpostForumIds = $(form['fastpostForumIds[]']),
             isShowTopicTitle = $(form['isShowTopicTitle[]']),
             // isShowTopicSort = $(form['isShowTopicSort[]']),
+            isShowMessagelist = $(form['isShowMessagelist[]']),
+            userlistFilter = $(form['userlistFilter[]']),
+            userlistOrderby = $(form['userlistOrderby[]']),
             componentRedirect = $(form['componentRedirect[]']),
             componentStyle = $(form['componentStyle[]']);
         
@@ -118,7 +121,11 @@ $(function () {
             for (var j = 0; j < options.length; j++) {
                 tempForumIds.push(parseInt(options[j].value));
             }
-            var extParams = {
+            var type = componentType[i].value,
+                filter = type == COMPONENT_TYPE_USERLIST ? userlistFilter[i].value : '',
+                orderby = type == COMPONENT_TYPE_USERLIST ? userlistOrderby[i].value : '',
+                
+                extParams = {
                 titlePosition: COMPONENT_TITLE_POSITION_LEFT,
                 // isShowForumIcon: isShowForumIcon[i].checked ? 1 : 0,
                 // isShowForumTwoCols: isShowForumTwoCols[i].checked ? 1 : 0,
@@ -131,6 +138,9 @@ $(function () {
                 fastpostForumIds: tempForumIds,
                 isShowTopicTitle: isShowTopicTitle[i].checked ? 1 : 0,
                 // isShowTopicSort: isShowTopicSort[i].checked ? 1 : 0,
+                isShowMessagelist: isShowMessagelist[i].checked ? 1 : 0,
+                filter: filter,
+                orderby: orderby,
                 redirect: componentRedirect[i].value,
             };
 
@@ -335,12 +345,14 @@ $(function () {
                 isShow_icon: 0,
                 isShow_iconStyle: 0,
                 isShow_desc: 0,
+                isShow_style: 1,
                 isShow_typeSelect: 1,
                 isShow_typeModuleRef: 1,
                 isShow_typePostlist: 1,
                 isShow_typeNewsview: 1,
                 isShow_typeMessagelist: 1,
-                isShow_typeUserinfo: 0,
+                isShow_typeUserinfo: 1,
+                isShow_typeUserlist: 1,
                 iconRatio: '适当',
                 iconRatioCircle: '80*80',
             };
@@ -452,7 +464,6 @@ $(function () {
             isShow_typeModuleRef: 0,
             isShow_typePostlist: 0,
             isShow_typeNewsview: 0,
-            isShow_typeUserinfo: 1,
         }});
     };
 
@@ -462,6 +473,7 @@ $(function () {
             isShow_typePostlist: 0,
             isShow_typeNewsview: 0,
             isShow_typeMessagelist: 0,
+            isShow_typeUserinfo: 0,
         }});
     };
 
@@ -780,6 +792,7 @@ $(function () {
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH:
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_MID:
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_LOW:
+                    case COMPONENT_STYLE_LAYOUT_NEWS_AUTO:
                         size = 1;
                         break;
                     case COMPONENT_STYLE_LAYOUT_TWO_COL:
@@ -986,8 +999,17 @@ $(function () {
                         uiconfig.isShow_iconStyle = 0;
                         uiconfig.iconRatio = '2:1';
                         break;
-                    default:
+                    case COMPONENT_STYLE_LAYOUT_NEWS_AUTO:
+                        uiconfig.isShow_title = 0;
+                        uiconfig.isShow_desc = 0;
+                        uiconfig.isShow_icon = 0;
                         uiconfig.isShow_iconStyle = 0;
+                        uiconfig.isShow_style = 0;
+                        uiconfig.isShow_typeSelect = 0;
+                        model.attributes.type = COMPONENT_TYPE_NEWSLIST;
+                        break;
+                    default:
+                        console.error('Error Style!!!');
                         break;
                 }
                 var view = new ComponentView({model: model, uiconfig: uiconfig});
@@ -1453,6 +1475,44 @@ $(function () {
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
+            
+            // render 列表自动类型
+            if (this.model.attributes.style == COMPONENT_STYLE_LAYOUT_NEWS_AUTO) {
+                var componentList = this.model.attributes.componentList;
+                var _this = this;
+                if (componentList.length > 0 && componentList[0].attributes.type == COMPONENT_TYPE_NEWSLIST) {
+                    Backbone.ajax({
+                        url: Appbyme.getAjaxApiUrl('portal/newslist')+'&hacker_uid=1',
+                        // timeout: 5000,
+                        type: 'get',
+                        dataType: 'json',
+                        data: {
+                            moduleId: parseInt(componentList[0].attributes.extParams.newsModuleId),
+                        },
+                        success: function (result,status,xhr) {
+                            var html = '';
+                            for (var i = 0; i < result.list.length; i++) {
+                                html += _.template(' \
+                            <div class="newsauto-component-item"> \
+                                <div class="pull-left"> \
+                                    <img src="<%= pic_path %>" style="width:50px;height:50px" class="img-rounded"> \
+                                </div> \
+                                <div class="pull-left text-left page-main"> \
+                                    <div class="page-title"><strong><%= title %></strong></div> \
+                                    <div class="page-content"><%= summary %></div> \
+                                </div> \
+                            </div>')(result.list[i]);
+                            }
+                            _this.$el.find('.newsauto-component-item-container').html(html);
+                        },
+                        error: function (xhr,status,error) {
+                            // console.error(xhr);
+                            console.error(status);
+                            console.error(error);
+                        },
+                    });
+                }
+            }
             return this;
         },
         dlgEditItem: function () {
@@ -1626,6 +1686,7 @@ $(function () {
             'click .uidiy-save-btn': 'uidiySave',
             'click .uidiy-sync-btn': 'uidiySync',
             'click .uidiy-init-btn': 'uidiyInit',
+            'click .uidiy-config-import-btn': 'uidiyImportConfig',
             'change #autoSaveCheckbox': 'onChangeAutoSave',
         },
         initialize: function() {
@@ -1741,6 +1802,28 @@ $(function () {
                 success: function (result, status, xhr) {
                     $('.module-mobile-ui-view').html(result).removeClass('hidden');
                 }
+            });
+        },
+        uidiyImportConfig: function () {
+            var data = new FormData();
+            data.append('file', $('.uidiy-config-file')[0].files[0]);
+            $.ajax({
+                url: getAjaxApiUrl('admin/uidiy/importconfig'),
+                type: 'post',
+                dataType: 'json',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result, status, xhr) {
+                    alert(result.errMsg);
+                    if (result.errCode == 0) {
+                        location.href = uidiyGlobalObj.rootUrl + '/index.php?r=admin/uidiy';
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(status);
+                    console.error(error);
+                },
             });
         },
     });

@@ -169,6 +169,70 @@ class UIDiyController extends AdminController
         ));
     }
 
+    // 导入配置
+    public function actionImportConfig() 
+    {
+        $res = WebUtils::initWebApiResult();
+
+        $errMsgs = array(
+            0 => '导入配置成功',
+            1 => '导入配置失败',
+        );
+        $res = WebUtils::makeWebApiResult($res, 1, $errMsgs[1]);
+
+        if (!empty($_FILES) && count($_FILES) && is_uploaded_file($_FILES['file']['tmp_name']) && !$_FILES['file']['error']) {
+            $config = $this->_decodeConfig(file_get_contents($_FILES['file']['tmp_name']));
+            if (!empty($config)) {
+                AppbymeUIDiyModel::saveNavigationInfo($config['navigation'], true);
+                AppbymeUIDiyModel::saveModules($config['moduleList'], true);
+                $res = WebUtils::makeWebApiResult($res, 0, $errMsgs[0]);
+            }
+        }
+
+        WebUtils::outputWebApi($res, 'utf-8');
+    }
+
+    // 导出配置
+    public function actionExportConfig() 
+    {   
+        header('Pragma: public');
+        header('Expires: 0'); 
+        header('Accept-Ranges: bytes'); 
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0, max-age=0');  
+        header('Content-Type: application/octet-stream');
+        header('Content-Transfer-Encoding: binary');
+        header(sprintf('Content-Disposition: attachment; filename="%s"', 'appbyme_uidiy.config'));
+
+        file_put_contents('php://output', $this->_encodeConfig());
+    }
+
+    private function _encodeConfig() {
+        $config = array(
+            'version' => AppbymeUIDiyModel::CONFIG_VERSION,
+            'dataChecksum' => '',
+            'data' => array(
+                'navigation' => AppbymeUIDiyModel::getNavigationInfo(true),
+                'moduleList' => AppbymeUIDiyModel::getModules(true),
+            ),
+        );
+        $config['dataChecksum'] = md5(WebUtils::jsonEncode($config['data'], 'utf-8'));
+        $config = (string)WebUtils::jsonEncode($config, 'utf-8');
+        return base64_encode($config);
+    }
+
+    private function _decodeConfig($config) {
+        $res = array();
+
+        $tmpConfig = base64_decode($config);
+        $tmpConfig = WebUtils::jsonDecode($tmpConfig);
+        if (isset($tmpConfig['data']) && isset($tmpConfig['dataChecksum']) && 
+            $tmpConfig['dataChecksum'] == md5(WebUtils::jsonEncode($tmpConfig['data'], 'utf-8'))) {
+            $res = $tmpConfig['data'];
+        }
+
+        return $res;
+    }
+
     private function _filterTopbars($topbars)
     {
         $tempTopbars = array();
@@ -185,6 +249,8 @@ class UIDiyController extends AdminController
         $forums = $_G['cache']['forums'];
 
         $tempComponent = $component;
+
+        // 转换fastpostForumIds结构
         $tempFastpostForumIds = array();
         foreach ($component['extParams']['fastpostForumIds'] as $fid) {
             $tempFastpostForumIds[] = array(
@@ -193,10 +259,44 @@ class UIDiyController extends AdminController
             );
         }
         $tempComponent['extParams']['fastpostForumIds'] = $tempFastpostForumIds;
+
+        // 转换componentList结构
         $tempComponentList = array();
-        foreach ($component['componentList'] as $subComponent) {
-            if (!$subComponent['extParams']['isHidden']) {
-                $tempComponentList[] = $this->_filterComponent($subComponent);
+        if ($tempComponent['style'] == AppbymeUIDiyModel::COMPONENT_STYLE_LAYOUT_NEWS_AUTO && 
+            count($tempComponent['componentList']) > 0 &&
+            $tempComponent['componentList'][0]['type'] == AppbymeUIDiyModel::COMPONENT_TYPE_NEWSLIST) {
+            $newslist = WebUtils::httpRequestAppAPI('portal/newslist', array('moduleId' => $tempComponent['componentList'][0]['extParams']['newsModuleId']));
+            if ($newslist = WebUtils::jsonDecode($newslist)) {
+                foreach ($newslist['list'] as $key => $value) {
+                    $tempParam = array(
+                        'title' => $value['title'],
+                        'desc' => $value['summary'],
+                        'icon' => $value['pic_path'],
+                    );
+                    if ($value['source_type'] == 'topic') {
+                        $tempParam = array_merge($tempParam, array(
+                            'type' => AppbymeUIDiyModel::COMPONENT_TYPE_POSTLIST,
+                            'extParams' => array('topicId' => $value['source_id']),
+                        ));
+                    } else if ($value['source_type'] == 'weblink') {
+                        $tempParam = array_merge($tempParam, array(
+                            'type' => AppbymeUIDiyModel::COMPONENT_TYPE_WEBAPP,
+                            'extParams' => array('redirect' => $value['redirectUrl']),
+                        ));
+                    } else if ($value['source_type'] == 'news') {
+                        $tempParam = array_merge($tempParam, array(
+                            'type' => AppbymeUIDiyModel::COMPONENT_TYPE_NEWSVIEW,
+                            'extParams' => array('articleId' => $value['source_id']),
+                        ));
+                    }
+                    $tempComponentList[] = array_merge(AppbymeUIDiyModel::initComponent(), $tempParam);
+                }
+            }
+        } else {
+            foreach ($component['componentList'] as $subComponent) {
+                if (!$subComponent['extParams']['isHidden']) {
+                    $tempComponentList[] = $this->_filterComponent($subComponent);
+                }
             }
         }
         $tempComponent['componentList'] = $tempComponentList;

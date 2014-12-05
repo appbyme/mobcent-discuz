@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `cdb_appbyme_user_setting` (
 # DROP TABLE IF EXISTS `cdb_appbyme_config`;
 CREATE TABLE IF NOT EXISTS `cdb_appbyme_config` (
   `ckey` varchar(255) NOT NULL DEFAULT '' COMMENT '设置键名',
-  `cvalue` text NOT NULL COMMENT '设置值',
+  `cvalue` mediumtext NOT NULL COMMENT '设置值',
   PRIMARY KEY (`ckey`)
 ) ENGINE=MyISAM;
 

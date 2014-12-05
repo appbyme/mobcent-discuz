@@ -237,6 +237,16 @@ class TestController extends MobcentController {
                 'params' => array('json' => "{'id': 1, 'idType': 'aid', 'page': 1, 'pageSize': 10, }"),
             ),
             array(
+                'title' => 'api/portal: portal/modulelist 门户模块列表',
+                'route' => 'portal/modulelist',
+                'params' => array(),
+            ), 
+            array(
+                'title' => 'api/portal: portal/newslist 门户模块内容列表',
+                'route' => 'portal/newslist',
+                'params' => array('moduleId' => 1),
+            ),
+            array(
                 'title' => 'api/user: 获取设置',
                 'route' => 'user/getsetting',
                 'params' => array('getSetting' => "{'body': {'postInfo': {'forumIds': '0'}}}"),
@@ -261,16 +271,6 @@ class TestController extends MobcentController {
                 'route' => 'app/servernotify',
                 'params' => array('event' => 'updateApp', 'appKey' => ''),
             ),      
-            array(
-                'title' => 'api/portal: 门户模块列表',
-                'route' => 'portal/modulelist',
-                'params' => array(),
-            ), 
-            array(
-                'title' => 'api/portal: 门户模块内容',
-                'route' => 'portal/newslist',
-                'params' => array('moduleId' => 1),
-            ),         
         );
         $this->renderPartial('debug', array('testApiList' => $testApiList));
     } 
