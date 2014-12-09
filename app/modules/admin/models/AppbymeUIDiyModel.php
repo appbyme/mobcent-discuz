@@ -56,7 +56,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_TYPE_SIGN = 'sign';
     const COMPONENT_TYPE_MESSAGELIST = 'messagelist';
     const COMPONENT_TYPE_SETTING = 'setting';
-    const COMPONENT_TYPE_ABOAT = 'aboat';
+    const COMPONENT_TYPE_ABOUT = 'about';
     const COMPONENT_TYPE_USERINFO = 'userinfo';
     const COMPONENT_TYPE_USERLIST = 'userlist';
     const COMPONENT_TYPE_MODULEREF = 'moduleRef';

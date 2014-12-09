@@ -609,9 +609,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <option value="<%= COMPONENT_TYPE_USERINFO %>" <%= type == COMPONENT_TYPE_USERINFO ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeUserinfo ? '' : 'hidden' %>">用户中心</option>
                 <option value="<%= COMPONENT_TYPE_USERLIST %>" <%= type == COMPONENT_TYPE_USERLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeUserlist ? '' : 'hidden' %>">用户列表</option>
                 <option value="<%= COMPONENT_TYPE_MESSAGELIST %>" <%= type == COMPONENT_TYPE_MESSAGELIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeMessagelist ? '' : 'hidden' %>">消息列表</option>
-                <option value="<%= COMPONENT_TYPE_SURROUDING_POSTLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_POSTLIST ? 'selected' : '' %>>周边帖子</option>
                 <option value="<%= COMPONENT_TYPE_SETTING %>" <%= type == COMPONENT_TYPE_SETTING ? 'selected' : '' %>>设置</option>
-                <option value="<%= COMPONENT_TYPE_ABOAT %>" <%= type == COMPONENT_TYPE_ABOAT ? 'selected' : '' %>>关于</option>
+                <option value="<%= COMPONENT_TYPE_ABOUT %>" <%= type == COMPONENT_TYPE_ABOUT ? 'selected' : '' %>>关于</option>
                 <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %> class="hidden">发表文字</option>
                 <option value="<%= COMPONENT_TYPE_FASTIMAGE %>" <%= type == COMPONENT_TYPE_FASTIMAGE ? 'selected' : '' %> class="hidden">发表图片</option>
                 <option value="<%= COMPONENT_TYPE_FASTCAMERA %>" <%= type == COMPONENT_TYPE_FASTCAMERA ? 'selected' : '' %> class="hidden">拍照发表</option>
@@ -735,11 +734,9 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_MESSAGELIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_MESSAGELIST ? '' : 'hidden' %>">
         </div>
-        <div id="component-view-<% print(COMPONENT_TYPE_SURROUDING_POSTLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SURROUDING_POSTLIST ? '' : 'hidden' %>">
-        </div>
         <div id="component-view-<% print(COMPONENT_TYPE_SETTING+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SETTING ? '' : 'hidden' %>">
         </div>
-        <div id="component-view-<% print(COMPONENT_TYPE_ABOAT+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_ABOAT ? '' : 'hidden' %>">
+        <div id="component-view-<% print(COMPONENT_TYPE_ABOUT+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_ABOUT ? '' : 'hidden' %>">
         </div>
         <!-- wepapp 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_WEBAPP+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_WEBAPP ? '' : 'hidden' %>">
@@ -758,7 +755,9 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                     <select class="form-control" name="moduleId[]">
                     <% for (var i = 0; i < Appbyme.uiModules.length; i++) { %>
                         <% var module = Appbyme.uiModules.models[i].attributes; %>
+                        <% if (module.type != MODULE_TYPE_FASTPOST) { %>
                         <option value="<%= module.id %>" <%= extParams.moduleId == module.id ? 'selected' : '' %>><%= module.title %></option> 
+                        <% } %>
                     <% } %>
                     </select>
                 </div>

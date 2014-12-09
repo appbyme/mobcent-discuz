@@ -24,7 +24,7 @@ class WebUtils {
                 'alert' => 0,
             ),
             'body' => array(
-                'externInfo' => null,
+                'externInfo' => array('padding' => ''),
             ),
         );
     }
@@ -221,7 +221,7 @@ class WebUtils {
         return $res;
     }
 
-    public static function httpRequest($url, $timeout=15, $postData=array()) {
+    public static function httpRequest($url, $timeout=20, $postData=array()) {
         return self::httpRequestByDiscuzApi($url, $postData, 'URLENCODE', array(), $timeout);
         // if (function_exists('curl_init')) {
         //     return self::getContentByCurl($url, $timeout);
@@ -242,17 +242,17 @@ class WebUtils {
      */
     public static function httpRequestByDiscuzApi($url, $postData=array(), 
                                                   $encodeType='URLENCODE', 
-                                                  $fileData=array(), $timeout=15) {
+                                                  $fileData=array(), $timeout=20) {
         Mobcent::import(MOBCENT_APP_ROOT.'/components/discuz/source/function/function_filesock.php');
         return mobcent_dfsockopen($url, $postData, $encodeType, $fileData, $timeout);
     }
 
-    public static function httpRequestAppAPI($route, $params=array(), $timeout=15) {
+    public static function httpRequestAppAPI($route, $params=array(), $timeout=20) {
         $url = WebUtils::createUrl_oldVersion($route, $params);
         return WebUtils::httpRequest($url, $timeout);
     }
 
-    public static function getContentByFileGetContents($url, $timeout=15) {
+    public static function getContentByFileGetContents($url, $timeout=20) {
         $context = stream_context_create(array(
             'http' => array(
                 'method' => 'GET',

@@ -217,17 +217,27 @@ class TestController extends MobcentController {
                 'params' => array(),
             ),
             array(
-                'title' => 'api/forum: 版块列表',
+                'title' => 'api/forum: forum/forumlist 版块列表',
                 'route' => 'forum/forumlist',
                 'params' => array('fid' => 0),
             ),
             array(
-                'title' => 'api/forum: 帖子详情',
+                'title' => 'api/forum: forum/topiclist 主题列表',
+                'route' => 'forum/topiclist',
+                'params' => array('boardId' => 0, 'page' => 1, 'pageSize' => 10, 'sortby' => 'all', 'filterType' => '', 'filterId' => 0),
+            ),
+            array(
+                'title' => 'api/forum: forum/postlist 帖子详情',
                 'route' => 'forum/postlist',
                 'params' => array('topicId' => 1),
             ),
             array(
-                'title' => 'api/portal: 文章详情',
+                'title' => 'api/forum: forum/search 搜索',
+                'route' => 'forum/search',
+                'params' => array('keyword' => '测试', 'page' => 1, 'pageSize' => 10, 'searchid' => 0),
+            ),
+            array(
+                'title' => 'api/portal: portal/newsview 文章详情',
                 'route' => 'portal/newsview',
                 'params' => array('json' => "{'aid': 1, 'page': 1}"),
             ),
@@ -247,7 +257,7 @@ class TestController extends MobcentController {
                 'params' => array('moduleId' => 1),
             ),
             array(
-                'title' => 'api/user: 获取设置',
+                'title' => 'api/user: user/getsetting 获取设置',
                 'route' => 'user/getsetting',
                 'params' => array('getSetting' => "{'body': {'postInfo': {'forumIds': '0'}}}"),
             ),
@@ -262,9 +272,34 @@ class TestController extends MobcentController {
                 'params' => array('type' => 'login', 'username' => 'admin', 'password'=>'admin'),
             ),
             array(
+                'title' => 'api/message: message/heart 心跳',
+                'route' => 'message/heart',
+                'params' => array(),
+            ),
+            array(
+                'title' => 'api/message: message/notifylist 提醒列表',
+                'route' => 'message/notifylist',
+                'params' => array('type' => 'post', 'page' => 1, 'pageSize' => 20),
+            ),
+            array(
+                'title' => 'api/message: message/pmsessionlist 私信总会话列表',
+                'route' => 'message/pmsessionlist',
+                'params' => array('json' => '{"page"=>1, "pageSize"=>10}'),
+            ),
+            array(
+                'title' => 'api/message: message/pmlist 私信会话列表',
+                'route' => 'message/pmlist',
+                'params' => array('pmlist' => '{"body": {"pmInfos": [{"fromUid": 2, "startTime": "0", "stopTime": "0", "cacheCount": 0, "pmLimit": 10, }], "externInfo": {"onlyFromUid":0} } }'),
+            ),
+            array(
                 'title' => 'api/app: app/initui 初始化AppUI',
                 'route' => 'app/initui',
                 'params' => array(),
+            ),
+            array(
+                'title' => 'api/app: app/moduleconfig 模块配置',
+                'route' => 'app/moduleconfig',
+                'params' => array('moduleId' => 1),
             ),
             array(
                 'title' => 'api/app: app/servernotify 服务器事件通知接口',

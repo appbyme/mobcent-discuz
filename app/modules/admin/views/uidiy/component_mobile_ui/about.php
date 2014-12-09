@@ -1,6 +1,6 @@
 <?php 
 /**
- * component_mobile_ui_aboat view
+ * component_mobile_ui_about view
  *
  * @author hongliang
  * @copyright 2012-2014 Appbyme

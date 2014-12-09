@@ -369,7 +369,6 @@ $(function () {
                 case COMPONENT_TYPE_TOPICLIST:
                 case COMPONENT_TYPE_TOPICLIST_SIMPLE:
                 case COMPONENT_TYPE_POSTLIST:
-                case COMPONENT_TYPE_SURROUDING_POSTLIST:
                     if (type == COMPONENT_TYPE_NEWSLIST || type == COMPONENT_TYPE_TOPICLIST || type == COMPONENT_TYPE_TOPICLIST_SIMPLE) {
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE+']').show();
                     } else {
