@@ -458,6 +458,24 @@
                         <span class="glyphicon glyphicon-chevron-right"></span>
                     </a>
             </div>
+            <?php elseif ($component['style'] == AppbymeUIDiyModel::COMPONENT_STYLE_LAYOUT_NEWS_AUTO): ?>
+                <?php foreach ($component['componentList'] as $key => $comp): ?>                
+                <?php
+                    $newslist = WebUtils::httpRequestAppAPI('portal/newslist', array('moduleId' => $component['componentList'][0]['extParams']['newsModuleId'], 'hacker_uid' => 1));
+                    $newslist = WebUtils::jsonDecode($newslist);
+                 ?>
+                    <?php foreach ($newslist['list'] as $list): ?>
+                    <div class="newsauto-component-item">
+                        <div class="pull-left">
+                            <img src="<?php echo str_replace('xgsize','mobcentSmallPreview',$list['pic_path']);?>" style="width:50px;height:50px" class="img-rounded">
+                        </div>
+                        <div class="pull-left text-left page-main">
+                            <div class="page-title"><strong><?php echo $list['title']; ?></strong></div>
+                            <div class="page-content" style="text-indent: 2em;width:190px;"><?php echo $list['summary']; ?></div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
             <?php endif; ?>
         <?php endforeach; ?>
 

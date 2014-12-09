@@ -135,6 +135,7 @@ class NewsListAction extends MobcentAction {
             $res = array_merge($res, $pageInfo);
             $res['list'] = array();
         }
+
         return $res;
     }
 
@@ -192,6 +193,7 @@ class NewsListAction extends MobcentAction {
     private function _autoFidData($fids, $offset, $pageSize, $params) {
         // [add]板块设置用户组权限后，针对当前用户进行过滤（在列表中是否显示）Author：HanPengyu，Data：14.11.28
         require_once libfile('function/forumlist');
+        $tmpFids = array();
         foreach ($fids as $fid) {
             $forum = DzForumForum::getForumFieldByFid($fid);
             forum($forum) && $tmpFids[] = $fid;

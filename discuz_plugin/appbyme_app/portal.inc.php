@@ -363,6 +363,7 @@ class PortalController {
         $digestLang = explode(',', Appbyme::lang('mobcent_portal_module_param_topic_digest'));
         $stickLang = explode(',', Appbyme::lang('mobcent_portal_module_param_topic_stick'));
         $specialLang = explode(',', Appbyme::lang('mobcent_portal_module_param_topic_special'));
+        $otherLang = explode(',', Appbyme::lang('mobcent_portal_module_param_other_filter'));
         $topicOrderbyLang = explode(',', Appbyme::lang('mobcent_portal_module_param_topic_orderby'));
         $timeLang = explode(',', Appbyme::lang('mobcent_portal_module_param_time'));
         $topicStyleLang = explode(',', Appbyme::lang('mobcent_portal_module_param_topic_style'));
@@ -394,6 +395,9 @@ class PortalController {
                 array(5, $specialLang[5]),
                 array(0, $specialLang[6]),
             )), $param['topic_special'], 'mcheckbox', '', 0, '', '', '', true);
+            showsetting($otherLang[0], array('param[other_filter]', array(
+                array(1, $otherLang[1]),
+            )), $param['other_filter'], 'mcheckbox', '', 0, '', '', '', true);
             showsetting(Appbyme::lang('mobcent_portal_module_param_topic_picrequired'),
                 'param[topic_picrequired]', $param['topic_picrequired'],
                 'radio', '', 0, '', '', '', true
@@ -405,6 +409,7 @@ class PortalController {
                 array('views', $topicOrderbyLang[4]),
                 array('heats', $topicOrderbyLang[5]),
                 array('recommends', $topicOrderbyLang[6]),
+                array('friend', $topicOrderbyLang[7]),
             )), $param['topic_orderby'], 'select', '', 0, '', '', '', true);
             showsetting(Appbyme::lang('mobcent_portal_module_param_topic_postdateline'), array('param[topic_postdateline]', array(
                 array(0, $timeLang[0]),
@@ -621,6 +626,7 @@ class PortalModule {
             'topic_digest' => '',
             'topic_stick' => '',
             'topic_special' => '',
+            'other_filter' => 0,
             'topic_picrequired' => 0,
             'topic_orderby' => 'lastpost',
             'topic_postdateline' => 0,

@@ -87,7 +87,6 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     </nav>
     
 
-
     <div id="uidiy-main-view">
 
     <div class="container" style="width:1200px;height:800px;">
@@ -149,6 +148,18 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <div class="col-sm-xs-8 col-sm-8 col-md-8" id="operation">
 
                 <div id="module-edit-dlg-view" class="module-play">
+                </div>
+
+                <div class="uidiy-config-admin">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="file" class="uidiy-config-file">
+                        </div>
+                        <div class="form-group">
+                            <button class="uidiy-config-import-btn btn btn-default btn-xs">导入配置</button> 
+                            <a href="<?php echo WebUtils::createUrl_oldVersion('admin/uidiy/exportconfig') ?>" class="btn btn-default btn-xs">导出配置</a> (仅导出当前已保存的配置)
+                        </div>
+                    </div>
                 </div>
 
                 <div class="text-left">
@@ -596,10 +607,9 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <option value="<%= COMPONENT_TYPE_MODULEREF %>" <%= type == COMPONENT_TYPE_MODULEREF ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeModuleRef ? '' : 'hidden' %>">模块指向</option>
                 <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
                 <option value="<%= COMPONENT_TYPE_USERINFO %>" <%= type == COMPONENT_TYPE_USERINFO ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeUserinfo ? '' : 'hidden' %>">用户中心</option>
+                <option value="<%= COMPONENT_TYPE_USERLIST %>" <%= type == COMPONENT_TYPE_USERLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeUserlist ? '' : 'hidden' %>">用户列表</option>
                 <option value="<%= COMPONENT_TYPE_MESSAGELIST %>" <%= type == COMPONENT_TYPE_MESSAGELIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeMessagelist ? '' : 'hidden' %>">消息列表</option>
-                <option value="<%= COMPONENT_TYPE_SURROUDING_USERLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_USERLIST ? 'selected' : '' %>>周边用户</option>
                 <option value="<%= COMPONENT_TYPE_SURROUDING_POSTLIST %>" <%= type == COMPONENT_TYPE_SURROUDING_POSTLIST ? 'selected' : '' %>>周边帖子</option>
-                <option value="<%= COMPONENT_TYPE_RECOMMEND_USERLIST %>" <%= type == COMPONENT_TYPE_RECOMMEND_USERLIST ? 'selected' : '' %>>推荐用户</option>
                 <option value="<%= COMPONENT_TYPE_SETTING %>" <%= type == COMPONENT_TYPE_SETTING ? 'selected' : '' %>>设置</option>
                 <option value="<%= COMPONENT_TYPE_ABOAT %>" <%= type == COMPONENT_TYPE_ABOAT ? 'selected' : '' %>>关于</option>
                 <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %> class="hidden">发表文字</option>
@@ -687,13 +697,45 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 </div>
             </div>
         </div>
+        <!-- 用户中心模板 -->
+        <div id="component-view-<% print(COMPONENT_TYPE_USERINFO+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_USERINFO ? '' : 'hidden' %>">
+
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <lable><input type="checkbox" name="isShowMessagelist[]" <%= extParams.isShowMessagelist ? 'checked' : '' %>>     是否显示我的消息</lable>
+                </div>
+            </div>
+        </div>
+        <!-- 用户列表 组件模板 -->
+        <div id="component-view-<% print(COMPONENT_TYPE_USERLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_USERLIST ? '' : 'hidden' %>">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">条件选择:</label>
+                <div class="col-sm-10">
+                    <select name="userlistFilter[]" class="form-control">
+                        <option value="<%= USERLIST_FILTER_ALL %>" <%= extParams.filter == USERLIST_FILTER_ALL ? 'selected' : '' %>>全部</option> 
+                        <option value="<%= USERLIST_FILTER_FRIEND %>" <%= extParams.filter == USERLIST_FILTER_FRIEND ? 'selected' : '' %>>好友</option> 
+                        <option value="<%= USERLIST_FILTER_FOLLOW %>" <%= extParams.filter == USERLIST_FILTER_FOLLOW ? 'selected' : '' %>>关注</option> 
+                        <option value="<%= USERLIST_FILTER_FOLLOWED %>" <%= extParams.filter == USERLIST_FILTER_FOLLOWED ? 'selected' : '' %>>粉丝</option> 
+                        <option value="<%= USERLIST_FILTER_RECOMMAND %>" <%= extParams.filter == USERLIST_FILTER_RECOMMAND ? 'selected' : '' %>>推荐</option> 
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序方式:</label>
+                <div class="col-sm-10">
+                    <select name="userlistOrderby[]" class="form-control">
+                        <option value="<%= USERLIST_ORDERBY_DATELINE %>" <%= extParams.orderby == USERLIST_ORDERBY_DATELINE ? 'selected' : '' %>>按默认排序</option> 
+                        <option value="<%= USERLIST_ORDERBY_REGISTER %>" <%= extParams.orderby == USERLIST_ORDERBY_REGISTER ? 'selected' : '' %>>按注册时间倒序排序</option> 
+                        <option value="<%= USERLIST_ORDERBY_LOGIN %>" <%= extParams.orderby == USERLIST_ORDERBY_LOGIN ? 'selected' : '' %>>按登陆时间倒序排序</option> 
+                        <option value="<%= USERLIST_ORDERBY_FOLLOWED %>" <%= extParams.orderby == USERLIST_ORDERBY_FOLLOWED ? 'selected' : '' %>>按粉丝最多倒序排序</option> 
+                        <option value="<%= USERLIST_ORDERBY_DISTANCE %>" <%= extParams.orderby == USERLIST_ORDERBY_DISTANCE ? 'selected' : '' %>>按距离倒序排序</option> 
+                    </select>
+                </div>
+            </div>
+        </div>
         <div id="component-view-<% print(COMPONENT_TYPE_MESSAGELIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_MESSAGELIST ? '' : 'hidden' %>">
         </div>
-        <div id="component-view-<% print(COMPONENT_TYPE_SURROUDING_USERLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SURROUDING_USERLIST ? '' : 'hidden' %>">
-        </div>
         <div id="component-view-<% print(COMPONENT_TYPE_SURROUDING_POSTLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SURROUDING_POSTLIST ? '' : 'hidden' %>">
-        </div>
-        <div id="component-view-<% print(COMPONENT_TYPE_RECOMMEND_USERLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_RECOMMEND_USERLIST ? '' : 'hidden' %>">
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_SETTING+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SETTING ? '' : 'hidden' %>">
         </div>
@@ -750,7 +792,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <!-- sign 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_SIGN+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SIGN ? '' : 'hidden' %>">
         </div>
-        <div class="form-group component-style-select-div">
+        <div class="form-group component-style-select-div <%= this.uiconfig.isShow_style ? '' : 'hidden' %>">
             <label for="" class="col-sm-2 control-label">页面样式: </label>
             <div class="col-sm-10">
                 <select class="form-control" name="componentStyle[]">
@@ -979,7 +1021,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutTwoRowOneCol ? '' : 'hidden' %>">2+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutThreeRowOneCol ? '' : 'hidden' %>">3+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_SLIDER %>" <%= style == COMPONENT_STYLE_LAYOUT_SLIDER ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutSlider ? '' : 'hidden' %>">幻灯片样式</option>
-                        <!-- <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_AUTO %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_AUTO ? 'selected' : '' %>>列表自动样式</option> 
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_AUTO %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_AUTO ? 'selected' : '' %>>列表自动样式</option>
+                        <!--
                         <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_MANUAL %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_MANUAL ? 'selected' : '' %>>列表手动样式</option>
                         -->
                     </select>
@@ -1243,6 +1286,9 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
             <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_NEWS_AUTO) { %>
+        <div class="newsauto-component-item-container">
         </div>
     <% } %>
     <div class="text-left" style="margin-bottom:5px;">
