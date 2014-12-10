@@ -127,6 +127,17 @@ return array(
     'location_activation' => WebUtils::t('03000001:当前用户需要激活,请到pc端激活.'),
     'mobcent_login_status' => WebUtils::t('03000001:当前登录状态失效.'),
 
+    'you_have_friends' => WebUtils::t('020000032:你们已成为好友'),
+    'no_privilege_addfriend' => WebUtils::t('020000033:抱歉，您目前没有权限添加好友'),
+    'friend_self_error' => WebUtils::t('020000034:抱歉，您不能加自己为好友'),
+    'space_does_not_exist' => WebUtils::t('020000035:抱歉，您指定的用户空间不存在'),
+    'is_blacklist' => WebUtils::t('020000036:抱歉，受对方的隐私设置影响，您目前没有权限进行本操作'),
+    'enough_of_the_number_of_friends_with_magic' => WebUtils::t('020000037:抱歉，您当前的好友数目达到系统限制,请使用好友增容卡增容'),
+    'enough_of_the_number_of_friends' => WebUtils::t('020000038:抱歉，您当前的好友数目达到系统限制，请先删除部分好友'),
+    'friends_add' => WebUtils::t('020000039:您已和 {username} 成为好友'),
+    'request_has_been_sent' => WebUtils::t('020000040:好友请求已发送，请等待对方验证'),
+    'waiting_for_the_other_test' => WebUtils::t('020000041:正在等待验证'),
+
     // 用户举报 errcode: 040xxxxx
     'report_parameters_invalid' => WebUtils::t('04000001:页面参数错误，暂不能举报'),
     'report_succeed' => WebUtils::t('04000002:举报成功'),

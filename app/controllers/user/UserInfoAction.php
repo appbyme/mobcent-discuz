@@ -17,7 +17,8 @@ class UserInfoAction extends CAction {
 
         $res = WebUtils::initWebApiArray_oldVersion();
         
-        $uid = $this->getController()->uid;
+        global $_G;
+        $uid = $_G['uid'];
         $puid = isset($_GET['userId']) ? $_GET['userId'] : $uid;
 
         $res = $this->_getUserInfo($res, $uid, $puid);
@@ -72,6 +73,7 @@ class UserInfoAction extends CAction {
         $res['body']['repeatList'] = $repeatList;
         $res['body']['profileList'] = $this->_getPersonalDataInfo($puid, $space);
         $res['body']['creditList'] = $this->_getStatisticalInformation($uid, $space);
+        $res['body']['creditShowList'] = $this->_getStatisticalInforSet($uid, $space);
         return $res;
     }
 
@@ -183,10 +185,29 @@ class UserInfoAction extends CAction {
 
         $statisticalInfos = array();
         $statisticalInfos[] = array('type' => 'credits', 'title' => WebUtils::t('积分'),'data' => (int)$space['credits']);
-        if(is_array($_G['setting']['extcredits'])) {
-            foreach($_G['setting']['extcredits'] as $key => $value) { 
-                if($value['title']) {
-                    $statisticalInfos[] = array('type' => 'extcredits' . $key, 'title' => $value['title'],'data' => (int)$space["extcredits$key"]);
+            if(is_array($_G['setting']['extcredits'])) {
+                foreach($_G['setting']['extcredits'] as $key => $value) { 
+                    if($value['title']) {
+                        $statisticalInfos[] = array('type' => 'extcredits' . $key, 'title' => $value['title'],'data' => (int)$space["extcredits$key"]);
+                    }
+                }
+            }
+        return $statisticalInfos;
+    }
+
+    private function _getStatisticalInforSet($uid, $space) {
+        global $_G;
+
+        $extcreditSet = WebUtils::getDzPluginAppbymeAppConfig('user_extcredit_show');
+
+        $statisticalInfos = array();
+        $statisticalInfos[] = array('type' => 'credits', 'title' => WebUtils::t('积分'),'data' => (int)$space['credits']);
+        if ($extcreditSet) {
+            if(is_array($_G['setting']['extcredits'])) {
+                foreach($_G['setting']['extcredits'] as $key => $value) { 
+                    if($value['title'] && $extcreditSet == $key) {
+                        $statisticalInfos[] = array('type' => 'extcredits' . $key, 'title' => $value['title'],'data' => (int)$space["extcredits$key"]);
+                    }
                 }
             }
         }
