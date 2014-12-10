@@ -383,7 +383,13 @@ class ForumUtils {
         return DzForumThread::isTop($tid);
     }
 
-    public static function isFavoriteTopic($uid, $tid) {return DzForumThread::isFavorite($uid, $tid);
+    public static function isFavoriteTopic($uid, $tid) {
+        return DzForumThread::isFavorite($uid, $tid);
+    }
+
+    // 是否赞过
+    public static function isHasRecommendAdd ($tid) {
+        return 1;
     }
 
     /**

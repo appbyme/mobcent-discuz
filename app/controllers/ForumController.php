@@ -29,7 +29,8 @@ class ForumController extends MobcentController  {
             'vote' => 'application.controllers.forum.VoteAction',
             'topicrate' => 'application.controllers.forum.TopicRateAction',
             'ratelistview' => 'application.controllers.forum.RateListViewAction',
-            'classification' => 'application.controllers.forum.ClassificationAction',            
+            'classification' => 'application.controllers.forum.ClassificationAction',
+            'sendattachmentex' => 'application.controllers.forum.SendAttachmentExAction',            
         );
     }
 
@@ -53,6 +54,7 @@ class ForumController extends MobcentController  {
             'topicrate' => true,
             'ratelistview' => false,
             'classification' => true,
+            'sendattachmentex' => true,    
         );
     }
 }

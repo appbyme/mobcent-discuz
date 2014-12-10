@@ -32,7 +32,8 @@ class UserController extends MobcentController {
             'switch' => 'application.controllers.user.SwitchAction',
             'location' => 'application.controllers.user.LocationAction',
             'qqinfo' => 'application.controllers.user.QQInfoAction',
-            'saveqqinfo' => 'application.controllers.user.SaveQQInfoAction',                        
+            'saveqqinfo' => 'application.controllers.user.SaveQQInfoAction',
+            'uploadavatarex' => 'application.controllers.user.UploadAvatarExAction',
         );
     }
 
@@ -58,7 +59,8 @@ class UserController extends MobcentController {
             'switch' => true,
             'location' => true,
             'qqinfo' => false,
-            'saveqqinfo' => false,           
+            'saveqqinfo' => false,    
+            'uploadavatarex' => true,
         );
     }
 }

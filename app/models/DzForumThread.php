@@ -448,13 +448,50 @@ class DzForumThread extends DiscuzAR {
     }
 
     // 查询符合条件数据的总条数
-    public static function getByFidCount($fids, $params=array()) {
-        $sql = 'SELECT COUNT(*) 
-                FROM %t
-                WHERE 1
-                AND fid IN (%n)
-                ';
+    public static function getByFidCount($fids, $params=array(), $longitude, $latitude, $radius) {
+        global $_G;
+        $table = ' %t';
+        $where = ' 1 AND fid IN (%n)';
         $term = array('forum_thread', $fids);
+
+        if ($params['topic_orderby'] == 'friend') {
+            $range = self::_getRange($longitude, $latitude, $radius);
+            $select = '*, ' . self::_getSqlDistance($longitude, $latitude) . ' AS distance ';
+            $table = '
+                %t hsu INNER JOIN %t ft ON hsu.object_id=ft.tid
+                INNER JOIN %t aus ON ft.authorid=aus.uid
+            ';
+
+            $where = '
+                hsu.type=%s 
+                AND hsu.longitude BETWEEN %s AND %s
+                AND hsu.latitude BETWEEN %s AND %s
+                AND aus.ukey=%s
+                AND aus.uvalue=%s
+                AND ft.authorid!=%s
+                AND fid IN (%n)
+            ';
+
+            $term = array(
+                'home_surrounding_user',
+                'forum_thread',
+                'appbyme_user_setting',
+                SurroundingInfo::TYPE_TOPIC,
+                $range['longitude']['min'],
+                $range['longitude']['max'],
+                $range['latitude']['min'],
+                $range['latitude']['max'],
+                AppbymeUserSetting::KEY_GPS_LOCATION,
+                AppbymeUserSetting::VALUE_GPS_LOCATION_ON,
+                $_G['uid'],
+                $fids
+            );
+        }
+
+        $sql = 'SELECT COUNT(*)
+                FROM '.$table.'
+                WHERE '.$where
+                ;
 
         if (!empty($params['topic_digest'])) {
             $sql .= ' AND digest IN (%n)';
@@ -499,6 +536,11 @@ class DzForumThread extends DiscuzAR {
         if ($params['topic_typeid'] > 0) {
             $sql .= ' AND typeid=%d';
             $term[] = $params['topic_typeid'];            
+        }
+
+        if ($params['other_filter']) {
+            $sql .= ' AND authorid IN (%n)';
+            $term[] = self::getUserFriendList($_G['uid']);
         }
         return DbUtils::getDzDbUtils(true)->queryScalar($sql, $term);
     }
@@ -514,14 +556,52 @@ class DzForumThread extends DiscuzAR {
      * @return array 
      */
     
-    public static function getByFidData($fids, $offset, $limit, $params=array()) {
-        $sql = 'SELECT *
-                FROM %t
-                WHERE 1
-                AND fid IN (%n)
-        ';
+    public static function getByFidData($fids, $offset, $limit, $params=array(), $longitude, $latitude, $radius) {
+        global $_G;
+        $select = ' *';
+        $table = ' %t';
+        $where = ' 1 AND fid IN (%n)';
         $term = array('forum_thread', $fids);
-        
+
+        if ($params['topic_orderby'] == 'friend') {
+            $range = self::_getRange($longitude, $latitude, $radius);
+            $select = '*, ' . self::_getSqlDistance($longitude, $latitude) . ' AS distance ';
+            $table = '
+                %t hsu INNER JOIN %t ft ON hsu.object_id=ft.tid
+                INNER JOIN %t aus ON ft.authorid=aus.uid
+            ';
+
+            $where = '
+                hsu.type=%s 
+                AND hsu.longitude BETWEEN %s AND %s
+                AND hsu.latitude BETWEEN %s AND %s
+                AND aus.ukey=%s
+                AND aus.uvalue=%s
+                AND ft.authorid!=%s
+                AND fid IN (%n)
+            ';
+
+            $term = array(
+                'home_surrounding_user',
+                'forum_thread',
+                'appbyme_user_setting',
+                SurroundingInfo::TYPE_TOPIC,
+                $range['longitude']['min'],
+                $range['longitude']['max'],
+                $range['latitude']['min'],
+                $range['latitude']['max'],
+                AppbymeUserSetting::KEY_GPS_LOCATION,
+                AppbymeUserSetting::VALUE_GPS_LOCATION_ON,
+                $_G['uid'],
+                $fids
+            );
+        }
+
+        $sql = 'SELECT '. $select . '
+                FROM '.$table.'
+                WHERE '.$where
+                ;
+
         if (!empty($params['topic_digest'])) {
             $sql .= ' AND digest IN (%n)';
             $term[] =  $params['topic_digest'];
@@ -567,8 +647,17 @@ class DzForumThread extends DiscuzAR {
             $term[] = $params['topic_typeid'];            
         }
 
+        if ($params['other_filter']) {
+            $sql .= ' AND authorid IN (%n)';
+            $term[] = self::getUserFriendList($_G['uid']);
+        }
+
         if (isset($params['topic_orderby'])) {
-            $sql .= ' ORDER BY ' . $params['topic_orderby'] . ' DESC';
+            $orderBy = ' ORDER BY ' . $params['topic_orderby'] . ' DESC';
+            if ($params['topic_orderby'] == 'friend') {
+                $orderBy = ' ORDER BY distance ASC';    
+            }
+            $sql .= $orderBy;
         } else {
             $sql .= ' ORDER BY dateline DESC';
         }
@@ -576,8 +665,38 @@ class DzForumThread extends DiscuzAR {
         $sql .= ' LIMIT %d, %d';
         $term[] = $offset;
         $term[] = $limit;
-
         return DbUtils::getDzDbUtils(true)->queryAll($sql, $term);
-
     }
+
+    /**
+     * 获取好友列表
+     * 
+     * @param int $uid 用户ID
+     * @return array $fuids 好友数组
+     */
+
+    public static function getUserFriendList($uid) {
+        $result = DbUtils::getDzDbUtils(true)->queryAll('
+            SELECT fuid
+            FROM %t
+            WHERE uid=%d
+            ',
+            array('home_friend', $uid)
+        );
+        foreach ($result as $res) {
+            $fuids[] = $res['fuid'];
+        }
+        return $fuids;
+    }
+
+    // 周边相关
+    private static function _getRange($longitude, $latitude, $radius) {
+        return SurroundingInfo::getRange($longitude, $latitude, $radius);
+    }
+
+    // 周边先关 计算距离
+    private static function _getSqlDistance($longitude, $latitude) {
+        return SurroundingInfo::getSqlDistance($longitude, $latitude);
+    }
+
 }

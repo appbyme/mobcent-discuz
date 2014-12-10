@@ -13,9 +13,9 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 // Mobcent::setErrors();
 class NewsListAction extends MobcentAction {
     const HANDPAGE = 10;
-    public function run($moduleId, $page = 1, $pageSize = 10) {
-        $key = CacheUtils::getNewsListKey(array($moduleId, $page, $pageSize));
-        $this->runWithCache($key, array('mid' => $moduleId, 'page' => $page, 'pageSize' => $pageSize));
+    public function run($moduleId, $page = 1, $pageSize = 10, $longitude, $latitude, $radius=100000, $isImageList=0) {
+        $key = CacheUtils::getNewsListKey(array($moduleId, $page, $pageSize, $longitude, $latitude, $radius, $imageList));
+        $this->runWithCache($key, array('mid' => $moduleId, 'page' => $page, 'pageSize' => $pageSize, 'longitude' => $longitude, 'latitude' => $latitude, 'radius' => $radius, 'isImageList' => $isImageList));
     }
 
     protected function runWithCache($key, $params=array()) {
@@ -70,7 +70,8 @@ class NewsListAction extends MobcentAction {
                 foreach ($autoAdd as $auto) {
                     $fids[] = $auto['id'];
                 }
-                $count = DzForumThread::getByFidCount($fids, $params);
+                $count = DzForumThread::getByFidCount($fids, $params, $longitude, $latitude, $radius);
+                // Mobcent::dumpSql();
             } else {
                 foreach ($autoAdd as $auto) {
                     $catids[] = $auto['id'];
@@ -97,7 +98,7 @@ class NewsListAction extends MobcentAction {
                 $res = array_merge($res, $pageInfo);
                 if ($count != 0) {
                     if ($autoAdd[0]['idtype'] == 'fid') {
-                        $autoData = $this->_autoFidData($fids, $offset, $pageSize, $params);
+                        $autoData = $this->_autoFidData($fids, $offset, $pageSize, $params, $longitude, $latitude, $radius);
                     } else {
                         $autoData = $this->_autoCatidData($catids, $offset, $pageSize, $params);
                     }
@@ -123,7 +124,7 @@ class NewsListAction extends MobcentAction {
 
         if ($count != 0) {
             if ($autoAdd[0]['idtype'] == 'fid') {
-                $autoData = $this->_autoFidData($fids, $offset, $pageSize, $params);
+                $autoData = $this->_autoFidData($fids, $offset, $pageSize, $params, $longitude, $latitude, $radius);
             } else {
                 $autoData = $this->_autoCatidData($catids, $offset, $pageSize, $params);
             } 
@@ -150,7 +151,7 @@ class NewsListAction extends MobcentAction {
 
         foreach($portals as $portal) {
            if ($portal['idtype'] == 'tid') {
-                $topicSummary = ForumUtils::getTopicSummary($portal['id'], 'portal');
+                $topicSummary = ForumUtils::getTopicSummary($portal['id'], 'portal', true, array('imageList' => $_GET['imageList'], 'imageListLen' => 9, 'imageListThumb' => 1));
                 $rows[] = $this->_getListField(ForumUtils::getTopicInfo($portal['id']), $topicSummary, 'topic', $portal['id']);
            } elseif ($portal['idtype'] == 'aid') {
                 $articleSummary = PortalUtils::getArticleSummary($portal['id']);
@@ -170,7 +171,7 @@ class NewsListAction extends MobcentAction {
         if(empty($handInfos)) return $rows;
         foreach ($handInfos as $hand) {
             if ($hand['idtype'] == 'tid') {
-                $topicSummary = ForumUtils::getTopicSummary($hand['id'], 'portal');
+                $topicSummary = ForumUtils::getTopicSummary($hand['id'], 'portal', true, array('imageList' => $_GET['imageList'], 'imageListLen' => 9, 'imageListThumb' => 1));
                 $topicInfo = ForumUtils::getTopicInfo($hand['id']);
 
                 //  add:在添加自定义内容的时候，手动修改的帖子标题 
@@ -190,7 +191,7 @@ class NewsListAction extends MobcentAction {
     }
 
     // 通过fids来取出数据
-    private function _autoFidData($fids, $offset, $pageSize, $params) {
+    private function _autoFidData($fids, $offset, $pageSize, $params, $longitude, $latitude, $radius) {
         // [add]板块设置用户组权限后，针对当前用户进行过滤（在列表中是否显示）Author：HanPengyu，Data：14.11.28
         require_once libfile('function/forumlist');
         $tmpFids = array();
@@ -200,9 +201,10 @@ class NewsListAction extends MobcentAction {
         }
         $fids = $tmpFids;
         
-        $lists = DzForumThread::getByFidData($fids, $offset, $pageSize, $params);
+        $lists = DzForumThread::getByFidData($fids, $offset, $pageSize, $params, $longitude, $latitude, $radius);
+        // Mobcent::dumpSql();
         foreach ($lists as $list) {
-            $topicSummary = ForumUtils::getTopicSummary($list['tid'], 'portal');
+            $topicSummary = ForumUtils::getTopicSummary($list['tid'], 'portal', true, array('imageList' => $_GET['imageList'], 'imageListLen' => 9, 'imageListThumb' => 1));
             $rows[] = $this->_getListField($list, $topicSummary, 'topic', $list['tid'], $params);
         }
         return $rows;        
@@ -274,11 +276,17 @@ class NewsListAction extends MobcentAction {
         $row['hits'] = $source_type == 'topic' ? (int)$list['views'] : (int)$list['viewnum'];
         $row['summary'] = $summary['msg'];
         $row['replies'] = $source_type == 'topic' ? (int)$list['replies'] : (int)$list['commentnum'];
-        // $row['pic_path'] = ImageUtils::getThumbImage($summary['image']);
-        $tempRow = ImageUtils::getThumbImageEx($summary['image'], 15, true, false);
+
+        $tempRow = ImageUtils::getThumbImageEx($summary['image'], 15, true, true);
         $row['pic_path'] = $tempRow['image'];
         $row['ratio'] = $tempRow['ratio'];
         $row['redirectUrl'] = (string)$list['url'];
+
+        $row['userAvatar'] = UserUtils::getUserAvatar($row['user_id']);
+        $row['isHasRecommendAdd'] = $source_type == 'topic' ? ForumUtils::isHasRecommendAdd($row['source_id']) : 0;
+        $row['distance'] = isset($list['distance']) ? (string)$list['distance'] : '';
+        $row['location'] = isset($list['location']) ? (string)$list['location'] : '';
+        $row['imageList'] = $summary['imageList'];
 
         return $row;
     }
