@@ -448,13 +448,13 @@ class DzForumThread extends DiscuzAR {
     }
 
     // 查询符合条件数据的总条数
-    public static function getByFidCount($fids, $params=array(), $longitude, $latitude, $radius) {
+    public static function getByFidCount($fids, $params=array(), $longitude='', $latitude='', $radius=100000) {
         global $_G;
         $table = ' %t';
         $where = ' 1 AND fid IN (%n)';
         $term = array('forum_thread', $fids);
 
-        if ($params['topic_orderby'] == 'friend') {
+        if ($params['topic_orderby'] == 'distance') {
             $range = self::_getRange($longitude, $latitude, $radius);
             $select = '*, ' . self::_getSqlDistance($longitude, $latitude) . ' AS distance ';
             $table = '
@@ -538,7 +538,7 @@ class DzForumThread extends DiscuzAR {
             $term[] = $params['topic_typeid'];            
         }
 
-        if ($params['other_filter']) {
+        if (in_array(1, $params['other_filter'])) {
             $sql .= ' AND authorid IN (%n)';
             $term[] = self::getUserFriendList($_G['uid']);
         }
@@ -556,14 +556,14 @@ class DzForumThread extends DiscuzAR {
      * @return array 
      */
     
-    public static function getByFidData($fids, $offset, $limit, $params=array(), $longitude, $latitude, $radius) {
+    public static function getByFidData($fids, $offset, $limit, $params=array(), $longitude='', $latitude='', $radius=100000) {
         global $_G;
         $select = ' *';
         $table = ' %t';
         $where = ' 1 AND fid IN (%n)';
         $term = array('forum_thread', $fids);
 
-        if ($params['topic_orderby'] == 'friend') {
+        if ($params['topic_orderby'] == 'distance') {
             $range = self::_getRange($longitude, $latitude, $radius);
             $select = '*, ' . self::_getSqlDistance($longitude, $latitude) . ' AS distance ';
             $table = '
@@ -647,7 +647,7 @@ class DzForumThread extends DiscuzAR {
             $term[] = $params['topic_typeid'];            
         }
 
-        if ($params['other_filter']) {
+        if (in_array(1, $params['other_filter'])) {
             $sql .= ' AND authorid IN (%n)';
             $term[] = self::getUserFriendList($_G['uid']);
         }
