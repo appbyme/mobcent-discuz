@@ -16,6 +16,19 @@ class UserAdminViewAction extends CAction {
 
     public function run($uid, $act='add') {
         $app = Yii::app()->getController()->mobcentDiscuzApp;
+
+        if (!empty($_POST)) {
+            // 把$_POST转成utf-8, 这是由于discuz源码会在mobile情况下把$_POST预先转码成对应的charset,
+            $_POST = array_intersect_key($_REQUEST, $_POST);
+            // 手动把转成utf-8的$_POST数据再次转成对应的charset
+            foreach ($_POST as $key => $value) {
+                if (is_string($value)) {
+                    $_POST[$key] = WebUtils::t($value);
+                }
+            }
+            $_GET = array_merge($_GET, $_POST);
+        }
+        
         $this->_adminUser($act, $uid);
     }
 

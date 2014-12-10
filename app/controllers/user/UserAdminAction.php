@@ -28,7 +28,7 @@ class UserAdminAction extends MobcentAction {
             case 'delblack':$res = $this->_userDelBlackSetting($res, $uid); break;
             case 'friend': $res = $this->_userFriendSetting($res, $uid, $gid, $note); break;
             case 'delfriend': $res = $this->_userDelFriendSetting($res, $uid); break;
-            default:# code...
+            default:
             break;
         }
         return $res;
@@ -135,13 +135,12 @@ class UserAdminAction extends MobcentAction {
 
     private function _userFriendSetting($res, $uid, $gid, $note) {
         global $_G;
-        $_G['uid'] = 1;
         require_once libfile('function/friend');
         require_once libfile('function/spacecp');
         require_once libfile('function/home');
-        // if(!checkperm('allowfriend')) {
-        //     return $this->makeErrorInfo($res, 'no_privilege_addfriend');
-        // }
+        if(!checkperm('allowfriend')) {
+            return $this->makeErrorInfo($res, 'no_privilege_addfriend');
+        }
 
         if($uid == $_G['uid']) {
             return $this->makeErrorInfo($res, 'friend_self_error');
