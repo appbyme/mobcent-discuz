@@ -13,7 +13,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 // Mobcent::setErrors();
 class NewsListAction extends MobcentAction {
     const HANDPAGE = 10;
-    public function run($moduleId, $page = 1, $pageSize = 10, $longitude, $latitude, $radius=100000, $isImageList=0) {
+    public function run($moduleId, $page = 1, $pageSize = 10, $longitude='', $latitude='', $radius=100000, $isImageList=0) {
         $key = CacheUtils::getNewsListKey(array($moduleId, $page, $pageSize, $longitude, $latitude, $radius, $imageList));
         $this->runWithCache($key, array('mid' => $moduleId, 'page' => $page, 'pageSize' => $pageSize, 'longitude' => $longitude, 'latitude' => $latitude, 'radius' => $radius, 'isImageList' => $isImageList));
     }

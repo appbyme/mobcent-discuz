@@ -215,7 +215,7 @@ class TopicListAction extends MobcentAction {
         return $list;
     }
 
-    private function _getTopicInfos($fid, $page, $pageSize, $sort, $filterType='', $filterId='', $isImageList) {
+    private function _getTopicInfos($fid, $page, $pageSize, $sort, $filterType='', $filterId='', $isImageList='') {
 
         $infos = array('count' => 0, 'list' => array());
 
