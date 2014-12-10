@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 加好友、关注、取消关注和拉黑、取消拉黑接口
+ * 关注、取消关注和拉黑、取消拉黑接口
  *
  * @author 徐少伟 <xushaowei@mobcent.com>
  * @copyright 2012-2014 Appbyme
@@ -26,8 +26,8 @@ class UserAdminAction extends MobcentAction {
             case 'unfollow':$res = $this->_userUnFollowSetting($res, $uid); break;
             case 'black': $res = $this->_userBlackSetting($res, $uid); break;
             case 'delblack':$res = $this->_userDelBlackSetting($res, $uid); break;
-            case 'friend': $res = $this->_userFriendSetting($res, $uid, $gid, $note); break;
-            case 'delfriend': $res = $this->_userDelFriendSetting($res, $uid); break;
+            // case 'friend': $res = $this->_userFriendSetting($res, $uid, $gid, $note); break;
+            // case 'delfriend': $res = $this->_userDelFriendSetting($res, $uid); break;
             default:
             break;
         }

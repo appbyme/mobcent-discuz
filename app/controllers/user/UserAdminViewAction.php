@@ -12,7 +12,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 }
 
 // Mobcent::setErrors();
-class UserAdminViewAction extends CAction {
+class UserAdminViewAction extends MobcentAction {
 
     public function run($uid, $act='add') {
         $app = Yii::app()->getController()->mobcentDiscuzApp;
@@ -28,7 +28,7 @@ class UserAdminViewAction extends CAction {
             }
             $_GET = array_merge($_GET, $_POST);
         }
-        
+
         $this->_adminUser($act, $uid);
     }
 
@@ -36,6 +36,10 @@ class UserAdminViewAction extends CAction {
 
         global $_G;
         $errorMsg = '';
+        require_once libfile('function/friend');
+        if (friend_request_check($uid) && $act='add') {
+            $act = 'add2';
+        }
 
         require_once libfile('function/friend');
         require_once libfile('function/spacecp');
@@ -43,33 +47,137 @@ class UserAdminViewAction extends CAction {
             switch ($act) {
                 case 'add':
                     $_POST = array_intersect_key($_REQUEST, $_POST);
-                    $res = WebUtils::httpRequestAppAPI('user/useradmin', array(
-                        'uid'=>$uid,
-                        'type'=>'friend',
-                        'gid'=>$_POST['gid'],
-                        'message'=>$_POST['note'],
-                    ));
-                    $res = WebUtils::jsonDecode($res);
+                    $note = $_POST['note'];
+                    global $_G;
+                    require_once libfile('function/friend');
+                    require_once libfile('function/spacecp');
+                    require_once libfile('function/home');
+                    // if(!checkperm('allowfriend')) {
+                    //     $list = $this->makeErrorInfo($res, 'no_privilege_addfriend');
+                    //     $this->_exitWithHtmlAlert($list['errcode']);
+                    // }
+
+                    if($uid == $_G['uid']) {
+                        $list = $this->makeErrorInfo($res, 'friend_self_error');
+                        $this->_exitWithHtmlAlert($list['errcode']);
+                    }
+
+                    if(friend_check($uid)) {
+                        $list = $this->makeErrorInfo($res, 'you_have_friends');
+                        $this->_exitWithHtmlAlert($list['errcode']);
+                    }
+
+                    $tospace = getuserbyuid($uid);
+                    if(empty($tospace)) {
+                        $list = $this->makeErrorInfo($res, 'space_does_not_exist');
+                        $this->_exitWithHtmlAlert($list['errcode']);
+                    }
+
+                    if(isblacklist($tospace['uid'])) {
+                        $list = $this->makeErrorInfo($res, 'is_blacklist');
+                        $this->_exitWithHtmlAlert($list['errcode']);
+                    }
+                    space_merge($space, 'count');
+                    space_merge($space, 'field_home');
+                    $maxfriendnum = checkperm('maxfriendnum'); 
+
+                    if($maxfriendnum && $space['friends'] >= $maxfriendnum + $space['addfriend']) {
+                        if($_G['magic']['friendnum']) {
+                            $list = $this->makeErrorInfo($res, 'enough_of_the_number_of_friends_with_magic');
+                            $this->_exitWithHtmlAlert($list['errcode']);
+                        } else {
+                            $list = $this->makeErrorInfo($res, 'enough_of_the_number_of_friends');
+                            $this->_exitWithHtmlAlert($list['errcode']);
+                        }
+                    }
+
+                    if(friend_request_check($uid)) {
+
+                    } else {
+                        if(C::t('home_friend_request')->count_by_uid_fuid($uid, $_G['uid'])) {
+                            $list = $this->makeErrorInfo($res, 'waiting_for_the_other_test');
+                            $this->_exitWithHtmlAlert($list['errcode']);
+                        }
+
+                        $_POST['gid'] = $gid;
+                        $_POST['note'] = censor(htmlspecialchars(cutstr($note, strtolower(CHARSET) == 'utf-8' ? 30 : 20, '')));
+                        friend_add($uid, $_POST['gid'], $_POST['note']);
+                        $note = array(
+                            'uid' => $_G['uid'],
+                            'url' => 'home.php?mod=spacecp&ac=friend&op=add&uid='.$_G['uid'].'&from=notice',
+                            'from_id' => $_G['uid'],
+                            'from_idtype' => 'friendrequest',
+                            'note' => !empty($_POST['note']) ? lang('spacecp', 'friend_request_note', array('note' => $_POST['note'])) : ''
+                        );
+
+                        notification_add($uid, 'friend', 'friend_request', $note);
+
+                        require_once libfile('function/mail');
+                        $values = array(
+                            'username' => $tospace['username'],
+                            'url' => getsiteurl().'home.php?mod=spacecp&ac=friend&amp;op=request'
+                        );
+                        sendmail_touser($uid, lang('spacecp', 'friend_subject', $values), '', 'friend_add');
+                        $list = $this->makeErrorInfo($res, 'request_has_been_sent');
+                        $this->_exitWithHtmlAlert($list['errcode']);
+                    }
                     $this->_exitWithHtmlAlert($res['errcode']);
-                    break;
                 case 'add2':
-                    $_POST = array_intersect_key($_REQUEST, $_POST);
-                    $res = WebUtils::httpRequestAppAPI('user/useradmin', array(
-                        'uid'=>$uid,
-                        'type'=>'friend',
-                        'gid'=>$_POST['gid'],
-                        'message'=>$_POST['note'],
-                    ));
-                    $res = WebUtils::jsonDecode($res);
-                    $this->_exitWithHtmlAlert($res['errcode']);
+                    global $_G;
+                    $_G['uid'] = 2;
+                    if($uid == $_G['uid']) {
+                        $list = $this->makeErrorInfo($res, 'friend_self_error');
+                        $this->_exitWithHtmlAlert($list['errcode']);
+                    }
+
+                    if(friend_check($uid)) {
+                        $list = $this->makeErrorInfo($res, 'you_have_friends');
+                        $this->_exitWithHtmlAlert($list['errcode']);
+                    }
+
+                    $tospace = getuserbyuid($uid);
+                    if(empty($tospace)) {
+                        $list = $this->makeErrorInfo($res, 'space_does_not_exist');
+                        $this->_exitWithHtmlAlert($list['errcode']);
+                    }
+
+                    if(isblacklist($tospace['uid'])) {
+                        $list = $this->makeErrorInfo($res, 'is_blacklist');
+                        $this->_exitWithHtmlAlert($list['errcode']);
+                    }
+                    space_merge($space, 'count');
+                    space_merge($space, 'field_home');
+                    $maxfriendnum = checkperm('maxfriendnum'); 
+
+                    if($maxfriendnum && $space['friends'] >= $maxfriendnum + $space['addfriend']) {
+                        if($_G['magic']['friendnum']) {
+                            $list = $this->makeErrorInfo($res, 'enough_of_the_number_of_friends_with_magic');
+                            $this->_exitWithHtmlAlert($list['errcode']);
+                        } else {
+                            $list = $this->makeErrorInfo($res, 'enough_of_the_number_of_friends');
+                            $this->_exitWithHtmlAlert($list['errcode']);
+                        }
+                    }
+                    require_once libfile('function/home');
+                    $_POST['gid'] = intval($gid);
+                    friend_add($uid, $uid);
+
+                    if(ckprivacy('friend', 'feed')) {
+                        require_once libfile('function/feed');
+                        feed_add('friend', 'feed_friend_title', array('touser'=>"<a href=\"home.php?mod=space&uid=$tospace[uid]\">$tospace[username]</a>"));
+                    }
+
+                    notification_add($uid, 'friend', 'friend_add');
+                    // showmessage('friends_add', dreferer(), array('username' => $tospace['username'], 'uid'=>$uid, 'from' => $_GET['from']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
+                    $list = $this->makeErrorInfo($res, 'friends_add', array('{username}' => $tospace['username']));
+                    $this->_exitWithHtmlAlert($list['errcode']);
                     break;
                 case 'ignore':
-                    $_POST = array_intersect_key($_REQUEST, $_POST);
-                    $res = WebUtils::httpRequestAppAPI('user/useradmin', array(
-                        'uid'=>$uid,
-                        'type'=>'delfriend',
-                    ));
-                    $list = WebUtils::jsonDecode($res);
+                    global $_G;
+                    require_once libfile('function/friend');
+                    friend_delete($uid);
+                    $params['noError'] = 1;
+                    $list = $this->makeErrorInfo($res, 'do_success', $params);
                     $this->_exitWithHtmlAlert($list['errcode']);
                     break;
                 case 'shield':
@@ -78,7 +186,6 @@ class UserAdminViewAction extends CAction {
                     // if(submitcheck('ignoresubmit')) {
                         $authorid = empty($_POST['authorid']) ? 0 : intval($_POST['authorid']);
                         $type = 'friend';
-                        $_G['uid'] = 1;
                         if($type) {
                             $type_uid = $type.'|'.$authorid;
                             if(empty($space['privacy']['filter_note']) || !is_array($space['privacy']['filter_note'])) {
