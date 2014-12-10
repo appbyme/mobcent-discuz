@@ -800,6 +800,10 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                     <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
                     <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
                     <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式</option>
+                    <option value="<%= COMPONENT_STYLE_IMAGE_BIG %>" <%= style == COMPONENT_STYLE_IMAGE_BIG ? 'selected' : '' %>>大图样式</option>
+                    <option value="<%= COMPONENT_STYLE_IMAGE_SUDOKU %>" <%= style == COMPONENT_STYLE_IMAGE_SUDOKU ? 'selected' : '' %>>类朋友圈样式</option>
+                    <option value="<%= COMPONENT_STYLE_1 %>" <%= style == COMPONENT_STYLE_1 ? 'selected' : '' %>>样式1</option>
+                    <option value="<%= COMPONENT_STYLE_2 %>" <%= style == COMPONENT_STYLE_2 ? 'selected' : '' %>>样式2</option>
                 </select> 
             </div>
         </div>
@@ -1022,7 +1026,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_ROW_ONE_COL ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutTwoRowOneCol ? '' : 'hidden' %>">2+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL %>" <%= style == COMPONENT_STYLE_LAYOUT_THREE_ROW_ONE_COL ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutThreeRowOneCol ? '' : 'hidden' %>">3+1样式</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_SLIDER %>" <%= style == COMPONENT_STYLE_LAYOUT_SLIDER ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutSlider ? '' : 'hidden' %>">幻灯片样式</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_AUTO %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_AUTO ? 'selected' : '' %>>列表自动样式</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_AUTO %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_AUTO ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutNewsAuto ? '' : 'hidden' %>">列表自动样式</option>
                         <!--
                         <option value="<%= COMPONENT_STYLE_LAYOUT_NEWS_MANUAL %>" <%= style == COMPONENT_STYLE_LAYOUT_NEWS_MANUAL ? 'selected' : '' %>>列表手动样式</option>
                         -->

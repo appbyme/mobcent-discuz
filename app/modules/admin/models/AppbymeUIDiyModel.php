@@ -77,6 +77,10 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_STYLE_FLAT = 'flat';
     const COMPONENT_STYLE_CARD = 'card';
     const COMPONENT_STYLE_IMAGE = 'image';
+    const COMPONENT_STYLE_IMAGE_BIG = 'imageBig';
+    const COMPONENT_STYLE_IMAGE_SUDOKU = 'imageSudoku';
+    const COMPONENT_STYLE_1 = 'style1';
+    const COMPONENT_STYLE_2 = 'style2';
 
     const COMPONENT_STYLE_LAYOUT_DEFAULT = 'layoutDefault';
     const COMPONENT_STYLE_LAYOUT_IMAGE = 'layoutImage';
