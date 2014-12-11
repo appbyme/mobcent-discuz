@@ -47,7 +47,7 @@ class UserAdminViewAction extends MobcentAction {
             switch ($act) {
                 case 'add':
                     $_POST = array_intersect_key($_REQUEST, $_POST);
-                    $note = $_POST['note'];
+                    $note = $_GET['note'];
                     require_once libfile('function/friend');
                     require_once libfile('function/spacecp');
                     require_once libfile('function/home');
@@ -205,6 +205,7 @@ class UserAdminViewAction extends MobcentAction {
             if ($act == 'add') {
                 require_once libfile('function/friend');
                 $groups = $this->_getFriendGroupList();
+                $tospace = getuserbyuid($uid);
             } elseif ($act == 'add2'){
                 require_once libfile('function/friend');
                 $groups = $this->_getFriendGroupList();
@@ -217,8 +218,8 @@ class UserAdminViewAction extends MobcentAction {
             'errorMsg' => $errorMsg,
             'action' => $act,
             '_G' => $_G,
-            'groups' => WebUtils::u($groups),
-            'tospace' => WebUtils::u($tospace),
+            'groups' => $groups,
+            'tospace' => $tospace,
         ));
     }
 

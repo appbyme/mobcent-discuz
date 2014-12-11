@@ -320,11 +320,11 @@ a.pn {
                             <table>
                                 <tr>
                                 <th valign="top" width="60" class="avt"><a href="home.php?mod=space&amp;uid=<?php echo $tospace['uid'];?>"><?php echo avatar($tospace[uid],small);?></th>
-                                    <td valign="top">添加 <strong><?php echo $tospace['username'];?></strong> 为好友，附言:<br />
+                                    <td valign="top">添加 <strong><?php echo WebUtils::u($tospace['username']);?></strong> 为好友，附言:<br />
                                     <input type="text" name="note" value="" size="35" class="px"  onkeydown="ctrlEnter(event, 'addsubmit_btn', 1);" />
-                                        <p class="mtn xg1">(附言为可选，<?php echo $tospace['username'];?> 会看到这条附言，最多 10 个字 )</p>
+                                        <p class="mtn xg1">(附言为可选，<?php echo WebUtils::u($tospace['username']);?> 会看到这条附言，最多 10 个字 )</p>
                                         <p class="mtm">
-                                        分组: <select name="gid" class="ps"><?php if(is_array($groups)) foreach($groups as $key => $value) { ?><option value="<?php echo $key;?>" <?php if(empty($space['privacy']['groupname']) && $key==1) { ?> selected="selected"<?php } ?>><?php echo $value;?></option>
+                                        分组: <select name="gid" class="ps"><?php if(is_array($groups)) foreach($groups as $key => $value) { ?><option value="<?php echo $key;?>" <?php if(empty($space['privacy']['groupname']) && $key==1) { ?> selected="selected"<?php } ?>><?php echo WebUtils::u($value);?></option>
                                         <?php } ?>
                                         </select>
                                     </p>
@@ -341,8 +341,8 @@ a.pn {
                                     <tr>
                                     <th valign="top" width="60" class="avt"><a href="home.php?mod=space&amp;uid=<?php echo $tospace['uid'];?>"><?php echo avatar($tospace[uid],small);?></th>
                                     <td valign="top">
-                                        <p>批准 <strong><?php echo $tospace['username'];?></strong> 的好友请求，并分组:</p>
-                                        <table><tr><?php $i=0;?><?php if(is_array($groups)) foreach($groups as $key => $value) { ?><td style="padding:8px 8px 0 0;"><label for="group_<?php echo $key;?>"><input type="radio" name="gid" id="group_<?php echo $key;?>" value="<?php echo $key;?>"<?php echo $groupselect[$key];?> /><?php echo $value;?></label></td>
+                                        <p>批准 <strong><?php echo WebUtils::u($tospace['username']);?></strong> 的好友请求，并分组:</p>
+                                        <table><tr><?php $i=0;?><?php if(is_array($groups)) foreach($groups as $key => $value) { ?><td style="padding:8px 8px 0 0;"><label for="group_<?php echo $key;?>"><input type="radio" name="gid" id="group_<?php echo $key;?>" value="<?php echo $key;?>"<?php echo $groupselect[$key];?> /><?php echo WebUtils::u($value);?></label></td>
                                         <?php if($i%2==1) { ?></tr><tr><?php } $i++;?><?php } ?>
                                         </tr></table>
                                     </td>
