@@ -715,7 +715,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         <option value="<%= USERLIST_FILTER_FRIEND %>" <%= extParams.filter == USERLIST_FILTER_FRIEND ? 'selected' : '' %>>好友</option> 
                         <option value="<%= USERLIST_FILTER_FOLLOW %>" <%= extParams.filter == USERLIST_FILTER_FOLLOW ? 'selected' : '' %>>关注</option> 
                         <option value="<%= USERLIST_FILTER_FOLLOWED %>" <%= extParams.filter == USERLIST_FILTER_FOLLOWED ? 'selected' : '' %>>粉丝</option> 
-                        <option value="<%= USERLIST_FILTER_RECOMMAND %>" <%= extParams.filter == USERLIST_FILTER_RECOMMAND ? 'selected' : '' %>>推荐</option> 
+                        <option value="<%= USERLIST_FILTER_RECOMMEND %>" <%= extParams.filter == USERLIST_FILTER_RECOMMEND ? 'selected' : '' %>>推荐</option> 
                     </select>
                 </div>
             </div>

@@ -130,7 +130,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const USERLIST_FILTER_FRIEND = 'friend';
     const USERLIST_FILTER_FOLLOW = 'follow';
     const USERLIST_FILTER_FOLLOWED = 'followed';
-    const USERLIST_FILTER_RECOMMAND = 'recommand';
+    const USERLIST_FILTER_RECOMMEND = 'recommend';
     const USERLIST_ORDERBY_DATELINE = 'dateline';
     const USERLIST_ORDERBY_REGISTER = 'register';
     const USERLIST_ORDERBY_LOGIN = 'login';
@@ -466,7 +466,7 @@ class AppbymeUIDiyModel extends DiscuzAR
                             'type' => self::COMPONENT_TYPE_USERLIST,
                             'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '6',
                             'extParams' => array(
-                                'filter' => self::USERLIST_FILTER_RECOMMAND,
+                                'filter' => self::USERLIST_FILTER_RECOMMEND,
                                 'orderby' => self::USERLIST_ORDERBY_DATELINE,
                             )
                         )),

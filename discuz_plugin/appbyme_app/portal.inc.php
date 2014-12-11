@@ -396,7 +396,9 @@ class PortalController {
                 array(0, $specialLang[6]),
             )), $param['topic_special'], 'mcheckbox', '', 0, '', '', '', true);
             showsetting($otherLang[0], array('param[other_filter]', array(
-                array(1, $otherLang[1]),
+                array('friend', $otherLang[1]),
+                array('follow', $otherLang[2]),
+                array('favoriteForum', $otherLang[3]),
             )), $param['other_filter'], 'mcheckbox', '', 0, '', '', '', true);
             showsetting(Appbyme::lang('mobcent_portal_module_param_topic_picrequired'),
                 'param[topic_picrequired]', $param['topic_picrequired'],
