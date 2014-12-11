@@ -21,7 +21,7 @@ class SendAttachmentExAction extends MobcentAction {
     private $allowExt = array('jpg', 'png', 'jpeg', 'mp3');
 
     public function run($type='image', $module='forum', $albumId=-1) {
-        $res = WebUtils::initWebApiArray();
+        $res = $this->initWebApiArray();
         $res['body']['attachment'] = array();
         switch ($type) {
             case 'image':
