@@ -31,7 +31,6 @@ class ForumController extends MobcentController  {
             'ratelistview' => 'application.controllers.forum.RateListViewAction',
             'classification' => 'application.controllers.forum.ClassificationAction',
             'sendattachmentex' => 'application.controllers.forum.SendAttachmentExAction',            
-            'savealbum' => 'application.controllers.forum.saveAlbumAction',            
         );
     }
 
@@ -56,7 +55,6 @@ class ForumController extends MobcentController  {
             'ratelistview' => false,
             'classification' => true,
             'sendattachmentex' => true,    
-            'savealbum' => true,    
         );
     }
 }
