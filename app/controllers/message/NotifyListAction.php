@@ -25,6 +25,7 @@ class NotifyListAction extends CAction {
         $res = array_merge($res, WebUtils::getWebApiArrayWithPage_oldVersion(
             $page, $pageSize, $count));
         $res['list'] = $list;
+        $res['body']['data'] = $notifyInfo['data'];
 
         // $transaction = Yii::app()->dbDz->beginTransaction();
         // try {
@@ -45,10 +46,39 @@ class NotifyListAction extends CAction {
         $info = array(
             'count' => 0,
             'list' => array(),
+            'data' => array(),
         );
 
         $count = DzHomeNotification::getCountByUid($uid, $type);
         $notifyData = DzHomeNotification::getAllNotifyByUid($uid, $type, $page, $pageSize);
+        
+        foreach ($notifyData as $data) {
+            $actions = array();
+            $matches = array();
+            preg_match('/<a onclick="showWindow.+?>(\S+)<\/a>/mi', $data['note'], $matches);
+            if (!empty($matches)) {
+                $actions = array();
+                $action = array('redirect' => '', 'title' => $matches[1], 'type' => '');
+                // 添加好友按钮
+                $tempMatches = array();
+                preg_match('/ac=friend&op=(\w+)&uid=(\d+)/mi', $matches[0], $tempMatches);
+                if (!empty($tempMatches)) {
+                    $action['redirect'] = WebUtils::createUrl_oldVersion('user/useradminview', array('act' => $tempMatches[1], 'uid' => $tempMatches[2]));
+                    $action['type'] = 'friend';
+                }
+                $data['note'] = str_replace($matches[1], '', $data['note']);
+                $actions[] = $action;
+            }
+
+            $tmpData['dateline'] = $data['dateline'].'000';
+            $tmpData['type'] = $data['type'];
+            $tmpData['note'] = WebUtils::emptyHtml($data['note']);
+            $tmpData['fromId'] = (int)$data['from_id'];
+            $tmpData['fromIdType'] = $data['from_idtype'];
+            $tmpData['actions'] = $actions;
+            $info['data'][] = $tmpData;
+        }
+
         foreach ($notifyData as $data) {
             $matches = array();
             preg_match_all('/&ptid=(\d+?)&pid=(\d+?)"/i', $data['note'], $matches);

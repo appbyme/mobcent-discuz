@@ -409,7 +409,7 @@ class PortalController {
                 array('views', $topicOrderbyLang[4]),
                 array('heats', $topicOrderbyLang[5]),
                 array('recommends', $topicOrderbyLang[6]),
-                array('friend', $topicOrderbyLang[7]),
+                array('distance', $topicOrderbyLang[7]),
             )), $param['topic_orderby'], 'select', '', 0, '', '', '', true);
             showsetting(Appbyme::lang('mobcent_portal_module_param_topic_postdateline'), array('param[topic_postdateline]', array(
                 array(0, $timeLang[0]),

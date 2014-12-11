@@ -109,6 +109,7 @@ return array(
     'to_view_the_photo_set_privacy' => WebUtils::t('02000003:抱歉！由于 {username} 的隐私设置，您不能访问当前内容'),
     'to_view_the_defaultAlbum_does_not_exist' => WebUtils::t('02000004:该相册下还没有图片'),
     'no_privilege_sendpm' => WebUtils::t('02000010:抱歉，您目前没有权限发短消息'),
+    'mobcent_save_album_success' => WebUtils::t('02000011:保存相册信息成功'),
 
     'follow_not_follow_self' => WebUtils::t('02000020:不能关注自己'),
     'follow_other_unfollow' => WebUtils::t('02000021:对方不允许您关注TA'),

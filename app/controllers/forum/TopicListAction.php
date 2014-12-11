@@ -10,10 +10,10 @@
 if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     exit('Access Denied');
 }
-
+// Mobcent::setErrors();
 class TopicListAction extends MobcentAction {
 
-    public function run($boardId=0, $page=1, $pageSize=10, $sortby='all', $filterType='', $filterId=0) {
+    public function run($boardId=0, $page=1, $pageSize=10, $sortby='all', $filterType='', $filterId=0, $isImageList=0) {
         switch ($boardId) {
             case -1: $sortby = 'new'; $boardId = 0; break;
             case -2: $sortby = 'marrow'; $boardId = 0; break;
@@ -36,9 +36,9 @@ class TopicListAction extends MobcentAction {
         $fid = (int)$boardId;
 
         global $_G;
-        $key = CacheUtils::getTopicListKey(array($fid, $_G['groupid'], $page, $pageSize, $sort, $filterType, $filterId));
+        $key = CacheUtils::getTopicListKey(array($fid, $_G['groupid'], $page, $pageSize, $sort, $filterType, $filterId, $isImageList));
 
-        $this->runWithCache($key, array('fid' => $fid, 'page' => $page, 'pageSize' => $pageSize, 'sort' => $sort, 'filterType' => $filterType, 'filterId' => $filterId));
+        $this->runWithCache($key, array('fid' => $fid, 'page' => $page, 'pageSize' => $pageSize, 'sort' => $sort, 'filterType' => $filterType, 'filterId' => $filterId, 'isImageList' => $isImageList));
         // Mobcent::dumpSql();
     }
 
@@ -169,7 +169,7 @@ class TopicListAction extends MobcentAction {
         $hasAnnouncements = $fid != 0 && $page == 1;
         $res['anno_list'] =  !$hasAnnouncements ? array() : $this->_getAnnouncementList($sort);
 
-        $topicInfos = $this->_getTopicInfos($fid, $page, $pageSize, $sort, $filterType, $filterId);
+        $topicInfos = $this->_getTopicInfos($fid, $page, $pageSize, $sort, $filterType, $filterId, $isImageList);
         $list = $topicInfos['list'];
         $count = $topicInfos['count'];
 
@@ -215,7 +215,7 @@ class TopicListAction extends MobcentAction {
         return $list;
     }
 
-    private function _getTopicInfos($fid, $page, $pageSize, $sort, $filterType='', $filterId='') {
+    private function _getTopicInfos($fid, $page, $pageSize, $sort, $filterType='', $filterId='', $isImageList='') {
 
         $infos = array('count' => 0, 'list' => array());
 
@@ -288,16 +288,20 @@ class TopicListAction extends MobcentAction {
             $cache = Yii::app()->params['mobcent']['cache']['topicSummary'];
             $key = sprintf('mobcentTopicSummary_%s_%s', $tid, $_G['groupid']);
             if (!$cache['enable'] || ($topicSummary = Yii::app()->cache->get($key)) === false) {
-                $topicSummary = ForumUtils::getTopicSummary($tid);
+                $topicSummary = ForumUtils::getTopicSummary($tid, 'forum', true, array('imageList' => 1, 'imageListLen' => 9, 'imageListThumb' => 1));
                 if ($cache['enable']) {
                     Yii::app()->cache->set($key, $topicSummary, $cache['expire']);
                 }
             }
+
             $topicInfo['subject'] = $topicSummary['msg'];
             // $topicInfo['pic_path'] = ImageUtils::getThumbImage($topicSummary['image']);
             $tempTopicInfo = ImageUtils::getThumbImageEx($topicSummary['image'], 15, true, false);
             $topicInfo['pic_path'] = $tempTopicInfo['image'];
             $topicInfo['ratio'] = $tempTopicInfo['ratio'];
+            $topicInfo['userAvatar'] = UserUtils::getUserAvatar($topic['authorid']);
+            $topicInfo['isHasRecommendAdd'] = ForumUtils::isHasRecommendAdd($tid);
+            $topicInfo['imageList'] = $topicSummary['imageList'];
             $list[] = $topicInfo;
         }
 

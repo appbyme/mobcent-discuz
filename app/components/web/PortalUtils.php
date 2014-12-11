@@ -20,10 +20,10 @@ class PortalUtils {
      *
      * @param int $aid 文章id
      * @param bool $transBr 是否要转换换行
-     * @return array array('msg' => '', 'image' => '')
+     * @return array array('msg' => '', 'image' => '', 'imageList' => array())
      */
     public static function getArticleSummary($aid, $transBr=true) {
-        $summary = array('msg' => '', 'image' => '');
+        $summary = array('msg' => '', 'image' => '', 'imageList' => array());
 
         $summaryLength = WebUtils::getDzPluginAppbymeAppConfig('portal_summary_length');
         $allowImage = WebUtils::getDzPluginAppbymeAppConfig('portal_allow_image');

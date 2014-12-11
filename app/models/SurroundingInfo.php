@@ -195,8 +195,16 @@ class SurroundingInfo extends DiscuzAR {
         return $range;
     }
 
+    public static function getRange($longitude, $latitude, $radius) {
+        return self::_getRange($longitude, $latitude, $radius);
+    }
+
     private static function _getSqlDistance($longitude, $latitude) {
         return sprintf('SQRT(POW((%f-longitude)/0.012*1023,2)+POW((%f-latitude)/0.009*1001,2))', $longitude, $latitude);
+    }
+
+    public static function getSqlDistance($longitude, $latitude) {
+        return self::_getSqlDistance($longitude, $latitude);
     }
 
     public static function saveUserLocation($uid, $longitude, $latitude, $location) {
