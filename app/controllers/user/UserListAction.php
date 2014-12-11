@@ -85,7 +85,7 @@ class UserListAction extends CAction {
             $tmpfollowe['icon'] = UserUtils::getUserAvatar($user);
             $tmpfollowe['level'] = (int)DzCommonUserList::getUserLevel($user);
             $tmpfollowe['distance'] = '28.870885837855756';
-            $tmpfollowe['location'] = '北京市海淀区信息产业基地西路38号';
+            $tmpfollowe['location'] = WebUtils::t('北京市海淀区信息产业基地西路38号');
             $tmpfollowe['lastLogin'] = '1374739235000';
             $tmpfollowe['signature'] = '1374739235000';
             $userInfo = UserUtils::getUserInfo($user);
@@ -137,7 +137,7 @@ class UserListAction extends CAction {
     }
 
     // 用户关注排序
-    private function _getFollowUsers($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
+    private function _getFollowUsers($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
         switch ($sortType) {
             case 'default':
                 return DzCommonUserList::_getFollowUsersDefault($viewUid, $page, $pageSize);
