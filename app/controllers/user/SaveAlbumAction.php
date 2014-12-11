@@ -14,7 +14,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     exit('Access Denied');
 }
 
-class saveAlbumAction extends MobcentAction {
+class SaveAlbumAction extends MobcentAction {
+
     public function run($ids, $picDesc, $albumId=-1) {
         $res = $this->initWebApiArray();
         $res = $this->_saveAlbum($ids, $picDesc, $albumId, $interval);
@@ -33,6 +34,6 @@ class saveAlbumAction extends MobcentAction {
 
         require_once libfile('function/spacecp');
         album_update_pic($albumId);
-        return $this->makeErrorInfo($res, 'mobcent_save_album_success', array('noError'=>1));
+        return $this->makeErrorInfo($res, 'mobcent_save_album_success', array('noError' => 1, 'alert' => 1));
     }
 }
