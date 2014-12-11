@@ -37,7 +37,7 @@ class UserAdminViewAction extends MobcentAction {
         global $_G;
         $errorMsg = '';
         require_once libfile('function/friend');
-        if (friend_request_check($uid) && $act='add') {
+        if (friend_request_check($uid) && $act == 'add') {
             $act = 'add2';
         }
 
@@ -124,7 +124,6 @@ class UserAdminViewAction extends MobcentAction {
                     $this->_exitWithHtmlAlert($res['errcode']);
                 case 'add2':
                     global $_G;
-                    $_G['uid'] = 2;
                     if($uid == $_G['uid']) {
                         $list = $this->makeErrorInfo($res, 'friend_self_error');
                         $this->_exitWithHtmlAlert($list['errcode']);
