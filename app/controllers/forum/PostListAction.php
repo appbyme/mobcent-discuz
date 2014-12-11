@@ -582,31 +582,3 @@ class PostListAction extends MobcentAction {
         return $userMember;
     }
 }
-
-class DzSupportInfo extends DiscuzAR
-{
-    public static function getSupportPostsByUidAndTid($uid, $tid)
-    {
-        return DbUtils::getDzDbUtils(true)->queryColumn('
-            SELECT pid
-            FROM %t
-            WHERE uid = %d
-            AND tid = %d
-            AND attitude = %d
-            ',
-            array('forum_hotreply_member', $uid, $tid, 1)
-        );
-    }
-
-    public static function getSupportTopicByUidAndTid($uid, $tid)
-    {
-        return DbUtils::getDzDbUtils(true)->queryAll('
-            SELECT dateline
-            FROM %t
-            WHERE recommenduid = %d
-            AND tid = %d
-            ',
-            array('forum_memberrecommend', $uid, $tid)
-        );
-    }
-}
