@@ -12,7 +12,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 }
 
 class DzCommonUserList extends DiscuzAR {
-
+    const TYPE_USER = 1;
     public static function model($className=__CLASS__) {
         return parent::model($className);
     }
@@ -252,7 +252,7 @@ class DzCommonUserList extends DiscuzAR {
     // 获取用户粉丝的详细信息按距离排序
     public static function _getFollowedUsersByRange($uid, $page, $pageSize, $longitude, $latitude, $radius) {
         $range = self::_getRange($longitude, $latitude, $radius);
-        $select = 'hf.uid' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        $select = 'hf.uid,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
         return DbUtils::getDzDbUtils(true)->queryColumn('
             SELECT ' . $select . '
             FROM %t hsu INNER JOIN %t aus
@@ -369,7 +369,7 @@ class DzCommonUserList extends DiscuzAR {
     // 用户推荐按距离排序
     public static function _getRecommendUsersSetByRange($uid, $page, $pageSize, $longitude, $latitude, $radius) {
         $range = self::_getRange($longitude, $latitude, $radius);
-        $select = 'hs.uid' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        $select = 'hs.uid,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
         return DbUtils::getDzDbUtils(true)->queryColumn('
             SELECT ' . $select . '
             FROM %t hsu INNER JOIN %t aus
@@ -471,7 +471,7 @@ class DzCommonUserList extends DiscuzAR {
     // 用户好友列表按距离排序
     public static function _getPostFuidListByRange($uid, $page, $pageSize, $longitude, $latitude, $radius) {
         $range = self::_getRange($longitude, $latitude, $radius);
-        $select = 'hf.fuid' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        $select = 'hf.fuid,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
         return DbUtils::getDzDbUtils(true)->queryColumn('
             SELECT ' . $select . '
             FROM %t hsu INNER JOIN %t aus
@@ -573,14 +573,13 @@ class DzCommonUserList extends DiscuzAR {
     // 所有用户按距离排序
     public static function _getRecommendUsersByRange($uid, $page, $pageSize, $longitude, $latitude, $radius) {
         $range = self::_getRange($longitude, $latitude, $radius);
-        $select = 'cm.uid' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        $select = 'cm.uid,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
         return DbUtils::getDzDbUtils(true)->queryColumn('
             SELECT ' . $select . '
             FROM %t hsu INNER JOIN %t aus
             ON (hsu.object_id=aus.uid)
             INNER JOIN %t cm ON (aus.uid=cm.uid)
             WHERE hsu.type=%s 
-            AND cm.uid != %d
             AND hsu.object_id!=%s
             AND hsu.longitude BETWEEN %s AND %s
             AND hsu.latitude BETWEEN %s AND %s
