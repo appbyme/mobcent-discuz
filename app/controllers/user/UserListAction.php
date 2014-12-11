@@ -10,48 +10,62 @@
 if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     exit('Access Denied');
 }
-
+// Mobcent::setErrors();
 class UserListAction extends CAction {
 
-    public function run($type='follow', $page=1, $pageSize=10) {
+    public function run($type='follow', $page=1, $pageSize=10, $orderBy='register', $longitude='', $latitude='', $radius=100000) {
         $res = WebUtils::initWebApiArray_oldVersion();
 
-        $uid = $this->getController()->uid;
+        switch ($orderBy) {
+            case 'register': $sortType = 'regdate';break;
+            case 'login': $sortType = 'lastvisit';break;
+            case 'followed': $sortType = 'follower';break;
+            case 'distance': $sortType = 'range';break;
+            case 'dateline': $sortType = 'default';break;
+            default:break;
+        }
+
+        global $_G;
+        $uid = $_G['uid'];
         $viewUid = isset($_GET['uid']) ? $_GET['uid'] : $uid;
-        
-        $res = $this->_getUserInfoList($res, $type, $uid, $viewUid, $page, $pageSize);
+        $res = $this->_getUserInfoList($res, $type, $uid, $viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
         
         echo WebUtils::outputWebApi($res, '', false);
     }
 
-    private function _getUserInfoList($res, $type, $uid, $viewUid, $page, $pageSize) {
-        $res['list'] = $this->_getUserList($type, $uid, $viewUid, $page, $pageSize);
+    private function _getUserInfoList($res, $type, $uid, $viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
+
+        $res['list'] = $this->_getUserList($type, $uid, $viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
         $count = $this->_getUserListCount($type, $uid, $viewUid, $page, $pageSize); 
         $res = WebUtils::getWebApiArrayWithPage_oldVersion($page, $pageSize, $count, $res);
         return $res;
     }
 
     // 用户关注、粉丝和推荐详细信息列表
-    private function _getUserList($type, $uid, $viewUid, $page, $pageSize) {
-        switch ($type) {
-            case 'follow':  
-                $users = UserFollowInfo::_getFollowUsers($viewUid, $page, $pageSize);
-                break;
-            case 'followed':
-                $users = UserFollowInfo::_getFollowedUsers($viewUid, $page, $pageSize);
-                break;
-            case 'recommend':
-                $users = $this->_getRecommendUserList($uid, $page, $pageSize);
-                $users = $users['users'];
-                break;
-            case 'friend':
-                $users = UserFollowInfo::getPostFuidList($uid);
-                break;
-            default:
-                break;
+    private function _getUserList($type, $uid, $viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
+            switch ($type) {
+                case 'follow':  
+                    $users = $this->_getFollowUsers($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
+                    break;
+                case 'followed':
+                    $users = $this->_getFollowedUsers($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
+                    break;
+                case 'recommend':
+                    $users = $this->_getRecommendUserList($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
+                    $users = $users['users'];
+                    break;
+                case 'friend':
+                    $users = $this->_getPostFuidList($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
+                    break;
+                case 'all':
+                    $users = $this->_getAllUidList($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
+                    break;
+                default:
+                    break;
+            $list = $this->_transUserList($users, $viewUid);
+            return $list;
         }
-        $list = $this->_transUserList($users, $viewUid);
-        return $list;
+        
     }
 
     // 用户关注、粉丝和推荐详细信息
@@ -61,6 +75,8 @@ class UserListAction extends CAction {
         $list = array();
         foreach ($users as $user) {
             $tmpfollowe['is_friend'] = UserUtils::isFollow($viewUid, $user) ? 1 : 0;
+            $tmpfollowe['isFriend'] = UserUtils::isFriend($viewUid, $user) ? 1 : 0;
+            $tmpfollowe['isFollow'] = UserUtils::isFollow($viewUid, $user) ? 1 : 0;
             $tmpfollowe['uid'] = (int)$user;
             $tmpfollowe['name'] = UserUtils::getUserName($user);
             $tmpfollowe['name'] = WebUtils::emptyHtml($tmpfollowe['name']);
@@ -68,7 +84,11 @@ class UserListAction extends CAction {
             $tmpfollowe['is_black'] = UserUtils::isBlacklist($viewUid , $user) ? 1 : 0;
             $tmpfollowe['gender'] = (int)UserUtils::getUserGender($user);
             $tmpfollowe['icon'] = UserUtils::getUserAvatar($user);
-            $tmpfollowe['level'] = (int)UserFollowInfo::getUserLevel($user);
+            $tmpfollowe['level'] = (int)DzCommonUserList::getUserLevel($user);
+            $tmpfollowe['distance'] = '28.870885837855756';
+            $tmpfollowe['location'] = '北京市海淀区信息产业基地西路38号';
+            $tmpfollowe['lastLogin'] = '1374739235000';
+            $tmpfollowe['signature'] = '1374739235000';
             $userInfo = UserUtils::getUserInfo($user);
             $tmpfollowe['credits'] = (int)$userInfo['credits'];
             $list[] = $tmpfollowe;
@@ -80,18 +100,21 @@ class UserListAction extends CAction {
     private function _getUserListCount($type, $uid, $viewUid, $page, $pageSize) {
         switch ($type) {
             case 'follow':  
-                $count = UserFollowInfo::_getFollowUsersCount($viewUid);
+                $count = DzCommonUserList::_getFollowUsersCount($viewUid);
                 break;
             case 'followed':
-                $count = UserFollowInfo::_getFollowedUsersCount($viewUid);
+                $count = DzCommonUserList::_getFollowedUsersCount($viewUid);
                 break;
             case 'recommend':
                 $count = $this->_getRecommendUserList($uid, $page, $pageSize);
                 $count = $count['count'];
                 break;
             case 'friend':
-                $count = UserFollowInfo::getPostFuidListCount($uid);
+                $count = DzCommonUserList::getPostFuidListCount($viewUid);
                 break;
+            case 'all':
+                $count = DzCommonUserList::_getRecommendUsersCount($uid);
+                break;   
             default:
                 break;
         }
@@ -99,170 +122,133 @@ class UserListAction extends CAction {
     }
 
     // 设置用户关注
-    private function _getRecommendUserList($uid, $page, $pageSize) {
-        $users = UserFollowInfo::_getrecommendUsersSet($page, $pageSize);
+    private function _getRecommendUserList($uid, $page, $pageSize, $sortType) {
+        $users = DzCommonUserList::_getRecommendUsersSet($page, $pageSize);
         if (!empty($users)) {
             $userListInfo = array();
-            $userListInfo['users'] = $users;
-            $userListInfo['count'] = UserFollowInfo::_getrecommendUsersSetCount();
+            $userListInfo['users'] = $this->_getRecommendUsers($page, $pageSize, $sortType);
+            $userListInfo['count'] = DzCommonUserList::_getRecommendUsersSetCount();
             return $userListInfo;
        } else {
             $userListInfo = array();
-            $userListInfo['users'] = UserFollowInfo::_getrecommendUsers($uid, $page, $pageSize);
-            $userListInfo['count'] = UserFollowInfo::_getrecommendUsersCount($uid);
+            $userListInfo['users'] = $this->_getAllUidList($uid, $page, $pageSize, $sortType);
+            $userListInfo['count'] = DzCommonUserList::_getRecommendUsersCount($uid);
             return $userListInfo;
         }
     }
-}
 
-class UserFollowInfo extends DiscuzAR {
-
-    public static function getPostFuidList($uid) {
-        return DbUtils::getDzDbUtils(true)->queryColumn('
-            SELECT fuid
-            FROM %t 
-            WHERE uid = %d
-            ',
-            array('home_friend', $uid)
-        );
-    }
-
-    public static function getPostFuidListCount($uid) {
-        return DbUtils::getDzDbUtils(true)->queryScalar('
-            SELECT count(*)
-            FROM %t 
-            WHERE uid = %d
-            ',
-            array('home_friend', $uid)
-        );
-    }
-    public static function getFollowList($uid) {
-        return DbUtils::getDzDbUtils(true)->queryAll('
-            SELECT * 
-            FROM %t WHERE uid = %d 
-            AND status != -1
-            ORDER BY dateline DESC
-            ',
-            array('home_follow', $uid)
-        );
-    }
-
-    // 查询用户关注好友的tid
-    public static function _getFollowUsers($uid, $page, $pageSize) {
-        if ($page==0) {
-            $sql = sprintf('
-            SELECT followuid 
-            FROM %%t
-            WHERE uid=%%d AND status=0
-            ORDER BY dateline DESC 
-            ');
-        }else{
-            $sql = sprintf('
-            SELECT followuid 
-            FROM %%t
-            WHERE uid=%%d AND status=0
-            ORDER BY dateline DESC
-            LIMIT %%d, %%d
-            ');
+    // 用户关注排序
+    private function _getFollowUsers($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
+        switch ($sortType) {
+            case 'default':
+                return DzCommonUserList::_getFollowUsersDefault($viewUid, $page, $pageSize);
+                break;
+            case 'regdate':
+                return DzCommonUserList::_getFollowUsersByRegist($viewUid, $page, $pageSize);
+                break;
+            case 'lastvisit':
+                return DzCommonUserList::_getFollowUsersByLastVisit($viewUid, $page, $pageSize);
+                break;
+            case 'follower':
+                return DzCommonUserList::_getFollowUsersByFollower($viewUid, $page, $pageSize);
+                break;
+            case 'range':
+                return DzCommonUserList::_getFollowUsersByRange($viewUid, $page, $pageSize, $longitude, $latitude, $radius);
+                break;
+            default:
+                break;
         }
-        return DbUtils::getDzDbUtils(true)->queryColumn(
-            $sql,
-            array('home_follow', $uid, $pageSize*($page-1), $pageSize)
-        );
     }
 
-    // 查询用户关注好友的总数
-    public static function _getFollowUsersCount($uid) {
-        $count = DbUtils::getDzDbUtils(true)->queryRow('
-            SELECT count(*) as num
-            FROM %t
-            WHERE uid=%d AND status=0
-            ORDER BY dateline DESC
-            ',
-            array('home_follow', $uid)
-        );
-        return $count['num'];
+    // 用户粉丝排序选择
+    private function _getFollowedUsers($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
+        switch ($sortType) {
+            case 'default':
+                return DzCommonUserList::_getFollowedUsersDefault($uid, $page, $pageSize);
+                break;
+            case 'regdate':
+                return DzCommonUserList::_getFollowedUsersByRegist($uid, $page, $pageSize);
+                break;
+            case 'lastvisit':
+                return DzCommonUserList::_getFollowedUsersByLastVisit($uid, $page, $pageSize);
+                break;
+            case 'follower':
+                return DzCommonUserList::_getFollowedUsersByFollower($uid, $page, $pageSize);
+                break;
+            case 'range':
+                return DzCommonUserList::_getFollowedUsersByRange($uid, $page, $pageSize, $longitude, $latitude, $radius);
+                break;
+            default:
+                break;
+        }
     }
 
-    // 查询用户粉丝的总数
-    public static function _getFollowedUsersCount($uid) {
-        $count = DbUtils::getDzDbUtils(true)->queryRow('
-            SELECT count(*) as num
-            FROM %t
-            WHERE followuid=%d AND status=0
-            ORDER BY dateline DESC
-            ',
-            array('home_follow', $uid)
-        );
-        return $count['num'];
+    // 用户推荐关注排序选择
+    private function _getRecommendUsers($page, $pageSize, $sortType, $longitude, $latitude, $radius) {
+        switch ($sortType) {
+            case 'default':
+                return DzCommonUserList::_getRecommendUsersSetByDefault($page, $pageSize);
+                break;
+            case 'regdate':
+                return DzCommonUserList::_getRecommendUsersSetByRegist($page, $pageSize);
+                break;
+            case 'lastvisit':
+                return DzCommonUserList::_getRecommendUsersSetByLastVisit($page, $pageSize);
+                break;
+            case 'follower':
+                return DzCommonUserList::_getRecommendUsersSetByFollower($page, $pageSize);
+                break;
+            case 'range':
+                return DzCommonUserList::_getRecommendUsersSetByRange($uid, $page, $pageSize, $longitude, $latitude, $radius);
+                break;
+            default:
+                break;
+        }
     }
 
-    // 获取用户等级
-    public static function getUserLevel($uid) {
-        $icon = UserUtils::getUserLevelIcon($uid);
-        return $icon['sun'] * 4 + $icon['moon'] * 2 + $icon['star'] * 1;
+    // 用户好友排序选择
+    private function _getPostFuidList($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
+        switch ($sortType) {
+            case 'default':
+                return DzCommonUserList::_getPostFuidListByDefault($uid, $page, $pageSize);
+                break;
+            case 'regdate':
+                return DzCommonUserList::_getPostFuidListByRegist($uid, $page, $pageSize);
+                break;
+            case 'lastvisit':
+                return DzCommonUserList::_getPostFuidListByLastVisit($uid, $page, $pageSize);
+                break;
+            case 'follower':
+                return DzCommonUserList::_getPostFuidListByFollower($uid, $page, $pageSize);
+                break;
+            case 'range':
+                return DzCommonUserList::_getPostFuidListByRange($uid, $page, $pageSize, $longitude, $latitude, $radius);
+                break;
+            default:
+                break;
+        }
     }
 
-    // 获取用户粉丝的详细信息
-    public static function _getFollowedUsers($uid, $page, $pageSize) {
-        return DbUtils::getDzDbUtils(true)->queryColumn('
-            SELECT uid
-            FROM %t
-            WHERE followuid=%d AND status=0
-            ORDER BY dateline DESC 
-            LIMIT %d, %d
-            ',
-            array('home_follow', $uid, $pageSize*($page-1), $pageSize)
-        );
-    }
-
-    // 获取用户未设置关注用户时的关注用户
-    public static function _getrecommendUsers($uid, $page, $pageSize) {
-        return DbUtils::getDzDbUtils(true)->queryColumn('
-            SELECT uid 
-            FROM %t 
-            WHERE uid != %d
-            ORDER BY credits DESC
-            LIMIT %d, %d
-            ',
-            array('common_member', $uid, $pageSize*($page-1), $pageSize)
-        );
-    }
-
-    // 获取用户设置关注用户数
-    public static function _getrecommendUsersCount($uid) {
-        $count = DbUtils::getDzDbUtils(true)->queryRow('
-            SELECT count(*) as num 
-            FROM %t 
-            WHERE uid != %d
-            ',
-            array('common_member', $uid)
-        );
-        return $count['num'];
-    }
-
-    // 查询用户是否设置了关注
-    public static function _getrecommendUsersSet($page, $pageSize) {
-        return DbUtils::getDzDbUtils(true)->queryColumn('
-            SELECT uid
-            FROM %t
-            WHERE status = 0
-            ORDER BY displayorder ASC 
-            LIMIT %d, %d
-            ',
-            array('home_specialuser', $pageSize*($page-1), $pageSize)
-        );
-    }
-
-    // 用户设置了关注的用户数
-    public static function _getrecommendUsersSetCount() {
-        $count = DbUtils::getDzDbUtils(true)->queryRow('
-            SELECT COUNT(*) as num
-            FROM %t
-            WHERE status = 0
-            ',
-            array('home_specialuser')
-        );
-        return $count['num'];
+    // 全部用户排序选择
+    private function _getAllUidList($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
+        switch ($sortType) {
+            case 'default':
+                return DzCommonUserList::_getRecommendUsersByDefault($uid, $page, $pageSize);
+                break;
+            case 'regdate':
+                return DzCommonUserList::_getRecommendUsersByRegist($uid, $page, $pageSize);
+                break;
+            case 'lastvisit':
+                return DzCommonUserList::_getRecommendUsersByLastVisit($uid, $page, $pageSize);
+                break;
+            case 'follower':
+                return DzCommonUserList::_getRecommendUsersByFollower($uid, $page, $pageSize);
+                break;
+            case 'range':
+                return DzCommonUserList::_getRecommendUsersByRange($uid, $page, $pageSize, $longitude, $latitude, $radius);
+                break;
+            default:
+                break;
+        }
     }
 }
