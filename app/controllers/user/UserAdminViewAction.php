@@ -48,14 +48,13 @@ class UserAdminViewAction extends MobcentAction {
                 case 'add':
                     $_POST = array_intersect_key($_REQUEST, $_POST);
                     $note = $_POST['note'];
-                    global $_G;
                     require_once libfile('function/friend');
                     require_once libfile('function/spacecp');
                     require_once libfile('function/home');
-                    // if(!checkperm('allowfriend')) {
-                    //     $list = $this->makeErrorInfo($res, 'no_privilege_addfriend');
-                    //     $this->_exitWithHtmlAlert($list['errcode']);
-                    // }
+                    if(!checkperm('allowfriend')) {
+                        $list = $this->makeErrorInfo($res, 'no_privilege_addfriend');
+                        $this->_exitWithHtmlAlert($list['errcode']);
+                    }
 
                     if($uid == $_G['uid']) {
                         $list = $this->makeErrorInfo($res, 'friend_self_error');
@@ -245,17 +244,4 @@ class UserAdminViewAction extends MobcentAction {
         echo $htmlString;
         exit;
     }
-}
-
-function checkexpiration($expiration, $operation) {
-    global $_G;
-    if(!empty($expiration) && in_array($operation, array('recommend', 'stick', 'digest', 'highlight', 'close'))) {
-        $expiration = strtotime($expiration) - $_G['setting']['timeoffset'] * 3600 + date('Z');
-        if(dgmdate($expiration, 'Ymd') <= dgmdate(TIMESTAMP, 'Ymd') || ($expiration > TIMESTAMP + 86400 * 180)) {
-            showmessage('admin_expiration_invalid', '', array('min'=>dgmdate(TIMESTAMP, 'Y-m-d'), 'max'=>dgmdate(TIMESTAMP + 86400 * 180, 'Y-m-d')));
-        }
-    } else {
-        $expiration = 0;
-    }
-    return $expiration;
 }
