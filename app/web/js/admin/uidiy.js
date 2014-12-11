@@ -369,17 +369,36 @@ $(function () {
                 case COMPONENT_TYPE_TOPICLIST:
                 case COMPONENT_TYPE_TOPICLIST_SIMPLE:
                 case COMPONENT_TYPE_POSTLIST:
+                case COMPONENT_TYPE_USERINFO:
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_FLAT+']').show();
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_CARD+']').show();
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_1+']').hide();
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_2+']').hide();
                     if (type == COMPONENT_TYPE_NEWSLIST || type == COMPONENT_TYPE_TOPICLIST || type == COMPONENT_TYPE_TOPICLIST_SIMPLE) {
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE+']').show();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_BIG+']').show();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').show();
                     } else {
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE+']').hide();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_BIG+']').hide();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').hide();
+                    }
+                    if (type == COMPONENT_TYPE_USERINFO) {
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_FLAT+']').hide();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_CARD+']').hide();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_1+']').show();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_2+']').show();
                     }
 
                     if (isInitSelect) {
                         $styleSelectDiv.find(':selected').each(function () {
                             this.selected = false;
                         });
-                        $styleSelectDiv.find('option')[0].selected = true;
+                        if (type == COMPONENT_TYPE_USERINFO) {
+                            $styleSelectDiv.find('[value='+COMPONENT_STYLE_1+']')[0].selected = true;
+                        } else {
+                            $styleSelectDiv.find('option')[0].selected = true;
+                        }
                     }
                     
                     $styleSelectDiv.show();
@@ -692,6 +711,7 @@ $(function () {
                 isShow_layoutTwoRowOneCol: 0,
                 isShow_layoutThreeRowOneCol: 0,
                 isShow_layoutSlider: 0,
+                isShow_layoutNewsAuto: 0,
             };
         },
         events: {
@@ -713,6 +733,7 @@ $(function () {
                     if (style == COMPONENT_STYLE_LAYOUT_LINE) {
                         this.uiconfig.isShow_layoutTwoColText = 0;
                         this.uiconfig.isShow_layoutThreeColText = 0;
+                        this.uiconfig.isShow_layoutNewsAuto = 0;
                     }
                     break;
                 case COMPONENT_STYLE_LAYOUT_IMAGE:
@@ -725,6 +746,7 @@ $(function () {
                     this.uiconfig.isShow_layoutOneRowOneCol = 1;
                     this.uiconfig.isShow_layoutTwoRowOneCol = 1;
                     this.uiconfig.isShow_layoutSlider = 1;
+                    this.uiconfig.isShow_layoutNewsAuto = 1;
                     break;
                 default:
                     break;

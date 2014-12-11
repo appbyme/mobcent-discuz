@@ -34,6 +34,8 @@ class UserController extends MobcentController {
             'qqinfo' => 'application.controllers.user.QQInfoAction',
             'saveqqinfo' => 'application.controllers.user.SaveQQInfoAction',
             'useradminview' => 'application.controllers.user.UserAdminViewAction',            
+            'uploadavatarex' => 'application.controllers.user.UploadAvatarExAction',
+            'savealbum' => 'application.controllers.user.saveAlbumAction',            
         );
     }
 
@@ -61,6 +63,8 @@ class UserController extends MobcentController {
             'qqinfo' => false,
             'saveqqinfo' => false,
             'useradminview' => true,          
+            'uploadavatarex' => true,
+            'savealbum' => true,    
         );
     }
 }

@@ -24,6 +24,9 @@ class HeartAction extends MobcentAction {
         // get @me info
         $res['body']['atMeInfo'] = $this->_getNotifyInfo($uid, 'at');
 
+        // 获取好友通知
+        $res['body']['friendInfo'] = $this->_getNotifyInfo($uid, 'friend');
+
         // get private message that client unreceived
         $res['body']['pmInfos'] = $this->_getPmInfos($uid);
 
