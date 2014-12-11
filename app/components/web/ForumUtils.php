@@ -392,6 +392,11 @@ class ForumUtils {
         return 1;
     }
 
+    // 赞的总数
+    public static function getRecommendAdd ($tid) {
+        return 1;
+    }
+
     /**
      * 测试是否此主帖仅作者可见
      */

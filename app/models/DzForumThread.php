@@ -538,7 +538,7 @@ class DzForumThread extends DiscuzAR {
             $term[] = $params['topic_typeid'];            
         }
 
-        if (in_array(1, $params['other_filter'])) {
+        if (in_array('friend', $params['other_filter'])) {
             $sql .= ' AND authorid IN (%n)';
             $term[] = self::getUserFriendList($_G['uid']);
         }
@@ -647,7 +647,7 @@ class DzForumThread extends DiscuzAR {
             $term[] = $params['topic_typeid'];            
         }
 
-        if (in_array(1, $params['other_filter'])) {
+        if (in_array('friend', $params['other_filter'])) {
             $sql .= ' AND authorid IN (%n)';
             $term[] = self::getUserFriendList($_G['uid']);
         }
@@ -698,5 +698,8 @@ class DzForumThread extends DiscuzAR {
     private static function _getSqlDistance($longitude, $latitude) {
         return SurroundingInfo::getSqlDistance($longitude, $latitude);
     }
+
+    
+
 
 }
