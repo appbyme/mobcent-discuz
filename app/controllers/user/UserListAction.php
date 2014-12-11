@@ -43,29 +43,28 @@ class UserListAction extends CAction {
 
     // 用户关注、粉丝和推荐详细信息列表
     private function _getUserList($type, $uid, $viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
-            switch ($type) {
-                case 'follow':  
-                    $users = $this->_getFollowUsers($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
-                    break;
-                case 'followed':
-                    $users = $this->_getFollowedUsers($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
-                    break;
-                case 'recommend':
-                    $users = $this->_getRecommendUserList($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
-                    $users = $users['users'];
-                    break;
-                case 'friend':
-                    $users = $this->_getPostFuidList($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
-                    break;
-                case 'all':
-                    $users = $this->_getAllUidList($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
-                    break;
-                default:
-                    break;
-            $list = $this->_transUserList($users, $viewUid);
-            return $list;
+        switch ($type) {
+            case 'follow':  
+                $users = $this->_getFollowUsers($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
+                break;
+            case 'followed':
+                $users = $this->_getFollowedUsers($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
+                break;
+            case 'recommend':
+                $users = $this->_getRecommendUserList($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
+                $users = $users['users'];
+                break;
+            case 'friend':
+                $users = $this->_getPostFuidList($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
+                break;
+            case 'all':
+                $users = $this->_getAllUidList($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius);
+                break;
+            default:
+                break;
         }
-        
+        $list = $this->_transUserList($users, $viewUid);
+        return $list;
     }
 
     // 用户关注、粉丝和推荐详细信息
