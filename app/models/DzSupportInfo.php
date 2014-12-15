@@ -44,7 +44,7 @@ class DzSupportInfo extends DiscuzAR {
         return DbUtils::getDzDbUtils(true)->queryScalar('
             SELECT recommend_add
             FROM %t
-            WHERE recommenduid = %d
+            WHERE authorid = %d
             AND tid = %d
             ',
             array('forum_thread', $uid, $tid)
