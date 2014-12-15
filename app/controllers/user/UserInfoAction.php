@@ -44,6 +44,7 @@ class UserInfoAction extends CAction {
         $res['flag'] = $uid == $puid ? 1 : 0;
         $res['is_black'] = (int)UserUtils::isBlacklist($uid, $puid) ? 1 : 0;
         $res['is_follow'] = (int)UserUtils::isFollow($uid, $puid); 
+        $res['isFriend'] = (int)UserUtils::isFriend($uid, $puid) ? 1 : 0;
         $res['icon'] = UserUtils::getUserAvatar($puid); 
         $res['level_url'] = '';
         $res['name'] = $space['username'];
