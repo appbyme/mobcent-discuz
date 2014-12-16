@@ -36,7 +36,7 @@ return array(
     'cache' => array(
         'topicSummary' => array(        // 主题列表中摘要缓存设置项, 建议开启!!!
             'enable' => 1,              // 是否开启, 1为开启,0为关闭    
-            'expire' => DAY_SECONDS*7,  // 缓存时间，单位秒
+            'expire' => DAY_SECONDS*1,  // 缓存时间，单位秒
         ),
         'postList' => array(    // 帖子详情列表缓存设置项
             'enable' => 0,      // 是否开启, 1为开启,0为关闭    

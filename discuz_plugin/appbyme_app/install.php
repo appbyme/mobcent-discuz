@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `cdb_appbyme_user_setting` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
     `uid` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
     `ukey` CHAR(20) NOT NULL DEFAULT '' COMMENT '用户设置键名',
-    `uvalue` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '用户设置值',
+    `uvalue` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '用户设置值',
     PRIMARY KEY (`id`),
     UNIQUE KEY `key` (`uid`, `ukey`)
 ) ENGINE=MyISAM;
@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `cdb_appbyme_portal_module_source` (
 ) ENGINE=MyISAM;
 
 ALTER TABLE `cdb_appbyme_config` CHANGE cvalue cvalue MEDIUMTEXT;
+ALTER TABLE `cdb_appbyme_user_setting` CHANGE uvalue uvalue VARCHAR(255);
 
 EOF;
 

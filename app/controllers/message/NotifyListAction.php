@@ -75,6 +75,9 @@ class NotifyListAction extends CAction {
             $tmpData['note'] = WebUtils::emptyHtml($data['note']);
             $tmpData['fromId'] = (int)$data['from_id'];
             $tmpData['fromIdType'] = $data['from_idtype'];
+            $tmpData['author'] = $data['author'];
+            $tmpData['authorId'] = (int)$data['authorid'];
+            $tmpData['authorAvatar'] = UserUtils::getUserAvatar($data['authorid']);
             $tmpData['actions'] = $actions;
             $info['data'][] = $tmpData;
         }
