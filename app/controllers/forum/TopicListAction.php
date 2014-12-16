@@ -13,7 +13,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 // Mobcent::setErrors();
 class TopicListAction extends MobcentAction {
 
-    public function run($boardId=0, $page=1, $pageSize=10, $sortby='all', $filterType='', $filterId=0, $isImageList=0) {
+    public function run($boardId=0, $page=1, $pageSize=10, $sortby='all', $filterType='', $filterId=0, $isImageList=0, $setScale=1) {
         switch ($boardId) {
             case -1: $sortby = 'new'; $boardId = 0; break;
             case -2: $sortby = 'marrow'; $boardId = 0; break;
@@ -38,7 +38,7 @@ class TopicListAction extends MobcentAction {
         global $_G;
         $key = CacheUtils::getTopicListKey(array($fid, $_G['groupid'], $page, $pageSize, $sort, $filterType, $filterId, $isImageList));
 
-        $this->runWithCache($key, array('fid' => $fid, 'page' => $page, 'pageSize' => $pageSize, 'sort' => $sort, 'filterType' => $filterType, 'filterId' => $filterId, 'isImageList' => $isImageList));
+        $this->runWithCache($key, array('fid' => $fid, 'page' => $page, 'pageSize' => $pageSize, 'sort' => $sort, 'filterType' => $filterType, 'filterId' => $filterId, 'isImageList' => $isImageList, 'setScale' => $setScale));
         // Mobcent::dumpSql();
     }
 
@@ -169,7 +169,7 @@ class TopicListAction extends MobcentAction {
         $hasAnnouncements = $fid != 0 && $page == 1;
         $res['anno_list'] =  !$hasAnnouncements ? array() : $this->_getAnnouncementList($sort);
 
-        $topicInfos = $this->_getTopicInfos($fid, $page, $pageSize, $sort, $filterType, $filterId, $isImageList);
+        $topicInfos = $this->_getTopicInfos($setScale, $fid, $page, $pageSize, $sort, $filterType, $filterId, $isImageList);
         $list = $topicInfos['list'];
         $count = $topicInfos['count'];
 
@@ -215,7 +215,7 @@ class TopicListAction extends MobcentAction {
         return $list;
     }
 
-    private function _getTopicInfos($fid, $page, $pageSize, $sort, $filterType='', $filterId='', $isImageList='') {
+    private function _getTopicInfos($setScale, $fid, $page, $pageSize, $sort, $filterType='', $filterId='', $isImageList='') {
 
         $infos = array('count' => 0, 'list' => array());
 
@@ -298,10 +298,15 @@ class TopicListAction extends MobcentAction {
             // $topicInfo['pic_path'] = ImageUtils::getThumbImage($topicSummary['image']);
             $tempTopicInfo = ImageUtils::getThumbImageEx($topicSummary['image'], 15, true, false);
             $topicInfo['pic_path'] = $tempTopicInfo['image'];
-            $topicInfo['ratio'] = $tempTopicInfo['ratio'];
+            if ($setScale == 0) {
+                $topicInfo['ratio'] = '1';
+            } else {
+                $topicInfo['ratio'] = $tempTopicInfo['ratio'];
+            }
             $topicInfo['userAvatar'] = UserUtils::getUserAvatar($topic['authorid']);
             $topicInfo['recommendAdd'] = (int)ForumUtils::getRecommendAdd($tid);
             $topicInfo['isHasRecommendAdd'] = ForumUtils::isHasRecommendAdd($tid);
+            $topicInfo['is_favor'] = ForumUtils::isFavoriteTopic($_G['uid'], $tid) ? 1 : 0;
             $topicInfo['imageList'] = $topicSummary['imageList'];
             $list[] = $topicInfo;
         }
