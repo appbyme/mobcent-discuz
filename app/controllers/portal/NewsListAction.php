@@ -285,6 +285,8 @@ class NewsListAction extends MobcentAction {
         $row['userAvatar'] = UserUtils::getUserAvatar($row['user_id']);
         $row['recommendAdd'] = $source_type == 'topic' ? ForumUtils::getRecommendAdd($row['source_id']) : 0;
         $row['isHasRecommendAdd'] = $source_type == 'topic' ? ForumUtils::isHasRecommendAdd($row['source_id']) : 0;
+        $isFavor = ForumUtils::isFavoriteTopic($_G['uid'], $row['source_id']) ? 1 : 0;
+        $row['is_favor'] = $source_type == 'topic' ? $isFavor : 0;
         $row['distance'] = isset($list['distance']) ? (string)$list['distance'] : '';
         $row['location'] = isset($list['location']) ? (string)$list['location'] : '';
         $row['imageList'] = $summary['imageList'];
