@@ -31,6 +31,9 @@ class DzCommonUserList extends DiscuzAR {
         $icon = UserUtils::getUserLevelIcon($uid);
         return $icon['sun'] * 4 + $icon['moon'] * 2 + $icon['star'] * 1;
     }
+
+    // 获取用户最后登录时间
+    
 /////////////////////////////////////////////////////////////////////
     // 查询用户关注好友的tid
     public static function _getFollowUsersDefault($uid, $page, $pageSize) {
@@ -631,5 +634,55 @@ class DzCommonUserList extends DiscuzAR {
 
     private static function _getSqlDistance($longitude, $latitude) {
         return sprintf('SQRT(POW((%f-longitude)/0.012*1023,2)+POW((%f-latitude)/0.009*1001,2))', $longitude, $latitude);
+    }
+
+    public static function getUserLastVisit($uid) {
+        return DbUtils::getDzDbUtils(true)->queryScalar('
+            SELECT lastvisit
+            FROM %t 
+            WHERE uid = %d
+            ',
+            array('common_member_status', $uid)
+        );
+    }
+
+    public static function getUserSightml($uid) {
+        return DbUtils::getDzDbUtils(true)->queryScalar('
+            SELECT sightml
+            FROM %t 
+            WHERE uid = %d
+            ',
+            array('common_member_field_forum', $uid)
+        );
+    }
+
+    public static function getOneUserByUid($uid, $longitude, $latitude, $radius) {
+        $range = self::_getRange($longitude, $latitude, $radius);
+        $select = '*, ' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        return DbUtils::getDzDbUtils(true)->queryRow('
+            SELECT ' . $select . '
+            FROM %t hsu
+            INNER JOIN %t aus
+            ON hsu.object_id=aus.uid
+            WHERE hsu.type=%s 
+            AND hsu.object_id!=%s
+            AND hsu.longitude BETWEEN %s AND %s
+            AND hsu.latitude BETWEEN %s AND %s
+            AND aus.ukey=%s
+            AND aus.uvalue=%s
+            ', 
+            array(
+                'home_surrounding_user',
+                'appbyme_user_setting',
+                self::TYPE_USER,
+                $uid,
+                $range['longitude']['min'],
+                $range['longitude']['max'],
+                $range['latitude']['min'],
+                $range['latitude']['max'],
+                AppbymeUserSetting::KEY_GPS_LOCATION,
+                AppbymeUserSetting::VALUE_GPS_LOCATION_ON,
+            )
+        );
     }
 }

@@ -63,12 +63,12 @@ class UserListAction extends CAction {
             default:
                 break;
         }
-        $list = $this->_transUserList($users, $viewUid);
+        $list = $this->_transUserList($users, $viewUid, $longitude, $latitude, $radius, $page, $pageSize);
         return $list;
     }
 
     // 用户关注、粉丝和推荐详细信息
-    private function _transUserList($users, $viewUid) {
+    private function _transUserList($users, $viewUid, $longitude, $latitude, $radius, $page, $pageSize) {
         loadcache('usergroups');
 
         $list = array();
@@ -84,10 +84,13 @@ class UserListAction extends CAction {
             $tmpfollowe['gender'] = (int)UserUtils::getUserGender($user);
             $tmpfollowe['icon'] = UserUtils::getUserAvatar($user);
             $tmpfollowe['level'] = (int)DzCommonUserList::getUserLevel($user);
-            $tmpfollowe['distance'] = '28.870885837855756';
-            $tmpfollowe['location'] = '北京市海淀区信息产业基地西路38号';
-            $tmpfollowe['lastLogin'] = '1374739235000';
-            $tmpfollowe['signature'] = '1374739235000';
+            $distance = DzCommonUserList::getOneUserByUid($user, $longitude, $latitude, $radius, $page, $pageSize);
+            $tmpfollowe['distance'] = (string)$distance['distance'];
+            $tmpfollowe['location'] = (string)WebUtils::t($distance['location']);
+            $lastLogin = WebUtils::t(DzCommonUserList::getUserLastVisit($user));
+            $tmpfollowe['lastLogin'] = $lastLogin . '000';
+            $signature = WebUtils::emptyHtml(DzCommonUserList::getUserSightml($user));
+            $tmpfollowe['signature'] = WebUtils::t($signature);
             $userInfo = UserUtils::getUserInfo($user);
             $tmpfollowe['credits'] = (int)$userInfo['credits'];
             $list[] = $tmpfollowe;
@@ -137,7 +140,7 @@ class UserListAction extends CAction {
     }
 
     // 用户关注排序
-    private function _getFollowUsers($uid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
+    private function _getFollowUsers($viewUid, $page, $pageSize, $sortType, $longitude, $latitude, $radius) {
         switch ($sortType) {
             case 'default':
                 return DzCommonUserList::_getFollowUsersDefault($viewUid, $page, $pageSize);

@@ -389,12 +389,14 @@ class ForumUtils {
 
     // 是否赞过
     public static function isHasRecommendAdd ($tid) {
-        return 1;
+        global $_G;
+        $recommendAdd = DzSupportInfo::getSupportTopicByUidAndTid($_G['uid'], $tid);
+        return !empty($recommendAdd) ? 1 : 0; 
     }
 
     // 赞的总数
     public static function getRecommendAdd ($tid) {
-        return 1;
+        return DzSupportInfo::getSupportTopicCount($tid);
     }
 
     /**

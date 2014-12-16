@@ -46,7 +46,6 @@ class UserAdminViewAction extends MobcentAction {
         if (!empty($_POST)) {
             switch ($act) {
                 case 'add':
-                    $_POST = array_intersect_key($_REQUEST, $_POST);
                     $note = $_GET['note'];
                     require_once libfile('function/friend');
                     require_once libfile('function/spacecp');
