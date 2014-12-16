@@ -42,12 +42,13 @@ class DzSupportInfo extends DiscuzAR {
     public static function getSupportTopicByUidAndTid($uid, $tid)
     {
         return DbUtils::getDzDbUtils(true)->queryScalar('
-            SELECT recommend_add
-            FROM %t
-            WHERE authorid = %d
-            AND tid = %d
+            SELECT t.recommend_add
+            FROM %t m INNER JOIN %t t
+            ON m.tid= t.tid
+            WHERE m.recommenduid = %d
+            AND m.tid = %d
             ',
-            array('forum_thread', $uid, $tid)
+            array('forum_memberrecommend', 'forum_thread', $uid, $tid)
         );
     }
 
