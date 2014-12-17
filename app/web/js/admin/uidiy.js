@@ -75,9 +75,11 @@ $(function () {
 
     var getComponentIconUrl = function (icon) {
         if (icon.indexOf(COMPONENT_ICON_DISCOVER_DEFAULT) != -1) {
-            return uidiyGlobalObj.componentIconDiscoverBaseUrlPath+'/'+icon+'.png';
+            return uidiyGlobalObj.componentDiscoverIconBaseUrlPath+'/'+icon+'.png';
         } else if (icon.indexOf(COMPONENT_ICON_FASTPOST) != -1) {
             return uidiyGlobalObj.componentFastpostIconBaseUrlPath+'/'+icon+'_n.png';
+        } else if (icon.indexOf(COMPONENT_ICON_TOPBAR) != -1) {
+            return uidiyGlobalObj.componentTopbarIconBaseUrlPath+'/'+icon+'_n.png';
         } else {
             return icon;    
         }
@@ -345,12 +347,26 @@ $(function () {
                 isShow_desc: 0,
                 isShow_style: 1,
                 isShow_typeSelect: 1,
+                isShow_typeEmpty: 0,
+                isShow_typeForumlist: 1,
+                isShow_typeNewslist: 1,
+                isShow_typeTopiclistSimple: 1,
+                isShow_typeWebapp: 1,
+                isShow_typeSetting: 1,
+                isShow_typeAbout: 1,
                 isShow_typeModuleRef: 1,
                 isShow_typePostlist: 1,
                 isShow_typeNewsview: 1,
                 isShow_typeMessagelist: 1,
                 isShow_typeUserinfo: 1,
                 isShow_typeUserlist: 1,
+                isShow_typeFasttext: 0,
+                isShow_typeFastimage: 0,
+                isShow_typeFastcamera: 0,
+                isShow_typeFastaudio: 0,
+                isShow_typeSign: 0,
+                isShow_typeWeather: 0,
+                isShow_typeSearch: 0,
                 iconRatio: '适当',
                 iconRatioCircle: '80*80',
             };
@@ -413,6 +429,10 @@ $(function () {
             var type = $(event.currentTarget).val();
             
             this.changeStyleUIByType(type, true);
+
+            if (type == COMPONENT_TYPE_FASTTEXT || type == COMPONENT_TYPE_FASTIMAGE || type == COMPONENT_TYPE_FASTCAMERA || type == COMPONENT_TYPE_FASTAUDIO) {
+                type = 'fastpost';
+            }
 
             $('#component-view-'+type+'-'+id).removeClass('hidden').siblings('.component-view-item').addClass('hidden');
         },
@@ -516,6 +536,32 @@ $(function () {
             isShow_desc: 1,
             isShow_delete: 1,
             iconRatio: '2:1',
+        }});
+    };
+
+    var createComponentViewTopbar = function(model) {
+        return new ComponentView({model: model, uiconfig: {
+            isShow_title: 0,
+            isShow_typeEmpty: 1,
+            isShow_typeForumlist: 0,
+            isShow_typeNewslist: 0,
+            isShow_typeTopiclistSimple: 0,
+            isShow_typeWebapp: 0,
+            isShow_typeSetting: 0,
+            isShow_typeAbout: 0,
+            isShow_typeModuleRef: 0,
+            isShow_typePostlist: 0,
+            isShow_typeNewsview: 0,
+            isShow_typeMessagelist: 0,
+            isShow_typeUserinfo: 1,
+            isShow_typeUserlist: 0,
+            isShow_typeSign: 1,
+            isShow_typeWeather: 1,
+            isShow_typeSearch: 1,
+            isShow_typeFasttext: 1,
+            isShow_typeFastimage: 1,
+            isShow_typeFastcamera: 1,
+            isShow_typeFastaudio: 1,
         }});
     };
 
@@ -1269,7 +1315,8 @@ $(function () {
         selectTopbar: function (event) {
             var index = $(event.currentTarget).index();
             var module = this.model.attributes;
-            var componentModel = new ComponentModel();
+            var componentModel = new ComponentModel({type: COMPONENT_TYPE_EMPTY});
+
             switch (index) {
                 case 0:
                     if (module.leftTopbars.length > 0) {
@@ -1555,20 +1602,45 @@ $(function () {
         },
         render: function () {
             this.$el.html(this.template(this.model.attributes));
+
+            var view = createComponentViewTopbar(this.model);
+            $('.topbar-component-view-container').html(view.render().el);
+
             return this;
         },
         submitTopbar: function () {
             event.preventDefault();
 
             var form = $('.module-topbar-edit-form')[0],
-                type = form.topbarComponentType.value,
-                index = parseInt(form.topbarIndex.value),
-                model = new ComponentModel({type: type}),
-                module = moduleEditMobileView.model.attributes;
+                index = parseInt(form.topbarIndex.value);
 
+            var componentList = submitComponentHelper(form),
+                model = componentList[0],
+                type = model.attributes.type;
+
+            // 目前topbar的icon是固定的
+            var icon = '';
+            switch (type) {
+                case COMPONENT_TYPE_FASTTEXT: icon = COMPONENT_ICON_TOPBAR+21; break;
+                case COMPONENT_TYPE_FASTIMAGE: icon = COMPONENT_ICON_TOPBAR+22; break;
+                case COMPONENT_TYPE_FASTCAMERA: icon = COMPONENT_ICON_TOPBAR+24; break;
+                case COMPONENT_TYPE_FASTAUDIO: icon = COMPONENT_ICON_TOPBAR+23; break;
+                case COMPONENT_TYPE_USERINFO: icon = COMPONENT_ICON_TOPBAR+6; break;
+                case COMPONENT_TYPE_SEARCH: icon = COMPONENT_ICON_TOPBAR+10; break;
+                default: icon = ''; break;
+            }
+            model.attributes.icon = icon;
+
+            var error = this.model.validate(model.attributes);
+            if (error != '') {
+                alert(error);
+                return;
+            }
+
+            module = moduleEditMobileView.model.attributes;
             switch (index) {
                 case 0:
-                    if (type == COMPONENT_TYPE_DEFAULT) {
+                    if (type == COMPONENT_TYPE_EMPTY) {
                         module.leftTopbars = [];
                     } else {
                         module.leftTopbars[0] = model;

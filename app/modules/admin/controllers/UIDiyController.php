@@ -17,7 +17,8 @@ class UIDiyController extends AdminController
 {
     public $navItemIconBaseUrlPath = '';
     public $componentFastpostIconBaseUrlPath = '';
-    public $componentIconDiscoverBaseUrlPath = '';
+    public $componentDiscoverIconBaseUrlPath = '';
+    public $componentTopbarIconBaseUrlPath = '';
 
     public function init()
     {
@@ -25,15 +26,18 @@ class UIDiyController extends AdminController
 
         $this->navItemIconBaseUrlPath = $this->rootUrl . '/images/admin/icon1';
         $this->componentFastpostIconBaseUrlPath = $this->rootUrl . '/images/admin/icon2';
-        $this->componentIconDiscoverBaseUrlPath = $this->rootUrl . '/images/admin/icon3';
+        $this->componentDiscoverIconBaseUrlPath = $this->rootUrl . '/images/admin/icon3';
+        $this->componentTopbarIconBaseUrlPath = $this->rootUrl . '/images/admin/topbar';
     }
 
     public function getComponentIconUrl($icon)
     {
         if (strpos($icon, AppbymeUIDiyModel::COMPONENT_ICON_DISCOVER_DEFAULT) !== false) {
-            return $this->componentIconDiscoverBaseUrlPath.'/'.$icon.'.png';
+            return $this->componentDiscoverIconBaseUrlPath.'/'.$icon.'.png';
         } else if (strpos($icon, AppbymeUIDiyModel::COMPONENT_ICON_FASTPOST) !== false) {
             return $this->componentFastpostIconBaseUrlPath.'/'.$icon.'_n.png';
+        } else if (strpos($icon, AppbymeUIDiyModel::COMPONENT_ICON_TOPBAR) !== false) {
+            return $this->componentTopbarIconBaseUrlPath.'/'.$icon.'_n.png';
         } else {
             return $icon;    
         }
@@ -237,7 +241,7 @@ class UIDiyController extends AdminController
     {
         $tempTopbars = array();
         foreach ($topbars as $topbar) {
-            $topbar['type'] != AppbymeUIDiyModel::COMPONENT_TYPE_DEFAULT && $tempTopbars[] = $topbar;
+            $topbar['type'] != AppbymeUIDiyModel::COMPONENT_TYPE_EMPTY && $tempTopbars[] = $topbar;
         }
         return $tempTopbars;
     }
