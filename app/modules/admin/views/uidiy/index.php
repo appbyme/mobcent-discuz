@@ -258,13 +258,13 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     <!-- topbar 编辑模板 -->
     <script type="text/template" id="module-topbar-dlg-template">
     <div class="panel panel-primary">
-        <form class="module-topbar-edit-form">
+        <form class="module-topbar-edit-form form-horizontal">
         <div class="panel-heading">
             <h3 class="panel-title pull-left">插件设置</h3>
             <button type="button" class="close close-topbar-btn pull-right">&times;</button>
         </div>
         <input type="hidden" name="topbarIndex" id="topbarIndex" value="0">
-        <div class="panel-body" style="padding:25px 0px">
+        <div class="panel-body">
             <div class="topbar-component-view-container">
             </div>
         </div>
@@ -765,7 +765,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <div class="form-group">
                 <label class="col-sm-2 control-label">发表板块: </label>
                 <div class="col-sm-10">
-                    <select class="input-sm" name="fastpostForumIds[]" multiple>
+                    <select class="input-sm form-control" name="fastpostForumIds[]" multiple>
                         <?php foreach ($forumList as $fid => $title) { ?>
                             <option value="<?php echo $fid ?>" <%= extParams.fastpostForumIds.indexOf(<?php echo $fid; ?>) != -1 ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
                         <?php } ?>
