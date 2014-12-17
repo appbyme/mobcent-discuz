@@ -452,11 +452,18 @@ class DzForumThread extends DiscuzAR {
         global $_G;
         $table = ' %t';
         $where = ' 1 AND fid IN (%n)';
+
+        // 用户收藏的板块
+        if (in_array('favoriteForum', $params['other_filter'])) {
+            $favoriteForum = self::getUserFavorite($_G['uid']);
+            $fids = array_intersect($fids, $favoriteForum);
+        }
+
         $term = array('forum_thread', $fids);
 
         if ($params['topic_orderby'] == 'distance') {
-            $range = self::_getRange($longitude, $latitude, $radius);
-            $select = '*, ' . self::_getSqlDistance($longitude, $latitude) . ' AS distance ';
+            $range = self::getRange($longitude, $latitude, $radius);
+            $select = '*, ' . self::getSqlDistance($longitude, $latitude) . ' AS distance ';
             $table = '
                 %t hsu INNER JOIN %t ft ON hsu.object_id=ft.tid
                 INNER JOIN %t aus ON ft.authorid=aus.uid
@@ -538,10 +545,30 @@ class DzForumThread extends DiscuzAR {
             $term[] = $params['topic_typeid'];            
         }
 
+        $authoridArr = array();
+        // 好友
         if (in_array('friend', $params['other_filter'])) {
-            $sql .= ' AND authorid IN (%n)';
-            $term[] = self::getUserFriendList($_G['uid']);
+            // $sql .= ' AND authorid IN (%n)';
+            // $term[] = self::getUserFriendList($_G['uid']);
+            $authoridArr[] = self::getUserFriendList($_G['uid']);
         }
+
+        // 关注
+        if (in_array('follow', $params['other_filter'])) {
+            // $sql .= ' AND authorid IN (%n)';
+            // $term[] = self::getFollowerUser($_G['uid']);
+            $authoridArr[] = self::getFollowerUser($_G['uid']);
+        }
+
+        if (!empty($authoridArr)) {
+            $tmp = array();
+            foreach ($authoridArr as $authorid) {
+                $tmp = array_merge($tmp, $authorid);
+            }
+            $sql .= ' AND authorid IN (%n)';
+            $term[] = $tmp;
+        }   
+
         return DbUtils::getDzDbUtils(true)->queryScalar($sql, $term);
     }
 
@@ -561,11 +588,18 @@ class DzForumThread extends DiscuzAR {
         $select = ' *';
         $table = ' %t';
         $where = ' 1 AND fid IN (%n)';
+
+        // 用户收藏的板块
+        if (in_array('favoriteForum', $params['other_filter'])) {
+            $favoriteForum = self::getUserFavorite($_G['uid']);
+            $fids = array_intersect($fids, $favoriteForum); // 交集
+        }
+
         $term = array('forum_thread', $fids);
 
         if ($params['topic_orderby'] == 'distance') {
-            $range = self::_getRange($longitude, $latitude, $radius);
-            $select = '*, ' . self::_getSqlDistance($longitude, $latitude) . ' AS distance ';
+            $range = self::getRange($longitude, $latitude, $radius);
+            $select = '*, ' . self::getSqlDistance($longitude, $latitude) . ' AS distance ';
             $table = '
                 %t hsu INNER JOIN %t ft ON hsu.object_id=ft.tid
                 INNER JOIN %t aus ON ft.authorid=aus.uid
@@ -647,14 +681,33 @@ class DzForumThread extends DiscuzAR {
             $term[] = $params['topic_typeid'];            
         }
 
+        $authoridArr = array();
+        // 好友
         if (in_array('friend', $params['other_filter'])) {
+            // $sql .= ' AND authorid IN (%n)';
+            // $term[] = self::getUserFriendList($_G['uid']);
+            $authoridArr[] = self::getUserFriendList($_G['uid']);
+        }
+
+        // 关注
+        if (in_array('follow', $params['other_filter'])) {
+            // $sql .= ' AND authorid IN (%n)';
+            // $term[] = self::getFollowerUser($_G['uid']);
+            $authoridArr[] = self::getFollowerUser($_G['uid']);
+        }
+
+        if (!empty($authoridArr)) {
+            $tmp = array();
+            foreach ($authoridArr as $authorid) {
+                $tmp = array_merge($tmp, $authorid);
+            }
             $sql .= ' AND authorid IN (%n)';
-            $term[] = self::getUserFriendList($_G['uid']);
+            $term[] = $tmp;
         }
 
         if (isset($params['topic_orderby'])) {
             $orderBy = ' ORDER BY ' . $params['topic_orderby'] . ' DESC';
-            if ($params['topic_orderby'] == 'friend') {
+            if ($params['topic_orderby'] == 'distance') {
                 $orderBy = ' ORDER BY distance ASC';    
             }
             $sql .= $orderBy;
@@ -674,7 +727,6 @@ class DzForumThread extends DiscuzAR {
      * @param int $uid 用户ID
      * @return array $fuids 好友数组
      */
-
     public static function getUserFriendList($uid) {
         $result = DbUtils::getDzDbUtils(true)->queryAll('
             SELECT fuid
@@ -683,6 +735,7 @@ class DzForumThread extends DiscuzAR {
             ',
             array('home_friend', $uid)
         );
+        $fuids = array();
         foreach ($result as $res) {
             $fuids[] = $res['fuid'];
         }
@@ -690,16 +743,46 @@ class DzForumThread extends DiscuzAR {
     }
 
     // 周边相关
-    private static function _getRange($longitude, $latitude, $radius) {
+    public static function getRange($longitude, $latitude, $radius) {
         return SurroundingInfo::getRange($longitude, $latitude, $radius);
     }
 
-    // 周边先关 计算距离
-    private static function _getSqlDistance($longitude, $latitude) {
+    // 周边想关 计算距离
+    public static function getSqlDistance($longitude, $latitude) {
         return SurroundingInfo::getSqlDistance($longitude, $latitude);
     }
 
-    
+    // 获取关注用户的uid
+    public static function getFollowerUser($uid) {
+        $result = DbUtils::getDzDbUtils(true)->queryAll('
+            SELECT followuid
+            FROM %t
+            WHERE uid=%d
+            ',
+            array('home_follow', $uid)
+        );
+        $followuids = array();
+        foreach ($result as $res) {
+            $followuids[] = $res['followuid'];
+        }
+        return $followuids;
+    }
 
+    // 获取用户收藏的板块
+    public static function getUserFavorite($uid, $idtype='fid') {
+        $result = DbUtils::getDzDbUtils(true)->queryAll('
+            SELECT id
+            FROM %t
+            WHERE uid=%d
+            AND idtype=%s
+            ',
+            array('home_favorite', $uid, $idtype)
+        );
+        $favoriteids = array();
+        foreach ($result as $res) {
+            $favoriteids[] = $res['id'];
+        }
+        return $favoriteids;
+    }
 
 }
