@@ -21,6 +21,9 @@ class UploadAvatarExAction extends MobcentAction {
     }
 
     private function _runAction($res, $uid) {
+        if (empty($_FILES['userAvatar']['tmp_name'])) {
+            return WebUtils::makeErrorInfo_oldVersion($res, WebUtils::t('请选择上传的文件'));
+        }
         
         if ($_FILES['userAvatar']['error'] > 0) {
             return WebUtils::makeErrorInfo_oldVersion($res, WebUtils::t('上传文件失败'));
@@ -40,6 +43,7 @@ class UploadAvatarExAction extends MobcentAction {
                 return array_merge($res, array('icon_url' => '', 'pic_path' => $image)); 
             }
             // WebUtils::httpRequestAppAPI('user/saveavatar', array('avatar' => $image, 'hacker_uid' => 1));
+            // die();
         }
         return WebUtils::makeErrorInfo_oldVersion($res, WebUtils::t('上传文件失败'));
     }

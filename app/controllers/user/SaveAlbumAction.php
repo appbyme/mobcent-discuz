@@ -25,7 +25,7 @@ class SaveAlbumAction extends MobcentAction {
     private function _saveAlbum($ids, $picDesc, $albumId) {
         global $_G;
         $ids = rawurldecode($ids);
-        $picDesc = rawurldecode($picDesc);
+        $picDesc = WebUtils::t(rawurldecode($picDesc));
         $pidIdArray = explode(',', $ids);
 
         foreach ($pidIdArray as $picid) {

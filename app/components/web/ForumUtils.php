@@ -1119,4 +1119,27 @@ class ForumUtils {
         return array($ratelogs, $postlist, $postcache);
     }
 
+    /**
+     * 获得在pc访问的url
+     * 
+     * @param mixed  $souceId 源的ID
+     * @param string $sourceType 源的类型（topic|news）
+     *
+     * @return string 访问地址
+     */
+    public static function getSourceWebUrl($souceId, $sourceType='topic') {
+        $sourceWebUrl = '';
+        switch ($sourceType) {
+            case 'topic':
+                $sourceWebUrl = WebUtils::getHttpFileName('forum.php?mod=viewthread&tid='.$souceId);
+                break;
+            case 'news':
+                $sourceWebUrl = WebUtils::getHttpFileName('portal.php?mod=view&aid='.$souceId);
+                break;
+            default:
+                break;
+        }
+        return $sourceWebUrl;
+    }
+
 }

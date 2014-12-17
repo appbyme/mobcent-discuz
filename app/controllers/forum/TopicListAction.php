@@ -286,9 +286,9 @@ class TopicListAction extends MobcentAction {
             $topicInfo['status'] = (int)$topic['status'];
 
             $cache = Yii::app()->params['mobcent']['cache']['topicSummary'];
-            $key = sprintf('mobcentTopicSummary_%s_%s', $tid, $_G['groupid']);
+            $key = sprintf('mobcentTopicSummary_%s_%s_%s', $tid, $_G['groupid'], $isImageList);
             if (!$cache['enable'] || ($topicSummary = Yii::app()->cache->get($key)) === false) {
-                $topicSummary = ForumUtils::getTopicSummary($tid, 'forum', true, array('imageList' => 1, 'imageListLen' => 9, 'imageListThumb' => 1));
+                $topicSummary = ForumUtils::getTopicSummary($tid, 'forum', true, array('imageList' => $isImageList, 'imageListLen' => 9, 'imageListThumb' => 1));
                 if ($cache['enable']) {
                     Yii::app()->cache->set($key, $topicSummary, $cache['expire']);
                 }
@@ -306,7 +306,8 @@ class TopicListAction extends MobcentAction {
             $topicInfo['userAvatar'] = UserUtils::getUserAvatar($topic['authorid']);
             $topicInfo['recommendAdd'] = (int)ForumUtils::getRecommendAdd($tid);
             $topicInfo['isHasRecommendAdd'] = ForumUtils::isHasRecommendAdd($tid);
-            $topicInfo['imageList'] = $topicSummary['imageList'];
+            $topicInfo['imageList'] = (array)$topicSummary['imageList'];
+            $topicInfo['sourceWebUrl'] = (string)ForumUtils::getSourceWebUrl($tid, 'topic');
             $list[] = $topicInfo;
         }
 
