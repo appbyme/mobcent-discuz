@@ -140,6 +140,33 @@ class TestController extends MobcentController {
     }
 
     public function actionDebug() {
+        $content = rawurlencode("[{'type':0,'infor':'人生得意须尽欢,[挖鼻屎][呵呵]@xjp'}]");
+        $typeOption = rawurlencode("{'profile':1,'makes':1,'boolen':2,'floor':4,'price':'19999','image':'','address':'1,2'}");
+        $topicAdminJson = '{
+            "body":
+            {
+                "json":
+                {
+                    "fid": 2,
+                    "tid":"7",
+                    "location": "北京市",
+                    "aid": "",
+                    "content":"'.$content.'",
+                    "title": "1111111",
+                    "longitude": "116.302891",
+                    "latitude": "40.055069",
+                    "isOnlyAuthor": 0,
+                    "isHidden": 0,
+                    "isAnonymous": 0,
+                    "isShowPostion": 1,
+                    "isQuote": "",
+                    "replyId": "",
+                    "sortId": "",
+                    "typeId": "",
+                    "typeOption":"'.$typeOption.'",
+                },
+            },
+        }';
         $testApiList = array(
             array(
                 'title' => 'debug: test/phpinfo phpinfo',
@@ -237,6 +264,16 @@ class TestController extends MobcentController {
                 'params' => array('keyword' => '测试', 'page' => 1, 'pageSize' => 10, 'searchid' => 0),
             ),
             array(
+                'title' => 'api/forum: forum/sendattachmentex 上传',
+                'route' => 'forum/sendattachmentex',
+                'params' => array('type' => 'image', 'module' => 'forum', 'albumId' => -1),
+            ),
+            array(
+                'title' => 'api/forum: forum/topicadmin 帖子管理',
+                'route' => 'forum/topicadmin',
+                'params' => array('platType' => 1, 'act' => 'reply', 'json' => $topicAdminJson),
+            ),
+            array(
                 'title' => 'api/portal: portal/newsview 文章详情',
                 'route' => 'portal/newsview',
                 'params' => array('json' => "{'aid': 1, 'page': 1}"),
@@ -257,6 +294,11 @@ class TestController extends MobcentController {
                 'params' => array('moduleId' => 1),
             ),
             array(
+                'title' => 'api/user: user/setting 设置接口',
+                'route' => 'user/setting',
+                'params' => array('setting' => "{'body': {'settingInfo': {'hidden': '0', 'deviceToken': '10769850486f002f7b67c3bc709a654bc9bd5db6a0eeba7f7238daa4f24a10ea'}}}"),
+            ),
+            array(
                 'title' => 'api/user: user/getsetting 获取设置',
                 'route' => 'user/getsetting',
                 'params' => array('getSetting' => "{'body': {'postInfo': {'forumIds': '0'}}}"),
@@ -270,6 +312,11 @@ class TestController extends MobcentController {
                 'title' => 'api/user: user/login 登陆',
                 'route' => 'user/login',
                 'params' => array('type' => 'login', 'username' => 'admin', 'password'=>'admin'),
+            ),
+            array(
+                'title' => 'api/user: user/useradminview 用户管理',
+                'route' => 'user/useradminview',
+                'params' => array('uid' => 2, 'act' => 'add'),
             ),
             array(
                 'title' => 'api/message: message/heart 心跳',
@@ -292,6 +339,11 @@ class TestController extends MobcentController {
                 'params' => array('pmlist' => '{"body": {"pmInfos": [{"fromUid": 2, "startTime": "0", "stopTime": "0", "cacheCount": 0, "pmLimit": 10, }], "externInfo": {"onlyFromUid":0} } }'),
             ),
             array(
+                'title' => 'api/message: message/pmadmin 私信管理',
+                'route' => 'message/pmadmin',
+                'params' => array('json' => "{'action': 'send', 'toUid': 2, 'plid': 0, 'pmid': 0, 'msg': {'type': 'text', 'content': 'http://localhost/31g/mobcent/app/data/phiz/default/10.png', }, }"),
+            ),
+            array(
                 'title' => 'api/app: app/initui 初始化AppUI',
                 'route' => 'app/initui',
                 'params' => array(),
@@ -305,7 +357,12 @@ class TestController extends MobcentController {
                 'title' => 'api/app: app/servernotify 服务器事件通知接口',
                 'route' => 'app/servernotify',
                 'params' => array('event' => 'updateApp', 'appKey' => ''),
-            ),      
+            ),
+            array(
+                'title' => 'api/app: app/serverupload 服务器上传接口',
+                'route' => 'app/serverupload',
+                'params' => array('type' => 'add_certfile_apns', 'certfile_apns_passphrase' => '1234'),
+            ),
         );
         $this->renderPartial('debug', array('testApiList' => $testApiList));
     } 

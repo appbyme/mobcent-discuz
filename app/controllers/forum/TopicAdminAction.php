@@ -9,45 +9,9 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     exit('Access Denied');
 }
 // Mobcent::setErrors();
-class TopicAdminAction extends MobcentAction{
-    public function run(){
+class TopicAdminAction extends MobcentAction {
 
-        // $content = 'hello';
-        // $content = rawurlencode('[{"type":0,"infor":"人生得意须尽欢,[挖鼻屎][呵呵]@liang1 "},{"type":1,"infor":"http://localhost/31u"}]');
-//         $typeOption = rawurlencode('{"profile":1,"makes":1,"boolen":2,"floor":4,"price":"19999","image":"","address":"1,2"}');
-//         $json = '{
-//         "head":
-//         {
-//                 "errCode": 0,
-//                 "errInfo":  "",
-//         },
-//         "body":
-//         {
-//                  "json":
-//                  {
-//                            "fid": 2,
-//                            "tid":"",
-//                            "location": "北京市",
-//                            "aid":"",
-//                            "content":"123",
-//                            "title":"测试贴",
-//                            "longitude":"116.302891",
-//                            "latitude":"40.055069",
-//                            "isOnlyAuthor":0,
-//                            "isHidden":0,
-//                            "isAnonymous":1,
-//                            "isShowPostion":1,
-//                            "isQuote":"",
-//                            "replyId":"",
-//                            "sortId":"",
-//                            "typeId":"",
-//                            "typeOption":"'.$typeOption.'",
-//                  },
-//                  "externInfo":
-//                  {
-//                  },
-//         },
-// }';
+    public function run() {
         $json = $_REQUEST['json'];
         $json = rawurldecode($json);
         $info = WebUtils::jsonDecode($json);
@@ -265,6 +229,7 @@ class TopicAdminAction extends MobcentAction{
            $act = 'newthread';
         }
         $jsonInfo['content'] = WebUtils::jsonDecode(rawurldecode($jsonInfo['content']));
+        
         foreach ($jsonInfo['content'] as $k => $v ) {
             switch ($v ["type"]) {
                 case 0 :
@@ -297,7 +262,7 @@ class TopicAdminAction extends MobcentAction{
                    break;
             }
         }
-
+        
         //表情处理
         $message = $this->smilesReplace($message);
         WebUtils::getDzPluginAppbymeAppConfig('forum_allow_gbk_special') && $message = mb_convert_encoding($message, 'HTML-ENTITIES', 'UTF-8');
@@ -764,6 +729,8 @@ class TopicAdminAction extends MobcentAction{
             'from_id' => $thread['tid'],
             'from_idtype' => 'post',
             ));
+            // ios push 
+            UserUtils::pushIOSMessage($thread['authorid'], 'reply', $_G['username'].WebUtils::t(' 回复了您的帖子 ').$thread['subject']);
         }
         $feedid = 0;
         if(helper_access::check_module('follow') && !empty($_GET['adddynamic']) && !$isanonymous) {

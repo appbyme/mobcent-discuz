@@ -109,6 +109,9 @@ class UserAdminViewAction extends MobcentAction {
                         );
 
                         notification_add($uid, 'friend', 'friend_request', $note);
+                        
+                        // ios push 
+                        UserUtils::pushIOSMessage($uid, 'friend', $_G['username'].WebUtils::t(' 请求加您为好友').$note['note']);
 
                         require_once libfile('function/mail');
                         $values = array(

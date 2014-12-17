@@ -241,6 +241,7 @@ class UIDiyController extends AdminController
     {
         $tempTopbars = array();
         foreach ($topbars as $topbar) {
+            $topbar = $this->_filterComponent($topbar);
             $topbar['type'] != AppbymeUIDiyModel::COMPONENT_TYPE_EMPTY && $tempTopbars[] = $topbar;
         }
         return $tempTopbars;

@@ -14,6 +14,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 class AppbymeUserSetting extends DiscuzAR {
 
     const KEY_GPS_LOCATION = 'hidden';
+    const KEY_DEVICE_TOKEN = 'deviceToken';
+
     const VALUE_GPS_LOCATION_ON = 0;
     const VALUE_GPS_LOCATION_OFF = 1;
 
@@ -98,5 +100,16 @@ class AppbymeUserSetting extends DiscuzAR {
             array('appbyme_user_setting', $uid, self::KEY_GPS_LOCATION)
         );
         return !(!empty($config) && $config['uvalue'] == 1);
+    }
+
+    public static function getUserDeviceToken($uid) {
+        return (string)DbUtils::getDzDbUtils(true)->queryScalar('
+            SELECT uvalue 
+            FROM %t
+            WHERE uid=%d
+            AND ukey=%s
+        ',
+            array('appbyme_user_setting', $uid, self::KEY_DEVICE_TOKEN)
+        );
     }
 }
