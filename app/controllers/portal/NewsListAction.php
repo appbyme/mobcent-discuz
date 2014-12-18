@@ -163,7 +163,7 @@ class NewsListAction extends MobcentAction {
                 $topicSummary = ForumUtils::getTopicSummary($portal['id'], 'portal', true, array('imageList' => $_GET['isImageList'], 'imageListLen' => 9, 'imageListThumb' => 1));
                 $rows[] = $this->_getListField(ForumUtils::getTopicInfo($portal['id']), $topicSummary, 'topic', $portal['id']);
            } elseif ($portal['idtype'] == 'aid') {
-                $articleSummary = PortalUtils::getArticleSummary($portal['id']);
+                $articleSummary = PortalUtils::getArticleSummary($portal['id'], true, array('imageList' => $_GET['isImageList'], 'imageListLen' => 9, 'imageListThumb' => 1));
                 $articleInfo = $this->_getArticleByAid($portal['id']);
                 $rows[] = $this->_getListField($articleInfo, $articleSummary, 'news', $portal['id']);
            } elseif ($portal['idtype'] == 'bid') {
@@ -187,7 +187,7 @@ class NewsListAction extends MobcentAction {
                 $hand['title'] && $topicInfo['subject'] = $hand['title'];
                 $rows[] = $this->_getListField($topicInfo, $topicSummary, 'topic', $hand['id']);
             } elseif($hand['idtype'] == 'aid') {
-                $articleSummary = PortalUtils::getArticleSummary($hand['id']);
+                $articleSummary = PortalUtils::getArticleSummary($hand['id'], true, array('imageList' => $_GET['isImageList'], 'imageListLen' => 9, 'imageListThumb' => 1));
                 $articleInfo = $this->_getArticleByAid($hand['id']);
 
                 //  add:在添加自定义内容的时候，手动修改的文章标题 
@@ -223,7 +223,7 @@ class NewsListAction extends MobcentAction {
                 $list['commentnum'] = (int)$topicInfo['replies'];
             }
 
-            $articleSummary = PortalUtils::getArticleSummary($list['aid']);
+            $articleSummary = PortalUtils::getArticleSummary($list['aid'], true, array('imageList' => $_GET['isImageList'], 'imageListLen' => 9, 'imageListThumb' => 1));
             $rows[] = $this->_getListField($list, $articleSummary, 'news', $list['aid']);
         }
         return $rows;        
