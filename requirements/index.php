@@ -78,6 +78,13 @@ $requirements=array(
         '<a href="http://www.yiiframework.com">Yii Framework</a>',
         t('yii', '会影响客户端性能速度, 如未通过,<a href="http://addon.discuz.com/?@appbyme_app.plugin.doc/FAQ">请点击查看说明</a>'),
     ),
+    array(
+        t('yii', 'openssl 扩展模块'),
+        false,
+        function_exists('openssl_open'),
+        '<a href="http://www.yiiframework.com">Yii Framework</a>',
+        t('yii', '会影响客户端ios的推送功能'),
+    ),
     // array(
     //  t('yii','DOM extension'),
     //  false,

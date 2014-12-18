@@ -20,9 +20,10 @@ class PortalUtils {
      *
      * @param int $aid 文章id
      * @param bool $transBr 是否要转换换行
+     * @param array $options 参数选项, 可选值: array('imageList' => 1, 'imageListLen' => 9, 'imageListThumb' => 1)
      * @return array array('msg' => '', 'image' => '', 'imageList' => array())
      */
-    public static function getArticleSummary($aid, $transBr=true) {
+    public static function getArticleSummary($aid, $transBr=true, $options=array()) {
         $summary = array('msg' => '', 'image' => '', 'imageList' => array());
 
         $summaryLength = WebUtils::getDzPluginAppbymeAppConfig('portal_summary_length');
@@ -36,11 +37,23 @@ class PortalUtils {
 
         $article = DzPortalArticle::getArticleByAid($aid);
         if (!empty($article)) {
+            $getImageList = isset($options['imageList']) ? $options['imageList'] : 0;
+            $imageListLen = isset($options['imageListLen']) ? $options['imageListLen'] : 9;
+            $imageListThumb = isset($options['imageListThumb']) ? $options['imageListThumb'] : 1;
+
             $msg = $article['summary'];
             if ($article['pic']) {
                 // $article['pic'] = pic_get($article['pic'], '', $article['thumb'], $article['remote'], 1, 1);
                 $article['pic'] = pic_get($article['pic'], '', $article['thumb'], $article['remote'], 0, 1);
-                $allowImage && $summary['image'] = WebUtils::getHttpFileName($article['pic']);
+                if ($allowImage) {
+                    $summary['image'] = WebUtils::getHttpFileName($article['pic']);
+
+                    if ($getImageList) {
+                        $tempImage = $summary['image'];
+                        $imageListThumb && $tempImage = ImageUtils::getThumbImage($tempImage);
+                        $summary['imageList'][] = $tempImage;
+                    }
+                }
             }
             $transBr && $msg = WebUtils::emptyReturnLine($msg, ' ');
             $msg = trim($msg);
