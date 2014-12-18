@@ -22,6 +22,7 @@ class SendAttachmentExAction extends MobcentAction {
 
     public function run($type='image', $module='forum', $albumId=-1) {
         $res = $this->initWebApiArray();
+        $albumId = $albumId == 0 ? -1 : $albumId;
         $res['body']['attachment'] = array();
         switch ($type) {
             case 'image':
@@ -78,8 +79,9 @@ class SendAttachmentExAction extends MobcentAction {
             if ($type == 'image' && $module == 'album') {
 
                 if(!checkperm('allowupload') || !helper_access::check_module('album')) {
-                    // 没有权限发相册
-                    return $this->makeErrorInfo($res, lang('message', 'no_privilege_postimage'));
+                    // 没有权限发相册,或者没有开启相册（没开启也可以$_G）
+                    // return $this->makeErrorInfo($res, lang('message', 'no_privilege_postimage'));
+                    return $this->makeErrorInfo($res, 'mobcent_no_privilege_postimage');
                 }
 
                 foreach ( $allowFile as $allowValue) {
