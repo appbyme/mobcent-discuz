@@ -145,14 +145,13 @@ class DzCommonUserList extends DiscuzAR {
 
     public static function _getFollowUsersByRange($uid, $page, $pageSize, $longitude, $latitude, $radius) {
         $range = self::_getRange($longitude, $latitude, $radius);
-        $select = 'hf.followuid' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        $select = 'hf.followuid,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
         return DbUtils::getDzDbUtils(true)->queryColumn('
             SELECT ' . $select . '
             FROM %t hsu INNER JOIN %t aus
             ON (hsu.object_id=aus.uid)
             INNER JOIN %t hf ON (aus.uid=hf.uid)
             WHERE hsu.type=%s
-            AND hf.uid=%d 
             AND hf.status = 0
             AND hsu.object_id!=%s
             AND hsu.longitude BETWEEN %s AND %s
@@ -264,7 +263,6 @@ class DzCommonUserList extends DiscuzAR {
             WHERE hsu.type=%s
             AND hf.followuid=%d 
             AND hf.status = 0
-            AND hsu.object_id!=%s
             AND hsu.longitude BETWEEN %s AND %s
             AND hsu.latitude BETWEEN %s AND %s
             AND aus.ukey=%s
@@ -481,7 +479,6 @@ class DzCommonUserList extends DiscuzAR {
             ON (hsu.object_id=aus.uid)
             INNER JOIN %t hf ON (aus.uid=hf.uid)
             WHERE hsu.type=%s
-            AND hf.uid=%d
             AND hsu.object_id!=%s
             AND hsu.longitude BETWEEN %s AND %s
             AND hsu.latitude BETWEEN %s AND %s

@@ -292,15 +292,32 @@ a.pn {
 /* 横向放置的手机及分辨率更小的设备 */
 @media (max-width: 480px) {
 .delect, .zhiding {
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
-    padding-left: 5%;
-    padding-right: 5%;
+    /*padding-left: 5%;
+    padding-right: 5%;*/
 }
+
+.tm_c {
+    width: 100%;
+    margin: 0 10px;
+}
+
+.px {
+    width: 98%;
+}
+
+.pnc {
+    margin: 0 10px;
+}
+
 .tpclg .pt {
     width: 97%;
 }
 }
+
+.c {width: 80%; margin: 0 0;}
+.size40 img{width:60px; height:60px;}
 </style>
 </head>
 <body>
@@ -313,13 +330,14 @@ a.pn {
                 <div class="c">
                     <ul class="tpcl">
                         <?php if ($action == 'add') {?>
-                        <h3 class="flb">
-                            <em id="return_<?php echo $_GET['handlekey'];?>">加为好友</em>
-                        </h3>
-                            <div class="c">
+                        <div class="c">
+                            <h3 class="flb">
+                                <em id="return_<?php echo $_GET['handlekey'];?>">加为好友</em>
+                            </h3>
+
                             <table>
                                 <tr>
-                                <th valign="top" width="60" class="avt"><a href="home.php?mod=space&amp;uid=<?php echo $tospace['uid'];?>"><?php echo avatar($tospace[uid],small);?></th>
+                                <th valign="top" width="60" class="avt"><a href="home.php?mod=space&amp;uid=<?php echo $tospace['uid'];?>"><div class="size40"><?php echo avatar($tospace[uid],small);?></div></th>
                                     <td valign="top">添加 <strong><?php echo WebUtils::u($tospace['username']);?></strong> 为好友，附言:<br />
                                     <input type="text" name="note" value="" size="35" class="px"  onkeydown="ctrlEnter(event, 'addsubmit_btn', 1);" />
                                         <p class="mtn xg1">(附言为可选，<?php echo WebUtils::u($tospace['username']);?> 会看到这条附言，最多 10 个字 )</p>
@@ -331,7 +349,7 @@ a.pn {
                                 </td>
                                 </tr>
                             </table>
-                            </div>
+                        </div>
                         <?php } else if ($action == 'add2') {?>
                             <h3 class="flb">
                                 <em id="return_<?php echo $_GET['handlekey'];?>">批准请求</em>
@@ -339,7 +357,7 @@ a.pn {
                             <div class="c">
                                 <table cellspacing="0" cellpadding="0">
                                     <tr>
-                                    <th valign="top" width="60" class="avt"><a href="home.php?mod=space&amp;uid=<?php echo $tospace['uid'];?>"><?php echo avatar($tospace[uid],small);?></th>
+                                    <th valign="top" width="60" class="avt"><a href="home.php?mod=space&amp;uid=<?php echo $tospace['uid'];?>"><div class="size40"><?php echo avatar($tospace[uid],small);?></div></th>
                                     <td valign="top">
                                         <p>批准 <strong><?php echo WebUtils::u($tospace['username']);?></strong> 的好友请求，并分组:</p>
                                         <table><tr><?php $i=0;?><?php if(is_array($groups)) foreach($groups as $key => $value) { ?><td style="padding:8px 8px 0 0;"><label for="group_<?php echo $key;?>"><input type="radio" name="gid" id="group_<?php echo $key;?>" value="<?php echo $key;?>"<?php echo $groupselect[$key];?> /><?php echo WebUtils::u($value);?></label></td>
@@ -366,7 +384,7 @@ a.pn {
                         <?php } ?>
                     </ul>
                 </div>
-                <p style="text-align:right">
+                <p style="text-align:right" class ="pnc">
                     <button type="submit" name="modsubmit" id="modsubmit" class="pn pnc" value="确定" ><span>确定</span>
                     </button>
                 </p>

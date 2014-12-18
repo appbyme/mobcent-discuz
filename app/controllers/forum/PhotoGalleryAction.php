@@ -55,6 +55,11 @@ class PhotoGalleryAction extends CAction {
             $tempImageInfo = ImageUtils::getThumbImageEx($imageSummary, 15, true, false);
             $imageInfo['pic_path'] = $tempImageInfo['image'];
             $imageInfo['ratio']= $tempImageInfo['ratio'];
+            $imageInfo['userAvatar'] = UserUtils::getUserAvatar($tmpImageInfo['authorid']);
+            $imageInfo['recommendAdd'] = (int)ForumUtils::getRecommendAdd($image);
+            $imageInfo['isHasRecommendAdd'] = (int)ForumUtils::isHasRecommendAdd($image);
+            $imageInfo['imageList'] = array();
+            $imageInfo['sourceWebUrl'] = (string)ForumUtils::getSourceWebUrl($image, 'topic');
             $list[] = $imageInfo;
         }
         return $list;

@@ -63,12 +63,12 @@ class UserListAction extends CAction {
             default:
                 break;
         }
-        $list = $this->_transUserList($users, $viewUid, $longitude, $latitude, $radius, $page, $pageSize);
+        $list = $this->_transUserList($users, $viewUid, $longitude, $latitude, $radius, $page, $pageSize, $sortType);
         return $list;
     }
 
     // 用户关注、粉丝和推荐详细信息
-    private function _transUserList($users, $viewUid, $longitude, $latitude, $radius, $page, $pageSize) {
+    private function _transUserList($users, $viewUid, $longitude, $latitude, $radius, $page, $pageSize, $sortType) {
         loadcache('usergroups');
 
         $list = array();
@@ -84,9 +84,14 @@ class UserListAction extends CAction {
             $tmpfollowe['gender'] = (int)UserUtils::getUserGender($user);
             $tmpfollowe['icon'] = UserUtils::getUserAvatar($user);
             $tmpfollowe['level'] = (int)DzCommonUserList::getUserLevel($user);
-            $distance = DzCommonUserList::getOneUserByUid($user, $longitude, $latitude, $radius, $page, $pageSize);
-            $tmpfollowe['distance'] = (string)$distance['distance'];
-            $tmpfollowe['location'] = (string)WebUtils::t($distance['location']);
+            if ($sortType == 'range') {
+                $distance = DzCommonUserList::getOneUserByUid($user, $longitude, $latitude, $radius, $page, $pageSize);
+                $tmpfollowe['distance'] = (string)$distance['distance'];
+                $tmpfollowe['location'] = (string)WebUtils::t($distance['location']);
+            } else {
+                $tmpfollowe['distance'] = '';
+                $tmpfollowe['location'] = '';
+            }
             $lastLogin = WebUtils::t(DzCommonUserList::getUserLastVisit($user));
             $tmpfollowe['lastLogin'] = $lastLogin . '000';
             $signature = WebUtils::emptyHtml(DzCommonUserList::getUserSightml($user));

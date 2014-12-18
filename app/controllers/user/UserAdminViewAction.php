@@ -36,9 +36,61 @@ class UserAdminViewAction extends MobcentAction {
 
         global $_G;
         $errorMsg = '';
+        require_once libfile('function/spacecp');
+        require_once libfile('function/home');
         require_once libfile('function/friend');
         if (friend_request_check($uid) && $act == 'add') {
             $act = 'add2';
+        }
+
+        if ($act == 'add'|| $act == 'add2') {
+            if($uid == $_G['uid']) {
+                $list = $this->makeErrorInfo($res, 'friend_self_error');
+                $this->_exitWithHtmlAlert($list['errcode']);
+            }
+
+            if(friend_check($uid)) {
+                $list = $this->makeErrorInfo($res, 'you_have_friends');
+                $this->_exitWithHtmlAlert($list['errcode']);
+            }
+
+            $tospace = getuserbyuid($uid);
+            if(empty($tospace)) {
+                $list = $this->makeErrorInfo($res, 'space_does_not_exist');
+                $this->_exitWithHtmlAlert($list['errcode']);
+            }
+
+            if(isblacklist($tospace['uid'])) {
+                $list = $this->makeErrorInfo($res, 'is_blacklist');
+                $this->_exitWithHtmlAlert($list['errcode']);
+            }
+
+            space_merge($space, 'count');
+            space_merge($space, 'field_home');
+            $maxfriendnum = checkperm('maxfriendnum');
+
+            if($maxfriendnum && $space['friends'] >= $maxfriendnum + $space['addfriend']) {
+                if($_G['magic']['friendnum']) {
+                    $list = $this->makeErrorInfo($res, 'enough_of_the_number_of_friends_with_magic');
+                    $this->_exitWithHtmlAlert($list['errcode']);
+                } else {
+                    $list = $this->makeErrorInfo($res, 'enough_of_the_number_of_friends');
+                    $this->_exitWithHtmlAlert($list['errcode']);
+                }
+            } 
+
+            if ($act == 'add') {
+
+                if(!checkperm('allowfriend')) {
+                    $list = $this->makeErrorInfo($res, 'no_privilege_addfriend');
+                    $this->_exitWithHtmlAlert($list['errcode']);
+                }
+
+                if(C::t('home_friend_request')->count_by_uid_fuid($uid, $_G['uid'])) {
+                    $list = $this->makeErrorInfo($res, 'waiting_for_the_other_test');
+                    $this->_exitWithHtmlAlert($list['errcode']);
+                }
+            }
         }
 
         require_once libfile('function/friend');
@@ -47,56 +99,8 @@ class UserAdminViewAction extends MobcentAction {
             switch ($act) {
                 case 'add':
                     $note = $_GET['note'];
-                    require_once libfile('function/friend');
-                    require_once libfile('function/spacecp');
-                    require_once libfile('function/home');
-                    if(!checkperm('allowfriend')) {
-                        $list = $this->makeErrorInfo($res, 'no_privilege_addfriend');
-                        $this->_exitWithHtmlAlert($list['errcode']);
-                    }
 
-                    if($uid == $_G['uid']) {
-                        $list = $this->makeErrorInfo($res, 'friend_self_error');
-                        $this->_exitWithHtmlAlert($list['errcode']);
-                    }
-
-                    if(friend_check($uid)) {
-                        $list = $this->makeErrorInfo($res, 'you_have_friends');
-                        $this->_exitWithHtmlAlert($list['errcode']);
-                    }
-
-                    $tospace = getuserbyuid($uid);
-                    if(empty($tospace)) {
-                        $list = $this->makeErrorInfo($res, 'space_does_not_exist');
-                        $this->_exitWithHtmlAlert($list['errcode']);
-                    }
-
-                    if(isblacklist($tospace['uid'])) {
-                        $list = $this->makeErrorInfo($res, 'is_blacklist');
-                        $this->_exitWithHtmlAlert($list['errcode']);
-                    }
-                    space_merge($space, 'count');
-                    space_merge($space, 'field_home');
-                    $maxfriendnum = checkperm('maxfriendnum'); 
-
-                    if($maxfriendnum && $space['friends'] >= $maxfriendnum + $space['addfriend']) {
-                        if($_G['magic']['friendnum']) {
-                            $list = $this->makeErrorInfo($res, 'enough_of_the_number_of_friends_with_magic');
-                            $this->_exitWithHtmlAlert($list['errcode']);
-                        } else {
-                            $list = $this->makeErrorInfo($res, 'enough_of_the_number_of_friends');
-                            $this->_exitWithHtmlAlert($list['errcode']);
-                        }
-                    }
-
-                    if(friend_request_check($uid)) {
-
-                    } else {
-                        if(C::t('home_friend_request')->count_by_uid_fuid($uid, $_G['uid'])) {
-                            $list = $this->makeErrorInfo($res, 'waiting_for_the_other_test');
-                            $this->_exitWithHtmlAlert($list['errcode']);
-                        }
-
+                    if(!friend_request_check($uid)) {
                         $_POST['gid'] = $gid;
                         $_POST['note'] = censor(htmlspecialchars(cutstr($note, strtolower(CHARSET) == 'utf-8' ? 30 : 20, '')));
                         friend_add($uid, $_POST['gid'], $_POST['note']);
@@ -122,39 +126,6 @@ class UserAdminViewAction extends MobcentAction {
                     $this->_exitWithHtmlAlert($res['errcode']);
                 case 'add2':
                     global $_G;
-                    if($uid == $_G['uid']) {
-                        $list = $this->makeErrorInfo($res, 'friend_self_error');
-                        $this->_exitWithHtmlAlert($list['errcode']);
-                    }
-
-                    if(friend_check($uid)) {
-                        $list = $this->makeErrorInfo($res, 'you_have_friends');
-                        $this->_exitWithHtmlAlert($list['errcode']);
-                    }
-
-                    $tospace = getuserbyuid($uid);
-                    if(empty($tospace)) {
-                        $list = $this->makeErrorInfo($res, 'space_does_not_exist');
-                        $this->_exitWithHtmlAlert($list['errcode']);
-                    }
-
-                    if(isblacklist($tospace['uid'])) {
-                        $list = $this->makeErrorInfo($res, 'is_blacklist');
-                        $this->_exitWithHtmlAlert($list['errcode']);
-                    }
-                    space_merge($space, 'count');
-                    space_merge($space, 'field_home');
-                    $maxfriendnum = checkperm('maxfriendnum'); 
-
-                    if($maxfriendnum && $space['friends'] >= $maxfriendnum + $space['addfriend']) {
-                        if($_G['magic']['friendnum']) {
-                            $list = $this->makeErrorInfo($res, 'enough_of_the_number_of_friends_with_magic');
-                            $this->_exitWithHtmlAlert($list['errcode']);
-                        } else {
-                            $list = $this->makeErrorInfo($res, 'enough_of_the_number_of_friends');
-                            $this->_exitWithHtmlAlert($list['errcode']);
-                        }
-                    }
                     require_once libfile('function/home');
                     $_POST['gid'] = intval($gid);
                     friend_add($uid, $uid);
