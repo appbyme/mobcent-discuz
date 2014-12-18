@@ -39,6 +39,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const MODULE_STYLE_FLAT = 'flat';
 
     // component
+    const COMPONENT_TYPE_EMPTY = 'empty';
     const COMPONENT_TYPE_DEFAULT = 'forumlist';
     const COMPONENT_TYPE_DISCOVER = 'discover';
     const COMPONENT_TYPE_FASTTEXT = 'fasttext';
@@ -125,6 +126,7 @@ class AppbymeUIDiyModel extends DiscuzAR
 
     const COMPONENT_ICON_FASTPOST = 'mc_forum_ico';
     const COMPONENT_ICON_DISCOVER_DEFAULT = 'mc_forum_squre_icon';
+    const COMPONENT_ICON_TOPBAR = 'mc_forum_top_bar_button';
 
     const USERLIST_FILTER_ALL = 'all';
     const USERLIST_FILTER_FRIEND = 'friend';
@@ -142,18 +144,18 @@ class AppbymeUIDiyModel extends DiscuzAR
         return array(
             'type' => self::NAV_TYPE_BOTTOM,
             'navItemList' => array(
-                array_merge(self::initNavItem(), array(
+                self::initNavItem(array(
                     'moduleId' => 3,
                     'title' => '首页',
                     'icon' => self::NAV_ITEM_ICON . '1',
                 )),
-                array_merge(self::initNavItem(), array(
+                self::initNavItem(array(
                     'moduleId' => 4,
                     'title' => '社区',
                     'icon' => self::NAV_ITEM_ICON . '2',
                 )),
                 self::initNavItemFastpost(),
-                array_merge(self::initNavItem(), array(
+                self::initNavItem(array(
                     'moduleId' => 5,
                     'title' => '消息',
                     'icon' => self::NAV_ITEM_ICON . '4',
@@ -163,37 +165,31 @@ class AppbymeUIDiyModel extends DiscuzAR
         );
     }
 
-    public static function initNavItem()
+    public static function initNavItem($params=array())
     {
-        return array(
+        return array_merge(array(
             'moduleId' => 0,
             'title' => '',
             'icon' => self::NAV_ITEM_ICON . '1',
-        );
+        ), $params);
     }
 
     public static function initNavItemDiscover()
     {
-        return array_merge(
-            self::initNavItem(),
-            array(
-                'moduleId' => self::MODULE_ID_DISCOVER,
-                'title' => '发现',
-                'icon' => self::NAV_ITEM_ICON . '5',
-            )
-        );
+        return self::initNavItem(array(
+            'moduleId' => self::MODULE_ID_DISCOVER,
+            'title' => '发现',
+            'icon' => self::NAV_ITEM_ICON . '5',
+        ));
     }
 
     public static function initNavItemFastpost()
     {
-        return array_merge(
-            self::initNavItem(),
-            array(
-                'moduleId' => self::MODULE_ID_FASTPOST,
-                'title' => '快速发表',
-                'icon' => self::NAV_ITEM_ICON . '17',
-            )
-        );
+        return self::initNavItem(array(
+            'moduleId' => self::MODULE_ID_FASTPOST,
+            'title' => '快速发表',
+            'icon' => self::NAV_ITEM_ICON . '17',
+        ));
     }
 
     public static function getNavigationInfo($isTemp=false)
@@ -235,23 +231,26 @@ class AppbymeUIDiyModel extends DiscuzAR
         return array(
             self::initDiscoverModule(),
             self::initFastpostModule(),
-            array_merge(self::initModule(), array(
+            self::initModule(array(
                 'id' => 3,
                 'title' => '首页',
                 'type' => self::MODULE_TYPE_SUBNAV,
                 'rightTopbars' => array(
-                    array_merge(self::initComponent(), array(
+                    self::initComponent(array(
                         'type' => self::COMPONENT_TYPE_USERINFO,
+                        'icon' => self::COMPONENT_ICON_TOPBAR.'6',
                     )),
-                    self::initComponent(),
+                    self::initComponent(array(
+                        'type' => self::COMPONENT_TYPE_EMPTY,
+                    )),
                 ),
             )),
-            array_merge(self::initModule(), array(
+            self::initModule(array(
                 'id' => 4,
                 'title' => '社区',
                 'type' => self::MODULE_TYPE_SUBNAV,
                 'componentList' => array(
-                    array_merge(self::initComponent(), array(
+                    self::initComponent(array(
                         'type' => self::COMPONENT_TYPE_FORUMLIST,
                         'title' => '版块',
                     )),
@@ -260,18 +259,22 @@ class AppbymeUIDiyModel extends DiscuzAR
                     self::initComponent(),
                 ),
                 'rightTopbars' => array(
-                    array_merge(self::initComponent(), array(
+                    self::initComponent(array(
                         'type' => self::COMPONENT_TYPE_SEARCH,
+                        'icon' => self::COMPONENT_ICON_TOPBAR.'10',
                     )),
-                    self::initComponent(),
+                    self::initComponent(array(
+                        'type' => self::COMPONENT_TYPE_USERINFO,
+                        'icon' => self::COMPONENT_ICON_TOPBAR.'6',
+                    )),
                 ),
             )),
-            array_merge(self::initModule(), array(
+            self::initModule(array(
                 'id' => 5,
                 'title' => '消息',
                 'type' => self::MODULE_TYPE_FULL,
                 'componentList' => array(
-                    array_merge(self::initComponent(), array(
+                    self::initComponent(array(
                         'type' => self::COMPONENT_TYPE_MESSAGELIST,
                     )),
                 ),
@@ -279,65 +282,69 @@ class AppbymeUIDiyModel extends DiscuzAR
         );
     }
 
-    public static function initModule()
+    public static function initModule($params=array())
     {
-        return array(
+        return array_merge(array(
             'id' => 0,
             'type' => self::MODULE_TYPE_FULL,
             'style' => self::MODULE_STYLE_CARD,
             'title' => '',
             'icon' => Yii::app()->getController()->rootUrl.'/images/admin/module-default.png',
             'leftTopbars' => array(
-                self::initComponent(),
+                self::initComponent(array(
+                    'type' => self::COMPONENT_TYPE_EMPTY,
+                )),
             ),
             'rightTopbars' => array(
-                self::initComponent(),
-                self::initComponent(),  
+                self::initComponent(array(
+                    'type' => self::COMPONENT_TYPE_EMPTY,
+                )),
+                self::initComponent(array(
+                    'type' => self::COMPONENT_TYPE_EMPTY,
+                )),
             ),
             'componentList' => array(),
             'extParams' => array('padding' => '',),
-        );
+        ), $params);
     }
 
     public static function initDiscoverModule()
     {
-        return array_merge(self::initModule(), array(
+        return self::initModule(array(
             'id' => self::MODULE_ID_DISCOVER,
             'title' => '发现',
-            'componentList' => array(
-                self::initComponentDiscover(),
-            ),
+            'componentList' => array(self::initComponentDiscover()),
         ));
     }
     
     public static function initFastpostModule()
     {
-        return array_merge(self::initModule(), array(
+        return self::initModule(array(
             'id' => self::MODULE_ID_FASTPOST,
             'title' => '快速发表',
             'type' => self::MODULE_TYPE_FASTPOST,
             'componentList' => array(
-                array_merge(self::initComponent(), array(
+                self::initComponent(array(
                     'type' => self::COMPONENT_TYPE_FASTTEXT,
                     'title' => '文字',
                     'icon' => self::COMPONENT_ICON_FASTPOST . '27',
                 )),
-                array_merge(self::initComponent(), array(
+                self::initComponent(array(
                     'type' => self::COMPONENT_TYPE_FASTIMAGE,
                     'title' => '图片',
                     'icon' => self::COMPONENT_ICON_FASTPOST . '28',
                 )),
-                array_merge(self::initComponent(), array(
+                self::initComponent(array(
                     'type' => self::COMPONENT_TYPE_FASTCAMERA,
                     'title' => '拍照',
                     'icon' => self::COMPONENT_ICON_FASTPOST . '29',
                 )),
-                array_merge(self::initComponent(), array(
+                self::initComponent(array(
                     'type' => self::COMPONENT_TYPE_FASTAUDIO,
                     'title' => '语音',
                     'icon' => self::COMPONENT_ICON_FASTPOST . '45',
                 )),
-                // array_merge(self::initComponent(), array(
+                // self::initComponent(array(
                 //     'type' => self::COMPONENT_TYPE_SIGN,
                 //     'title' => '签到',
                 //     'icon' => self::COMPONENT_ICON_FASTPOST . '30',
@@ -396,9 +403,9 @@ class AppbymeUIDiyModel extends DiscuzAR
         ));
     }
 
-    public static function initComponent()
+    public static function initComponent($params=array())
     {
-        return array(
+        return array_merge(array(
             'id' => '',
             'type' => self::COMPONENT_TYPE_DEFAULT,
             'style' => self::COMPONENT_STYLE_FLAT,
@@ -426,28 +433,28 @@ class AppbymeUIDiyModel extends DiscuzAR
                 'orderby' => '',
                 'redirect' => '',
             ),
-        );
+        ), $params);
     }
 
     public static function initComponentDiscover()
     {
-        return array_merge(self::initComponent(), array(
+        return self::initComponent(array(
             'type' => self::COMPONENT_TYPE_DISCOVER,
             'componentList' => array(
-                array_merge(self::initLayout(), array(
+                self::initLayout(array(
                     'style' => self::COMPONENT_STYLE_DISCOVER_SLIDER,
                     'componentList' => array(
                     ),
                 )),
-                array_merge(self::initLayout(), array(
+                self::initLayout(array(
                     'style' => self::COMPONENT_STYLE_DISCOVER_DEFAULT,
                     'componentList' => array(
-                        array_merge(self::initComponent(), array(
+                        self::initComponent(array(
                             'title' => '个人中心',
                             'type' => self::COMPONENT_TYPE_USERINFO,
                             'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '9',
                         )),
-                        array_merge(self::initComponent(), array(
+                        self::initComponent(array(
                             'title' => '周边用户',
                             'type' => self::COMPONENT_TYPE_USERLIST,
                             'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '5',
@@ -456,12 +463,12 @@ class AppbymeUIDiyModel extends DiscuzAR
                                 'orderby' => self::USERLIST_ORDERBY_DISTANCE,
                             ),
                         )),
-                        array_merge(self::initComponent(), array(
+                        self::initComponent(array(
                             'title' => '周边帖子',
                             'type' => self::COMPONENT_TYPE_SURROUDING_POSTLIST,
                             'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '4',
                         )),
-                        array_merge(self::initComponent(), array(
+                        self::initComponent(array(
                             'title' => '推荐用户',
                             'type' => self::COMPONENT_TYPE_USERLIST,
                             'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '6',
@@ -470,18 +477,18 @@ class AppbymeUIDiyModel extends DiscuzAR
                                 'orderby' => self::USERLIST_ORDERBY_DATELINE,
                             )
                         )),
-                        array_merge(self::initComponent(), array(
+                        self::initComponent(array(
                             'title' => '设置',
                             'type' => self::COMPONENT_TYPE_SETTING,
                             'icon' => self::COMPONENT_ICON_DISCOVER_DEFAULT . '7',
                         )),
-                        // array_merge(self::initComponent(), array(
+                        // self::initComponent(array(
                         //     'title' => '关于',
                         //     'type' => self::COMPONENT_TYPE_ABOAT,
                         // )),
                     ),
                 )),
-                array_merge(self::initLayout(), array(
+                self::initLayout(array(
                     'style' => self::COMPONENT_STYLE_DISCOVER_CUSTOM,
                     'componentList' => array(
                     ),
@@ -490,11 +497,11 @@ class AppbymeUIDiyModel extends DiscuzAR
         ));
     }
 
-    public static function initLayout()
+    public static function initLayout($params=array())
     {
-        return array_merge(self::initComponent(), array(
+        return self::initComponent(array_merge(array(
             'type' => self::COMPONENT_TYPE_LAYOUT,
             'style' => self::COMPONENT_STYLE_LAYOUT_DEFAULT,
-        ));
+        ), $params));
     }
 }

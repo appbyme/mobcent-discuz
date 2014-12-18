@@ -782,4 +782,31 @@ class UserUtils {
         
         return ($_G['username'] != '' && in_array($_G['username'], $allowUsers)) || in_array($_G['groupid'], $allowGroupIds);
     }
+
+    public static function pushIOSMessage($uid, $type, $message='') {
+        $payload = array();
+        $data = array();
+        switch ($type) {
+            case 'reply':
+            case 'at':
+            case 'friend':
+            case 'pm':
+                $data = array(
+                    'type' => $type,
+                );
+                break;
+            default:
+                break;
+        }
+        if (!empty($data)) {
+            $payload['aps'] = array(
+                'alert' => $message,
+                'sound' => 'default',
+                'badge' => 1,
+            );
+            $payload['appbymeData'] = $data;
+        }
+
+        return Webutils::doAppAPNsHelper($uid, $payload);
+    }
 }

@@ -282,6 +282,43 @@ class WebUtils {
         return $res;
     }
 
+    public static function doAppAPNsHelper($uid, $payload, $timeout=10, $charset='') {
+        $res = false;
+
+        $deviceToken = AppbymeUserSetting::getUserDeviceToken($uid);
+        $passphrase = AppbymeConfig::getAPNsCertfilePassword();
+        $certfile = MOBCENT_UPLOAD_PATH.'/appbyme_push.pem';
+        if (file_exists($certfile) && $uid && $deviceToken && $passphrase && $payload) {
+            $res = WebUtils::doAPNs($certfile, $passphrase, $deviceToken, $payload, $timeout, $charset);
+        }
+
+        return $res;
+    }
+
+    public static function doAPNs($localCertFile, $passphrase, $deviceToken, $payload, $timeout=10, $charset='') {
+        // https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html#//apple_ref/doc/uid/TP40008194-CH100-SW9
+        $res = false;
+
+        $ctx = stream_context_create();
+        stream_context_set_option($ctx, 'ssl', 'local_cert', $localCertFile);
+        stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+
+        $url = 'ssl://gateway.push.apple.com:2195';
+        // $url = 'ssl://gateway.sandbox.push.apple.com:2195'; // test
+
+        if ($fp = stream_socket_client($url, $err, $errstr, $timeout, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx)) {
+            stream_set_timeout($fp, $timeout);
+
+            $payload = WebUtils::jsonEncode($payload, $charset);
+            $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+            fwrite($fp, $msg, strlen($msg)) && $res = true;
+
+            fclose($fp);
+        }
+
+        return $res;
+    }
+
     public static function getDzPluginAppbymeAppConfig($key = '') {
         global $_G;
 

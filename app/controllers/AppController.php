@@ -17,6 +17,7 @@ class AppController extends MobcentController
             'initui' => 'application.controllers.app.InitUIAction',
             'moduleconfig' => 'application.controllers.app.ModuleConfigAction',
             'servernotify' => 'application.controllers.app.ServerNotifyAction',
+            'serverupload' => 'application.controllers.app.ServerUploadAction',
         );
     }
 
@@ -26,6 +27,7 @@ class AppController extends MobcentController
             'initui' => false,
             'moduleconfig' => false,
             'servernotify' => false,
+            'serverupload' => false,
         );
     }
 }

@@ -219,7 +219,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         apphash: '<?php echo MobcentDiscuz::getAppHashValue(); ?>',
         navItemIconUrlBasePath: '<?php echo $this->navItemIconBaseUrlPath; ?>',
         componentFastpostIconBaseUrlPath: '<?php echo $this->componentFastpostIconBaseUrlPath; ?>',
-        componentIconDiscoverBaseUrlPath: '<?php echo $this->componentIconDiscoverBaseUrlPath; ?>',
+        componentDiscoverIconBaseUrlPath: '<?php echo $this->componentDiscoverIconBaseUrlPath; ?>',
+        componentTopbarIconBaseUrlPath: '<?php echo $this->componentTopbarIconBaseUrlPath; ?>',
         moduleInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initModule(), 'utf-8'); ?>,
         componentInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initComponent(), 'utf-8'); ?>,
         layoutInitParams: <?php echo WebUtils::jsonEncode(AppbymeUIDiyModel::initLayout(), 'utf-8'); ?>,
@@ -257,28 +258,15 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     <!-- topbar 编辑模板 -->
     <script type="text/template" id="module-topbar-dlg-template">
     <div class="panel panel-primary">
-        <form class="module-topbar-edit-form">
+        <form class="module-topbar-edit-form form-horizontal">
         <div class="panel-heading">
             <h3 class="panel-title pull-left">插件设置</h3>
             <button type="button" class="close close-topbar-btn pull-right">&times;</button>
         </div>
         <input type="hidden" name="topbarIndex" id="topbarIndex" value="0">
-        <div class="panel-body" style="padding:25px 0px">
-            <label class="radio-inline">
-                <input type="radio" name="topbarComponentType" value="<%= COMPONENT_TYPE_DEFAULT %>" <%= type == COMPONENT_TYPE_DEFAULT ? 'checked' : '' %>> 取消
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="topbarComponentType" value="<%= COMPONENT_TYPE_WEATHER %>" <%= type == COMPONENT_TYPE_WEATHER ? 'checked' : '' %>> 天气
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="topbarComponentType" value="<%= COMPONENT_TYPE_USERINFO %>" <%= type == COMPONENT_TYPE_USERINFO ? 'checked' : '' %>> 用户中心
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="topbarComponentType" value="<%= COMPONENT_TYPE_SIGN %>" <%= type == COMPONENT_TYPE_SIGN ? 'checked' : '' %>> 签到
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="topbarComponentType" value="<%= COMPONENT_TYPE_SEARCH %>" <%= type == COMPONENT_TYPE_SEARCH ? 'checked' : '' %>> 搜索
-            </label>
+        <div class="panel-body">
+            <div class="topbar-component-view-container">
+            </div>
         </div>
         <div class="panel-footer text-right">
             <input type="submit" class="btn btn-primary btn-sm" value="确定" >  
@@ -598,28 +586,33 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <label class="col-sm-2 control-label">链接地址: </label>
             <div class="col-sm-10">
             <select name="componentType[]" class="selectComponentType form-control" <%= this.uiconfig.isShow_typeSelect ? '' : 'disabled' %>>
-                <option value="<%= COMPONENT_TYPE_FORUMLIST %>" <%= type == COMPONENT_TYPE_FORUMLIST ? 'selected' : '' %>>版块列表</option>
-                <option value="<%= COMPONENT_TYPE_NEWSLIST %>" <%= type == COMPONENT_TYPE_NEWSLIST ? 'selected' : '' %>>门户模块列表</option>
-                <!-- <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %>>帖子列表</option> -->
-                <option value="<%= COMPONENT_TYPE_TOPICLIST_SIMPLE %>" <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? 'selected' : '' %>>简版帖子列表</option>
+                <option value="<%= COMPONENT_TYPE_EMPTY %>" <%= type == COMPONENT_TYPE_EMPTY ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeEmpty ? '' : 'hidden' %>">取消</option>
+                <option value="<%= COMPONENT_TYPE_FORUMLIST %>" <%= type == COMPONENT_TYPE_FORUMLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeForumlist ? '' : 'hidden' %>">版块列表</option>
+                <option value="<%= COMPONENT_TYPE_NEWSLIST %>" <%= type == COMPONENT_TYPE_NEWSLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeNewslist ? '' : 'hidden' %>">门户模块列表</option>
+                <!-- <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeTopiclist ? '' : 'hidden' %>">帖子列表</option> -->
+                <option value="<%= COMPONENT_TYPE_TOPICLIST_SIMPLE %>" <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeTopiclistSimple ? '' : 'hidden' %>">简版帖子列表</option>
                 <option value="<%= COMPONENT_TYPE_POSTLIST %>" <%= type == COMPONENT_TYPE_POSTLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typePostlist ? '' : 'hidden' %>">帖子详情</option>
                 <option value="<%= COMPONENT_TYPE_NEWSVIEW %>" <%= type == COMPONENT_TYPE_NEWSVIEW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeNewsview ? '' : 'hidden' %>">文章详情</option>
                 <option value="<%= COMPONENT_TYPE_MODULEREF %>" <%= type == COMPONENT_TYPE_MODULEREF ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeModuleRef ? '' : 'hidden' %>">模块指向</option>
-                <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %>>外部wap页</option>
+                <option value="<%= COMPONENT_TYPE_WEBAPP %>" <%= type == COMPONENT_TYPE_WEBAPP ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeWebapp ? '' : 'hidden' %>">外部wap页</option>
                 <option value="<%= COMPONENT_TYPE_USERINFO %>" <%= type == COMPONENT_TYPE_USERINFO ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeUserinfo ? '' : 'hidden' %>">用户中心</option>
                 <option value="<%= COMPONENT_TYPE_USERLIST %>" <%= type == COMPONENT_TYPE_USERLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeUserlist ? '' : 'hidden' %>">用户列表</option>
                 <option value="<%= COMPONENT_TYPE_MESSAGELIST %>" <%= type == COMPONENT_TYPE_MESSAGELIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeMessagelist ? '' : 'hidden' %>">消息列表</option>
-                <option value="<%= COMPONENT_TYPE_SETTING %>" <%= type == COMPONENT_TYPE_SETTING ? 'selected' : '' %>>设置</option>
-                <option value="<%= COMPONENT_TYPE_ABOUT %>" <%= type == COMPONENT_TYPE_ABOUT ? 'selected' : '' %>>关于</option>
-                <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %> class="hidden">发表文字</option>
-                <option value="<%= COMPONENT_TYPE_FASTIMAGE %>" <%= type == COMPONENT_TYPE_FASTIMAGE ? 'selected' : '' %> class="hidden">发表图片</option>
-                <option value="<%= COMPONENT_TYPE_FASTCAMERA %>" <%= type == COMPONENT_TYPE_FASTCAMERA ? 'selected' : '' %> class="hidden">拍照发表</option>
-                <option value="<%= COMPONENT_TYPE_FASTAUDIO %>" <%= type == COMPONENT_TYPE_FASTAUDIO ? 'selected' : '' %> class="hidden">发表语音</option>
-                <option value="<%= COMPONENT_TYPE_SIGN %>" <%= type == COMPONENT_TYPE_SIGN ? 'selected' : '' %> class="hidden">签到</option>
+                <option value="<%= COMPONENT_TYPE_SETTING %>" <%= type == COMPONENT_TYPE_SETTING ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeSetting ? '' : 'hidden' %>">设置</option>
+                <option value="<%= COMPONENT_TYPE_ABOUT %>" <%= type == COMPONENT_TYPE_ABOUT ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeAbout ? '' : 'hidden' %>">关于</option>
+                <option value="<%= COMPONENT_TYPE_WEATHER %>" <%= type == COMPONENT_TYPE_WEATHER ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeWeather ? '' : 'hidden' %>">天气</option>
+                <option value="<%= COMPONENT_TYPE_SEARCH %>" <%= type == COMPONENT_TYPE_SEARCH ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeSearch ? '' : 'hidden' %>">搜索</option>
+                <option value="<%= COMPONENT_TYPE_FASTTEXT %>" <%= type == COMPONENT_TYPE_FASTTEXT ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeFasttext ? '' : 'hidden' %>">发表文字</option>
+                <option value="<%= COMPONENT_TYPE_FASTIMAGE %>" <%= type == COMPONENT_TYPE_FASTIMAGE ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeFastimage ? '' : 'hidden' %>">发表图片</option>
+                <option value="<%= COMPONENT_TYPE_FASTCAMERA %>" <%= type == COMPONENT_TYPE_FASTCAMERA ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeFastcamera ? '' : 'hidden' %>">拍照发表</option>
+                <option value="<%= COMPONENT_TYPE_FASTAUDIO %>" <%= type == COMPONENT_TYPE_FASTAUDIO ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeFastaudio ? '' : 'hidden' %>">发表语音</option>
+                <option value="<%= COMPONENT_TYPE_SIGN %>" <%= type == COMPONENT_TYPE_SIGN ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeSign ? '' : 'hidden' %>">签到</option>
             </select>
             </div>
         </div>
 
+        <div id="component-view-<% print(COMPONENT_TYPE_EMPTY+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_EMPTY ? '' : 'hidden' %>">
+        </div>
         <div id="component-view-<% print(COMPONENT_TYPE_FORUMLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_FORUMLIST ? '' : 'hidden' %>">
         <!--
             <div class="form-group">
@@ -738,6 +731,10 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_ABOUT+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_ABOUT ? '' : 'hidden' %>">
         </div>
+        <div id="component-view-<% print(COMPONENT_TYPE_WEATHER+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_WEATHER ? '' : 'hidden' %>">
+        </div>
+        <div id="component-view-<% print(COMPONENT_TYPE_SEARCH+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SEARCH ? '' : 'hidden' %>">
+        </div>
         <!-- wepapp 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_WEBAPP+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_WEBAPP ? '' : 'hidden' %>">
             <div class="form-group">
@@ -768,7 +765,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <div class="form-group">
                 <label class="col-sm-2 control-label">发表板块: </label>
                 <div class="col-sm-10">
-                    <select class="input-sm" name="fastpostForumIds[]" multiple>
+                    <select class="input-sm form-control" name="fastpostForumIds[]" multiple>
                         <?php foreach ($forumList as $fid => $title) { ?>
                             <option value="<?php echo $fid ?>" <%= extParams.fastpostForumIds.indexOf(<?php echo $fid; ?>) != -1 ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
                         <?php } ?>

@@ -428,7 +428,7 @@ label {
 }
 
 .play-border-add select, .pic-text-pop select, .add-style-pop select,.add-comp-pop select, 
-.add-channel-pop select, .add-slide-pop select
+.add-channel-pop select, .add-slide-pop select, .play-add-plug select
 {
     width: 170px;
 }
@@ -676,7 +676,9 @@ label {
 }
 
 /* 兼容代码，兼容左图右文弹出框样式、添加组件、添加幻灯片 */
-.pic-text-pop .col-sm-2, .add-comp-pop .col-sm-2, .add-style-pop .col-sm-2, .add-slide-pop .col-sm-2{
+.pic-text-pop .col-sm-2, .add-comp-pop .col-sm-2, .add-style-pop .col-sm-2, .add-slide-pop .col-sm-2,
+.play-add-plug .col-sm-2
+{
     padding-left: 15px;
     width: 99px;
 }
@@ -688,7 +690,9 @@ label {
     padding-left: 40px;
 }
 
-.pic-text-pop .col-sm-10, .add-comp-pop .col-sm-10, .add-style-pop .col-sm-10, .add-slide-pop .col-sm-10 {
+.pic-text-pop .col-sm-10, .add-comp-pop .col-sm-10, .add-style-pop .col-sm-10, .add-slide-pop .col-sm-10, 
+.play-add-plug .col-sm-10
+{
     width: 215px;
 }
 

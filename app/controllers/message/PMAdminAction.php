@@ -16,16 +16,6 @@ class PMAdminAction extends MobcentAction {
     public function run($json) {
         $res = $this->initWebApiArray();
 
-        // $json = "{
-        //     'action': 'send',
-        //     'toUid': 1,
-        //     'plid': 0,
-        //     'pmid': 67,
-        //     'msg': {
-        //         'type': 'text', 
-        //         'content': 'http://localhost/31g/mobcent/app/data/phiz/default/10.png',
-        //     },
-        // }";
         $json = rawurldecode($json);
         $json = WebUtils::jsonDecode($json);
         
@@ -182,11 +172,15 @@ class PMAdminAction extends MobcentAction {
                 } else {
                     // showmessage('do_success', 'home.php?mod=space&do=pm&subop=view'.(intval($_POST['touid']) ? '&touid='.intval($_POST['touid']) : ( intval($_POST['plid']) ? '&plid='.intval($_POST['plid']).'&daterange=1&type=1' : '' )));
                 }
+
                 $res = $this->makeErrorInfo($res, 'do_success', array('noError' => 1, 'alert' => 0));
                 $msgInfo = uc_pm_viewnode($_G['uid'], $type, $return);
                 $res['body']['plid'] = (int)$msgInfo['plid'];
                 $res['body']['pmid'] = (int)$msgInfo['pmid'];
                 $res['body']['sendTime'] = $msgInfo['dateline'].'000';
+
+                // ios push
+                UserUtils::pushIOSMessage($touid, 'pm', $_G['username'].WebUtils::t(' 对 您 说: ').$message);
             }
         } else {
             if(in_array($return, range(-16, -1))) {

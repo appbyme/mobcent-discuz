@@ -58,4 +58,35 @@ class AppbymeConfig extends DiscuzAR {
             DB::update('appbyme_config', $appForumKey, array('ckey' => 'app_forumkey'));
         }
     }
+
+    public static function setAPNsCertfilePassword($password) {
+        $key = 'certfile_apns_passphrase';
+        $data = array(
+            'ckey' => $key, 
+            'cvalue' => base64_encode($password),
+        );
+        $tempData = DbUtils::getDzDbUtils(true)->queryRow('
+            SELECT * 
+            FROM %t 
+            WHERE ckey=%s
+            ',
+            array('appbyme_config', $key)
+        );
+        if (empty($tempData)) {
+            DbUtils::getDzDbUtils(true)->insert('appbyme_config', $data);
+        } else {
+            DbUtils::getDzDbUtils(true)->update('appbyme_config', $data, array('ckey' => $key));
+        }
+    }
+
+    public static function getAPNsCertfilePassword() {
+        $data = DbUtils::getDzDbUtils(true)->queryScalar('
+            SELECT cvalue
+            FROM %t
+            WHERE ckey = %s
+            ',
+            array('appbyme_config', 'certfile_apns_passphrase')
+        );
+        return (string)base64_decode($data);
+    }
 }
