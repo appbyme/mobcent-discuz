@@ -45,20 +45,20 @@ class UserUtils {
         return $ucenterurl . '/avatar.php?uid=' . $uid . '&size='. $size; 
     }
 
-    public static function getUserName($uid) {
-        $user = self::getUserInfo($uid);
-        return !empty($user) ? $user['username'] : '';
+    public static function getUserName($uid, $userInfo=array()) {
+        empty($userInfo) && $userInfo = self::getUserInfo($uid);
+        return !empty($userInfo) ? $userInfo['username'] : '';
     }
 
-    public static function getUserGender($uid) {
-        $user = self::getUserProfile($uid);
-        return !empty($user) ? (int)$user['gender'] : self::GENDER_SECRET;
+    public static function getUserGender($uid, $userProfile=array()) {
+        empty($userProfile) && $userProfile = self::getUserProfile($uid);
+        return !empty($userProfile) ? (int)$userProfile['gender'] : self::GENDER_SECRET;
     }
     
     // 获取用户等级名称
-    public static function getUserTitle($uid) {
+    public static function getUserTitle($uid, $userInfo=array()) {
         $userTitle = '';
-        $userInfo = UserUtils::getUserInfo($uid);
+        empty($userInfo) && $userInfo = self::getUserInfo($uid);
         if (!empty($userInfo)) {
             $groupId = $userInfo['groupid'];
             $userGroup = UserUtils::getUserGroupsByGids($groupId);
@@ -67,12 +67,12 @@ class UserUtils {
         return $userTitle;
     }
 
-    public static function getUserLevelIcon($uid) {
+    public static function getUserLevelIcon($uid, $user=array()) {
         // from funtion_forumlist showstars
         $icon = array('sun' => 0, 'moon' => 0, 'star' => 0);
         
         global $_G;
-        $user = self::getUserInfo($uid);
+        empty($user) && $user = self::getUserInfo($uid);
         if (!empty($user)) {
             $num = $stars = $_G['cache']['usergroups'][$user['groupid']]['stars'];
             if(empty($_G['setting']['starthreshold'])) {

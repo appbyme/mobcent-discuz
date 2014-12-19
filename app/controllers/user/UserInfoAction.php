@@ -295,12 +295,6 @@ class DzUserInfo extends DiscuzAR {
         return $TopicNum = $TopicNum[0]['num'];
     }
 
-    // 获取用户当前等级
-    public static function getUserLevel($uid) {
-        $icon = UserUtils::getUserLevelIcon($uid);
-        return $icon['sun'] * 4 + $icon['moon'] * 2 + $icon['star'] * 1;
-    }
-
     public static function getFavouriteTopics($uid) {
         return DbUtils::getDzDbUtils(true)->queryAll('
             SELECT a.*, b.*

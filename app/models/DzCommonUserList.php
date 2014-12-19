@@ -27,8 +27,8 @@ class DzCommonUserList extends DiscuzAR {
     }
 
     // 获取用户等级
-    public static function getUserLevel($uid) {
-        $icon = UserUtils::getUserLevelIcon($uid);
+    public static function getUserLevel($uid, $userInfo=array()) {
+        $icon = UserUtils::getUserLevelIcon($uid, $userInfo);
         return $icon['sun'] * 4 + $icon['moon'] * 2 + $icon['star'] * 1;
     }
 
