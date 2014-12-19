@@ -287,7 +287,9 @@ class WebUtils {
 
         $deviceToken = AppbymeUserSetting::getUserDeviceToken($uid);
         $passphrase = AppbymeConfig::getAPNsCertfilePassword();
-        $certfile = MOBCENT_UPLOAD_PATH.'/appbyme_push.pem';
+        $config = WebUtils::getMobcentConfig('misc');
+        $certfile = $config['apnsCertfilePath'].'/'.$config['apnsCertfileName'];
+        
         if (file_exists($certfile) && $uid && $deviceToken && $passphrase && $payload) {
             $res = WebUtils::doAPNs($certfile, $passphrase, $deviceToken, $payload, $timeout, $charset);
         }

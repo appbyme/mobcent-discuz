@@ -428,7 +428,7 @@ class AppbymeUIDiyModel extends DiscuzAR
                 'fastpostForumIds' => array(),
                 'isShowTopicTitle' => 1,
                 // 'isShowTopicSort' => 0,
-                'isShowMessagelist' => 1,
+                'isShowMessagelist' => 0,
                 'filter' => '',
                 'orderby' => '',
                 'redirect' => '',

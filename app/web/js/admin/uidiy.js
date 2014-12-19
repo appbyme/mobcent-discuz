@@ -385,7 +385,7 @@ $(function () {
                 case COMPONENT_TYPE_TOPICLIST:
                 case COMPONENT_TYPE_TOPICLIST_SIMPLE:
                 case COMPONENT_TYPE_POSTLIST:
-                case COMPONENT_TYPE_USERINFO:
+                // case COMPONENT_TYPE_USERINFO:
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_FLAT+']').show();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_CARD+']').show();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_1+']').hide();

@@ -24,13 +24,17 @@ class ServerUploadAction extends MobcentAction
 
     private function _doUpload($res, $type)
     {
-        $path = MOBCENT_UPLOAD_PATH;
-        $certfileAPNs = $path.'/appbyme_push.pem';
+        $config = WebUtils::getMobcentConfig('misc');
+        $path = $config['apnsCertfilePath'];
+        $certfileAPNs = $path.'/'.$config['apnsCertfileName'];
+        
         if ($type == 'add_certfile_apns') {
+            $password = (string)$_POST['passphrase'];
+            
             if (UploadUtils::makeBasePath($path)) {
                 if (!empty($_FILES) && count($_FILES) && is_uploaded_file($_FILES['file']['tmp_name']) && !$_FILES['file']['error']) {
                     FileUtils::saveFile($certfileAPNs, file_get_contents($_FILES['file']['tmp_name']));
-                    AppbymeConfig::setAPNsCertfilePassword($_POST['certfile_apns_passphrase']);
+                    AppbymeConfig::setAPNsCertfilePassword($password);
                 } else {
                     $res = $this->makeErrorInfo($res, WebUtils::t('上传失败'));
                 }

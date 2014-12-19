@@ -32,6 +32,10 @@ return array(
         'avatarMidLength' => 128,
         'avatarSmallLength' => 64,
     ),
+    'misc' => array(
+        'apnsCertfilePath' => MOBCENT_UPLOAD_PATH,
+        'apnsCertfileName' => 'appbyme_apns.pem',
+    ),
     // 更改缓存配置之后一定要在后台清理一下缓存!!!
     'cache' => array(
         'topicSummary' => array(        // 主题列表中摘要缓存设置项, 建议开启!!!
