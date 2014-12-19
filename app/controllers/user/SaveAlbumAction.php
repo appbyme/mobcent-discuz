@@ -17,8 +17,9 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 class SaveAlbumAction extends MobcentAction {
 
     public function run($ids, $picDesc, $albumId=-1) {
+        $albumId = $albumId == 0 ? -1 : $albumId;
         $res = $this->initWebApiArray();
-        $res = $this->_saveAlbum($ids, $picDesc, $albumId, $interval);
+        $res = $this->_saveAlbum($ids, $picDesc, $albumId);
         echo WebUtils::outputWebApi($res, '', false);
     }
 
