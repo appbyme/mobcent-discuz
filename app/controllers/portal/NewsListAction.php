@@ -284,6 +284,7 @@ class NewsListAction extends MobcentAction {
         $row['redirectUrl'] = (string)$list['url'];
 
         $row['userAvatar'] = UserUtils::getUserAvatar($row['user_id']);
+        $row['gender'] = (int)UserUtils::getUserGender($row['user_id']);
         $row['recommendAdd'] = $source_type == 'topic' ? ForumUtils::getRecommendAdd($row['source_id']) : 0;
         $row['isHasRecommendAdd'] = $source_type == 'topic' ? ForumUtils::isHasRecommendAdd($row['source_id']) : 0;
         $row['distance'] = isset($list['distance']) ? (string)$list['distance'] : '';

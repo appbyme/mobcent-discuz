@@ -300,6 +300,7 @@ class TopicListAction extends MobcentAction {
             $topicInfo['pic_path'] = $tempTopicInfo['image'];
             $topicInfo['ratio'] = $tempTopicInfo['ratio'];
             $topicInfo['userAvatar'] = UserUtils::getUserAvatar($topic['authorid']);
+            $topicInfo['gender'] = (int)UserUtils::getUserGender($topic['authorid']);
             $topicInfo['recommendAdd'] = (int)ForumUtils::getRecommendAdd($tid);
             $topicInfo['isHasRecommendAdd'] = ForumUtils::isHasRecommendAdd($tid);
             $topicInfo['imageList'] = (array)$topicSummary['imageList'];
