@@ -73,6 +73,11 @@ class UserListAction extends CAction {
 
         $list = array();
         foreach ($users as $user) {
+            if ($sortType == 'range') {
+                $tmpfollowe['distance'] = (string)$user['distance'];
+                $tmpfollowe['location'] = (string)WebUtils::t($user['location']);
+                $user = $user['uid'];
+            }
             $tmpfollowe['is_friend'] = UserUtils::isFollow($viewUid, $user) ? 1 : 0;
             $tmpfollowe['isFriend'] = UserUtils::isFriend($viewUid, $user) ? 1 : 0;
             $tmpfollowe['isFollow'] = UserUtils::isFollow($viewUid, $user) ? 1 : 0;
@@ -84,14 +89,6 @@ class UserListAction extends CAction {
             $tmpfollowe['gender'] = (int)UserUtils::getUserGender($user);
             $tmpfollowe['icon'] = UserUtils::getUserAvatar($user);
             $tmpfollowe['level'] = (int)DzCommonUserList::getUserLevel($user);
-            if ($sortType == 'range') {
-                $distance = DzCommonUserList::getOneUserByUid($user, $longitude, $latitude, $radius, $page, $pageSize);
-                $tmpfollowe['distance'] = (string)$distance['distance'];
-                $tmpfollowe['location'] = (string)WebUtils::t($distance['location']);
-            } else {
-                $tmpfollowe['distance'] = '';
-                $tmpfollowe['location'] = '';
-            }
             $lastLogin = WebUtils::t(DzCommonUserList::getUserLastVisit($user));
             $tmpfollowe['lastLogin'] = $lastLogin . '000';
             $signature = WebUtils::emptyHtml(DzCommonUserList::getUserSightml($user));
