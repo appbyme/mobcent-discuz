@@ -45,12 +45,12 @@ class UserInfoAction extends CAction {
         $res['is_black'] = (int)UserUtils::isBlacklist($uid, $puid) ? 1 : 0;
         $res['is_follow'] = (int)UserUtils::isFollow($uid, $puid); 
         $res['isFriend'] = (int)UserUtils::isFriend($uid, $puid) ? 1 : 0;
-        $res['icon'] = UserUtils::getUserAvatar($puid); 
+        $res['icon'] = UserUtils::getUserAvatar($puid, $spacePro); 
         $res['level_url'] = '';
         $res['name'] = $space['username'];
         $res['email'] = $space['email'];
         $res['status'] = (int)UserUtils::getUserLoginStatus($puid);
-        $res['gender'] = (int)UserUtils::getUserGender($puid);
+        $res['gender'] = (int)UserUtils::getUserGender($puid, $spacePro);
         $res['email'] = $space['email'];
         $res['score'] = (int)$space['credits'];
         $res['credits'] = (int)$space['credits'];  
@@ -63,7 +63,7 @@ class UserInfoAction extends CAction {
         $res['follow_num'] = (int)DzUserInfo::getFollowedFriendsCount($puid);
         $res['level'] = (int)DzCommonUserList::getUserLevel($space['groupid']);
 
-        $res['userTitle'] = UserUtils::getUserTitle($puid);
+        $res['userTitle'] = UserUtils::getUserTitle($puid, $spacePro);
 
         $repeatList = array();
         foreach(UserUtils::getRepeatList($uid) as $user) {

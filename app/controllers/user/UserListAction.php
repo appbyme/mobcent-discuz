@@ -77,6 +77,9 @@ class UserListAction extends CAction {
                 $tmpfollowe['distance'] = (string)$user['distance'];
                 $tmpfollowe['location'] = (string)WebUtils::t($user['location']);
                 $user = $user['uid'];
+            } else {
+                $tmpfollowe['distance'] = '';
+                $tmpfollowe['location'] = '';
             }
             $tmpfollowe['is_friend'] = UserUtils::isFollow($viewUid, $user) ? 1 : 0;
             $tmpfollowe['isFriend'] = UserUtils::isFriend($viewUid, $user) ? 1 : 0;
