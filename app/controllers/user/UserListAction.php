@@ -13,7 +13,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 // Mobcent::setErrors();
 class UserListAction extends CAction {
 
-    public function run($type='follow', $page=1, $pageSize=10, $orderBy='register', $longitude='', $latitude='', $radius=100000) {
+    public function run($type='follow', $page=1, $pageSize=10, $orderBy='dateline', $longitude='', $latitude='', $radius=100000) {
         $res = WebUtils::initWebApiArray_oldVersion();
 
         switch ($orderBy) {
