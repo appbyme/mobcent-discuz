@@ -27,8 +27,8 @@ class DzCommonUserList extends DiscuzAR {
     }
 
     // 获取用户等级
-    public static function getUserLevel($uid, $userInfo=array()) {
-        $icon = UserUtils::getUserLevelIcon($uid, $userInfo);
+    public static function getUserLevel($uid) {
+        $icon = UserUtils::getUserLevelIcon($uid);
         return $icon['sun'] * 4 + $icon['moon'] * 2 + $icon['star'] * 1;
     }
 
@@ -145,8 +145,8 @@ class DzCommonUserList extends DiscuzAR {
 
     public static function _getFollowUsersByRange($uid, $page, $pageSize, $longitude, $latitude, $radius) {
         $range = self::_getRange($longitude, $latitude, $radius);
-        $select = 'hf.followuid,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
-        return DbUtils::getDzDbUtils(true)->queryColumn('
+        $select = '*,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        return DbUtils::getDzDbUtils(true)->queryAll('
             SELECT ' . $select . '
             FROM %t hsu INNER JOIN %t aus
             ON (hsu.object_id=aus.uid)
@@ -254,8 +254,8 @@ class DzCommonUserList extends DiscuzAR {
     // 获取用户粉丝的详细信息按距离排序
     public static function _getFollowedUsersByRange($uid, $page, $pageSize, $longitude, $latitude, $radius) {
         $range = self::_getRange($longitude, $latitude, $radius);
-        $select = 'hf.uid,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
-        return DbUtils::getDzDbUtils(true)->queryColumn('
+        $select = '*,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        return DbUtils::getDzDbUtils(true)->queryAll('
             SELECT ' . $select . '
             FROM %t hsu INNER JOIN %t aus
             ON (hsu.object_id=aus.uid)
@@ -370,8 +370,8 @@ class DzCommonUserList extends DiscuzAR {
     // 用户推荐按距离排序
     public static function _getRecommendUsersSetByRange($uid, $page, $pageSize, $longitude, $latitude, $radius) {
         $range = self::_getRange($longitude, $latitude, $radius);
-        $select = 'hs.uid,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
-        return DbUtils::getDzDbUtils(true)->queryColumn('
+        $select = '*,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        return DbUtils::getDzDbUtils(true)->queryAll('
             SELECT ' . $select . '
             FROM %t hsu INNER JOIN %t aus
             ON (hsu.object_id=aus.uid)
@@ -472,8 +472,8 @@ class DzCommonUserList extends DiscuzAR {
     // 用户好友列表按距离排序
     public static function _getPostFuidListByRange($uid, $page, $pageSize, $longitude, $latitude, $radius) {
         $range = self::_getRange($longitude, $latitude, $radius);
-        $select = 'hf.fuid,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
-        return DbUtils::getDzDbUtils(true)->queryColumn('
+        $select = '*,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        return DbUtils::getDzDbUtils(true)->queryAll('
             SELECT ' . $select . '
             FROM %t hsu INNER JOIN %t aus
             ON (hsu.object_id=aus.uid)
@@ -573,8 +573,8 @@ class DzCommonUserList extends DiscuzAR {
     // 所有用户按距离排序
     public static function _getRecommendUsersByRange($uid, $page, $pageSize, $longitude, $latitude, $radius) {
         $range = self::_getRange($longitude, $latitude, $radius);
-        $select = 'cm.uid,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
-        return DbUtils::getDzDbUtils(true)->queryColumn('
+        $select = '*,' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
+        return DbUtils::getDzDbUtils(true)->queryAll('
             SELECT ' . $select . '
             FROM %t hsu INNER JOIN %t aus
             ON (hsu.object_id=aus.uid)
@@ -650,36 +650,6 @@ class DzCommonUserList extends DiscuzAR {
             WHERE uid = %d
             ',
             array('common_member_field_forum', $uid)
-        );
-    }
-
-    public static function getOneUserByUid($uid, $longitude, $latitude, $radius) {
-        $range = self::_getRange($longitude, $latitude, $radius);
-        $select = '*, ' . self::_getSqlDistance($longitude, $latitude) . ' AS distance';
-        return DbUtils::getDzDbUtils(true)->queryRow('
-            SELECT ' . $select . '
-            FROM %t hsu
-            INNER JOIN %t aus
-            ON hsu.object_id=aus.uid
-            WHERE hsu.type=%s 
-            AND hsu.object_id!=%s
-            AND hsu.longitude BETWEEN %s AND %s
-            AND hsu.latitude BETWEEN %s AND %s
-            AND aus.ukey=%s
-            AND aus.uvalue=%s
-            ', 
-            array(
-                'home_surrounding_user',
-                'appbyme_user_setting',
-                self::TYPE_USER,
-                $uid,
-                $range['longitude']['min'],
-                $range['longitude']['max'],
-                $range['latitude']['min'],
-                $range['latitude']['max'],
-                AppbymeUserSetting::KEY_GPS_LOCATION,
-                AppbymeUserSetting::VALUE_GPS_LOCATION_ON,
-            )
         );
     }
 }

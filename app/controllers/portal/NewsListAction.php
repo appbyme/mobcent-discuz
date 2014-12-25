@@ -14,7 +14,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 class NewsListAction extends MobcentAction {
     const HANDPAGE = 10;
     public function run($moduleId, $page = 1, $pageSize = 10, $longitude='', $latitude='', $radius=100000, $isImageList=0) {
-        $getKeyArray = array('mid' => $moduleId, 'page' => $page, 'pageSize' => $pageSize, 'isImageList' => $isImageList);
+        $getKeyArray = array('mid' => $moduleId, 'page' => $page, 'pageSize' => $pageSize, 'longitude' => $longitude, 'latitude' => $latitude, 'radius' =>$radius, 'isImageList' => $isImageList);
         $filter = unserialize(AppbymePoralModule::getModuleParam($moduleId));
         if (is_array($filter['other_filter']) || $filter['topic_orderby'] == 'distance') {
             $res = $this->getResult($getKeyArray);
@@ -284,6 +284,7 @@ class NewsListAction extends MobcentAction {
         $row['redirectUrl'] = (string)$list['url'];
 
         $row['userAvatar'] = UserUtils::getUserAvatar($row['user_id']);
+        $row['gender'] = (int)UserUtils::getUserGender($row['user_id']);
         $row['recommendAdd'] = $source_type == 'topic' ? ForumUtils::getRecommendAdd($row['source_id']) : 0;
         $row['isHasRecommendAdd'] = $source_type == 'topic' ? ForumUtils::isHasRecommendAdd($row['source_id']) : 0;
         $row['distance'] = isset($list['distance']) ? (string)$list['distance'] : '';

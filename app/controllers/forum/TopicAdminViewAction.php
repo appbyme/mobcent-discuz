@@ -64,6 +64,7 @@ class TopicAdminViewAction extends CAction {
             } else {
                 // 在DISCUZ_ROOT/source/include/topicadmin/topicadmin_moderate.php基础上进行二次开发
                 $thread = $_G['forum_thread'];
+                $thread['dblastpost'] = $thread['lastpost'];
 
                 $threadlist[$thread['tid']] = $thread;
 
