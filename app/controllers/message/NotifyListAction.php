@@ -13,6 +13,10 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
 class NotifyListAction extends CAction {
 
+    const NOTIFY_TYPE_POST = 'post';
+    const NOTIFY_TYPE_AT = 'at';
+    const NOTIFY_TYPE_FRIEND = 'friend';
+
     public function run($type = 'post', $page = 1, $pageSize = 20) {
         $res = WebUtils::initWebApiArray_oldVersion();
 
@@ -64,7 +68,7 @@ class NotifyListAction extends CAction {
                 preg_match('/ac=friend&op=(\w+)&uid=(\d+)/mi', $matches[0], $tempMatches);
                 if (!empty($tempMatches)) {
                     $action['redirect'] = WebUtils::createUrl_oldVersion('user/useradminview', array('act' => $tempMatches[1], 'uid' => $tempMatches[2]));
-                    $action['type'] = 'friend';
+                    $action['type'] = self::NOTIFY_TYPE_FRIEND;
                 }
                 $data['note'] = str_replace($matches[1], '', $data['note']);
                 $actions[] = $action;
@@ -82,18 +86,21 @@ class NotifyListAction extends CAction {
             $info['data'][] = $tmpData;
         }
 
-        foreach ($notifyData as $data) {
-            $matches = array();
-            preg_match_all('/&ptid=(\d+?)&pid=(\d+?)"/i', $data['note'], $matches);
-            $ptid = $matches[1][0];
-            $pid = $matches[2][0];
-            $postInfo = $this->_getPostInfo($ptid, $pid);
-            if (!empty($postInfo)) {
-                $info['list'][] = $postInfo;
-            } else {
-                --$count;
-            }
+        if ($type == self::NOTIFY_TYPE_POST || $type == self::NOTIFY_TYPE_AT) {
+            foreach ($notifyData as $data) {
+                $matches = array();
+                preg_match_all('/&ptid=(\d+?)&pid=(\d+?)"/i', $data['note'], $matches);
+                $ptid = $matches[1][0];
+                $pid = $matches[2][0];
+                $postInfo = $this->_getPostInfo($ptid, $pid);
+                if (!empty($postInfo)) {
+                    $info['list'][] = $postInfo;
+                } else {
+                    --$count;
+                }
+            }    
         }
+        
         $info['count'] = $count;
 
         return $info;

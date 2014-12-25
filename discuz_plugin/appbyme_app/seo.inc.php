@@ -37,17 +37,17 @@ if (!submitcheck('seo_submit')) {
     showtitle(Appbyme::lang('appbyme_seo_title_download'));
     showtablerow('', array('width="80"', ''), array(
             cplang('setting_seo_seotitle'),
-            '<input type="text" name="settingnew[seotitle][download]" value="'.$setting['seotitle']['download'].'" class="txt" style="width:280px;" />',
+            '<input type="text" name="settingnew[seotitle][download]" value="'.htmlspecialchars($setting['seotitle']['download']).'" class="txt" style="width:280px;" />',
         )
     );
     showtablerow('', array('width="80"', ''), array(
             cplang('setting_seo_seokeywords'),
-            '<input type="text" name="settingnew[seokeywords][download]" value="'.$setting['seokeywords']['download'].'" class="txt" style="width:280px;" />'
+            '<input type="text" name="settingnew[seokeywords][download]" value="'.htmlspecialchars($setting['seokeywords']['download']).'" class="txt" style="width:280px;" />'
         )
     );
     showtablerow('', array('width="80"', ''), array(
             cplang('setting_seo_seodescription'),
-            '<input type="text" name="settingnew[seodescription][download]" value="'.$setting['seodescription']['download'].'" class="txt" style="width:280px;" />',
+            '<input type="text" name="settingnew[seodescription][download]" value="'.htmlspecialchars($setting['seodescription']['download']).'" class="txt" style="width:280px;" />',
         )
     );
 
