@@ -907,6 +907,12 @@ $(function () {
                 isShow_desc: 1,
                 isShow_icon: 1,
                 isShow_iconStyle: 1,
+                isShow_typeFasttext: 1,
+                isShow_typeFastimage: 1,
+                isShow_typeFastcamera: 1,
+                isShow_typeFastaudio: 1,
+                isShow_typeSign: 1,
+                isShow_typeSearch: 1,
             };
             for (var i = 0; i < componentList.length; i++) {
                 var model = componentList[i];

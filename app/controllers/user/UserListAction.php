@@ -74,31 +74,32 @@ class UserListAction extends CAction {
         $list = array();
         foreach ($users as $user) {
             if ($sortType == 'range') {
-                $tmpfollowe['distance'] = (string)$user['distance'];
-                $tmpfollowe['location'] = (string)WebUtils::t($user['location']);
-                $user = $user['uid'];
+                $tmpUserInfo['distance'] = (string)$user['distance'];
+                $tmpUserInfo['location'] = (string)WebUtils::t($user['location']);
+                $uid = $user['uid'];
             } else {
-                $tmpfollowe['distance'] = '';
-                $tmpfollowe['location'] = '';
+                $tmpUserInfo['distance'] = '';
+                $tmpUserInfo['location'] = '';
             }
-            $tmpfollowe['is_friend'] = UserUtils::isFollow($viewUid, $user) ? 1 : 0;
-            $tmpfollowe['isFriend'] = UserUtils::isFriend($viewUid, $user) ? 1 : 0;
-            $tmpfollowe['isFollow'] = UserUtils::isFollow($viewUid, $user) ? 1 : 0;
-            $tmpfollowe['uid'] = (int)$user;
-            $tmpfollowe['name'] = UserUtils::getUserName($user);
-            $tmpfollowe['name'] = WebUtils::emptyHtml($tmpfollowe['name']);
-            $tmpfollowe['status'] = (int)UserUtils::getUserLoginStatus($user);
-            $tmpfollowe['is_black'] = UserUtils::isBlacklist($viewUid , $user) ? 1 : 0;
-            $tmpfollowe['gender'] = (int)UserUtils::getUserGender($user);
-            $tmpfollowe['icon'] = UserUtils::getUserAvatar($user);
-            $tmpfollowe['level'] = (int)DzCommonUserList::getUserLevel($user);
-            $lastLogin = WebUtils::t(DzCommonUserList::getUserLastVisit($user));
-            $tmpfollowe['lastLogin'] = $lastLogin . '000';
-            $signature = WebUtils::emptyHtml(DzCommonUserList::getUserSightml($user));
-            $tmpfollowe['signature'] = WebUtils::t($signature);
-            $userInfo = UserUtils::getUserInfo($user);
-            $tmpfollowe['credits'] = (int)$userInfo['credits'];
-            $list[] = $tmpfollowe;
+            $tmpUserInfo['is_friend'] = UserUtils::isFollow($viewUid, $uid) ? 1 : 0;
+            $tmpUserInfo['isFriend'] = UserUtils::isFriend($viewUid, $uid) ? 1 : 0;
+            $tmpUserInfo['isFollow'] = UserUtils::isFollow($viewUid, $uid) ? 1 : 0;
+            $tmpUserInfo['uid'] = (int)$uid;
+            $tmpUserInfo['name'] = UserUtils::getUserName($uid);
+            $tmpUserInfo['name'] = WebUtils::emptyHtml($tmpUserInfo['name']);
+            $tmpUserInfo['status'] = (int)UserUtils::getUserLoginStatus($uid);
+            $tmpUserInfo['is_black'] = UserUtils::isBlacklist($viewUid , $uid) ? 1 : 0;
+            $tmpUserInfo['gender'] = (int)UserUtils::getUserGender($uid);
+            $tmpUserInfo['icon'] = UserUtils::getUserAvatar($uid);
+            $tmpUserInfo['level'] = (int)DzCommonUserList::getUserLevel($uid);
+            $lastLogin = WebUtils::t(DzCommonUserList::getUserLastVisit($uid));
+            $tmpUserInfo['lastLogin'] = $lastLogin . '000';
+            $signature = WebUtils::emptyHtml(DzCommonUserList::getUserSightml($uid));
+            $tmpUserInfo['signature'] = WebUtils::t($signature);
+            $userInfo = UserUtils::getUserInfo($uid);
+            $tmpUserInfo['credits'] = (int)$userInfo['credits'];
+            
+            $list[] = $tmpUserInfo;
         } 
         return $list;
     }

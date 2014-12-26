@@ -40,28 +40,28 @@ CREATE TABLE IF NOT EXISTS `cdb_appbyme_user_access` (
 
 # 用户设置表
 CREATE TABLE IF NOT EXISTS `cdb_appbyme_user_setting` (
-    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id', 
-    `uid` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
-    `ukey` CHAR(20) NOT NULL DEFAULT '' COMMENT '用户设置键名',
-    `uvalue` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '用户设置值',
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT, 
+    `uid` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+    `ukey` CHAR(20) NOT NULL DEFAULT '',
+    `uvalue` VARCHAR(255) NOT NULL DEFAULT '',
     PRIMARY KEY (`id`),
     UNIQUE KEY `key` (`uid`, `ukey`)
 ) ENGINE=MyISAM;
 
 # 设置表
 CREATE TABLE IF NOT EXISTS `cdb_appbyme_config` (
-  `ckey` varchar(255) NOT NULL DEFAULT '' COMMENT '设置键名',
-  `cvalue` mediumtext NOT NULL COMMENT '设置值',
+  `ckey` varchar(255) NOT NULL DEFAULT '',
+  `cvalue` mediumtext NOT NULL,
   PRIMARY KEY (`ckey`)
 ) ENGINE=MyISAM;
 
 # 门户模块表
 CREATE TABLE IF NOT EXISTS `cdb_appbyme_portal_module` (
-    `mid` int(12) NOT NULL AUTO_INCREMENT COMMENT '模块id',
-    `name` varchar(230) NOT NULL DEFAULT '' COMMENT '模块名称',
-    `type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '模块类型',
-    `displayorder` int(12) NOT NULL DEFAULT '0' COMMENT '排序',
-    `param` text NOT NULL COMMENT '模块参数配置序列化存储',
+    `mid` int(12) NOT NULL AUTO_INCREMENT,
+    `name` varchar(230) NOT NULL DEFAULT '',
+    `type` tinyint(2) NOT NULL DEFAULT '0',
+    `displayorder` int(12) NOT NULL DEFAULT '0',
+    `param` text NOT NULL,
     PRIMARY KEY (`mid`),
     KEY `displayorder` (`displayorder`)
 ) ENGINE=MyISAM;
@@ -69,17 +69,17 @@ CREATE TABLE IF NOT EXISTS `cdb_appbyme_portal_module` (
 # 门户模块数据表
 CREATE TABLE IF NOT EXISTS `cdb_appbyme_portal_module_source` (
     `sid` int(12) NOT NULL AUTO_INCREMENT,
-    `mid` int(12) DEFAULT '0' COMMENT '模块id',
-    `id` int(12) DEFAULT '0' COMMENT '来源id',
-    `url` varchar(500) DEFAULT '' COMMENT '来源url',
-    `idtype` varchar(10) DEFAULT '' COMMENT '来源id类型 (fid 版块id, catid 文章栏目id, tid 主题id ,aid 文章id, url 为外链地址)',
-    `imgid` int(12) DEFAULT '0' COMMENT '来源图片id',
-    `imgurl` varchar(500) DEFAULT '' COMMENT '图片来源url',
-    `imgtype` varchar(10) DEFAULT '' COMMENT '图片来源类型 (tid 主题id ,aid 文章id, url 为外链地址)',
-    `title` varchar(200) DEFAULT '' COMMENT '来源的标题',
-    `type` tinyint(2) DEFAULT '1' COMMENT '来源类型 (1为普通来源, 2为幻灯片来源)',
-    `displayorder` int(12) NOT NULL DEFAULT '0' COMMENT '排序',
-    `param` text NOT NULL COMMENT '参数配置序列化存储',
+    `mid` int(12) DEFAULT '0',
+    `id` int(12) DEFAULT '0',
+    `url` varchar(500) DEFAULT '',
+    `idtype` varchar(10) DEFAULT '',
+    `imgid` int(12) DEFAULT '0',
+    `imgurl` varchar(500) DEFAULT '',
+    `imgtype` varchar(10) DEFAULT '',
+    `title` varchar(200) DEFAULT '',
+    `type` tinyint(2) DEFAULT '1',
+    `displayorder` int(12) NOT NULL DEFAULT '0',
+    `param` text NOT NULL,
     PRIMARY KEY (`sid`),
     KEY `mid` (`mid`, `type`, `idtype`, `imgtype`),
     KEY `displayorder` (`mid`, `type`, `displayorder`)
