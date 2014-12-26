@@ -73,13 +73,14 @@ class UserListAction extends CAction {
 
         $list = array();
         foreach ($users as $user) {
-            $uid = $user['uid'];
             if ($sortType == 'range') {
                 $tmpUserInfo['distance'] = (string)$user['distance'];
                 $tmpUserInfo['location'] = (string)WebUtils::t($user['location']);
+                $uid = $user['uid'];
             } else {
                 $tmpUserInfo['distance'] = '';
                 $tmpUserInfo['location'] = '';
+                $uid = $user;
             }
             $tmpUserInfo['is_friend'] = UserUtils::isFollow($viewUid, $uid) ? 1 : 0;
             $tmpUserInfo['isFriend'] = UserUtils::isFriend($viewUid, $uid) ? 1 : 0;
