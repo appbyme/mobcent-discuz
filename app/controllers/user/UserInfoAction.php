@@ -63,7 +63,7 @@ class UserInfoAction extends CAction {
         $res['follow_num'] = (int)DzUserInfo::getFollowedFriendsCount($puid);
         $res['level'] = (int)DzCommonUserList::getUserLevel($space['groupid']);
 
-        $res['userTitle'] = UserUtils::getUserTitle($puid);
+        $res['userTitle'] = UserUtils::getUserTitle($puid, $space);
 
         $repeatList = array();
         foreach(UserUtils::getRepeatList($uid) as $user) {

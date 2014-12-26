@@ -20,7 +20,7 @@ class SettingAction extends MobcentAction {
         // $setting ='{"head": {"errCode": 0, "errInfo": ""}, "body": {"settingInfo": {"hidden": 0}, "externInfo": {}}}';
         $settings = rawurldecode($setting);
         $settings = WebUtils::jsonDecode($settings);
-        $settings = $settings != null ? $settings['body']['settingInfo'] : array();
+        $settings = !empty($settings) ? $settings['body']['settingInfo'] : array();
         
         // insert or update new settings
         AppbymeUserSetting::saveNewSettings($uid, $settings);

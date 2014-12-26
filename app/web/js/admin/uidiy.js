@@ -390,15 +390,20 @@ $(function () {
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_CARD+']').show();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_1+']').hide();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_2+']').hide();
-                    if (type == COMPONENT_TYPE_NEWSLIST || type == COMPONENT_TYPE_TOPICLIST || type == COMPONENT_TYPE_TOPICLIST_SIMPLE) {
+                    
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE+']').hide();
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_BIG+']').hide();
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').hide();
+
+                    if (type == COMPONENT_TYPE_NEWSLIST) {
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE+']').show();
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_BIG+']').show();
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').show();
-                    } else {
-                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE+']').hide();
-                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_BIG+']').hide();
-                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').hide();
                     }
+                    if (type == COMPONENT_TYPE_TOPICLIST || type == COMPONENT_TYPE_TOPICLIST_SIMPLE) {
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').show();
+                    }
+
                     if (type == COMPONENT_TYPE_USERINFO) {
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_FLAT+']').hide();
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_CARD+']').hide();

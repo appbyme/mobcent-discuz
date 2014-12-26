@@ -64,7 +64,7 @@ class TopicListAction extends CAction {
         foreach ($topicList as $topic) {
             $tmpTopicInfo = ForumUtils::getTopicInfo((int)$topic);
             $topicSummary = ForumUtils::getTopicSummary((int)$topic);
-            // var_dump($tmpTopicInfo);exit;
+            
             $topicInfo['board_id'] = (int)$tmpTopicInfo['fid'];
             $topicInfo['board_name'] = $fid != 0 ? $forum['name'] : ForumUtils::getForumName($tmpTopicInfo['fid']);
             $topicInfo['board_name'] = WebUtils::emptyHtml($topicInfo['board_name']);

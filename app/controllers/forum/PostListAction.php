@@ -194,8 +194,8 @@ class PostListAction extends MobcentAction {
                     $this->_isComplexContent($topicInfo['content']) && $topicInfo['type'] = 'normal_complex';
                 }
 
-                $topicInfo['poll_info'] = ForumUtils::isVoteTopic($topic) ? $this->_getVoteInfo($topic) : null;
-                $topicInfo['activityInfo'] = ForumUtils::isActivityTopic($topic) ? TopicUtils::getActivityInfo($topic) : null;
+                $topicInfo['poll_info'] = ForumUtils::isVoteTopic($topic) ? $this->_getVoteInfo($topic) : WebUtils::getWebApiResPadding();
+                $topicInfo['activityInfo'] = ForumUtils::isActivityTopic($topic) ? TopicUtils::getActivityInfo($topic) : WebUtils::getWebApiResPadding();
                 $topicInfo['location'] = ForumUtils::getTopicLocation($tid);
 
                 // 主题管理面板编辑 start

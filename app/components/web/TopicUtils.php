@@ -52,7 +52,7 @@ class TopicUtils {
     }
 
     private static function _getActivityAction($activity) {
-        $action = null;
+        $action = WebUtils::getWebApiResPadding();
         
         $isVerified = $activity['mobcent']['isVerified'];
         $applied = $activity['mobcent']['applied'];
@@ -79,7 +79,7 @@ class TopicUtils {
                             $action['info'] = self::_getActivityActionApplyInfo($activity);
                         } else { 
                             $action['type'] = DzForumThread::TYPE_ACTIVITY_ACTION_LOGIN;
-                            $action['info'] = null;
+                            $action['info'] = WebUtils::getWebApiResPadding();
                         } 
                         $action['title'] = WebUtils::t('我要参加');
                     }
@@ -93,7 +93,7 @@ class TopicUtils {
             if ($isActivityClose) {
                 $action['title'] = WebUtils::t('活动已结束');
                 $action['type'] = DzForumThread::TYPE_ACTIVITY_ACTION_NONE;
-                $action['info'] = null;
+                $action['info'] = WebUtils::getWebApiResPadding();
             }
         // }
         return $action;
@@ -236,7 +236,7 @@ class TopicUtils {
     }
 
     private static function _getActivityApplyListHelper($activity, $verified) {
-        $list = null;
+        $list = WebUtils::getWebApiResPadding();
         $activityList = $verified ? $activity['mobcent']['applyListVerified'] : $activity['mobcent']['applyList'];
         if (!empty($activityList)) {
             $list['title'] =  $verified ? 
@@ -260,7 +260,8 @@ class TopicUtils {
         return $list;
     }
 
-    private static function _makeInputElement($type, $name, $value='', $label='', $attributes=null, $elements=array()) {
+    private static function _makeInputElement($type, $name, $value='', $label='', $attributes=array('padding'=>''), $elements=array()) {
+        empty($attributes) && $attributes = WebUtils::getWebApiResPadding();
         return array('type' => $type, 'name' => $name, 'value' => $value,
             'label' => $label, 'attributes' => $attributes, 'elements' => $elements, 
         );
