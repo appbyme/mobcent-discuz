@@ -56,7 +56,7 @@ class TopicListAction extends CAction {
     }
 
     // 获取发表、回复和关注帖子详细信息
-    private function _transTopicList($topicList) {
+    private function _transTopicList($topicList, $type) {
         $list = array();
 
         global $_G;
@@ -64,6 +64,7 @@ class TopicListAction extends CAction {
         foreach ($topicList as $topic) {
             $tmpTopicInfo = ForumUtils::getTopicInfo((int)$topic);
             $topicSummary = ForumUtils::getTopicSummary((int)$topic);
+            // var_dump($tmpTopicInfo);exit;
             $topicInfo['board_id'] = (int)$tmpTopicInfo['fid'];
             $topicInfo['board_name'] = $fid != 0 ? $forum['name'] : ForumUtils::getForumName($tmpTopicInfo['fid']);
             $topicInfo['board_name'] = WebUtils::emptyHtml($topicInfo['board_name']);
@@ -74,8 +75,15 @@ class TopicListAction extends CAction {
             $topicSummary['msg'] = WebUtils::emptyReturnLine($topicSummary['msg'], ' ');
             $topicInfo['subject'] = $topicSummary['msg'];
             $topicInfo['user_id'] = (int)$tmpTopicInfo['authorid'];
-            $topicInfo['last_reply_date'] = $tmpTopicInfo['lastpost'] . '000';
-            $topicInfo['user_nick_name'] = $tmpTopicInfo['author'];  
+            if ($type = 'favorite' && empty($tmpTopicInfo['author'])) {
+                $dateline = UserTopicInfo::getUserfavorite($_G['uid'],$topic);
+                $topicInfo['last_reply_date'] = $dateline . '000';
+                $topicInfo['user_nick_name'] = UserUtils::getUserName($dateline['uid']);
+            } else {
+                $topicInfo['last_reply_date'] = $tmpTopicInfo['dateline'] . '000';
+                $topicInfo['user_nick_name'] = (string)$tmpTopicInfo['author']; 
+            }
+             
             $topicInfo['hits'] = (int)$tmpTopicInfo['views'];  
             $topicInfo['replies'] = (int)$tmpTopicInfo['replies'];
             $topicInfo['top'] = (int)ForumUtils::isTopTopic($topic) ? 1 : 0;
@@ -288,6 +296,18 @@ class UserTopicInfo extends DiscuzAR {
             WHERE typeid = %d
             ',
             array('forum_threadclass', $typeid)
+        );
+    }
+
+    public static function getUserfavorite($uid, $tid) {
+        return DbUtils::getDzDbUtils(true)->queryScalar('
+            SELECT dateline, uid
+            FROM %t 
+            WHERE idtype = %s
+            AND uid = %d
+            AND id = %d
+            ',
+            array('home_favorite', 'tid', $uid, $tid)
         );
     }
 }

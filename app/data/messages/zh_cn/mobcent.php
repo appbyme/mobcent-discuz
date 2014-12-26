@@ -163,9 +163,9 @@ return array(
     'recommend_self_disallow' => WebUtils::t('07000002:评价指数 {recommendc} 您不能评价自己的帖子'),
     'recommend_duplicate' => WebUtils::t('07000003:评价指数 {recommendc} 您已评价过本主题'),
     'recommend_outoftimes' => WebUtils::t('07000004:评价指数 {recommendc} 今日评价机会已用完'),
-    'recommend_succed' => WebUtils::t('00000000:评价指数 {recommendc} {recommendv}'),
+    'recommend_succed' => WebUtils::t('00000000:赞 {recommendv}'),
     'noreply_yourself_error' => WebUtils::t('07000006:您不能对自己的回帖进行投票'),
     'noreply_voted_error' => WebUtils::t('07000007:您已经对此回帖投过票了'),
     'recommend_daycount_succeed' => WebUtils::t('00000000:评价指数 {recommendc} {recommendv} 您今天还能评价 {daycount} 次'),
-
+    'post_poll_succeed' => WebUtils::t('00000000:赞 +1'),
 );

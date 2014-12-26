@@ -127,7 +127,7 @@ class SupportAction extends MobcentAction
         $hotreply[$_GET['do']]++;
 
         $params = array('noError' => 1, '{recommendv}' => $recommendv, '{recommendc}' => $thread['recommends']);
-        return $this->makeErrorInfo($res, 'thread_poll_succeed', $params);
+        return $this->makeErrorInfo($res, 'post_poll_succeed', $params);
     }
 }
 
