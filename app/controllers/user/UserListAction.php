@@ -73,10 +73,10 @@ class UserListAction extends CAction {
 
         $list = array();
         foreach ($users as $user) {
+            $uid = $user['uid'];
             if ($sortType == 'range') {
                 $tmpUserInfo['distance'] = (string)$user['distance'];
                 $tmpUserInfo['location'] = (string)WebUtils::t($user['location']);
-                $uid = $user['uid'];
             } else {
                 $tmpUserInfo['distance'] = '';
                 $tmpUserInfo['location'] = '';
