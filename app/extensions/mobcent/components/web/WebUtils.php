@@ -41,7 +41,7 @@ class WebUtils {
             'errCode' => 0,
             'errMsg' => '',
             'version' => MOBCENT_VERSION,
-            'data' => self::getWebApiResPadding(),
+            'data' => self::getWebApiResPadding(false),
         );
     }
 
@@ -64,8 +64,8 @@ class WebUtils {
         return $res;
     }
 
-    public static function getWebApiResPadding($key='padding', $value='') {
-        return array($key => $value);
+    public static function getWebApiResPadding($isNull=true, $key='padding', $value='') {
+        return $isNull ? null : array($key => $value);
     }
 
     public static function checkError($res) {

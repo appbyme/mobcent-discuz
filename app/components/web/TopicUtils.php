@@ -260,7 +260,7 @@ class TopicUtils {
         return $list;
     }
 
-    private static function _makeInputElement($type, $name, $value='', $label='', $attributes=array('padding'=>''), $elements=array()) {
+    private static function _makeInputElement($type, $name, $value='', $label='', $attributes=null, $elements=array()) {
         empty($attributes) && $attributes = WebUtils::getWebApiResPadding();
         return array('type' => $type, 'name' => $name, 'value' => $value,
             'label' => $label, 'attributes' => $attributes, 'elements' => $elements, 
