@@ -22,9 +22,11 @@ class AppUtils {
     public static function getAppLevel() {
         $appId = self::getAppId();
         // $appId = 'o8n5mW6eo6AP8A5Hmb';
+        // $appId = 'pmjAXPiqj7RKAiPrbL';
+
         $url = sprintf('http://sdk.mobcent.com/baikesdk/pay/payState.do?gzip=0&forumKey=%s', $appId);
         $data = WebUtils::jsonDecode(WebUtils::httpRequest($url, 30));
 
-        return isset($data['data']['paystate']['user_defined']) ? $data['data']['paystate']['user_defined'] : LEVEL_FREE;
+        return (int)(isset($data['data']['paystate']['user_defined']) ? $data['data']['paystate']['user_defined'] : self::LEVEL_FREE);
     }
 }
