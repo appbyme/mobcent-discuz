@@ -1336,7 +1336,6 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
         // 根据付费信息的提示语
         function showTipsByAppLevel() {
-            return;
             // if (appLevel == 0) {
             //     $('.mobcent-error-info').html('自定义页面和接入外部wap页面的功能只针对付费用户开放！');
             //     $('.mobcent-alert-darker').toggle("drop");
