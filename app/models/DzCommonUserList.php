@@ -643,6 +643,16 @@ class DzCommonUserList extends DiscuzAR {
         );
     }
 
+    public static function getUserLastRegdate($uid) {
+        return DbUtils::getDzDbUtils(true)->queryScalar('
+            SELECT regdate
+            FROM %t 
+            WHERE uid = %d
+            ',
+            array('common_member', $uid)
+        );
+    }
+
     public static function getUserSightml($uid) {
         return DbUtils::getDzDbUtils(true)->queryScalar('
             SELECT sightml

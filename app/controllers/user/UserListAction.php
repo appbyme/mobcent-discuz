@@ -95,6 +95,12 @@ class UserListAction extends CAction {
             $tmpUserInfo['level'] = (int)DzCommonUserList::getUserLevel($uid);
             $lastLogin = WebUtils::t(DzCommonUserList::getUserLastVisit($uid));
             $tmpUserInfo['lastLogin'] = $lastLogin . '000';
+            if ($sortType == 'regdate') {
+                $lastRegdate = DzCommonUserList::getUserLastRegdate($uid);
+                $tmpUserInfo['dateline'] = $lastRegdate . '000';
+            } else {
+                $tmpUserInfo['dateline'] = $lastLogin . '000';
+            }
             $signature = WebUtils::emptyHtml(DzCommonUserList::getUserSightml($uid));
             $tmpUserInfo['signature'] = WebUtils::t($signature);
             $userInfo = UserUtils::getUserInfo($uid);
