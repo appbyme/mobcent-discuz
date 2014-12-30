@@ -892,8 +892,8 @@ class TopicAdminAction extends MobcentAction {
                 // showmessage($replymessage, $url, $param);
             } */
         }
-        if($jsonInfo['isShowPostion'] && $jsonInfo['location']){
-            $data = DB::query('INSERT INTO  %t VALUES(poi_id,%f,%f,%d,%d,%s)',array('home_surrounding_user',$jsonInfo['longitude'],$jsonInfo['latitude'],$pid,2,$jsonInfo['location']));
+        if ($jsonInfo['isShowPostion']) {
+            $data = DB::query('INSERT INTO  %t VALUES(poi_id,%f,%f,%d,%d,%s)',array('home_surrounding_user',$jsonInfo['longitude'],$jsonInfo['latitude'],$pid,2,(string)$jsonInfo['location']));
         }
          /* //客户端回复帖子积分入库
             $temp = DB::fetch_first('SELECT extcredits3 FROM '.DB::table('common_credit_rule').' WHERE rid =%d',array(2));
@@ -1422,8 +1422,8 @@ class TopicAdminAction extends MobcentAction {
                 updategroupcreditlog($_G['fid'], $_G['uid']);
             }
             /*如果显示地理位置，入库到表里*/
-            if($jsonInfo['isShowPostion'] && $jsonInfo['location']){
-                $data = DB::query('INSERT INTO  %t VALUES(null,%f,%f,%d,%d,%s)',array('home_surrounding_user',$jsonInfo['longitude'],$jsonInfo['latitude'],$tid,3,$jsonInfo['location']));
+            if ($jsonInfo['isShowPostion']) {
+                $data = DB::query('INSERT INTO  %t VALUES(null,%f,%f,%d,%d,%s)',array('home_surrounding_user',$jsonInfo['longitude'],$jsonInfo['latitude'],$tid,3,(string)$jsonInfo['location']));
             }
            /*  //客户端发表主题积分入库
                 $temp = DB::fetch_first('SELECT extcredits3  FROM '.DB::table('common_credit_rule').' WHERE rid =%d ',array(1));

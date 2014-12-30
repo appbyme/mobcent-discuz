@@ -149,7 +149,7 @@ class TestController extends MobcentController {
                 {
                     "fid": 2,
                     "tid":"7",
-                    "location": "北京市",
+                    "location": "",
                     "aid": "",
                     "content":"'.$content.'",
                     "title": "1111111",
@@ -271,7 +271,7 @@ class TestController extends MobcentController {
             array(
                 'title' => 'api/forum: forum/topicadmin 帖子管理',
                 'route' => 'forum/topicadmin',
-                'params' => array('platType' => 1, 'act' => 'reply', 'json' => $topicAdminJson),
+                'params' => array('platType' => 1, 'act' => 'new', 'json' => $topicAdminJson),
             ),
             array(
                 'title' => 'api/portal: portal/newsview 文章详情',
@@ -317,6 +317,16 @@ class TestController extends MobcentController {
                 'title' => 'api/user: user/useradminview 用户管理',
                 'route' => 'user/useradminview',
                 'params' => array('uid' => 2, 'act' => 'add'),
+            ),
+            array(
+                'title' => 'api/user: user/uploadavatarex 上传头像',
+                'route' => 'user/uploadavatarex',
+                'params' => array(),
+            ),
+            array(
+                'title' => 'api/user: user/saveavatar 上传头像',
+                'route' => 'user/saveavatar',
+                'params' => array('avatar' => ''),
             ),
             array(
                 'title' => 'api/message: message/heart 心跳',

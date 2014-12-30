@@ -59,6 +59,16 @@ class AppbymeConfig extends DiscuzAR {
         }
     }
 
+    public static function getForumkey() {
+        return (string)DbUtils::getDzDbUtils(true)->queryScalar('
+            SELECT cvalue
+            FROM %t
+            WHERE ckey = %s
+            ',
+            array('appbyme_config', 'app_forumkey')
+        );
+    }
+    
     public static function setAPNsCertfilePassword($password) {
         $key = 'certfile_apns_passphrase';
         $data = array(

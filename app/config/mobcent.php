@@ -28,9 +28,9 @@ return array(
         ),
     ),
     'user' => array(
-        'avatarBigLength' => 256,
-        'avatarMidLength' => 128,
-        'avatarSmallLength' => 64,
+        'avatarBigLength' => 200,
+        'avatarMidLength' => 120,
+        'avatarSmallLength' => 48,
     ),
     'misc' => array(
         'apnsCertfilePath' => MOBCENT_UPLOAD_PATH,

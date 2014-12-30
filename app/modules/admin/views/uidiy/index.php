@@ -317,7 +317,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                     <% for (var i = 0; i < Appbyme.uiModules.models.length; i++) {
                         var module = Appbyme.uiModules.models[i]; 
                     %>
-                        <option value="<%= module.id %>" <%= moduleId == module.id ? 'selected' : '' %> class="<%= module.id == MODULE_ID_DISCOVER ? 'hidden' : '' %>"><%= module.attributes.title %></option>
+                        <option value="<%= module.id %>" <%= moduleId == module.id ? 'selected' : '' %> class="<%= module.id == MODULE_ID_DISCOVER ? 'hidden' : '' %>" <%= module.id == MODULE_ID_DISCOVER ? 'disabled' : '' %>><%= module.attributes.title %></option>
                     <% } %>
                     </select>
                 </div>
@@ -1325,6 +1325,11 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 setTimeout("$('.alert-darker').fadeOut(8000);", 1000);
             }
         })
+
+        // 根据付费信息的提示语
+        function showTipsByAppLevel() {
+            var appLevel = <?php echo $appLevel; ?>;
+        }
     </script>
 </body>
 </html>

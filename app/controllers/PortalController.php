@@ -13,7 +13,7 @@ class PortalController extends MobcentController {
 
     public function actions() {
         return array(
-        	'commentlist' => 'application.controllers.portal.CommentListAction',
+            'commentlist' => 'application.controllers.portal.CommentListAction',
             'commentadmin' => 'application.controllers.portal.CommentAdminAction',
             'modulelist' => 'application.controllers.portal.ModuleListAction',
             'newslist' => 'application.controllers.portal.NewsListAction',

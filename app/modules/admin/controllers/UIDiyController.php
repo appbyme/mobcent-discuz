@@ -96,6 +96,7 @@ class UIDiyController extends AdminController
             'newsModules' => $newsModules,
             'forumList' => $forumList,
             'browserInfo' => $browserInfo,
+            'appLevel' => AppUtils::getAppLevel(),
         ));
     }
 

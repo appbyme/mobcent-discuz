@@ -1227,6 +1227,8 @@ $(function () {
             if ($('#autoSaveCheckbox')[0].checked) {
                 mainView.saveUIDiy(0);
             }
+
+            showTipsByAppLevel();
         },
         closeModule: function () {
             this.toggle();
