@@ -215,6 +215,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
     <script type="text/javascript">
     var uidiyGlobalObj = {
+        appLevel: <?php echo $appLevel; ?>,
         rootUrl: '<?php echo $this->rootUrl; ?>',
         apphash: '<?php echo MobcentDiscuz::getAppHashValue(); ?>',
         navItemIconUrlBasePath: '<?php echo $this->navItemIconBaseUrlPath; ?>',
@@ -377,7 +378,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             </div>
 
             <% var isModuleTypeSelect = id != MODULE_ID_FASTPOST && id != MODULE_ID_DISCOVER; %>
-            <div class="<%= !isModuleTypeSelect ? 'hidden' : '' %> form-group">
+            <div class="<%= !isModuleTypeSelect ? 'hidden' : '' %> form-group" style="position: relative;">
                 <label class="col-sm-2 control-label">模块类型: </label>
                 <div class="col-sm-10">
                 <select id="moduleType" name="moduleType" class="form-control">
@@ -388,8 +389,10 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                     <option value="<%= MODULE_TYPE_CUSTOM %>" <%= type == MODULE_TYPE_CUSTOM ? 'selected' : '' %>>自定义页面</option>
                 </select>
                 </div>
+                <% if (uidiyGlobalObj.appLevel == 0) { %>
+                    <div style="position:absolute;left:400px;top:7px;color:red">自定义页面页面只针对付费用户开放！</div>
+                <% } %> 
             </div>
-
             <div class="form-group module-style-select-div">
                 <label for="" class="col-sm-2 control-label">模块样式: </label>
                 <div class="col-sm-10">
@@ -737,6 +740,9 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         </div>
         <!-- wepapp 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_WEBAPP+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_WEBAPP ? '' : 'hidden' %>">
+            <% if (uidiyGlobalObj.appLevel == 0) { %>
+                <div style="color:red;" class="mobcent-pay-info">外部wap页只针对付费用户开放！</div>
+            <% } %> 
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">wap地址: </label>
                 <div class="col-sm-10">
@@ -1330,13 +1336,13 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
         // 根据付费信息的提示语
         function showTipsByAppLevel() {
-            var appLevel = <?php echo $appLevel; ?>;
-            if (appLevel == 0) {
-                $('.mobcent-error-info').html('自定义页面和接入外部wap页面的功能只针对付费用户开放！');
-                $('.mobcent-alert-darker').toggle("drop");
-                $("body,html").scrollTop(0);
-                setTimeout("$('.mobcent-alert-darker').fadeOut(2000);", 1000);
-            }
+            return;
+            // if (appLevel == 0) {
+            //     $('.mobcent-error-info').html('自定义页面和接入外部wap页面的功能只针对付费用户开放！');
+            //     $('.mobcent-alert-darker').toggle("drop");
+            //     $("body,html").scrollTop(0);
+            //     setTimeout("$('.mobcent-alert-darker').fadeOut(2000);", 1000);
+            // }
         }
     </script>
 </body>

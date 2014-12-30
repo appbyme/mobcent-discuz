@@ -683,6 +683,15 @@ label {
     width: 99px;
 }
 
+/*付费提示，wap页做的兼容性*/
+.mobcent-pay-info {padding-left:130px;}
+
+.pic-text-pop .mobcent-pay-info, .add-comp-pop .mobcent-pay-info, .add-style-pop .mobcent-pay-info, .add-slide-pop .mobcent-pay-info,
+.play-add-plug .mobcent-pay-info
+{
+    padding-left: 80px;
+}
+
 /* 为了兼容上传图片下面的预览框 */
 .pic-text-pop .col-sm-offset-2, .add-comp-pop .col-sm-offset-2, .add-style-pop .col-sm-offset-2, 
 .add-slide-pop .col-sm-offset-2
