@@ -55,9 +55,9 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 </head>
 <body>
 <div class="covering"></div>
-<div class="alert alert-darker text-center" style="display:none;background:#d9534f;color:white">
-   <a href="#" class="close" data-dismiss="alert">&times;</a>
-   <strong>友情提示: </strong>为了保证数据传输的正确性，最好使用最新版本的谷歌浏览器来进行操作。
+<div class="alert mobcent-alert-darker text-center" style="display:none;background:#d9534f;color:white">
+    <a href="#" class="close" data-dismiss="alert">&times;</a>
+    <strong class="mobcent-error-info">友情提示: 为了保证数据传输的正确性，请务必使用最新版本的谷歌浏览器来进行操作。</strong>
 </div>
 <?php global $_G; ?>
     <!-- Static navbar -->
@@ -1321,14 +1321,22 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
             var browserInfo = "<?php echo $browserInfo; ?>";
             if (browserInfo < '37.0.2062.124') {
-                $('.alert-darker').toggle("drop");
-                setTimeout("$('.alert-darker').fadeOut(8000);", 1000);
+                $('.mobcent-alert-darker a').remove();
+                $('.mobcent-alert-darker').toggle("drop");
+                $('#uidiy-main-view').remove();
+                // setTimeout("$('.alert-darker').fk(8000);", 1000);
             }
         })
 
         // 根据付费信息的提示语
         function showTipsByAppLevel() {
             var appLevel = <?php echo $appLevel; ?>;
+            if (appLevel == 0) {
+                $('.mobcent-error-info').html('自定义页面和接入外部wap页面的功能只针对付费用户开放！');
+                $('.mobcent-alert-darker').toggle("drop");
+                $("body,html").scrollTop(0);
+                setTimeout("$('.mobcent-alert-darker').fadeOut(2000);", 1000);
+            }
         }
     </script>
 </body>

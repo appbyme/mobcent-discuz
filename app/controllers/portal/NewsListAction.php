@@ -268,7 +268,7 @@ class NewsListAction extends MobcentAction {
         if ($source_type == 'topic') {
             $row['fid'] = (int)$list['fid'];
         }
-        $row['source_type'] = $source_type;
+        $row['source_type'] = (string)$source_type;
         $row['source_id'] = (int)$source_id;
         $row['title'] = $source_type == 'topic' ? (string)$list['subject'] : (string)$list['title'];
         $row['title'] = WebUtils::emptyHtml($row['title']);
@@ -276,18 +276,18 @@ class NewsListAction extends MobcentAction {
         $row['last_reply_date'] = $source_type == 'topic' ? $list[$statu].'000' : $list['dateline'].'000';
         $row['user_nick_name'] = $source_type == 'topic' ? (string)$list['author'] : (string)$list['username'];
         $row['hits'] = $source_type == 'topic' ? (int)$list['views'] : (int)$list['viewnum'];
-        $row['summary'] = $summary['msg'];
+        $row['summary'] = (string)$summary['msg'];
         $row['replies'] = $source_type == 'topic' ? (int)$list['replies'] : (int)$list['commentnum'];
 
         $tempRow = ImageUtils::getThumbImageEx($summary['image'], 15, true, true);
-        $row['pic_path'] = $tempRow['image'];
-        $row['ratio'] = $tempRow['ratio'];
+        $row['pic_path'] = (string)$tempRow['image'];
+        $row['ratio'] = (int)$tempRow['ratio'];
         $row['redirectUrl'] = (string)$list['url'];
 
-        $row['userAvatar'] = UserUtils::getUserAvatar($row['user_id']);
+        $row['userAvatar'] = (string)UserUtils::getUserAvatar($row['user_id']);
         $row['gender'] = (int)UserUtils::getUserGender($row['user_id']);
-        $row['recommendAdd'] = $source_type == 'topic' ? ForumUtils::getRecommendAdd($row['source_id']) : 0;
-        $row['isHasRecommendAdd'] = $source_type == 'topic' ? ForumUtils::isHasRecommendAdd($row['source_id']) : 0;
+        $row['recommendAdd'] = $source_type == 'topic' ? (int)ForumUtils::getRecommendAdd($row['source_id']) : 0;
+        $row['isHasRecommendAdd'] = $source_type == 'topic' ? (int)ForumUtils::isHasRecommendAdd($row['source_id']) : 0;
         $row['distance'] = isset($list['distance']) ? (string)$list['distance'] : '';
         $row['location'] = isset($list['location']) ? (string)$list['location'] : '';
         $row['imageList'] = (array)$summary['imageList'];
@@ -349,12 +349,12 @@ class NewsListAction extends MobcentAction {
     private function _fieldPicList($fid, $source_type, $source_id, $title, $pic_path, $pic_toUrl='') {
         $row = array();
         $row['fid'] = (int)$fid;
-        $row['source_type'] = $source_type;
+        $row['source_type'] = (string)$source_type;
         $row['source_id'] = (int)$source_id;
         $row['title'] = WebUtils::emptyHtml($title);
-        $row['pic_path'] = $pic_path;
+        $row['pic_path'] = (string)$pic_path;
         if ($source_type == 'weblink') {
-            $row['pic_toUrl'] = $pic_toUrl;
+            $row['pic_toUrl'] = (string)$pic_toUrl;
         }
         return $row;
     }
