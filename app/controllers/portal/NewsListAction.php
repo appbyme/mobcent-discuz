@@ -204,6 +204,7 @@ class NewsListAction extends MobcentAction {
 
         $lists = DzForumThread::getByFidData($fids, $offset, $pageSize, $params, $longitude, $latitude, $radius);
         // Mobcent::dumpSql();
+        $rows = array();
         foreach ($lists as $list) {
             $topicSummary = ForumUtils::getTopicSummary($list['tid'], 'portal', true, array('imageList' => $_GET['isImageList'], 'imageListLen' => 9, 'imageListThumb' => 1));
             $rows[] = $this->_getListField($list, $topicSummary, 'topic', $list['tid'], $params);
