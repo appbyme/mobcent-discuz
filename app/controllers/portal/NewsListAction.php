@@ -281,7 +281,7 @@ class NewsListAction extends MobcentAction {
 
         $tempRow = ImageUtils::getThumbImageEx($summary['image'], 15, true, true);
         $row['pic_path'] = (string)$tempRow['image'];
-        $row['ratio'] = (int)$tempRow['ratio'];
+        $row['ratio'] = $tempRow['ratio'];
         $row['redirectUrl'] = (string)$list['url'];
 
         $row['userAvatar'] = (string)UserUtils::getUserAvatar($row['user_id']);
