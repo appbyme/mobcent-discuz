@@ -192,7 +192,7 @@ class AppbymeUIDiyModel extends DiscuzAR
         ));
     }
 
-    public static function getNavigationInfo($isTemp=false)
+    public static function getNavigationInfo($isTemp=false) 
     {
         $data = DbUtils::getDzDbUtils(true)->queryScalar('
             SELECT cvalue
@@ -201,7 +201,10 @@ class AppbymeUIDiyModel extends DiscuzAR
             ',
             array('appbyme_config', $isTemp ? self::NAV_KEY_TEMP : self::NAV_KEY)
         );
-        return $data ? (array)unserialize(WebUtils::u($data)) : array();
+        return $data ? (array)unserialize(WebUtils::u($data)) : array(
+            'type' => self::NAV_TYPE_BOTTOM,
+            'navItemList' => array()
+        );
     }
 
     public static function saveNavigationInfo($navInfo, $isTemp=false)

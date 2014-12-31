@@ -25,7 +25,7 @@ class AppUtils {
         // $appId = 'pmjAXPiqj7RKAiPrbL';
 
         $url = sprintf('http://sdk.mobcent.com/baikesdk/pay/payState.do?gzip=0&forumKey=%s', $appId);
-        $data = WebUtils::jsonDecode(WebUtils::httpRequest($url, 30));
+        $data = WebUtils::jsonDecode(WebUtils::httpRequest($url, 10));
 
         return (int)(isset($data['data']['paystate']['user_defined']) ? $data['data']['paystate']['user_defined'] : self::LEVEL_FREE);
     }
