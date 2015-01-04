@@ -52,7 +52,7 @@ class UserAdminAction extends MobcentAction {
                     $res = $this->makeErrorInfo($res, 'follow_other_unfollow');
                 }
                 $mutual = 1;
-                C::t('home_follow')->update_by_uid_followuid($followuid, $_G['uid'], array('mutual'=>1));
+                C::t('home_follow')->update_by_uid_followuid($followUid, $_G['uid'], array('mutual'=>1));
             }
 
             $followed = DzUserSettingInfo::getUserSettingInfo($uid, $followUid);
@@ -70,11 +70,11 @@ class UserAdminAction extends MobcentAction {
                 );
                 C::t('home_follow')->insert($followInfo, false, true);
                 C::t('common_member_count')->increase($uid, array('following' => 1));
-                C::t('common_member_count')->increase($followuid, array('follower' => 1, 'newfollower' => 1));
+                C::t('common_member_count')->increase($followUid, array('follower' => 1, 'newfollower' => 1));
                 notification_add($followUid, 'follower', 'member_follow_add', array('count' => $count, 'from_id'=>$uid, 'from_idtype' => 'following'), 1);
             } elseif($special) {
                 $status = $special == 1 ? 1 : 0;
-                C::t('home_follow')->update_by_uid_followuid($uid, $followuid, array('status'=>$status));
+                C::t('home_follow')->update_by_uid_followuid($uid, $followUid, array('status'=>$status));
                 $special = $special == 1 ? 2 : 1;
             } else {
                 $res = $this->makeErrorInfo($res, 'follow_followed_ta');
