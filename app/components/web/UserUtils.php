@@ -662,6 +662,10 @@ class UserUtils {
             }
         }
 
+        // [add]更新欢迎注册等 data:2015.01.04
+        require_once libfile('cache/userstats', 'function');
+        build_cache_userstats();
+        
         $_GET['regmessage'] = Webutils::t('来自手机客户端注册');
         $regmessage = dhtmlspecialchars($_GET['regmessage']);
         if($ctlObj->setting['regverify'] == 2) {
