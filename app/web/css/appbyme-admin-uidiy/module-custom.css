@@ -74,7 +74,7 @@
     padding:0px 0px 0px 10px;
 }
 
-/* 单栏样式低 */
+/* 单栏样式中 */
 .custom-style-layout-one-col-low {
     /*background: #e3e3e3;*/
     width: 320px;
@@ -89,7 +89,19 @@
     margin-bottom: 5px;
 }
 
-
+/* 单栏样式低 */
+.custom-style-layout-one_col-low-fixed {
+    /*background: #e3e3e3;*/
+    width: 320px;
+    height: 80px;
+    border-radius: 5px;
+    margin: 0px auto 5px;
+}
+.custom-style-layout-one_col-low-fixed .textImage {
+    width: 320px;
+    height: 60px;
+    margin-bottom: 5px;
+}
 
 /* 双栏文字 */
 .custom-layouttwocoltext {

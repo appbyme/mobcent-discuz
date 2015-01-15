@@ -672,6 +672,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                     <?php } ?>
                     </select> 
                 </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 control-label">主题分类: </label>
                 <div class="col-sm-10">
                     <select class="form-control topicSimpleTopicTypeSelect" name="topicSimpleTypeId[]">
@@ -683,6 +685,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         <?php } ?>
                     </select>
                 </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 control-label">过滤选择: </label>
                 <div class="col-sm-10">
                     <select class="form-control" name="topicSimpleOrderby[]">
@@ -692,6 +696,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         <option value="top" <%= extParams.orderby == 'top' ? 'selected' : '' %>>置顶帖</option>
                     </select>
                 </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 control-label">置顶帖显示: </label>
                 <div class="col-sm-10">
                     <select class="form-control" name="topicSimpleTopOrder[]">
@@ -824,17 +830,29 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <!-- sign 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_SIGN+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SIGN ? '' : 'hidden' %>">
         </div>
-        <div class="form-group list-ext-config-div">
-            <label class="col-sm-2 control-label">主题标题长度: </label>
-            <input type="text" class="form-control input-sm" name="listTitleLength[]" value="<%= extParams.listTitleLength %>">
-            <label class="col-sm-2 control-label">主题摘要长度: </label>
-            <input type="text" class="form-control input-sm" name="listSummaryLength[]" value="<%= extParams.listSummaryLength %>">
-            <label class="col-sm-2 control-label">主题图片位置: </label>
-            <select class="form-control" name="listImagePosition[]">
-                <option value="<%= IMAGE_POSITION_NONE %>" <%= extParams.listImagePosition == IMAGE_POSITION_NONE ? 'selected' : '' %>>无</option>
-                <option value="<%= IMAGE_POSITION_LEFT %>" <%= extParams.listImagePosition == IMAGE_POSITION_LEFT ? 'selected' : '' %>>左</option>
-                <option value="<%= IMAGE_POSITION_RIGHT %>" <%= extParams.listImagePosition == IMAGE_POSITION_RIGHT ? 'selected' : '' %>>右</option>
-            </select> 
+        <div class="list-ext-config-div">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">主题标题长度: </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-sm" name="listTitleLength[]" value="<%= extParams.listTitleLength %>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">主题摘要长度: </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-sm" name="listSummaryLength[]" value="<%= extParams.listSummaryLength %>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">主题图片位置: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="listImagePosition[]">
+                        <option value="<%= IMAGE_POSITION_NONE %>" <%= extParams.listImagePosition == IMAGE_POSITION_NONE ? 'selected' : '' %>>无</option>
+                        <option value="<%= IMAGE_POSITION_LEFT %>" <%= extParams.listImagePosition == IMAGE_POSITION_LEFT ? 'selected' : '' %>>左</option>
+                        <option value="<%= IMAGE_POSITION_RIGHT %>" <%= extParams.listImagePosition == IMAGE_POSITION_RIGHT ? 'selected' : '' %>>右</option>
+                    </select>
+                </div>
+            </div> 
         </div>
         <div class="form-group component-style-select-div <%= this.uiconfig.isShow_style ? '' : 'hidden' %>">
             <label for="" class="col-sm-2 control-label">页面样式: </label>
@@ -1137,6 +1155,15 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <div class="textOverlapDown-title">
                     <div class="textoverlapdown-color"><%= component['title'] %></div>
                 </div>
+            </div>
+        <% } %>
+        </div>
+    <% } else if (style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW_FIXED) { %>
+        <div class="custom-style-layout-one_col-low-fixed">
+        <% for (var i = 0; i < componentList.length; i++) { %>
+        <% var component = componentList[i].attributes; %>    
+            <div class="textOverlapDown">
+                <img src="<%= component['icon'] %>" style="width:320px;height:80px;" class="img-rounded">
             </div>
         <% } %>
         </div>
