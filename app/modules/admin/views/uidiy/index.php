@@ -592,7 +592,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <option value="<%= COMPONENT_TYPE_EMPTY %>" <%= type == COMPONENT_TYPE_EMPTY ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeEmpty ? '' : 'hidden' %>">取消</option>
                 <option value="<%= COMPONENT_TYPE_FORUMLIST %>" <%= type == COMPONENT_TYPE_FORUMLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeForumlist ? '' : 'hidden' %>">版块列表</option>
                 <option value="<%= COMPONENT_TYPE_NEWSLIST %>" <%= type == COMPONENT_TYPE_NEWSLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeNewslist ? '' : 'hidden' %>">门户模块列表</option>
-                <!-- <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeTopiclist ? '' : 'hidden' %>">帖子列表</option> -->
+                <!-- 暂时屏蔽 <option value="<%= COMPONENT_TYPE_TOPICLIST %>" <%= type == COMPONENT_TYPE_TOPICLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeTopiclist ? '' : 'hidden' %>">帖子列表</option> -->
                 <option value="<%= COMPONENT_TYPE_TOPICLIST_SIMPLE %>" <%= type == COMPONENT_TYPE_TOPICLIST_SIMPLE ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeTopiclistSimple ? '' : 'hidden' %>">简版帖子列表</option>
                 <option value="<%= COMPONENT_TYPE_POSTLIST %>" <%= type == COMPONENT_TYPE_POSTLIST ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typePostlist ? '' : 'hidden' %>">帖子详情</option>
                 <option value="<%= COMPONENT_TYPE_NEWSVIEW %>" <%= type == COMPONENT_TYPE_NEWSVIEW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_typeNewsview ? '' : 'hidden' %>">文章详情</option>
@@ -665,12 +665,41 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">选择版块: </label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="topicSimpleForumId[]">
+                    <select class="form-control topicSimpleForumSelect" name="topicSimpleForumId[]">
                         <option value="0" <%= extParams.forumId == 0 ? 'selected' : '' %> class="">全部版块</option>
                     <?php foreach ($forumList as $fid => $title) { ?>
                         <option value="<?php echo $fid ?>" <%= extParams.forumId == <?php echo $fid; ?> ? 'selected' : '' %>><?php echo WebUtils::u($title) ?></option> 
                     <?php } ?>
                     </select> 
+                </div>
+                <label class="col-sm-2 control-label">主题分类: </label>
+                <div class="col-sm-10">
+                    <select class="form-control topicSimpleTopicTypeSelect" name="topicSimpleTypeId[]">
+                        <option value="0" <%= extParams.filterId == 0 ? 'selected' : '' %>>无</option>
+                        <?php foreach ($topicTypeSortInfos as $info) { ?>
+                            <?php foreach ($info['types'] as $type) { ?>
+                                <option class="divTopicType divTopicTypeFid-<?php echo $info['fid']; ?>" value="<?php echo $type['id'] ?>" <%= extParams.filterId == <?php echo $type['id']; ?> ? 'selected' : '' %>><?php echo WebUtils::u($type['title']) ?></option> 
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">过滤选择: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="topicSimpleOrderby[]">
+                        <option value="all" <%= extParams.orderby == 'all' ? 'selected' : '' %>>全部帖(按最新回复排序)</option>
+                        <option value="new" <%= extParams.orderby == 'new' ? 'selected' : '' %>>最新帖(按最新发表排序)</option>
+                        <option value="marrow" <%= extParams.orderby == 'marrow' ? 'selected' : '' %>>精华帖</option>
+                        <option value="top" <%= extParams.orderby == 'top' ? 'selected' : '' %>>置顶帖</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label">置顶帖显示: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="topicSimpleTopOrder[]">
+                        <option value="0" <%= extParams.order == 0 ? 'selected' : '' %>>无</option>
+                        <option value="1" <%= extParams.order == 1 ? 'selected' : '' %>>本版置顶</option>
+                        <option value="2" <%= extParams.order == 2 ? 'selected' : '' %>>分类置顶</option>
+                        <option value="3" <%= extParams.order == 3 ? 'selected' : '' %>>全局置顶</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -758,7 +787,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                     <select class="form-control" name="moduleId[]">
                     <% for (var i = 0; i < Appbyme.uiModules.length; i++) { %>
                         <% var module = Appbyme.uiModules.models[i].attributes; %>
-                        <% if (module.type != MODULE_TYPE_FASTPOST) { %>
+                        <% var isOnlyCustomModule = $('#moduleType').val() == MODULE_TYPE_SUBNAV; %>
+                        <% if ((!isOnlyCustomModule && module.type != MODULE_TYPE_FASTPOST) || (isOnlyCustomModule && module.type == MODULE_TYPE_CUSTOM)) { %>
                         <option value="<%= module.id %>" <%= extParams.moduleId == module.id ? 'selected' : '' %>><%= module.title %></option> 
                         <% } %>
                     <% } %>
@@ -794,13 +824,28 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <!-- sign 组件模板 -->
         <div id="component-view-<% print(COMPONENT_TYPE_SIGN+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SIGN ? '' : 'hidden' %>">
         </div>
+        <div class="form-group list-ext-config-div">
+            <label class="col-sm-2 control-label">主题标题长度: </label>
+            <input type="text" class="form-control input-sm" name="listTitleLength[]" value="<%= extParams.listTitleLength %>">
+            <label class="col-sm-2 control-label">主题摘要长度: </label>
+            <input type="text" class="form-control input-sm" name="listSummaryLength[]" value="<%= extParams.listSummaryLength %>">
+            <label class="col-sm-2 control-label">主题图片位置: </label>
+            <select class="form-control" name="listImagePosition[]">
+                <option value="<%= IMAGE_POSITION_NONE %>" <%= extParams.listImagePosition == IMAGE_POSITION_NONE ? 'selected' : '' %>>无</option>
+                <option value="<%= IMAGE_POSITION_LEFT %>" <%= extParams.listImagePosition == IMAGE_POSITION_LEFT ? 'selected' : '' %>>左</option>
+                <option value="<%= IMAGE_POSITION_RIGHT %>" <%= extParams.listImagePosition == IMAGE_POSITION_RIGHT ? 'selected' : '' %>>右</option>
+            </select> 
+        </div>
         <div class="form-group component-style-select-div <%= this.uiconfig.isShow_style ? '' : 'hidden' %>">
             <label for="" class="col-sm-2 control-label">页面样式: </label>
             <div class="col-sm-10">
                 <select class="form-control" name="componentStyle[]">
                     <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
                     <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
-                    <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式</option>
+                    <option value="<%= COMPONENT_STYLE_TIEBA %>" <%= style == COMPONENT_STYLE_TIEBA ? 'selected' : '' %>>贴吧样式</option>
+                    <option value="<%= COMPONENT_STYLE_HEADLINES %>" <%= style == COMPONENT_STYLE_HEADLINES ? 'selected' : '' %>>今日头条样式</option>
+                    <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式1</option>
+                    <option value="<%= COMPONENT_STYLE_IMAGE_2 %>" <%= style == COMPONENT_STYLE_IMAGE_2 ? 'selected' : '' %>>图片样式2</option>
                     <option value="<%= COMPONENT_STYLE_IMAGE_BIG %>" <%= style == COMPONENT_STYLE_IMAGE_BIG ? 'selected' : '' %>>大图样式</option>
                     <option value="<%= COMPONENT_STYLE_IMAGE_SUDOKU %>" <%= style == COMPONENT_STYLE_IMAGE_SUDOKU ? 'selected' : '' %>>类朋友圈样式</option>
                     <option value="<%= COMPONENT_STYLE_1 %>" <%= style == COMPONENT_STYLE_1 ? 'selected' : '' %>>样式1</option>
@@ -1010,7 +1055,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <div class="col-sm-10">
                     <select class="form-control input-sm layoutStyleSelect" name="layoutStyle">
                         <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutOneColHigh ? '' : 'hidden' %>">单栏样式(高)</option>
-                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutOneColLow ? '' : 'hidden' %>">单栏样式(低)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_LOW %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutOneColLow ? '' : 'hidden' %>">单栏样式(中)</option>
+                        <option value="<%= COMPONENT_STYLE_LAYOUT_ONE_COL_LOW_FIXED %>" <%= style == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW_FIXED ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutOneColLowFixed ? '' : 'hidden' %>">单栏样式(低)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutTwoColText ? '' : 'hidden' %>">双栏文字</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutTwoColHigh ? '' : 'hidden' %>">双栏样式(高)</option>
                         <option value="<%= COMPONENT_STYLE_LAYOUT_TWO_COL_MID %>" <%= style == COMPONENT_STYLE_LAYOUT_TWO_COL_MID ? 'selected' : '' %> class="<%= this.uiconfig.isShow_layoutTwoColMid ? '' : 'hidden' %>">双栏样式(中)</option>

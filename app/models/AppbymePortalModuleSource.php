@@ -16,6 +16,13 @@ class AppbymePortalModuleSource extends DiscuzAR {
     const SOURCE_TYPE_NORMAL = 1;
     const SOURCE_TYPE_SLIDER = 2;
 
+    const SOURCE_TYPE_AID = 'aid';
+    const SOURCE_TYPE_TID = 'tid';
+    const SOURCE_TYPE_FID = 'fid';
+    const SOURCE_TYPE_CATID = 'catid';
+    const SOURCE_TYPE_URL = 'url';
+    const SOURCE_TYPE_BID = 'bid';
+
     public static function model($className=__CLASS__) {
         return parent::model($className);
     }
@@ -109,4 +116,23 @@ class AppbymePortalModuleSource extends DiscuzAR {
         );
     }
 
+    public static function getSources($mid, $type=self::SOURCE_TYPE_NORMAL, $page=1, $pagesize=10, $params=array()) {
+        $sqlParams = array('appbyme_portal_module_source', $mid, $type);
+        $sql = '
+            SELECT *
+            FROM %t
+            WHERE mid=%d AND type=%d
+        ';
+        if (is_array($params['idtype']) && $params['idtype']) {
+            $sql .= ' AND idtype IN (%n) ';
+            $sqlParams = array_merge($sqlParams, array($params['idtype']));
+        }
+        $sql .= ' ORDER BY displayorder ASC ';
+        if ($page > 0 && $pagesize > 0) {
+            $sql .= ' LIMIT %d, %d ';
+            $sqlParams = array_merge($sqlParams, array(($page-1)*$pagesize, $pagesize));
+        }
+        
+        return DbUtils::getDzDbUtils(true)->queryAll($sql, $sqlParams);
+    }
 }

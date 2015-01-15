@@ -18,6 +18,8 @@ class NotifyListAction extends CAction {
     const NOTIFY_TYPE_FRIEND = 'friend';
 
     public function run($type = 'post', $page = 1, $pageSize = 20) {
+        require_once libfile('function/friend');
+
         $res = WebUtils::initWebApiArray_oldVersion();
 
         $uid = $this->getController()->uid;
@@ -57,6 +59,7 @@ class NotifyListAction extends CAction {
         $notifyData = DzHomeNotification::getAllNotifyByUid($uid, $type, $page, $pageSize);
         
         foreach ($notifyData as $data) {
+            $isAllowData = true;
             $actions = array();
             $matches = array();
             preg_match('/<a onclick="showWindow.+?>(\S+)<\/a>/mi', $data['note'], $matches);
@@ -70,20 +73,30 @@ class NotifyListAction extends CAction {
                     $action['redirect'] = WebUtils::createUrl_oldVersion('user/useradminview', array('act' => $tempMatches[1], 'uid' => $tempMatches[2]));
                     $action['type'] = self::NOTIFY_TYPE_FRIEND;
                 }
+
                 $data['note'] = str_replace($matches[1], '', $data['note']);
+
+                // 暂时屏蔽已经是好友的动作
+                if (friend_check($tempMatches[2])) {
+                    $isAllowData = false;
+                    $count--;
+                }
+
                 $actions[] = $action;
             }
 
-            $tmpData['dateline'] = $data['dateline'].'000';
-            $tmpData['type'] = $data['type'];
-            $tmpData['note'] = WebUtils::emptyHtml($data['note']);
-            $tmpData['fromId'] = (int)$data['from_id'];
-            $tmpData['fromIdType'] = $data['from_idtype'];
-            $tmpData['author'] = $data['author'];
-            $tmpData['authorId'] = (int)$data['authorid'];
-            $tmpData['authorAvatar'] = UserUtils::getUserAvatar($data['authorid']);
-            $tmpData['actions'] = $actions;
-            $info['data'][] = $tmpData;
+            if ($isAllowData) {
+                $tmpData['dateline'] = $data['dateline'].'000';
+                $tmpData['type'] = $data['type'];
+                $tmpData['note'] = WebUtils::emptyHtml($data['note']);
+                $tmpData['fromId'] = (int)$data['from_id'];
+                $tmpData['fromIdType'] = $data['from_idtype'];
+                $tmpData['author'] = $data['author'];
+                $tmpData['authorId'] = (int)$data['authorid'];
+                $tmpData['authorAvatar'] = UserUtils::getUserAvatar($data['authorid']);
+                $tmpData['actions'] = $actions;
+                $info['data'][] = $tmpData;
+            }
         }
 
         if ($type == self::NOTIFY_TYPE_POST || $type == self::NOTIFY_TYPE_AT) {

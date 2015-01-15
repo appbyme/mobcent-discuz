@@ -77,7 +77,10 @@ class AppbymeUIDiyModel extends DiscuzAR
 
     const COMPONENT_STYLE_FLAT = 'flat';
     const COMPONENT_STYLE_CARD = 'card';
+    const COMPONENT_STYLE_TIEBA = 'tieba';
+    const COMPONENT_STYLE_HEADLINES = 'headlines';
     const COMPONENT_STYLE_IMAGE = 'image';
+    const COMPONENT_STYLE_IMAGE_2 = 'image2';
     const COMPONENT_STYLE_IMAGE_BIG = 'imageBig';
     const COMPONENT_STYLE_IMAGE_SUDOKU = 'imageSudoku';
     const COMPONENT_STYLE_1 = 'style1';
@@ -95,6 +98,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH = 'layoutOneCol_High';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_MID = 'layoutOneCol_Mid';
     const COMPONENT_STYLE_LAYOUT_ONE_COL_LOW = 'layoutOneCol_Low';
+    const COMPONENT_STYLE_LAYOUT_ONE_COL_LOW_FIXED = 'layoutOneCol_Low_Fixed';
     const COMPONENT_STYLE_LAYOUT_TWO_COL = 'layoutTwoCol';
     const COMPONENT_STYLE_LAYOUT_TWO_COL_TEXT = 'layoutTwoColText';
     const COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH = 'layoutTwoCol_High';
@@ -138,6 +142,10 @@ class AppbymeUIDiyModel extends DiscuzAR
     const USERLIST_ORDERBY_LOGIN = 'login';
     const USERLIST_ORDERBY_FOLLOWED = 'followed';
     const USERLIST_ORDERBY_DISTANCE = 'distance';
+
+    const IMAGE_POSITION_NONE = 0;
+    const IMAGE_POSITION_LEFT = 1;
+    const IMAGE_POSITION_RIGHT = 2;
 
     public static function initNavigation()
     {
@@ -419,6 +427,7 @@ class AppbymeUIDiyModel extends DiscuzAR
             'iconStyle' => self::COMPONENT_ICON_STYLE_IMAGE,
             'componentList' => array(),
             'extParams' => array(
+                'dataId' => 0,
                 'titlePosition' => self::COMPONENT_TITLE_POSITION_LEFT,
                 // 'isShowForumIcon' => 1,
                 // 'isShowForumTwoCols' => 1,
@@ -433,8 +442,13 @@ class AppbymeUIDiyModel extends DiscuzAR
                 // 'isShowTopicSort' => 0,
                 'isShowMessagelist' => 0,
                 'filter' => '',
+                'filterId' => 0,
+                'order' => 0,
                 'orderby' => '',
                 'redirect' => '',
+                'listTitleLength' => 10,
+                'listSummaryLength' => 40,
+                'listImagePosition' => self::IMAGE_POSITION_LEFT,
             ),
         ), $params);
     }

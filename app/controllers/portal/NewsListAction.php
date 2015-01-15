@@ -30,11 +30,35 @@ class NewsListAction extends MobcentAction {
         $res = array();
         $cache = $this->getCacheInfo();
         if (!$cache['enable'] || ($res = Yii::app()->cache->get($key)) === false) {
+            // var_dump('no cache');
             $res = WebUtils::outputWebApi($this->getResult($params), '', false);
             if ($page == 1 && $cache['enable']) {
-                Yii::app()->cache->set($key, $res, $cache['expire']);
+                $fids = array();
+                $sources = AppbymePortalModuleSource::getSources(
+                    $mid, 
+                    AppbymePortalModuleSource::SOURCE_TYPE_NORMAL, 
+                    0, 
+                    0,
+                    array('idtype' => array(
+                       AppbymePortalModuleSource::SOURCE_TYPE_FID,
+                    ))
+                );
+                foreach ($sources as $source) {
+                    $fids[] = $source['id'];
+                }
+
+                !empty($fids) && $dep = new DiscuzDbCacheDependency('
+                    SELECT MAX(lastpost)
+                    FROM %t
+                    WHERE fid IN (%n)
+                    ', 
+                    array('forum_forum', $fids)
+                );
+                
+                Yii::app()->cache->set($key, $res, $cache['expire'], $dep);
             }
         }
+
         echo $res;
     }
 

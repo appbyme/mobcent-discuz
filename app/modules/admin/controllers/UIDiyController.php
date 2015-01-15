@@ -97,6 +97,7 @@ class UIDiyController extends AdminController
             'forumList' => $forumList,
             'browserInfo' => $browserInfo,
             'appLevel' => AppUtils::getAppLevel(),
+            'topicTypeSortInfos' => $this->_getTopicTypeSortInfos(),
         ));
     }
 
@@ -268,45 +269,57 @@ class UIDiyController extends AdminController
 
         // 转换componentList结构
         $tempComponentList = array();
-        if ($tempComponent['style'] == AppbymeUIDiyModel::COMPONENT_STYLE_LAYOUT_NEWS_AUTO && 
-            count($tempComponent['componentList']) > 0 &&
-            $tempComponent['componentList'][0]['type'] == AppbymeUIDiyModel::COMPONENT_TYPE_NEWSLIST) {
-            $newslist = WebUtils::httpRequestAppAPI('portal/newslist', array('moduleId' => $tempComponent['componentList'][0]['extParams']['newsModuleId']));
-            if ($newslist = WebUtils::jsonDecode($newslist)) {
-                foreach ($newslist['list'] as $key => $value) {
-                    $tempParam = array(
-                        'title' => $value['title'],
-                        'desc' => $value['summary'],
-                        'icon' => $value['pic_path'],
-                    );
-                    if ($value['source_type'] == 'topic') {
-                        $tempParam = array_merge($tempParam, array(
-                            'type' => AppbymeUIDiyModel::COMPONENT_TYPE_POSTLIST,
-                            'extParams' => array('topicId' => $value['source_id']),
-                        ));
-                    } else if ($value['source_type'] == 'weblink') {
-                        $tempParam = array_merge($tempParam, array(
-                            'type' => AppbymeUIDiyModel::COMPONENT_TYPE_WEBAPP,
-                            'extParams' => array('redirect' => $value['redirectUrl']),
-                        ));
-                    } else if ($value['source_type'] == 'news') {
-                        $tempParam = array_merge($tempParam, array(
-                            'type' => AppbymeUIDiyModel::COMPONENT_TYPE_NEWSVIEW,
-                            'extParams' => array('articleId' => $value['source_id']),
-                        ));
-                    }
-                    $tempComponentList[] = array_merge(AppbymeUIDiyModel::initComponent(), $tempParam);
-                }
-            }
-        } else {
-            foreach ($component['componentList'] as $subComponent) {
-                if (!$subComponent['extParams']['isHidden']) {
-                    $tempComponentList[] = $this->_filterComponent($subComponent);
-                }
+        foreach ($component['componentList'] as $subComponent) {
+            if (!$subComponent['extParams']['isHidden']) {
+                $tempComponentList[] = $this->_filterComponent($subComponent);
             }
         }
         $tempComponent['componentList'] = $tempComponentList;
+        
         return $tempComponent;
+    }
+
+    private function _getTopicTypeSortInfos() {
+        $infos = array();
+
+        $fields = DbUtils::getDzDbUtils(true)->queryAll('
+            SELECT fid, threadtypes, threadsorts
+            FROM %t
+            WHERE fid IN (%n)
+            ',
+            array('forum_forumfield', DzForumForum::getFids())
+        );
+        foreach ($fields as $field) {
+            if (!empty($field)) {
+                $info = array('fid' => (int)$field['fid'], 'types' => array(), 'sorts' => array());
+
+                $types = unserialize($field['threadtypes']);
+                if (!empty($types['types'])) {
+                    foreach ($types['types'] as $key => $value) {
+                        // 控制管理组专用
+                        // if ($types['moderators'][$key] == 1) {
+                            // continue;
+                        // }
+                        $info['types'][] = array(
+                            'id' => $key,
+                            'title' => WebUtils::emptyHtml($value),
+                        );
+                    }
+                }
+                $sorts = unserialize($field['threadsorts']);
+                if (!empty($sorts['types'])) {
+                    foreach ($sorts['types'] as $key => $value) {
+                        $info['sorts'][] = array(
+                            'id' => $key,
+                            'title' => WebUtils::emptyHtml($value),
+                        );
+                    }
+                }
+
+                $infos[$info['fid']] = $info;
+            }
+        }
+        return $infos;
     }
 
     /**
@@ -477,12 +490,11 @@ class UIDiyController extends AdminController
         self::makeResponse(1, '图片删除成功！');
     }
 
-    public static function makeResponse ($errCode=1, $errMsg='') {
+    public static function makeResponse($errCode=1, $errMsg='') {
         $res = WebUtils::initWebApiResult();
         $res['errCode'] = $errCode;
         $res['errMsg'] = $errMsg;
         $res['data'] = array();
         WebUtils::outputWebApi($res, 'utf-8', true);
     }
-
 }

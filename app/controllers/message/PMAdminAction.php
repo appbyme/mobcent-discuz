@@ -13,6 +13,10 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
 class PMAdminAction extends MobcentAction {
 
+    const ACTION_SEND = 'send';
+    const ACTION_DELPLID = 'delplid';
+    const ACTION_DELPMID = 'delpmid';
+
     public function run($json) {
         $res = $this->initWebApiArray();
 
@@ -24,15 +28,67 @@ class PMAdminAction extends MobcentAction {
         !isset($json['plid']) && $json['plid'] = 0;
         !isset($json['pmid']) && $json['pmid'] = 0;
 
-        switch ($json['action']) {
-            case 'send': $res = $this->_pmSend($res, $json); break;
-            default: $res = $this->makeErrorInfo($res, 'mobcent_error_params'); break;
-        }
+        $res = $this->_pmAdmin($res, $json);
 
         echo WebUtils::outputWebApi($res, '', false);
     }
 
+    private function _pmAdmin($res, $data) {
+        require_once libfile('function/spacecp');
+        // require_once libfile('function/magic');
+
+        loaducenter();
+
+        // 在DISCUZ_ROOT/source/include/spacecp/spacecp_pm.php基础上二次开发
+        switch ($data['action']) {
+            case self::ACTION_SEND: $res = $this->_pmSend($res, $data); break;
+            case self::ACTION_DELPLID: $res = $this->_pmDel($res, $data, 1); break;
+            case self::ACTION_DELPMID: $res = $this->_pmDel($res, $data); break;
+            default: $res = $this->makeErrorInfo($res, 'mobcent_error_params'); break;
+        }
+
+        return $res;
+    }
+
+    private function _pmDel($res, $data, $isPlid=0) {
+        global $_G;
+
+        $delpmid = (int)$data['pmid'];
+        $delplid = (int)$data['plid'];
+
+        if(empty($delpmid) && empty($delplid)) {
+            return $this->makeErrorInfo($res, lang('message', 'delete_pm_error_option'));
+        }
+
+        $flag = true;
+
+        if(!empty($delpmid) && !$isPlid) {
+            $return = uc_pm_delete($_G['uid'], 'inbox', $delpmid);
+            if($return <= 0) {
+                $flag = false;
+            }
+        }
+
+        if(!empty($delplid) && $isPlid) {
+            $delplid = array($delplid);
+            $return = uc_pm_deletechat($_G['uid'], $delplid, 1);
+            if(!$return) {
+                $flag = false;
+            }
+        }
+
+        if($flag) {
+            return $this->makeErrorInfo($res, lang('message', 'delete_pm_success'), array('noError' => 1));
+        } else {
+            return $this->makeErrorInfo($res, lang('message', 'this_message_could_note_be_option'));
+        }
+
+        return $res;
+    }
+
     private function _pmSend($res, $data) {
+        global $_G;
+
         $touid = (int)$data['toUid'];
         $pmid = (int)$data['pmid'];
         $_GET['topmuid'] = $touid;
@@ -41,14 +97,6 @@ class PMAdminAction extends MobcentAction {
         $users = array();
         $type = 0;
 
-        global $_G;
-
-        require_once libfile('function/spacecp');
-        // require_once libfile('function/magic');
-
-        loaducenter();
-
-        // 在DISCUZ_ROOT/source/include/spacecp/spacecp_pm.php基础上二次开发
         $waittime = interval_check('post');
         if ($waittime > 0) {
             // showmessage('message_can_not_send_2', '', array(), array('return' => true));

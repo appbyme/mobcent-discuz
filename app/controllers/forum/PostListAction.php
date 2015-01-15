@@ -538,27 +538,27 @@ class PostListAction extends MobcentAction {
     private function _filterContent($content) {
         $typeMaps = array('text' => 0, 'image' => 1, 'video' => 2, 'audio' => 3, 'url' => 4, 'attachment' => 5,);
         $newContent = array();
-        foreach ($content as $key => $value) {
-            $newContent[$key]['infor'] = $value['content'];
-            $newContent[$key]['type'] = $typeMaps[$value['type']];
+        foreach ($content as $value) {
+            $tempContent['infor'] = $value['content'];
+            $tempContent['type'] = $typeMaps[$value['type']];
             switch ($value['type']) {
                 case 'image':
-                    $newContent[$key]['originalInfo'] = $value['content'];
-                    $newContent[$key]['aid'] = isset($value['extraInfo']['aid']) ? $value['extraInfo']['aid'] : 0;
-                    $newContent[$key]['infor'] = ImageUtils::getThumbImage($value['content']);
+                    $tempContent['originalInfo'] = $value['content'];
+                    $tempContent['aid'] = isset($value['extraInfo']['aid']) ? $value['extraInfo']['aid'] : 0;
+                    $tempContent['infor'] = ImageUtils::getThumbImage($value['content']);
                     break;
                 case 'url':
-                    $newContent[$key]['infor'] = $value['content'];
-                    $newContent[$key]['url'] = $value['extraInfo']['url'];
+                    $tempContent['infor'] = $value['content'];
+                    $tempContent['url'] = $value['extraInfo']['url'];
                     break;
                 case 'attachment':
-                    $newContent[$key]['infor'] = $value['content'];
-                    $newContent[$key]['url'] = $value['extraInfo']['url'];
-                    $newContent[$key]['desc'] = $value['extraInfo']['desc'];
+                    $tempContent['infor'] = $value['content'];
+                    $tempContent['url'] = $value['extraInfo']['url'];
+                    $tempContent['desc'] = $value['extraInfo']['desc'];
                     break;
                 case 'video':
                     $videoInfo = ForumUtils::parseVideoUrl($value['content']);
-                    $newContent[$key]['extParams'] = array(
+                    $tempContent['extParams'] = array(
                         'videoType' => $videoInfo['type'],
                         'videoId' => $videoInfo['vid'],
                     );
@@ -566,6 +566,12 @@ class PostListAction extends MobcentAction {
                 default:
                     break;
             }
+            // 判定是否开启附件下载
+            if (!WebUtils::getDzPluginAppbymeAppConfig('forum_allow_attachment') && $tempContent['type'] == 5) {
+                $tempContent = array();
+            }
+
+            !empty($tempContent) && $newContent[] = $tempContent;
         }
         return $newContent;
     }

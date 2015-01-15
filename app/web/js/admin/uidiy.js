@@ -103,16 +103,23 @@ $(function () {
             // isShowForumTwoCols = $(form['isShowForumTwoCols[]']),
             // pageTitle = $(form['pageTitle[]']),
             newsModuleId = $(form['newsModuleId[]']),
-            forumId = componentType == COMPONENT_TYPE_TOPICLIST ? $(form['topicForumId[]']) : $(form['topicSimpleForumId[]']),
             moduleId = $(form['moduleId[]']),
             topicId = $(form['topicId[]']),
             articleId = $(form['articleId[]']),
+            topicForumId = $(form['topicForumId[]']),
+            topicSimpleForumId = $(form['topicSimpleForumId[]']),
             fastpostForumIds = $(form['fastpostForumIds[]']),
             isShowTopicTitle = $(form['isShowTopicTitle[]']),
             // isShowTopicSort = $(form['isShowTopicSort[]']),
             isShowMessagelist = $(form['isShowMessagelist[]']),
+            topicSimpleOrderby = $(form['topicSimpleOrderby[]']),
+            topicSimpleTopOrder = $(form['topicSimpleTopOrder[]']),
+            topicSimpleTypeId = $(form['topicSimpleTypeId[]']),
             userlistFilter = $(form['userlistFilter[]']),
             userlistOrderby = $(form['userlistOrderby[]']),
+            listTitleLength = $(form['listTitleLength[]']),
+            listSummaryLength = $(form['listSummaryLength[]']),
+            listImagePosition = $(form['listImagePosition[]']),
             componentRedirect = $(form['componentRedirect[]']),
             componentStyle = $(form['componentStyle[]']);
         
@@ -125,25 +132,48 @@ $(function () {
             }
             var type = componentType[i].value,
                 filter = type == COMPONENT_TYPE_USERLIST ? userlistFilter[i].value : '',
-                orderby = type == COMPONENT_TYPE_USERLIST ? userlistOrderby[i].value : '',
-                
-                extParams = {
+                orderby = '',
+                forumId = parseInt(type == COMPONENT_TYPE_TOPICLIST ? topicForumId[i].value : topicSimpleForumId[i].value),
+                dataId = 0;
+
+            switch (type) {
+                case COMPONENT_TYPE_TOPICLIST: 
+                    dataId = parseInt(topicForumId[i].value);
+                    break;
+                case COMPONENT_TYPE_TOPICLIST_SIMPLE:
+                    dataId = parseInt(topicSimpleForumId[i].value);
+                    orderby = topicSimpleOrderby[i].value; 
+                    break;
+                case COMPONENT_TYPE_USERLIST: 
+                    orderby = userlistOrderby[i].value; 
+                    break;
+                default: 
+                    break;
+            }
+
+            var extParams = {
+                dataId: dataId,
                 titlePosition: COMPONENT_TITLE_POSITION_LEFT,
                 // isShowForumIcon: isShowForumIcon[i].checked ? 1 : 0,
                 // isShowForumTwoCols: isShowForumTwoCols[i].checked ? 1 : 0,
                 // pageTitle: pageTitle[i].value,
                 newsModuleId: parseInt(newsModuleId[i].value),
-                forumId: parseInt(forumId[i].value),
-                moduleId: parseInt(moduleId[i].value),
+                forumId: forumId,
+                moduleId: parseInt(moduleId[i].value) || 0,
                 topicId: parseInt(topicId[i].value) || 0,
                 articleId: parseInt(articleId[i].value) || 0,
                 fastpostForumIds: tempForumIds,
                 isShowTopicTitle: isShowTopicTitle[i].checked ? 1 : 0,
                 // isShowTopicSort: isShowTopicSort[i].checked ? 1 : 0,
                 isShowMessagelist: isShowMessagelist[i].checked ? 1 : 0,
+                filterId: parseInt(topicSimpleTypeId[i].value) || 0,
                 filter: filter,
                 orderby: orderby,
+                order: parseInt(topicSimpleTopOrder[i].value), 
                 redirect: componentRedirect[i].value,
+                listTitleLength: parseInt(listTitleLength[i].value) || 10, 
+                listSummaryLength: parseInt(listSummaryLength[i].value) || 40, 
+                listImagePosition: parseInt(listImagePosition[i].value) || IMAGE_POSITION_LEFT, 
             };
 
             var model = new ComponentModel({
@@ -329,6 +359,7 @@ $(function () {
             'click .upload-component-icon-btn': 'uploadIcon',
             'change .componentIconFile': 'onChangeComponentIcon',
             'change .componentIconStyle': 'onChangeComponentIconStyle',
+            'change .topicSimpleForumSelect': 'onChangeTopicSimpleForum',
         },
         initialize: function(options) {
             this.initUIConfig();
@@ -350,6 +381,7 @@ $(function () {
                 isShow_typeEmpty: 0,
                 isShow_typeForumlist: 1,
                 isShow_typeNewslist: 1,
+                isShow_typeTopiclist: 1,
                 isShow_typeTopiclistSimple: 1,
                 isShow_typeWebapp: 1,
                 isShow_typeSetting: 1,
@@ -374,6 +406,8 @@ $(function () {
         render: function () {
             this.$el.html(this.template(this.model.attributes));
             this.changeStyleUIByType(this.model.attributes.type);
+            this.toggleExtConfigDiv(this.model.attributes.type);
+            this.changeTopicSimpleForum();
             return this;
         },
         // 选择可选的页面样式
@@ -390,18 +424,26 @@ $(function () {
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_CARD+']').show();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_1+']').hide();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_2+']').hide();
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_TIEBA+']').hide();
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_HEADLINES+']').hide();
                     
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE+']').hide();
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_2+']').hide();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_BIG+']').hide();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').hide();
 
                     if (type == COMPONENT_TYPE_NEWSLIST) {
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE+']').show();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_2+']').show();
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_BIG+']').show();
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').show();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_TIEBA+']').show();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_HEADLINES+']').show();
                     }
                     if (type == COMPONENT_TYPE_TOPICLIST || type == COMPONENT_TYPE_TOPICLIST_SIMPLE) {
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').show();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_TIEBA+']').show();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_HEADLINES+']').show();
                     }
 
                     if (type == COMPONENT_TYPE_USERINFO) {
@@ -434,6 +476,7 @@ $(function () {
             var type = $(event.currentTarget).val();
             
             this.changeStyleUIByType(type, true);
+            this.toggleExtConfigDiv(type);
 
             if (type == COMPONENT_TYPE_FASTTEXT || type == COMPONENT_TYPE_FASTIMAGE || type == COMPONENT_TYPE_FASTCAMERA || type == COMPONENT_TYPE_FASTAUDIO) {
                 type = 'fastpost';
@@ -452,6 +495,22 @@ $(function () {
         onChangeComponentIconStyle: function (event) {
             var ratio = event.currentTarget.value == COMPONENT_ICON_STYLE_CIRCLE ? this.uiconfig.iconRatioCircle : this.uiconfig.iconRatio;
             this.$el.find('.componentIconRatio').text(ratio);
+        },
+        onChangeTopicSimpleForum: function (event) {
+            this.changeTopicSimpleForum(true);
+        },
+        changeTopicSimpleForum: function (isInitSelect) {
+            this.$el.find('.divTopicType').hide();
+            this.$el.find('.divTopicTypeFid-'+this.$el.find('.topicSimpleForumSelect').val()).show();
+            if (isInitSelect) {
+                this.$el.find('.topicSimpleTopicTypeSelect option')[0].selected = true;
+            }
+        },
+        toggleExtConfigDiv: function (type) {
+            this.$el.find('.list-ext-config-div').hide();
+            if (type == COMPONENT_TYPE_NEWSLIST || type == COMPONENT_TYPE_TOPICLIST || type == COMPONENT_TYPE_TOPICLIST_SIMPLE) {
+                this.$el.find('.list-ext-config-div').show();
+            }
         },
         uploadIcon: function () {
             var data = new FormData();
@@ -510,7 +569,6 @@ $(function () {
 
     var createComponentViewSubnav = function(model) {
         return new ComponentView({model: model, uiconfig: {
-            isShow_typeModuleRef: 0,
             isShow_typePostlist: 0,
             isShow_typeNewsview: 0,
             isShow_typeMessagelist: 0,
@@ -550,6 +608,7 @@ $(function () {
             isShow_typeEmpty: 1,
             isShow_typeForumlist: 0,
             isShow_typeNewslist: 0,
+            isShow_typeTopiclist: 0,
             isShow_typeTopiclistSimple: 0,
             isShow_typeWebapp: 0,
             isShow_typeSetting: 0,
@@ -746,6 +805,7 @@ $(function () {
             this.uiconfig = {
                 isShow_layoutOneColHigh: 0,
                 isShow_layoutOneColLow: 0,
+                isShow_layoutOneColLowFixed: 0,
                 isShow_layoutTwoColText: 0,
                 isShow_layoutTwoColHigh: 0,
                 isShow_layoutTwoColMid: 0,
@@ -790,6 +850,7 @@ $(function () {
                 case COMPONENT_STYLE_LAYOUT_IMAGE:
                     this.uiconfig.isShow_layoutOneColHigh = 1;
                     this.uiconfig.isShow_layoutOneColLow = 1;
+                    this.uiconfig.isShow_layoutOneColLowFixed = 1;
                     this.uiconfig.isShow_layoutThreeColText = 1;
                     this.uiconfig.isShow_layoutThreeColMid = 1;
                     this.uiconfig.isShow_layoutOneColOneRow = 1;
@@ -863,6 +924,7 @@ $(function () {
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH:
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_MID:
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_LOW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_LOW_FIXED:
                     case COMPONENT_STYLE_LAYOUT_NEWS_AUTO:
                         size = 1;
                         break;
@@ -925,6 +987,7 @@ $(function () {
                 switch (layoutStyle) {
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH:
                     case COMPONENT_STYLE_LAYOUT_ONE_COL_LOW:
+                    case COMPONENT_STYLE_LAYOUT_ONE_COL_LOW_FIXED:
                         uiconfig.isShow_iconStyleImage = 1;
                         uiconfig.isShow_iconStyleTextImage = 1;
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
