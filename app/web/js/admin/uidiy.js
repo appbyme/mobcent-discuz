@@ -120,6 +120,8 @@ $(function () {
             listTitleLength = $(form['listTitleLength[]']),
             listSummaryLength = $(form['listSummaryLength[]']),
             listImagePosition = $(form['listImagePosition[]']),
+            forumTopiclistStyle = $(form['forumTopiclistStyle[]']),
+            forumPostlistStyle = $(form['forumPostlistStyle[]']),
             componentRedirect = $(form['componentRedirect[]']),
             componentStyle = $(form['componentStyle[]']);
         
@@ -173,7 +175,9 @@ $(function () {
                 redirect: componentRedirect[i].value,
                 listTitleLength: parseInt(listTitleLength[i].value) || 10, 
                 listSummaryLength: parseInt(listSummaryLength[i].value) || 40, 
-                listImagePosition: parseInt(listImagePosition[i].value) || IMAGE_POSITION_LEFT, 
+                listImagePosition: parseInt(listImagePosition[i].value) || IMAGE_POSITION_LEFT,
+                forumTopiclistStyle: forumTopiclistStyle[i].value,
+                forumPostlistStyle: forumPostlistStyle[i].value,
             };
 
             var model = new ComponentModel({
@@ -426,6 +430,7 @@ $(function () {
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_2+']').hide();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_TIEBA+']').hide();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_HEADLINES+']').hide();
+                    $styleSelectDiv.find('[value='+COMPONENT_STYLE_NETEASE_NEWS+']').hide();
                     
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE+']').hide();
                     $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_2+']').hide();
@@ -438,12 +443,14 @@ $(function () {
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_BIG+']').show();
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').show();
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_TIEBA+']').show();
-                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_HEADLINES+']').show();
+                        // $styleSelectDiv.find('[value='+COMPONENT_STYLE_HEADLINES+']').show();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_NETEASE_NEWS+']').show();
                     }
                     if (type == COMPONENT_TYPE_TOPICLIST || type == COMPONENT_TYPE_TOPICLIST_SIMPLE) {
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_IMAGE_SUDOKU+']').show();
                         $styleSelectDiv.find('[value='+COMPONENT_STYLE_TIEBA+']').show();
-                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_HEADLINES+']').show();
+                        // $styleSelectDiv.find('[value='+COMPONENT_STYLE_HEADLINES+']').show();
+                        $styleSelectDiv.find('[value='+COMPONENT_STYLE_NETEASE_NEWS+']').show();
                     }
 
                     if (type == COMPONENT_TYPE_USERINFO) {

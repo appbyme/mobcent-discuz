@@ -79,6 +79,7 @@ class AppbymeUIDiyModel extends DiscuzAR
     const COMPONENT_STYLE_CARD = 'card';
     const COMPONENT_STYLE_TIEBA = 'tieba';
     const COMPONENT_STYLE_HEADLINES = 'headlines';
+    const COMPONENT_STYLE_NETEASE_NEWS = 'neteaseNews';
     const COMPONENT_STYLE_IMAGE = 'image';
     const COMPONENT_STYLE_IMAGE_2 = 'image2';
     const COMPONENT_STYLE_IMAGE_BIG = 'imageBig';
@@ -449,6 +450,8 @@ class AppbymeUIDiyModel extends DiscuzAR
                 'listTitleLength' => 10,
                 'listSummaryLength' => 40,
                 'listImagePosition' => self::IMAGE_POSITION_LEFT,
+                'forumTopiclistStyle' => self::COMPONENT_STYLE_FLAT,
+                'forumPostlistStyle' => self::COMPONENT_STYLE_FLAT,
             ),
         ), $params);
     }

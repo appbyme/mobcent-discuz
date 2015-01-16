@@ -634,6 +634,27 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 </div>
             </div>
         --> 
+            <div class="form-group">
+                <label class="col-sm-2 control-label">帖子列表页面样式: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="forumTopiclistStyle[]">
+                        <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
+                        <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
+                        <option value="<%= COMPONENT_STYLE_TIEBA %>" <%= style == COMPONENT_STYLE_TIEBA ? 'selected' : '' %>>类贴吧样式</option>
+                        <option value="<%= COMPONENT_STYLE_NETEASE_NEWS %>" <%= style == COMPONENT_STYLE_NETEASE_NEWS ? 'selected' : '' %>>类网易新闻样式</option>
+                        <option value="<%= COMPONENT_STYLE_IMAGE_SUDOKU %>" <%= style == COMPONENT_STYLE_IMAGE_SUDOKU ? 'selected' : '' %>>类朋友圈样式</option>
+                    </select> 
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">帖子详情页面样式: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="forumPostlistStyle[]">
+                        <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
+                        <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
+                    </select> 
+                </div>
+            </div>
         </div>
         <div id="component-view-<% print(COMPONENT_TYPE_NEWSLIST+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_NEWSLIST ? '' : 'hidden' %>">
             <div class="form-group">
@@ -860,8 +881,11 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <select class="form-control" name="componentStyle[]">
                     <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
                     <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
-                    <option value="<%= COMPONENT_STYLE_TIEBA %>" <%= style == COMPONENT_STYLE_TIEBA ? 'selected' : '' %>>贴吧样式</option>
-                    <option value="<%= COMPONENT_STYLE_HEADLINES %>" <%= style == COMPONENT_STYLE_HEADLINES ? 'selected' : '' %>>今日头条样式</option>
+                    <option value="<%= COMPONENT_STYLE_TIEBA %>" <%= style == COMPONENT_STYLE_TIEBA ? 'selected' : '' %>>类贴吧样式</option>
+                    <!--
+                    <option value="<%= COMPONENT_STYLE_HEADLINES %>" <%= style == COMPONENT_STYLE_HEADLINES ? 'selected' : '' %>>类今日头条样式</option>
+                    -->
+                    <option value="<%= COMPONENT_STYLE_NETEASE_NEWS %>" <%= style == COMPONENT_STYLE_NETEASE_NEWS ? 'selected' : '' %>>类网易新闻样式</option>
                     <option value="<%= COMPONENT_STYLE_IMAGE %>" <%= style == COMPONENT_STYLE_IMAGE ? 'selected' : '' %>>图片样式1</option>
                     <option value="<%= COMPONENT_STYLE_IMAGE_2 %>" <%= style == COMPONENT_STYLE_IMAGE_2 ? 'selected' : '' %>>图片样式2</option>
                     <option value="<%= COMPONENT_STYLE_IMAGE_BIG %>" <%= style == COMPONENT_STYLE_IMAGE_BIG ? 'selected' : '' %>>大图样式</option>
