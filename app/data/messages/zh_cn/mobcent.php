@@ -111,6 +111,10 @@ return array(
     'no_privilege_sendpm' => WebUtils::t('02000010:抱歉，您目前没有权限发短消息'),
     'mobcent_save_album_success' => WebUtils::t('02000011:保存相册信息成功'),
     'mobcent_no_privilege_postimage' => WebUtils::t('02000012:您目前没有权限上传图片,或者没有开启相册。'),
+    'update_date_success' => WebUtils::t('02000013:资料更新成功'),
+    'check_date_item' => WebUtils::t('02000014:请检查该资料项:'),
+    'profile_censor' => WebUtils::t('02000015:含有敏感词汇'),
+    
 
     'follow_not_follow_self' => WebUtils::t('02000020:不能关注自己'),
     'follow_other_unfollow' => WebUtils::t('02000021:对方不允许您关注TA'),

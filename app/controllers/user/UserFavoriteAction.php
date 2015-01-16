@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 用户收藏帖子、取消收藏接口
+ * 用户收藏帖子、版块,取消收藏接口
  *
  * @author 徐少伟 <xushaowei@mobcent.com>
  * @copyright 2012-2014 Appbyme
@@ -30,7 +30,7 @@ class UserFavoriteAction extends MobcentAction {
         return $res;
     }
 
-    private function _userFavoriteSetting($res, $tid, $idType) {
+    private function _userFavoriteSetting($res, $id, $idType) {
         global $_G;
         $uid = $_G['uid'];
 
@@ -44,38 +44,43 @@ class UserFavoriteAction extends MobcentAction {
         switch($idType) {
             case 'tid':
                 $idType = 'tid';
-                $thread = C::t('forum_thread')->fetch($tid);
+                $thread = C::t('forum_thread')->fetch($id);
                 $title = $thread['subject'];
                 break;
-            case 'forum':
+            case 'fid':
                 $idType = 'fid';
-                $foruminfo = C::t('forum_forum')->fetch($tid);
-                $title = $foruminfo['status'] != 3 ? $foruminfo['name'] : '';
+                $foruminfo = C::t('forum_forum')->fetch($id);
+                loadcache('forums');
+                $forum = $_G['cache']['forums'][$id];
+                if(!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) {
+                    $title = $foruminfo['status'] != 3 ? $foruminfo['name'] : '';
+                    // $icon = '<img src="static/image/feed/discuz.gif" alt="forum" class="vm" /> ';
+                }
                 break;
             case 'blog':
                 $idType = 'blogid';
-                $bloginfo = C::t('home_blog')->fetch($tid);
+                $bloginfo = C::t('home_blog')->fetch($id);
                 $title = ($bloginfo['uid'] == $spaceuid) ? $bloginfo['subject'] : '';
                 break;
             case 'group':
                 $idType = 'gid';
-                $foruminfo = C::t('forum_forum')->fetch($tid);
+                $foruminfo = C::t('forum_forum')->fetch($id);
                 $title = $foruminfo['status'] == 3 ? $foruminfo['name'] : '';
                 break;
             case 'album':
                 $idType = 'albumid';
-                $result = C::t('home_album')->fetch($tid, $spaceuid);
+                $result = C::t('home_album')->fetch($id, $spaceuid);
                 $title = $result['albumname'];
                 break;
             case 'space':
                 $idType = 'uid';
-                $_member = getuserbyuid($tid);
+                $_member = getuserbyuid($id);
                 $title = $_member['username'];
                 $unset($_member);
                 break;
             case 'article':
                 $idType = 'aid';
-                $article = C::t('portal_article_title')->fetch($tid);
+                $article = C::t('portal_article_title')->fetch($id);
                 $title = $article['title'];
                 break;
             default:
@@ -85,20 +90,20 @@ class UserFavoriteAction extends MobcentAction {
         if(empty($title)) {
             return $this->makeErrorInfo($res, 'favorite_cannot_favorite');
         } else {
-            $fav = C::t('home_favorite')->fetch_by_id_idtype($tid, $idType, $uid);
+            $fav = C::t('home_favorite')->fetch_by_id_idtype($id, $idType, $uid);
             if($fav) {
                 $res = $this->makeErrorInfo($res, 'favorite_repeat');
             } else {
                 $description = '';
                 $description_show = nl2br($description);
 
-                $fav_count = C::t('home_favorite')->count_by_id_idtype($tid, $idType);
+                $fav_count = C::t('home_favorite')->count_by_id_idtype($id, $idType);
                 require_once libfile('function/home');
                 $description = WebUtils::t('用手机客户端收藏');
                 $arr = array(
                     'uid' => intval($uid),
                     'idtype' => $idType,
-                    'id' => $tid,
+                    'id' => $id,
                     'spaceuid' => $thread['authorid'],
                     'title' => getstr($title, 255),
                     'description' => getstr($description, '', 0, 0, 1),
@@ -112,19 +117,20 @@ class UserFavoriteAction extends MobcentAction {
 
                 switch($idType) {
                     case 'tid':
-                        C::t('forum_thread')->increase($tid, array('favtimes'=>1));
+                        C::t('forum_thread')->increase($id, array('favtimes'=>1));
                         require_once libfile('function/forum');
-                        update_threadpartake($tid);
+                        update_threadpartake($id);
                         break;
-                    case 'forum':
-                        C::t('forum_forum')->update_forum_counter($tid, 0, 0, 0, 0, 1);
+                    case 'fid': 
+                        C::t('forum_forum')->update_forum_counter($id, 0, 0, 0, 0, 1);
+                        // $extrajs = '<script type="text/javascript">$("number_favorite_num").innerHTML = parseInt($("number_favorite_num").innerHTML)+1;$("number_favorite").style.display="";</script>';
                         dsetcookie('nofavfid', '', -1);
                         break;
-                    case 'blog':C::t('home_blog')->increase($tid, $spaceuid, array('favtimes' => 1)); break;
-                    case 'group':C::t('forum_forum')->update_forum_counter($tid, 0, 0, 0, 0, 1);break;
-                    case 'album':C::t('home_album')->update_num_by_albumid($tid, 1, 'favtimes', $spaceuid);break;
-                    case 'space':C::t('common_member_status')->increase($tid, array('favtimes' => 1));break;
-                    case 'article':C::t('portal_article_count')->increase($tid, array('favtimes' => 1));break;
+                    case 'blog':C::t('home_blog')->increase($id, $spaceuid, array('favtimes' => 1)); break;
+                    case 'group':C::t('forum_forum')->update_forum_counter($id, 0, 0, 0, 0, 1);break;
+                    case 'album':C::t('home_album')->update_num_by_albumid($id, 1, 'favtimes', $spaceuid);break;
+                    case 'space':C::t('common_member_status')->increase($id, array('favtimes' => 1));break;
+                    case 'article':C::t('portal_article_count')->increase($id, array('favtimes' => 1));break;
                     default:
                     break;
                 }
@@ -138,6 +144,11 @@ class UserFavoriteAction extends MobcentAction {
     private function _userUnFollowSetting($res, $topicId, $idType) {
         global $_G;
         $uid = $_G['uid'];
+        switch ($idType) {
+            case 'forum':$idType = 'fid';break;
+            default:
+            break;
+        }
 
         $setType = 'one';
         if($setType == 'all') {
@@ -155,6 +166,13 @@ class UserFavoriteAction extends MobcentAction {
             if(empty($thevalue) || $thevalue['uid'] != $_G['uid']) {
                 $res = $this->makeErrorInfo($res, 'favorite_does_not_exist');
             } else {
+                switch($thevalue['idtype']) {
+                case 'fid':
+                    C::t('forum_forum')->update_forum_counter($thevalue['id'], 0, 0, 0, 0, -1);
+                    break;
+                default:
+                    break;
+                }
                 C::t('home_favorite')->delete($favid);
                 if($_G['setting']['cloud_status']) {
                     $favoriteService = Cloud::loadClass('Service_Client_Favorite');
