@@ -37,7 +37,6 @@ class UserController extends MobcentController {
             'uploadavatarex' => 'application.controllers.user.UploadAvatarExAction',
             'savealbum' => 'application.controllers.user.SaveAlbumAction',            
             'userinfoadminview' => 'application.controllers.user.UserInfoAdminViewAction',
-            'recommendlist' => 'application.controllers.user.RecommendListAction',
         );
     }
 
@@ -68,7 +67,6 @@ class UserController extends MobcentController {
             'uploadavatarex' => true,
             'savealbum' => true,
             'userinfoadminview' => ture,
-            'recommendlist' => true,
         );
     }
 }
