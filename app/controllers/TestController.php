@@ -324,7 +324,7 @@ class TestController extends MobcentController {
                 'params' => array(),
             ),
             array(
-                'title' => 'api/user: user/saveavatar 上传头像',
+                'title' => 'api/user: user/saveavatar 保存头像',
                 'route' => 'user/saveavatar',
                 'params' => array('avatar' => ''),
             ),
