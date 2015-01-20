@@ -852,18 +852,22 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <div id="component-view-<% print(COMPONENT_TYPE_SIGN+'-'+id) %>" class="component-view-item <%= type == COMPONENT_TYPE_SIGN ? '' : 'hidden' %>">
         </div>
         <div class="list-ext-config-div">
-            <div class="form-group">
+            <div class="form-group" style="position:relative">
                 <label class="col-sm-2 control-label">主题标题长度: </label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control input-sm" name="listTitleLength[]" value="<%= extParams.listTitleLength %>">
                 </div>
+                <div class="mob-topic-len" style="position:absolute;top:7px;left:400px;color:red">0-255, 0代表没有主题标题长度</div>
             </div>
-            <div class="form-group">
+            <div class="mob-topic-len-left" style="">0-255, 0代表没有主题标题长度</div>
+            <div class="form-group" style="position:relative">
                 <label class="col-sm-2 control-label">主题摘要长度: </label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control input-sm" name="listSummaryLength[]" value="<%= extParams.listSummaryLength %>">
                 </div>
+                <div class="mob-topic-len" style="position:absolute;top:7px;left:400px;color:red">0-255, 0代表没有主题摘要长度</div>
             </div>
+            <div class="mob-topic-len-left" style="">0-255,0代表没有主题摘要长度</div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">主题图片位置: </label>
                 <div class="col-sm-10">

@@ -218,6 +218,7 @@ class SendAttachmentExAction extends MobcentAction {
      * @return mixed Value.
      */
     private function _uploadAttach($uid, $allowValue) {
+        global $_G;
         $fileExtension = FileUtils::getFileExtension($_FILES['uploadFile']['name'][$allowValue], 'jpg');
         $type = 'forum';
         $extid = 0;

@@ -511,6 +511,13 @@ class UserUtils {
         } else {
             $groupinfo['groupid'] = $ctlObj->setting['newusergroupid'];
         }
+
+        // 在插件中设置的用户组 date:2015.01.15
+        $registerGroup = WebUtils::getDzPluginAppbymeAppConfig('mobile_register_group');
+        if ($registerGroup) {
+            $groupinfo['groupid'] = $registerGroup;
+        }
+
         $usernamelen = dstrlen($username);
         if($usernamelen < 3) {
             return self::errorInfo(lang('message', 'profile_username_tooshort'));

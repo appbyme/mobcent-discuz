@@ -683,6 +683,24 @@ label {
     width: 99px;
 }
 
+/* 主题标题长度、主题摘要长度 */ 
+.mob-topic-len-left {
+    display: none;
+}
+.pic-text-pop .mob-topic-len-left, .add-comp-pop .mob-topic-len-left, .add-style-pop .mob-topic-len-left, .add-slide-pop .mob-topic-len-left,
+.play-add-plug .mob-topic-len-left
+{
+    padding-left: 60px;
+    color: red;
+    display: block;
+}
+
+.pic-text-pop .mob-topic-len, .add-comp-pop .mob-topic-len, .add-style-pop .mob-topic-len, .add-slide-pop .mob-topic-len,
+.play-add-plug .mob-topic-len
+{
+    display: none;
+}
+
 /*付费提示，wap页做的兼容性*/
 .mobcent-pay-info {padding-left:130px;}
 

@@ -13,7 +13,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 // Mobcent::setErrors();
 class TopicListAction extends MobcentAction {
 
-    public function run($boardId=0, $page=1, $pageSize=10, $sortby='all', $filterType='', $filterId=0, $isImageList=0) {
+    public function run($boardId=0, $page=1, $pageSize=10, $sortby='all', $filterType='', $filterId=0, $isImageList=0, $topOrder=0) {
         switch ($boardId) {
             case -1: $sortby = 'new'; $boardId = 0; break;
             case -2: $sortby = 'marrow'; $boardId = 0; break;
@@ -36,9 +36,9 @@ class TopicListAction extends MobcentAction {
         $fid = (int)$boardId;
 
         global $_G;
-        $key = CacheUtils::getTopicListKey(array($fid, $_G['groupid'], $page, $pageSize, $sort, $filterType, $filterId, $isImageList));
+        $key = CacheUtils::getTopicListKey(array($fid, $_G['groupid'], $page, $pageSize, $sort, $filterType, $filterId, $isImageList, $topOrder));
 
-        $this->runWithCache($key, array('fid' => $fid, 'page' => $page, 'pageSize' => $pageSize, 'sort' => $sort, 'filterType' => $filterType, 'filterId' => $filterId, 'isImageList' => $isImageList));
+        $this->runWithCache($key, array('fid' => $fid, 'page' => $page, 'pageSize' => $pageSize, 'sort' => $sort, 'filterType' => $filterType, 'filterId' => $filterId, 'isImageList' => $isImageList, 'topOrder' => $topOrder));
         // Mobcent::dumpSql();
     }
 
@@ -169,10 +169,13 @@ class TopicListAction extends MobcentAction {
         $hasAnnouncements = $fid != 0 && $page == 1;
         $res['anno_list'] =  !$hasAnnouncements ? array() : $this->_getAnnouncementList($sort);
 
-        $topicInfos = $this->_getTopicInfos($fid, $page, $pageSize, $sort, $filterType, $filterId, $isImageList);
+        $topicInfos = $this->_getTopicInfos($fid, $page, $pageSize, $sort, $filterType, $filterId, $isImageList, $topOrder);
         $list = $topicInfos['list'];
+        $topTopicList = $topicInfos['topTopicList'];
         $count = $topicInfos['count'];
 
+        $res['forumInfo'] = $this->_getBoardInfo($fid);
+        $res['topTopicList'] = $topTopicList;
         $res['list'] = $list;
         $res = array_merge($res, WebUtils::getWebApiArrayWithPage_oldVersion($page, $pageSize, $count));
         return $res;
@@ -215,15 +218,86 @@ class TopicListAction extends MobcentAction {
         return $list;
     }
 
-    private function _getTopicInfos($fid, $page, $pageSize, $sort, $filterType='', $filterId='', $isImageList='') {
+    private function _getTopicInfos($fid, $page, $pageSize, $sort, $filterType='', $filterId='', $isImageList='', $topOrder='') {
 
-        $infos = array('count' => 0, 'list' => array());
+        $infos = array('count' => 0, 'list' => array(), 'topTopicList' => array());
 
-        global $_G;
-        $forum = $_G['forum'];
+        // global $_G;
+        // $forum = $_G['forum'];
 
         $count = $this->_getTopicCount($fid, $sort, $filterType, $filterId);
         $topicList = $this->_getTopicList($fid, $page, $pageSize, $sort, $filterType, $filterId);
+
+        $topTopicList = $topTopicListTmp = $topList = array();
+        if ($page == 1 && $topOrder != 0) {
+            $status = $_GET['topOrder'];
+            $fids = array();
+            switch ($status) {
+                case DzForumThread::DISPLAY_ORDER_GLOBAL :
+                    $fids = ForumUtils::getForumShowFids();
+                    break;
+                case DzForumThread::DISPLAY_ORDER_GROUP :
+                    $fids = DzForumForum::getFidsByGid(DzForumForum::getGidByFid($fid));
+                    break;
+                case DzForumThread::DISPLAY_ORDER_FORUM :
+                    $fids = array($fid);
+                    break;
+                default:
+                    break;
+            }
+            $topTopicListTmp = DzForumThread::getByFidData($fids, 0, 3, array('topic_stick' => array($status)));
+            foreach ($topTopicListTmp as $top) {
+                $topList['id'] = (int)$top['tid'];
+                $topList['title'] = (string)$top['subject'];
+                $topTopicList[] = $topList;
+            }
+        }
+            // $topTopicList = $this->_getListField($topTopicList);
+
+        $list = $this->_getListField($topicList);
+
+        $infos['count'] = $count;
+        $infos['list'] = $list;
+        $infos['topTopicList'] = $topTopicList;
+        return $infos;
+    }
+
+    private function _getNewTopicPanel() {
+        return ForumUtils::getNewTopicPanel();
+    }
+
+    private function _getTopicCount($fid, $sort, $filterType, $filterId) {
+        return ForumUtils::getTopicCount($fid, $this->_transParams($sort, $filterType, $filterId));
+    }
+
+    private function _getTopicList($fid, $page, $pageSize, $sort, $filterType, $filterId) {
+        return ForumUtils::getTopicList($fid, $page, $pageSize, $this->_transParams($sort, $filterType, $filterId));
+    }
+
+    private function _transParams($sort, $filterType, $filterId) {
+        $sortMaps = array(
+            'publish' => 'new',
+            'essence' => 'marrow',
+            'top' => 'top',
+            'new' => 'new',
+            'marrow' => 'marrow',
+            'all' => 'all'
+        );
+        $params = array();
+        if ($filterType == 'sortid') {
+            $params['topic_sortid'] = $filterId;
+        } else if ($filterType == 'typeid'){
+            $params['topic_typeid'] = $filterId;
+        }
+        if (($sort != '' && isset($sortMaps[$sort]))) {
+            $params['sort'] = $sortMaps[$sort];
+        }
+        return  $params;
+    }
+
+    private function _getListField($topicList) {
+        global $_G;
+        $forum = $_G['forum'];
 
         $list = array();
         foreach($topicList as $topic) {
@@ -305,44 +379,24 @@ class TopicListAction extends MobcentAction {
             $topicInfo['isHasRecommendAdd'] = ForumUtils::isHasRecommendAdd($tid);
             $topicInfo['imageList'] = (array)$topicSummary['imageList'];
             $topicInfo['sourceWebUrl'] = (string)ForumUtils::getSourceWebUrl($tid, 'topic');
+            $tmpList = 
             $list[] = $topicInfo;
         }
-
-        $infos['count'] = $count;
-        $infos['list'] = $list;
-        return $infos;
+        return $list;
     }
 
-    private function _getNewTopicPanel() {
-        return ForumUtils::getNewTopicPanel();
+    private function _getBoardInfo($fid) {
+        global $_G;
+        $forum = $_G['forum'];
+
+        require_once libfile('function/forumlist');
+        $forumImage = get_forumimg($forum['icon']);
+        $forumImage = (string)WebUtils::getHttpFileName($forumImage);
+
+        $forumInfo = array();
+        $forumInfo['title'] = $fid != 0 ? (string)WebUtils::emptyHtml($forum['name']) : '';
+        $forumInfo['icon'] = (string)$forumImage;
+        return $forumInfo;
     }
 
-    private function _getTopicCount($fid, $sort, $filterType, $filterId) {
-        return ForumUtils::getTopicCount($fid, $this->_transParams($sort, $filterType, $filterId));
-    }
-
-    private function _getTopicList($fid, $page, $pageSize, $sort, $filterType, $filterId) {
-        return ForumUtils::getTopicList($fid, $page, $pageSize, $this->_transParams($sort, $filterType, $filterId));
-    }
-
-    private function _transParams($sort, $filterType, $filterId) {
-        $sortMaps = array(
-            'publish' => 'new',
-            'essence' => 'marrow',
-            'top' => 'top',
-            'new' => 'new',
-            'marrow' => 'marrow',
-            'all' => 'all'
-        );
-        $params = array();
-        if ($filterType == 'sortid') {
-            $params['topic_sortid'] = $filterId;
-        } else if ($filterType == 'typeid'){
-            $params['topic_typeid'] = $filterId;
-        }
-        if (($sort != '' && isset($sortMaps[$sort]))) {
-            $params['sort'] = $sortMaps[$sort];
-        }
-        return  $params;
-    }
 }
