@@ -90,6 +90,7 @@ class GetSettingAction extends MobcentAction {
         $plugin = array(
             'qqconnect' => $this->_isQQConnect(),
             'dsu_paulsign' => $this->_isDsuPaulsign(),
+            'wxconnect' => $this->_isWechatConnect(),
         );
         return $plugin;
     }
@@ -134,6 +135,10 @@ class GetSettingAction extends MobcentAction {
         return DzCommonPlugin::isDsuPaulsignAvailable() && $this->_isMobileAllowPaulsign() ? 1 : 0;
     }
 
+    private function _isWechatConnect() {
+        return $this->_isMobileAllowWechatlogin() ? 1 : 0;    
+    }
+    
     private function _isMobileAllowPaulsign() {
         $config = WebUtils::getDzPluginAppbymeAppConfig('mobile_allow_sign');
         return !($config !== false && $config == 0);
@@ -163,6 +168,11 @@ class GetSettingAction extends MobcentAction {
         return !($config !== false && $config == 0);
     }
 
+    private function _isMobileAllowWechatlogin() {
+        $config = WebUtils::getDzPluginAppbymeAppConfig('mobile_allow_wxlogin');
+        return !($config !== false && $config == 0);
+    }
+    
     private function _getUserSetting() {
         global $_G;
         $res = array(

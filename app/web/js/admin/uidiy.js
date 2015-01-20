@@ -1014,7 +1014,17 @@ $(function () {
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
                         uiconfig.isShow_iconStyleTextOverlapUpVideo = 1;
                         uiconfig.isShow_iconStyleTextOverlapDownVideo = 1;
-                        uiconfig.iconRatio = layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH ? '640*640' : '320*640';
+                        if (layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH) {
+                            uiconfig.iconRatio = '640*640';
+                        } else if (layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW) {
+                            uiconfig.iconRatio = '320*640';
+                        } else if (layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW_FIXED) {
+                            var iconRatioMap = {};
+                            iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = '54*320';
+                            iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = '60*320';
+                            iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = '70*320';
+                            uiconfig.iconRatio = iconRatioMap[style];
+                        }
                         break;
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH:
                         uiconfig.isShow_iconStyleImage = 1;
