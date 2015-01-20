@@ -120,6 +120,7 @@ $(function () {
             listTitleLength = $(form['listTitleLength[]']),
             listSummaryLength = $(form['listSummaryLength[]']),
             listImagePosition = $(form['listImagePosition[]']),
+            listDetailStyle = $(form['listDetailStyle[]']),
             forumTopiclistStyle = $(form['forumTopiclistStyle[]']),
             forumPostlistStyle = $(form['forumPostlistStyle[]']),
             componentRedirect = $(form['componentRedirect[]']),
@@ -133,21 +134,34 @@ $(function () {
                 tempForumIds.push(parseInt(options[j].value));
             }
             var type = componentType[i].value,
-                filter = type == COMPONENT_TYPE_USERLIST ? userlistFilter[i].value : '',
+                filter = '',
                 orderby = '',
                 forumId = parseInt(type == COMPONENT_TYPE_TOPICLIST ? topicForumId[i].value : topicSimpleForumId[i].value),
+                subListStyle = '',
+                subDetailViewStyle = '',
                 dataId = 0;
 
             switch (type) {
+                case COMPONENT_TYPE_FORUMLIST:
+                    subListStyle = forumTopiclistStyle[i].value;
+                    subDetailViewStyle = forumPostlistStyle[i].value;
+                    break;
+                case COMPONENT_TYPE_NEWSLIST:
+                    subDetailViewStyle = listDetailStyle[i].value;
+                    break;
                 case COMPONENT_TYPE_TOPICLIST: 
                     dataId = parseInt(topicForumId[i].value);
+                    subDetailViewStyle = listDetailStyle[i].value;
                     break;
                 case COMPONENT_TYPE_TOPICLIST_SIMPLE:
                     dataId = parseInt(topicSimpleForumId[i].value);
                     orderby = topicSimpleOrderby[i].value; 
+                    filter = 'typeid';
+                    subDetailViewStyle = listDetailStyle[i].value;
                     break;
                 case COMPONENT_TYPE_USERLIST: 
-                    orderby = userlistOrderby[i].value; 
+                    orderby = userlistOrderby[i].value;
+                    filter = userlistFilter[i].value;
                     break;
                 default: 
                     break;
@@ -176,8 +190,8 @@ $(function () {
                 listTitleLength: parseInt(listTitleLength[i].value) || 10, 
                 listSummaryLength: parseInt(listSummaryLength[i].value) || 40, 
                 listImagePosition: parseInt(listImagePosition[i].value) || IMAGE_POSITION_LEFT,
-                forumTopiclistStyle: forumTopiclistStyle[i].value,
-                forumPostlistStyle: forumPostlistStyle[i].value,
+                subListStyle: subListStyle,
+                subDetailViewStyle: subDetailViewStyle,
             };
 
             var model = new ComponentModel({
@@ -1000,7 +1014,17 @@ $(function () {
                         uiconfig.isShow_iconStyleTextOverlapDown = 1;
                         uiconfig.isShow_iconStyleTextOverlapUpVideo = 1;
                         uiconfig.isShow_iconStyleTextOverlapDownVideo = 1;
-                        uiconfig.iconRatio = layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH ? '640*640' : '320*640';
+                        if (layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_HIGH) {
+                            uiconfig.iconRatio = '640*640';
+                        } else if (layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW) {
+                            uiconfig.iconRatio = '320*640';
+                        } else if (layoutStyle == COMPONENT_STYLE_LAYOUT_ONE_COL_LOW_FIXED) {
+                            var iconRatioMap = {};
+                            iconRatioMap[COMPONENT_STYLE_LAYOUT_DEFAULT] = '54*320';
+                            iconRatioMap[COMPONENT_STYLE_LAYOUT_IMAGE] = '60*320';
+                            iconRatioMap[COMPONENT_STYLE_LAYOUT_LINE] = '70*320';
+                            uiconfig.iconRatio = iconRatioMap[style];
+                        }
                         break;
                     case COMPONENT_STYLE_LAYOUT_TWO_COL_HIGH:
                         uiconfig.isShow_iconStyleImage = 1;

@@ -449,9 +449,9 @@ class AppbymeUIDiyModel extends DiscuzAR
                 'redirect' => '',
                 'listTitleLength' => 10,
                 'listSummaryLength' => 40,
-                'listImagePosition' => self::IMAGE_POSITION_LEFT,
-                'forumTopiclistStyle' => self::COMPONENT_STYLE_FLAT,
-                'forumPostlistStyle' => self::COMPONENT_STYLE_FLAT,
+                'listImagePosition' => self::IMAGE_POSITION_RIGHT,
+                'subListStyle' => self::COMPONENT_STYLE_FLAT,
+                'subDetailViewStyle' => self::COMPONENT_STYLE_FLAT,
             ),
         ), $params);
     }

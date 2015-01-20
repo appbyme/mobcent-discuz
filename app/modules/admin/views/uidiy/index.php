@@ -638,11 +638,11 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <label class="col-sm-2 control-label">帖子列表页面样式: </label>
                 <div class="col-sm-10">
                     <select class="form-control" name="forumTopiclistStyle[]">
-                        <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
-                        <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
-                        <option value="<%= COMPONENT_STYLE_TIEBA %>" <%= style == COMPONENT_STYLE_TIEBA ? 'selected' : '' %>>类贴吧样式</option>
-                        <option value="<%= COMPONENT_STYLE_NETEASE_NEWS %>" <%= style == COMPONENT_STYLE_NETEASE_NEWS ? 'selected' : '' %>>类网易新闻样式</option>
-                        <option value="<%= COMPONENT_STYLE_IMAGE_SUDOKU %>" <%= style == COMPONENT_STYLE_IMAGE_SUDOKU ? 'selected' : '' %>>类朋友圈样式</option>
+                        <option value="<%= COMPONENT_STYLE_FLAT %>" <%= extParams.subListStyle == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
+                        <option value="<%= COMPONENT_STYLE_CARD %>" <%= extParams.subListStyle == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
+                        <option value="<%= COMPONENT_STYLE_TIEBA %>" <%= extParams.subListStyle == COMPONENT_STYLE_TIEBA ? 'selected' : '' %>>类贴吧样式</option>
+                        <option value="<%= COMPONENT_STYLE_NETEASE_NEWS %>" <%= extParams.subListStyle == COMPONENT_STYLE_NETEASE_NEWS ? 'selected' : '' %>>类网易新闻样式</option>
+                        <option value="<%= COMPONENT_STYLE_IMAGE_SUDOKU %>" <%= extParams.subListStyle == COMPONENT_STYLE_IMAGE_SUDOKU ? 'selected' : '' %>>类朋友圈样式</option>
                     </select> 
                 </div>
             </div>
@@ -650,8 +650,8 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                 <label class="col-sm-2 control-label">帖子详情页面样式: </label>
                 <div class="col-sm-10">
                     <select class="form-control" name="forumPostlistStyle[]">
-                        <option value="<%= COMPONENT_STYLE_FLAT %>" <%= style == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
-                        <option value="<%= COMPONENT_STYLE_CARD %>" <%= style == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
+                        <option value="<%= COMPONENT_STYLE_FLAT %>" <%= extParams.subDetailViewStyle == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
+                        <option value="<%= COMPONENT_STYLE_CARD %>" <%= extParams.subDetailViewStyle == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
                     </select> 
                 </div>
             </div>
@@ -873,7 +873,16 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         <option value="<%= IMAGE_POSITION_RIGHT %>" <%= extParams.listImagePosition == IMAGE_POSITION_RIGHT ? 'selected' : '' %>>右</option>
                     </select>
                 </div>
-            </div> 
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">详情页面样式: </label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="listDetailStyle[]">
+                        <option value="<%= COMPONENT_STYLE_FLAT %>" <%= extParams.subDetailViewStyle == COMPONENT_STYLE_FLAT ? 'selected' : '' %>>扁平样式</option>
+                        <option value="<%= COMPONENT_STYLE_CARD %>" <%= extParams.subDetailViewStyle == COMPONENT_STYLE_CARD ? 'selected' : '' %>>卡片样式</option>
+                    </select> 
+                </div>
+            </div>
         </div>
         <div class="form-group component-style-select-div <%= this.uiconfig.isShow_style ? '' : 'hidden' %>">
             <label for="" class="col-sm-2 control-label">页面样式: </label>
