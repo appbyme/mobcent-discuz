@@ -66,7 +66,7 @@ class UserController extends MobcentController {
             'useradminview' => true,          
             'uploadavatarex' => true,
             'savealbum' => true,
-            'userinfoadminview' => ture,
+            'userinfoadminview' => true,
         );
     }
 }

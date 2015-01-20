@@ -216,53 +216,68 @@ width:100%;
 overflow:auto; 
 word-break:break-all; 
 }
+textarea
+{
+width:100%;
+height:100%;
+}
 </style>
 
 </head>
 <body>
 <div class="zhiding">
     <form method="post" action="<?php echo $formUrl; ?>">
-    <table cellpadding="0" cellspacing="0" class="fwin" width="100%">
-        <tr>
-            <?php
-                $base = WebUtils::createUrl_oldVersion('user/userinfoadminview', array('act' => 'base'));
-                $contact = WebUtils::createUrl_oldVersion('user/userinfoadminview', array('act' => 'contact'));
-                $edu = WebUtils::createUrl_oldVersion('user/userinfoadminview', array('act' => 'edu'));
-                $work = WebUtils::createUrl_oldVersion('user/userinfoadminview', array('act' => 'work'));
-                $info = WebUtils::createUrl_oldVersion('user/userinfoadminview', array('act' => 'info'));
-            ?>
-            <select name="pageselect" onchange="self.location.href=options[selectedIndex].value" >
-                <option value="<?php echo $base;?>" <?php if ($action == "base") {echo "selected='selected'";}?>>基本资料</option>
-                <option value="<?php echo $contact;?>" <?php if ($action == "contact") {echo "selected='selected'";}?>>联系方式</option> 
-                <option value="<?php echo $edu;?>" <?php if ($action == "edu") {echo "selected='selected'";}?>>教育情况</option>
-                <option value="<?php echo $work;?>" <?php if ($action == "work") {echo "selected='selected'";}?>>工作情况</option>
-                <option value="<?php echo $info;?>" <?php if ($action == "info") {echo "selected='selected'";}?>>个人信息</option>
-            </select>
-        </tr>
-        <tr>
-            <table cellspacing="5" cellpadding="0" width="100%">
-                <?php if(is_array($settings)) foreach($settings as $key => $value) { if($value['available']) { ?>
-                <tr id="tr_<?php echo $key;?>">
-                    <th align="left" id="th_<?php echo $key;?>">
-                        <?php if($value['required']) { ?><span class="rq" title="必填">*</span><?php } ?><?php echo $value['title'];?>
-                    </th>
-                    <td class="hasd" id="td_<?php echo $key;?>">
-                        <?php echo $htmls[$key];?>
-                    </td>
-                    <?php } }?>
-                </tr>
-            </table>
-        </tr>
-        <tr>
-            <th>
-                <p style="text-align:center">
-                    <input type="hidden" name="profilesubmit" value="true">
-                    <button type="submit" name="profilesubmitbtn" id="profilesubmitbtn" value="true" class="pn pnc"><strong>保存</strong></button>
-                    <span id="submit_result" class="rq"></span>
-                </p>
-            </th>
-        </tr>
-    </table>
+        <table cellpadding="0" cellspacing="0" class="fwin" width="100%">
+            <tr>
+                <?php
+                    $base = WebUtils::createUrl_oldVersion('user/userinfoadminview', array('act' => 'base'));
+                    $contact = WebUtils::createUrl_oldVersion('user/userinfoadminview', array('act' => 'contact'));
+                    $edu = WebUtils::createUrl_oldVersion('user/userinfoadminview', array('act' => 'edu'));
+                    $work = WebUtils::createUrl_oldVersion('user/userinfoadminview', array('act' => 'work'));
+                    $info = WebUtils::createUrl_oldVersion('user/userinfoadminview', array('act' => 'info'));
+                ?>
+                <select name="pageselect" onchange="self.location.href=options[selectedIndex].value" >
+                    <option value="<?php echo $base;?>" <?php if ($action == "base") {echo "selected='selected'";}?>>基本资料</option>
+                    <option value="<?php echo $contact;?>" <?php if ($action == "contact") {echo "selected='selected'";}?>>联系方式</option> 
+                    <option value="<?php echo $edu;?>" <?php if ($action == "edu") {echo "selected='selected'";}?>>教育情况</option>
+                    <option value="<?php echo $work;?>" <?php if ($action == "work") {echo "selected='selected'";}?>>工作情况</option>
+                    <option value="<?php echo $info;?>" <?php if ($action == "info") {echo "selected='selected'";}?>>个人信息</option>
+                </select>
+            </tr>
+            <tr>
+                <table border="0" cellspacing="5" cellpadding="0" width="100%">
+                    <?php if(is_array($settings)) 
+                    foreach($settings as $key => $value) {if($value['available'] && !(in_array($value['fieldid'],array('birthcity','residecity')))) { ?>
+                        <?php if ($value['formtype'] != 'textarea') {?>
+                        <tr id="tr_<?php echo $key;?>">
+                            <th align="left" valign="top" id="th_<?php echo $key;?>">
+                            <nobr>
+                                <?php if($value['required']) { ?><span class="rq" title="必填">*</span><?php } ?><?php echo WebUtils::u($value['title']);?>
+                            </nobr></th>
+                            <td class="hasd" id="td_<?php echo $key;?>">
+                                <?php echo WebUtils::u($htmls[$key]);?>
+                            </td>
+                        </tr>
+                    <?php } else {?>
+                        <tr id="tr_<?php echo $key;?>">
+                            <th colspan="2" align="left" id="th_<?php echo $key;?>">
+                                <?php if($value['required']) { ?><span class="rq" title="必填">*</span><?php } ?><?php echo WebUtils::u($value['title']);?>
+                                <?php echo WebUtils::u($htmls[$key]);?>
+                            </th>
+                        </tr>
+                    <?php } } }?>
+                </table>
+            </tr>
+            <tr>
+                <th>
+                    <p style="text-align:center">
+                        <input type="hidden" name="profilesubmit" value="true">
+                        <button type="submit" name="profilesubmitbtn" id="profilesubmitbtn" value="true" class="pn pnc"><strong>保存</strong></button>
+                        <span id="submit_result" class="rq"></span>
+                    </p>
+                </th>
+            </tr>
+        </table>
     </form>
 </div>
 

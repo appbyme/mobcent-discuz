@@ -294,7 +294,7 @@ class UserInfoAdminViewAction extends MobcentAction {
             </script>',
             $message, $location
         );
-        echo $htmlString;
+        echo WebUtils::u($htmlString);
         exit;
     }
 }
