@@ -10,7 +10,7 @@
 if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     exit('Access Denied');
 }
-Mobcent::setErrors();
+// Mobcent::setErrors();
 class SavePlatFormInfoAction extends MobcentAction {
 
     public function run($username, $oauthToken, $password, $openId, $email='', $gender=0, $act='register', $platformId=20) {

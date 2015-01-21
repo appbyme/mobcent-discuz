@@ -206,7 +206,7 @@ $(function () {
                 redirect: componentRedirect[i].value,
                 listTitleLength: tempListTitleLength, 
                 listSummaryLength: tempListSummaryLength, 
-                listImagePosition: parseInt(listImagePosition[i].value) || IMAGE_POSITION_LEFT,
+                listImagePosition: parseInt(listImagePosition[i].value),
                 subListStyle: subListStyle,
                 subDetailViewStyle: subDetailViewStyle,
             };

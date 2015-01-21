@@ -3,8 +3,8 @@
 /** 
  * 微信绑定model类
  *
- * @author 谢建平 <xiejianping@mobcent.com>
- * @copyright 2012-2014 Appbyme
+ * @author HanPengyu
+ * @copyright 2012-2015 Appbyme
  */
 
 if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
@@ -21,7 +21,7 @@ class AppbymeConnection extends DiscuzAR {
     }
 
     public function tableName() {
-        return '{{cdb_appbyme_connection}}';
+        return '{{appbyme_connection}}';
     }
 
     public function rules() {
@@ -38,13 +38,13 @@ class AppbymeConnection extends DiscuzAR {
             AND status=%n
             AND type=%n
             ',
-            array('cdb_appbyme_connection', $openId, self::WECHAT_BIND, self::WECHAT_TYPE)
+            array('appbyme_connection', $openId, self::WECHAT_BIND, self::WECHAT_TYPE)
         );
     }
 
     // 插件自定义WX表
     public static function insertMobcentWx($data) {
-        return DbUtils::getDzDbUtils(true)->insert('cdb_appbyme_connection', $data);
+        return DbUtils::getDzDbUtils(true)->insert('appbyme_connection', $data);
     }
 
     // WX 3.2微信表

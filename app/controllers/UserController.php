@@ -69,8 +69,8 @@ class UserController extends MobcentController {
             'uploadavatarex' => true,
             'savealbum' => true,
             'userinfoadminview' => true,
-            'platforminfo' => true,
-            'saveplatforminfo' => true
+            'platforminfo' => false,
+            'saveplatforminfo' => false
         );
     }
 }
