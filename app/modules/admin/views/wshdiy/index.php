@@ -254,8 +254,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                             <span>
                                 <a class="wap-public-btn" data-url="<?php echo $url; ?>">WAP地址</a>
                             </span>
-                            <!-- <span><a href="<?php echo $this->dzRootUrl; ?>/mobcent/app/web/index.php?r=admin/wshdiy/delpublic&id=<?php echo $module['id']; ?>" onclick="return confirm('真的要删除吗？')">删除</a></span> -->
-                            <span><a class="public-del">删除</a></span>
+                            <span><a href="<?php echo $this->dzRootUrl; ?>/mobcent/app/web/index.php?r=admin/wshdiy/delpublic&id=<?php echo $module['id']; ?>" onclick="return confirm('真的要删除吗？')">删除</a></span>
                         </div>
                     </div>
                     <?php endforeach; ?>
