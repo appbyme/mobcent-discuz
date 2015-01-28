@@ -69,10 +69,17 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav nav-list">
             <li class=""><a href="<?php echo $this->dzRootUrl; ?>" target="_blank">网站首页</a></li>
-            <li><a href="http://addon.discuz.com/?@appbyme_app.plugin.doc/install" target="_blank">说明文档</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">应用管理 <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/app/web/index.php?r=admin/uidiy">自定义管理</a></li>
+                    <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/app/web/index.php?r=admin/wshdiy">微生活管理</a></li>
+                </ul>
+            </li>
+            <li><a href="<?php echo $this->dzRootUrl; ?>/admin.php" target="_blank">Discuz!管理中心</a></li>
             <li><a href="<?php echo $this->dzRootUrl; ?>/plugin.php?id=appbyme_app:download" target="_blank">应用下载</a></li>
             <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/requirements/index.php" target="_blank">配置需求</a></li>
-            <li><a href="<?php echo $this->dzRootUrl; ?>/admin.php" target="_blank">Discuz!管理中心</a></li>
+            <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/requirements/index.php" target="_blank">文档教程</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">

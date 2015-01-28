@@ -299,6 +299,8 @@ class TopicListAction extends MobcentAction {
         global $_G;
         $forum = $_G['forum'];
 
+        $isImageList = isset($_GET['isImageList']) ? $_GET['isImageList'] : 0;
+
         $list = array();
         foreach($topicList as $topic) {
             // 该主题是由别的版块移动过来的

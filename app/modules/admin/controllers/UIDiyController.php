@@ -330,7 +330,7 @@ class UIDiyController extends AdminController
      *
      * @return mixed 返回状态码和信息.
      */
-    public function actionUploadIcon() {
+    public function actionUploadIcon($type='uidiy') {
 
         $res = WebUtils::initWebApiResult();
 
@@ -341,7 +341,7 @@ class UIDiyController extends AdminController
 
         // 创建放置图片的文件夹
         $date = date('Ym/d', time());
-        $path = MOBCENT_UPLOAD_PATH.'/'.'uidiy/'.$date;
+        $path = MOBCENT_UPLOAD_PATH.'/'.$type.'/'.$date;
 
         if ( UploadUtils::makeBasePath($path) == '') {
             self::makeResponse(0, '上传目录不可写！');
@@ -366,7 +366,7 @@ class UIDiyController extends AdminController
                 self::makeResponse(0, '上传图片失败！');
             }
 
-            $fileName = $this->dzRootUrl.'/data/appbyme/upload/uidiy/'.$date.'/'.basename($fileName);
+            $fileName = $this->dzRootUrl.'/data/appbyme/upload/'.$type.'/'.$date.'/'.basename($fileName);
             ImageUtils::getThumbImageEx($fileName, 10, false, false, true);
             self::makeResponse(1, $fileName);
         }
