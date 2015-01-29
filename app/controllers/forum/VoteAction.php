@@ -26,6 +26,7 @@ class VoteAction extends MobcentAction
     {
         global $_G;
         $_G['tid'] = $tid;
+        require_once libfile('function/post');
         $options = rawurldecode($options);
         $_GET['pollanswers'] = $options;
 

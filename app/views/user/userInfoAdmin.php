@@ -225,7 +225,7 @@ height:100%;
 
 </head>
 <body>
-<div class="zhiding">
+<div style="margin-top:15px;" class="zhiding">
     <form method="post" action="<?php echo $formUrl; ?>">
         <table cellpadding="0" cellspacing="0" class="fwin" width="100%">
             <tr>

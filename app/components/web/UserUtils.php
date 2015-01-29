@@ -218,6 +218,7 @@ class UserUtils {
         $permission = array();
 
         global $_G;
+        $tempGroupAllowPostPoll = $_G['group']['allowpostpoll'];
         $tempGroupAllowPostImage = $_G['group']['allowpostimage'];
         $tempGroupAllowPostAttach = $_G['group']['allowpostattach'];
         $tempGroupAttachExtensions = $_G['group']['attachextensions'];
@@ -228,6 +229,8 @@ class UserUtils {
             
             ForumUtils::initForum($fid);
 
+            $_G['group']['allowpostpoll'] = $tempGroupAllowPostPoll;
+            
             // 获取上传图片权限
             $_G['forum']['allowpostimage'] = isset($_G['forum']['allowpostimage']) ? $_G['forum']['allowpostimage'] : '';
             $_G['group']['allowpostimage'] = $tempGroupAllowPostImage;
