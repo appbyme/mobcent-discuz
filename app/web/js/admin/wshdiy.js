@@ -23,9 +23,8 @@ $(function() {
             var type = $('.public-type').find("option:selected").val();
             var keyword = $('.public-keyword').val();
 
-            // keyword == '' && alert('关键字不能空') return false;
             if (title == '' || keyword == '') {
-                alert('标题或者关键字不能空！');
+                alert('标题或者服务词不能空！');
                 return false;
             }
 
@@ -88,6 +87,11 @@ $(function() {
             var icon = $('.public-img').attr('src');
             var type = $('.public-type').find("option:selected").val();
             var keyword = $('.public-keyword').val();
+
+            if (title == '' || keyword == '') {
+                alert('标题或者服务词不能空！');
+                return false;
+            }
 
             $.ajax({
                 type:'POST',

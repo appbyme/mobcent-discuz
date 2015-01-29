@@ -243,7 +243,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         }
 
                         if (isset($module['type']) && $module['type'] != '') {
-                            $url .= '&filter=industry_type:cater|sort_name:distance';
+                            $url .= '&filter=industry_type:'.$module['type'].'|sort_name:distance';
                         }
                     ?>
                     <div class="module-list">
@@ -274,10 +274,6 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
         </div>
     </div>
-
-    <input type="text" class="test" value="" >
-    <button class="test-btn">GOGO</button>
-
 </body>
 <script type="text/javascript">
     var dzRootUrl = "<?php echo $this->dzRootUrl; ?>";

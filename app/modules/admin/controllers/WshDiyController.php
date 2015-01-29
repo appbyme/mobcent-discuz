@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * 微生活
+ *
+ * @author HanPengyu
+ * @copyright 2012-2015 Appbyme
+ */
 
 if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
     exit('Access Denied');

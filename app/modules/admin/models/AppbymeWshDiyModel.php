@@ -1,9 +1,9 @@
 <?php
 /**
- * UI Diy model类
+ * WSH model类
  *
- * @author 谢建平 <jianping_xie@aliyun.com>
- * @copyright 2012-2014 Appbyme
+ * @author HanPengyu
+ * @copyright 2012-2015 Appbyme
  */
 
 if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
