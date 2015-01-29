@@ -172,4 +172,8 @@ return array(
     'noreply_voted_error' => WebUtils::t('07000007:您已经对此回帖投过票了'),
     'recommend_daycount_succeed' => WebUtils::t('00000000:评价指数 {recommendc} {recommendv} 您今天还能评价 {daycount} 次'),
     'post_poll_succeed' => WebUtils::t('00000000:赞 +1'),
+
+    // 微信、qq绑定
+    'mobcent_bind_error' => WebUtils::t('08000001:绑定失败,密码输入错误！'),
+
 );

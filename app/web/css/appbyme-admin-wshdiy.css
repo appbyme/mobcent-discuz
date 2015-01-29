@@ -1,0 +1,217 @@
+
+/*重写了Bootstrap*/
+.container {
+    width: 90%;
+    width: 1200px;
+}
+ .form-group {
+    margin-bottom: 5px;
+ }
+.form-group input[type=text] {
+    width: 225px;
+    font-size: 12px;
+}
+.form-group select {
+    width: 225px;
+    font-size: 12px;
+}
+.form-group textarea {
+    width: 225px;
+    font-size: 12px;
+}
+
+.form-group input[type=number] {
+    width: 225px;
+}
+
+.form-group label {
+    padding-right: 0px;
+}
+label {
+    font-weight:100;
+}
+
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+ 
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0,0,0,0.1); 
+    background: white;
+    /*background: #2E8BCE;*/
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    /*-webkit-box-shadow: inset 0 0 6px #2E8BCE;*/
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    /*background: rgba(255,0,0,0.4); */
+    background: #2E8BCE;
+}
+
+
+/************************/
+
+.wshdiy-main {
+    width: 1200px;
+    height: 800px;
+    /*background: #e3e3e3;*/
+    margin: 0 auto;
+}
+
+.wshdiy-left {
+    width: 350px;
+    height: 700px;
+    /*border: 1px solid red;*/
+    border-radius: 5px;
+    float: left;
+}
+
+/* 右侧面板 */
+.wshdiy-right {
+    width: 800px;
+    height: 700px;
+    border-radius: 5px;
+    float: right;
+    position: relative;
+}
+
+/* 右侧面板公共样式 */
+.wsh-right-border {
+    border: 1px solid #e3e3e3;
+    border-top: none;
+    padding: 15px 0px 0px 5px;
+    height: 650px;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+/*添加按钮*/
+.add-public-btn {
+    width: 90px;
+    height: 90px;
+    /*border: 1px solid red;*/
+    font-size: 12px;
+    text-align: center;
+    float: left;
+    margin: 0px 0px 15px 8px;
+    padding-top: 20px;
+}
+
+.module-add img:hover, .module-list a:hover {
+    cursor:pointer;
+}
+
+/* 模块 */
+.module-list {
+    width: 120px;
+    height: 115px;
+    font-size: 12px;
+    /*border:1px solid green;*/
+    float: left;
+    margin: 0px 0px 15px 8px;
+    text-align: center;
+}
+
+.module-list img {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 3px;
+}
+
+.module-list 
+
+.module-title {
+    width: 80px;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 auto;
+    overflow:hidden;
+    /*border: 1px solid red;*/
+}
+
+
+/* 添加公共服务页 */
+.add-public {
+    width: 500px;
+    /*height: 300px;*/
+    border-radius: 5px;
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    z-index: 100;
+    display:none;
+    font-size: 12px;
+}
+
+/* 公共服务WAP页 */
+.wap-public {
+    width: 500px;
+    /*height: 300px;*/
+    border-radius: 5px;
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    z-index: 100;
+    display:none;
+    font-size: 12px;
+}
+
+.add-public .panel-heading, .wap-public .panel-heading {
+    width: 100%;
+    height: 40px;
+}
+.module-play .panel-title {
+    width: 100px;
+}
+
+/* 整体颜色的修改，主要是针对bootstrap的面板进行修改 */
+.panel-primary {
+    border-color:#e3e3e3;
+}
+.panel-primary .panel-heading{
+    background: #66ADE8;
+}
+
+/* 弹出框覆盖层 */
+.covering{
+    z-index: 50;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    opacity:0.4;
+    filter:alpha(opacity=40);
+    display:none
+}
+
+.error-prompt {
+    z-index: 50;
+    position:fixed;
+    top:30%;
+    left:40%;
+    width:20%;
+    height:50px;
+    line-height: 50px;
+    background:#66ADE8;
+    /*opacity:0.4;*/
+    /*filter:alpha(opacity=40);*/
+    border-radius: 5px;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* 公共服务 */

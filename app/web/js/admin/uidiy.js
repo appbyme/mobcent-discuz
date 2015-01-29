@@ -56,6 +56,12 @@ $(function () {
         element.scrollTop = element.scrollHeight;
     };
 
+    var minMaxHelper = function (n, min, max) {
+        n = Math.max(n, min);
+        n = Math.min(n, max);
+        return n;
+    };
+
     var localStorageWrapper = new LocalStorageWrapper();
 
     var APPBYME_UIDIY_AUTOSAVE = 'appbyme_uidiy_autosave';
@@ -141,6 +147,17 @@ $(function () {
                 subDetailViewStyle = '',
                 dataId = 0;
 
+            var tempListTitleLength = parseInt(listTitleLength[i].value);
+            if (!(tempListTitleLength === 0 || tempListTitleLength)) {
+                tempListTitleLength = 40;
+            }
+            tempListTitleLength = minMaxHelper(tempListTitleLength, 0, 255);
+            var tempListSummaryLength = parseInt(listSummaryLength[i].value);
+            if (!(tempListSummaryLength === 0 || tempListSummaryLength)) {
+                tempListSummaryLength = 40;
+            }
+            tempListSummaryLength = minMaxHelper(tempListSummaryLength, 0, 255);
+
             switch (type) {
                 case COMPONENT_TYPE_FORUMLIST:
                     subListStyle = forumTopiclistStyle[i].value;
@@ -187,9 +204,9 @@ $(function () {
                 orderby: orderby,
                 order: parseInt(topicSimpleTopOrder[i].value), 
                 redirect: componentRedirect[i].value,
-                listTitleLength: parseInt(listTitleLength[i].value) || 10, 
-                listSummaryLength: parseInt(listSummaryLength[i].value) || 40, 
-                listImagePosition: parseInt(listImagePosition[i].value) || IMAGE_POSITION_LEFT,
+                listTitleLength: tempListTitleLength, 
+                listSummaryLength: tempListSummaryLength, 
+                listImagePosition: parseInt(listImagePosition[i].value),
                 subListStyle: subListStyle,
                 subDetailViewStyle: subDetailViewStyle,
             };

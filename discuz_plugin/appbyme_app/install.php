@@ -90,6 +90,20 @@ CREATE TABLE IF NOT EXISTS `cdb_appbyme_portal_module_source` (
     KEY `displayorder` (`mid`, `type`, `displayorder`)
 ) ENGINE=MyISAM;
 
+# 第三方登陆接口绑定
+# DROP TABLE IF EXISTS `cdb_appbyme_connection`;
+CREATE TABLE `cdb_appbyme_connection` (
+    `id` int(12) NOT NULL AUTO_INCREMENT,
+    `uid` mediumint(8) unsigned NOT NULL,
+    `openid` char(32) NOT NULL DEFAULT '',
+    `status` tinyint(1) NOT NULL DEFAULT '0',
+    `type` tinyint(1) NOT NULL DEFAULT '0',
+    `param` text NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `uid` (`uid`, `type`),
+    KEY `openid` (`openid`, `type`)
+) ENGINE=MyISAM;
+
 ALTER TABLE `cdb_appbyme_config` CHANGE cvalue cvalue MEDIUMTEXT;
 ALTER TABLE `cdb_appbyme_user_setting` CHANGE uvalue uvalue VARCHAR(255);
 
