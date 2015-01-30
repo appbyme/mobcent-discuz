@@ -102,6 +102,8 @@ class GetSettingAction extends MobcentAction {
             'isTodayPostCount' => $this->_isForumShowTodayPost(),
             'postlistOrderby' => (int)WebUtils::getDzPluginAppbymeAppConfig('forum_postlist_orderby'),
             'postAudioLimit' => $this->_getAudioLimit('forum_audio_limit'),
+            'isShowLocationTopic' => (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_newtopic_location'),
+            'isShowLocationPost' => (int)WebUtils::getDzPluginAppbymeAppConfig('forum_allow_newpost_location'),
             // 'defaultNewImageTopicFid' => (int)WebUtils::getDzPluginAppbymeAppConfig('forum_new_image_topic'),
         );
         return $plugin;

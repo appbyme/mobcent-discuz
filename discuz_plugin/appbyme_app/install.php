@@ -104,6 +104,20 @@ CREATE TABLE `cdb_appbyme_connection` (
     KEY `openid` (`openid`, `type`)
 ) ENGINE=MyISAM;
 
+# 公共服务
+# DROP TABLE IF EXISTS `cdb_appbyme_service`;
+CREATE TABLE `cdb_appbyme_service` (
+    `id` int(12) NOT NULL AUTO_INCREMENT,
+    `title` varchar(20) NOT NULL DEFAULT '',
+    `icon` varchar(255) NOT NULL DEFAULT '',
+    `type` char(10) NOT NULL DEFAULT '',
+    `keyword` char(20) NOT NULL DEFAULT '',
+    `param` text NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `title` (`title`, `type`),
+    KEY `keyword` (`keyword`, `type`)
+) ENGINE=MyISAM;
+
 ALTER TABLE `cdb_appbyme_config` CHANGE cvalue cvalue MEDIUMTEXT;
 ALTER TABLE `cdb_appbyme_user_setting` CHANGE uvalue uvalue VARCHAR(255);
 

@@ -725,7 +725,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                     </select>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group hidden">
                 <label class="col-sm-2 control-label">置顶帖显示: </label>
                 <div class="col-sm-10">
                     <select class="form-control" name="topicSimpleTopOrder[]">
