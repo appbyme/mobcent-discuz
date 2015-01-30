@@ -174,7 +174,7 @@ class TopicListAction extends MobcentAction {
         $topTopicList = $topicInfos['topTopicList'];
         $count = $topicInfos['count'];
 
-        $res['forumInfo'] = $this->_getBoardInfo($fid);
+        $res['forumInfo'] = $this->_getForumInfo($fid);
         $res['topTopicList'] = $topTopicList;
         $res['list'] = $list;
         $res = array_merge($res, WebUtils::getWebApiArrayWithPage_oldVersion($page, $pageSize, $count));
@@ -387,7 +387,7 @@ class TopicListAction extends MobcentAction {
         return $list;
     }
 
-    private function _getBoardInfo($fid) {
+    private function _getForumInfo($fid) {
         global $_G;
         $forum = $_G['forum'];
 
@@ -396,7 +396,9 @@ class TopicListAction extends MobcentAction {
         $forumImage = (string)WebUtils::getHttpFileName($forumImage);
 
         $forumInfo = array();
+        $forumInfo['id'] = (int)$fid;
         $forumInfo['title'] = $fid != 0 ? (string)WebUtils::emptyHtml($forum['name']) : '';
+        $forumInfo['description'] = (string)WebUtils::emptyHtml($forum['description']);
         $forumInfo['icon'] = (string)$forumImage;
         return $forumInfo;
     }

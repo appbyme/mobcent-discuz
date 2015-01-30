@@ -131,6 +131,7 @@ class ForumListAction extends MobcentAction {
         $forumInfo = array();
         $forumInfo['board_id'] = (int)$fid;
         $forumInfo['board_name'] = WebUtils::emptyHtml($forum['name']);
+        $forumInfo['description'] = (string)WebUtils::emptyHtml($forum['description']);
         $forumInfo['board_child'] = count($forumSubList) > 0 ? 1 : 0;
         $forumInfo['board_img'] = WebUtils::getHttpFileName($image);
         $forumInfo['last_posts_date'] = !empty($dateline) ? $dateline . '000' : '';
