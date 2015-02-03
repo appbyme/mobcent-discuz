@@ -79,7 +79,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <li><a href="<?php echo $this->dzRootUrl; ?>/admin.php" target="_blank">Discuz!管理中心</a></li>
             <li><a href="<?php echo $this->dzRootUrl; ?>/plugin.php?id=appbyme_app:download" target="_blank">应用下载</a></li>
             <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/requirements/index.php" target="_blank">配置需求</a></li>
-            <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/requirements/index.php" target="_blank">文档教程</a></li>
+            <li><a href="http://bbs.appbyme.com/forum-57-2.html" target="_blank">帮助文档</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">

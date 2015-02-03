@@ -64,7 +64,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             <li><a href="<?php echo $this->dzRootUrl; ?>/admin.php" target="_blank">Discuz!管理中心</a></li>
             <li><a href="<?php echo $this->dzRootUrl; ?>/plugin.php?id=appbyme_app:download" target="_blank">应用下载</a></li>
             <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/requirements/index.php" target="_blank">配置需求</a></li>
-            <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/requirements/index.php" target="_blank">文档教程</a></li>
+            <li><a href="http://bbs.appbyme.com/forum-57-2.html" target="_blank">帮助文档</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -216,7 +216,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         <div class="module-title">微生活首页</div>
                         <div class="module-edit">
                             <span>
-                                <a class="wap-public-btn" data-url="http://test.wsh.appbyme.com/">WAP地址</a>
+                                <a class="wap-public-btn" data-url="http://wsh.appbyme.com/">WAP地址</a>
                             </span>
                         </div>
                     </div>
@@ -229,7 +229,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                         <div class="module-title">微生活首页</div>
                         <div class="module-edit">
                             <span>
-                                <a class="wap-public-btn" data-url="http://test.wsh.appbyme.com/">WAP地址</a>
+                                <a class="wap-public-btn" data-url="http://wsh.appbyme.com/">WAP地址</a>
                                 <!-- <a class="wap-public-btn" data-url="http://wsh.appbyme.com/">WAP地址</a> -->
                             </span>
                         </div>
@@ -237,7 +237,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
                     <?php foreach($moduleList as $module): ?>
                     <?php 
-                        $url = "http://test.wsh.appbyme.com/index.php?r=service/list&q=";
+                        $url = "http://wsh.appbyme.com/index.php?r=service/list&q=";
                         if (isset($module['keyword']) && $module['keyword'] != '') {
                             $url .= $module['keyword'];
                         }

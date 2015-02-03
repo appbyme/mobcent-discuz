@@ -1,5 +1,8 @@
 <?php exit; ?>
 <!--{subtemplate common/header}-->
+<!--{eval
+empty($appleDownloadUrl) && $appleDownloadUrl = sprintf("javascript:alert('%s')", Appbyme::t('ios版应用正在发布到App store, 目前暂时无法下载, 请稍后...'));
+}-->
 <link href="{$assetsBaseUrlPath}/css/download.css" type="text/css" rel="stylesheet">
 <div id="appbyme_wrap">
     <div class="appbyme_header">
