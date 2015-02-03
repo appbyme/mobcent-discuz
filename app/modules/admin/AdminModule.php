@@ -15,6 +15,7 @@ class AdminModule extends CWebModule
 {
     public $controllerMap = array(
         'uidiy' => 'application.modules.admin.controllers.UIDiyController',
+        'wshdiy' => 'application.modules.admin.controllers.WshDiyController',
     );
 
     public function init()

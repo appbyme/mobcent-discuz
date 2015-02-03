@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `cdb_appbyme_portal_module_source` (
 
 # 第三方登陆接口绑定
 # DROP TABLE IF EXISTS `cdb_appbyme_connection`;
-CREATE TABLE `cdb_appbyme_connection` (
+CREATE TABLE IF NOT EXISTS `cdb_appbyme_connection` (
     `id` int(12) NOT NULL AUTO_INCREMENT,
     `uid` mediumint(8) unsigned NOT NULL,
     `openid` char(32) NOT NULL DEFAULT '',
@@ -106,7 +106,7 @@ CREATE TABLE `cdb_appbyme_connection` (
 
 # 公共服务
 # DROP TABLE IF EXISTS `cdb_appbyme_service`;
-CREATE TABLE `cdb_appbyme_service` (
+CREATE TABLE IF NOT EXISTS `cdb_appbyme_service` (
     `id` int(12) NOT NULL AUTO_INCREMENT,
     `title` varchar(20) NOT NULL DEFAULT '',
     `icon` varchar(255) NOT NULL DEFAULT '',
