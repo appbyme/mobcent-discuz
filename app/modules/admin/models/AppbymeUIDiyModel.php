@@ -284,7 +284,7 @@ class AppbymeUIDiyModel extends DiscuzAR
                             'filterId' => 0,
                             'orderby' => 'marrow',
                             'listTitleLength' => 40,
-                            'listSummaryLength' => 40,
+                            'listSummaryLength' => 0,
                             'listImagePosition' => self::IMAGE_POSITION_RIGHT,
                             'subDetailViewStyle' => self::COMPONENT_STYLE_FLAT,
                         ),

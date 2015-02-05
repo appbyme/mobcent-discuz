@@ -39,6 +39,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             background-size: 350px 700px;
             text-align: center;
             /*border: 1px solid green;*/
+            position: relative;
         }
     </style>
 </head>
@@ -82,7 +83,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
         <div class="wshdiy-left">
             <div class="wshdiy-mobile">
-
+                <iframe class="wap-preview" src="http://wsh.appbyme.com/"></iframe>
             </div>
         </div>
 
@@ -132,7 +133,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                                     <option value="education">教育培训</option>
                                     <option value="house">楼宇大厦</option>
                                     <option value="enterprise">公司企业</option>
-                                    <option value="">其他</option>
+                                    <option value="">所有</option>
                                 </select>
                             </div>
                         </div>
@@ -226,10 +227,10 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 
                     <div class="module-list">
                         <img class="img-thumbnail" src="<?php echo !empty($module['icon']) ? $module['icon'] : $this->rootUrl.'/images/admin/module-default.png'; ?>">
-                        <div class="module-title">微生活首页</div>
+                        <div class="module-title">公共服务首页</div>
                         <div class="module-edit">
                             <span>
-                                <a class="wap-public-btn" data-url="http://wsh.appbyme.com/">WAP地址</a>
+                                <a class="wap-public-btn" data-url="http://wsh.appbyme.com">WAP地址</a>
                                 <!-- <a class="wap-public-btn" data-url="http://wsh.appbyme.com/">WAP地址</a> -->
                             </span>
                         </div>

@@ -74,6 +74,16 @@ label {
     float: left;
 }
 
+/* 左侧预览 */
+.wap-preview {
+    /*border: 1px solid red;*/
+    position: absolute;
+    top: 80px;
+    left: 19px;
+    width: 310px;
+    height: 540px;
+}
+
 /* 右侧面板 */
 .wshdiy-right {
     width: 800px;
@@ -129,7 +139,10 @@ label {
     margin-bottom: 3px;
 }
 
-.module-list 
+.module-list img:hover {
+    opacity:0.7;
+    cursor: pointer;
+}
 
 .module-title {
     width: 80px;
@@ -213,5 +226,6 @@ label {
     font-size: 20px;
     text-align: center;
 }
+
 
 /* 公共服务 */

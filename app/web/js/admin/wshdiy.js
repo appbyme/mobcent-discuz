@@ -165,6 +165,14 @@ $(function() {
             })
         }
     })
+    
+    // 公共服务点击左侧显示
+    $('.module-list').on({
+        click:function() {
+            var url = $(this).find('.wap-public-btn').attr('data-url');
+            $('.wap-preview').attr('src', url);  
+        }
+    })
 
     // 关闭添加公共服务页
     $('.add-public-close').on({
@@ -180,13 +188,16 @@ $(function() {
         }
     })
 
+    // 拖动
     $('.add-public').draggable();
     // $('.wap-public').draggable();
 
+    // 弹出框和覆盖层
     function switchCovering(className) {
         $('.' + className).fadeToggle();
         $('.covering').fadeToggle();   
     }
+
 
     function initAddPublic() {
         $('.add-public').css({
