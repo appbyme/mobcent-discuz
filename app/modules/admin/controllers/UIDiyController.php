@@ -49,7 +49,14 @@ class UIDiyController extends AdminController
         $forumList = ForumUtils::getForumListForHtml();
 
         $navInfo = AppbymeUIDiyModel::getNavigationInfo(true);
-        empty($navInfo) && $navInfo = AppbymeUIDiyModel::initNavigation();
+        $tempModules = AppbymeUIDiyModel::getModules(true);
+        // 初始化默认配置
+        if (empty($navInfo) || empty($navInfo['navItemList']) || empty($tempModules)) {
+            $navInfo = AppbymeUIDiyModel::initNavigation();
+            $tempModules = AppbymeUIDiyModel::initModules();
+        }
+        
+        // 必须存在发现导航
         $hasDiscoverNavItem = false;
         foreach ($navInfo['navItemList'] as $navItem) {
             if ($navItem['moduleId'] == AppbymeUIDiyModel::MODULE_ID_DISCOVER) {
@@ -59,12 +66,12 @@ class UIDiyController extends AdminController
         }
         !$hasDiscoverNavItem && array_unshift($navInfo['navItemList'], AppbymeUIDiyModel::initNavItemDiscover());
 
-        $modules = array();
-        $tempModules = AppbymeUIDiyModel::getModules(true);
+        // 必须存在发现和快发模块
         $isFindDiscover = $isFindFastpost = false;
         $discoverModule = AppbymeUIDiyModel::initDiscoverModule();
         $fastpostModule = AppbymeUIDiyModel::initFastpostModule();
 
+        $modules = array();
         foreach ($tempModules as $module) {
             switch ($module['id']) {
                 case AppbymeUIDiyModel::MODULE_ID_DISCOVER:

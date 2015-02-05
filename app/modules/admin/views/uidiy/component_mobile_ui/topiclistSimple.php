@@ -6,8 +6,13 @@
  * @author 牛存晖 <niucunhui@gmail.com>
  * @copyright 2012-2014 Appbyme
  */
-    $fid = $component['extParams']['forumId'];
-    $url = $this->rootUrl."/index.php?r=forum/topiclist&boardId=".$fid."&pageSize=10&page=1";
+    $url = sprintf('%s/index.php?r=forum/topiclist&boardId=%d&sortby=%s&filterType=%s&filterId=%d', 
+        $this->rootUrl, 
+        $component['extParams']['forumId'], 
+        $component['extParams']['orderby'], 
+        $component['extParams']['filter'], 
+        $component['extParams']['filterId']
+    );
     $info = WebUtils::httpRequest($url, 30);
     $info = WebUtils::jsondecode($info);
     $component['title'] = '帖子详情'; 
