@@ -175,5 +175,6 @@ return array(
 
     // 微信、qq绑定
     'mobcent_bind_error' => WebUtils::t('08000001:绑定失败,密码输入错误！'),
+    'mobcent_bind_error_repeat' => WebUtils::t('08000002:抱歉,该用户已被绑定，无法再次绑定。'),
 
 );

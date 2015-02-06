@@ -69,4 +69,17 @@ class AppbymeConnection extends DiscuzAR {
             array('common_plugin', $identifier)
         );
     }
+
+    // 检测用户是否绑定
+    public static function getUserBindInfo($uid) {
+        return DbUtils::getDzDbUtils(true)->queryRow('
+            SELECT *
+            FROM %t
+            WHERE uid=%d
+            AND type=%d
+            ',
+            array('appbyme_connection', $uid, self::WECHAT_TYPE)
+        );  
+    }
+
 }

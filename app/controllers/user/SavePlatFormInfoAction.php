@@ -57,6 +57,11 @@ class SavePlatFormInfoAction extends MobcentAction {
                 return $this->makeErrorInfo($res, 'mobcent_bind_error');
             }
 
+            $isBind = $this->_getUserBindInfo($_G['uid']);
+            if ($isBind) {
+                return $this->makeErrorInfo($res, 'mobcent_bind_error_repeat');   
+            }
+
             $this->_updateQqMember($_G['uid'], $oauthToken, $openId, $gender);
 
             $userInfo = AppbymeUserAccess::loginProcess($_G['uid'], $password);
@@ -72,6 +77,16 @@ class SavePlatFormInfoAction extends MobcentAction {
         // 客户端参数不正确
         return $this->makeErrorInfo($res, 'mobcent_error_params');
 
+    }
+
+    private function _getUserBindInfo($uid) {
+        return DbUtils::getDzDbUtils(true)->queryRow('
+            SELECT *
+            FROM %t
+            WHERE uid=%d
+            ',
+            array('common_member_connect', $uid)
+        );
     }
 
     private function _inserBindlog($data) {
@@ -150,6 +165,11 @@ class SavePlatFormInfoAction extends MobcentAction {
             $logInfo = UserUtils::login($username, $password);
             if ($logInfo['errcode']) {
                 UserUtils::delUserAccessByUsername($username);
+                return $this->makeErrorInfo($res, 'mobcent_bind_error');
+            }
+
+            $isBind = AppbymeConnection::getUserBindInfo($_G['uid']);
+            if ($isBind) {
                 return $this->makeErrorInfo($res, 'mobcent_bind_error');
             }
 

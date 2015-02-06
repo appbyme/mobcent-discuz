@@ -860,7 +860,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
         </div>
         <div class="list-ext-config-div">
             <div class="form-group" style="position:relative">
-                <label class="col-sm-2 control-label">主题标题长度: </label>
+                <label class="col-sm-2 control-label">主题标题最大长度: </label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control input-sm" name="listTitleLength[]" value="<%= extParams.listTitleLength %>">
                 </div>
@@ -868,7 +868,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
             </div>
             <div class="mob-topic-len-left" style="">0-255, 0代表没有主题标题长度</div>
             <div class="form-group" style="position:relative">
-                <label class="col-sm-2 control-label">主题摘要长度: </label>
+                <label class="col-sm-2 control-label">主题摘要最大长度: </label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control input-sm" name="listSummaryLength[]" value="<%= extParams.listSummaryLength %>">
                 </div>
