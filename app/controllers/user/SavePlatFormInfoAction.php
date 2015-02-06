@@ -170,7 +170,7 @@ class SavePlatFormInfoAction extends MobcentAction {
 
             $isBind = AppbymeConnection::getUserBindInfo($_G['uid']);
             if ($isBind) {
-                return $this->makeErrorInfo($res, 'mobcent_bind_error');
+                return $this->makeErrorInfo($res, 'mobcent_bind_error_repeat');
             }
 
             $data = array('uid' => $_G['uid'], 'openid' => $openId, 'status' => 1, 'type' => 1);
