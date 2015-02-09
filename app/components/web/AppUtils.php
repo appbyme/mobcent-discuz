@@ -75,7 +75,7 @@ class AppUtils {
             }
         } else {
             foreach ($tempComponent['componentList'] as $subComponent) {
-                $tempComponentList[] = $this->_filterComponent($subComponent);
+                $tempComponentList[] = self::filterComponent($subComponent);
             }
         }
         $tempComponent['componentList'] = $tempComponentList;
