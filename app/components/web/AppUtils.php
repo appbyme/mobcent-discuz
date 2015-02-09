@@ -75,7 +75,7 @@ class AppUtils {
             }
         } else {
             foreach ($tempComponent['componentList'] as $subComponent) {
-                $tempComponentList[] = $this->_filterComponent($subComponent);
+                $tempComponentList[] = self::filterComponent($subComponent);
             }
         }
         $tempComponent['componentList'] = $tempComponentList;
@@ -105,7 +105,7 @@ class AppUtils {
     }
 
     public static function filterModule($module) {
-        $tempModule = array();
+        $tempModule = $module;
 
         $tempModule['leftTopbars'] = self::filterTopbars($module['leftTopbars']);
         $tempModule['rightTopbars'] = self::filterTopbars($module['rightTopbars']);
