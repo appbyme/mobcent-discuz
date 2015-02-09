@@ -40,7 +40,7 @@ function getProtalInfo(i){
             data:{
                 module: JSON.stringify(moduleInfo),
             },
-            dataTyle:"html",
+            dataType:"html",
             success:function(msg) {
                 $('.module-mobile-ui-view').html(msg);
             }

@@ -332,7 +332,7 @@ class AppbymeUIDiyModel extends DiscuzAR
         return array_merge(array(
             'id' => 0,
             'type' => self::MODULE_TYPE_FULL,
-            'style' => self::MODULE_STYLE_CARD,
+            'style' => self::MODULE_STYLE_FLAT,
             'title' => '',
             'icon' => Yii::app()->getController()->rootUrl.'/images/admin/module-default.png',
             'leftTopbars' => array(
