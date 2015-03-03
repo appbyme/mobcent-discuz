@@ -22,7 +22,7 @@ mobcentMakeWritableDir($mobcentRuntimePath);
 !is_writable($mobcentRuntimePath) && exit('Mobcent Runtime Path must be writable');
 
 define('IN_APPBYME', true);
-define('MOBCENT_HACKER_UID', true);
+define('MOBCENT_HACKER_UID', 0);
 
 define('MOBCENT_HACKER_USER', 'MOBCENT@hacker#007');
 define('MOBCENT_HACKER_PASSWORD', 'MOBCENT@hacker#007');
