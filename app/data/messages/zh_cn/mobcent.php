@@ -176,5 +176,12 @@ return array(
     // 微信、qq绑定
     'mobcent_bind_error' => WebUtils::t('08000001:绑定失败,密码输入错误！'),
     'mobcent_bind_error_repeat' => WebUtils::t('08000002:抱歉,该用户已被绑定，无法再次绑定。'),
+    'mobcent_authorization_error' => WebUtils::t('08000003:授权失败!'),
+
+    // 手机验证绑定
+    'mobcent_mobile_empty' => WebUtils::t('09000001:手机号码为空！'),
+    'mobcent_mobile_error' => WebUtils::t('09000002:输入的手机号有误！'),
+    'mobcent_mobile_repeat' => WebUtils::t('09000003:此手机号已被注册'),
+    'mobcent_result_error' => WebUtils::t('09000004:非法请求'),
 
 );

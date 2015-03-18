@@ -48,7 +48,7 @@ class SavePlatFormInfoAction extends MobcentAction {
             $res['body']['secret'] = (string)$userAccess['secret'];
             $res['body']['uid'] = (int)$regInfo['info']['uid'];
             return $res;
-        } elseif ($act == 'bind') {
+        } elseif ($act == 'bind' && !empty($openId)) {
             
             global $_G;
             $logInfo = UserUtils::login($username, $password);
@@ -159,7 +159,8 @@ class SavePlatFormInfoAction extends MobcentAction {
             $res['body']['uid'] = (int)$uid;
             $res['body']['token'] = (string)$userInfo['token'];
             $res['body']['secret'] = (string)$userInfo['secret'];
-        } elseif($act == 'bind') {
+            return $res;
+        } elseif($act == 'bind' && !empty($openId)) {
             
             global $_G;
             $logInfo = UserUtils::login($username, $password);
@@ -183,8 +184,9 @@ class SavePlatFormInfoAction extends MobcentAction {
             $res['body']['uid'] = (int)$_G['uid'];
             $res['body']['avatar'] = (string)$userAvatar;
             $res['body']['userName'] = (string)$_G['username'];
+            return $res;
         }
-        return $res;
+        return $this->makeErrorInfo($res, 'mobcent_error_params');
     }
 
 }
