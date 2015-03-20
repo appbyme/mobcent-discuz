@@ -450,8 +450,8 @@ class DzForumThread extends DiscuzAR {
     // 查询符合条件数据的总条数
     public static function getByFidCount($fids, $params=array(), $longitude='', $latitude='', $radius=100000) {
         global $_G;
-        $table = ' %t';
-        $where = ' 1 AND fid IN (%n)';
+        $table = ' %t ft';
+        $where = ' 1 AND ft.fid IN (%n)';
 
         // 用户收藏的板块
         if (in_array('favoriteForum', $params['other_filter'])) {
@@ -460,6 +460,12 @@ class DzForumThread extends DiscuzAR {
         }
 
         $term = array('forum_thread', $fids);
+
+        if (!empty($params['topic_picrequired'])) {
+            $table = '%t ft INNER JOIN %t fp ON ft.tid = fp.tid';
+            $where .= ' AND fp.first=1 AND fp.attachment=%d';
+            $term = array('forum_thread', 'forum_post', $fids, self::PIC_ATTACHMENT);
+        }
 
         if ($params['topic_orderby'] == 'distance') {
             $range = self::getRange($longitude, $latitude, $radius);
@@ -476,7 +482,7 @@ class DzForumThread extends DiscuzAR {
                 AND aus.ukey=%s
                 AND aus.uvalue=%s
                 AND ft.authorid!=%s
-                AND fid IN (%n)
+                AND ft.fid IN (%n)
             ';
 
             $term = array(
@@ -493,6 +499,46 @@ class DzForumThread extends DiscuzAR {
                 $_G['uid'],
                 $fids
             );
+
+            if (!empty($params['topic_picrequired'])) {
+                $table = '
+                    %t hsu 
+                    INNER JOIN %t ft ON hsu.object_id=ft.tid
+                    INNER JOIN %t aus ON ft.authorid=aus.uid 
+                    INNER JOIN %t fp ON ft.tid=fp.tid
+                ';
+
+                $where = '
+                    hsu.type=%s 
+                    AND hsu.longitude BETWEEN %s AND %s
+                    AND hsu.latitude BETWEEN %s AND %s
+                    AND aus.ukey=%s
+                    AND aus.uvalue=%s
+                    AND ft.authorid!=%s
+                    AND ft.fid IN (%n)
+                    AND fp.first = 1
+                    AND fp.attachment = %d
+                ';
+
+                $term = array(
+                    'home_surrounding_user',
+                    'forum_thread',
+                    'appbyme_user_setting',
+                    'forum_post',
+                    SurroundingInfo::TYPE_TOPIC,
+                    $range['longitude']['min'],
+                    $range['longitude']['max'],
+                    $range['latitude']['min'],
+                    $range['latitude']['max'],
+                    AppbymeUserSetting::KEY_GPS_LOCATION,
+                    AppbymeUserSetting::VALUE_GPS_LOCATION_ON,
+                    $_G['uid'],
+                    $fids,
+                    self::PIC_ATTACHMENT
+                );  
+            }
+
+
         }
 
         $sql = 'SELECT COUNT(*)
@@ -501,47 +547,47 @@ class DzForumThread extends DiscuzAR {
                 ;
 
         if (!empty($params['topic_digest'])) {
-            $sql .= ' AND digest IN (%n)';
+            $sql .= ' AND ft.digest IN (%n)';
             $term[] =  $params['topic_digest'];
         }
 
         if (!empty($params['topic_stick'])) {
-            $sql .= ' AND displayorder IN (%n)';
+            $sql .= ' AND ft.displayorder IN (%n)';
             $term[] = $params['topic_stick'];
         } else {
-            $sql .= ' AND displayorder>=%s';
+            $sql .= ' AND ft.displayorder>=%s';
             $term[] = self::DISPLAY_ORDER_NORMAL;
         }
 
         if (!empty($params['topic_special'])) {
-           $sql .= ' AND special IN (%n)';
+           $sql .= ' AND ft.special IN (%n)';
            $term[] = $params['topic_special'];
         }
 
-        if (!empty($params['topic_picrequired'])) {
-            $sql .= ' AND attachment=%d';
-            $term[] = self::PIC_ATTACHMENT;
-        }
+        // if (!empty($params['topic_picrequired'])) {
+        //     $sql .= ' AND ft.attachment=%d';
+        //     $term[] = self::PIC_ATTACHMENT;
+        // }
 
         if ($params['topic_postdateline'] > 0) {
             $time = time() - $params['topic_postdateline'];
-            $sql .= ' AND dateline>%d';
+            $sql .= ' AND ft.dateline>%d';
             $term[] = $time;
         }
 
         if ($params['topic_lastpost'] > 0) {
             $time = time() - $params['topic_lastpost'];
-            $sql .= ' AND lastpost>%d';
+            $sql .= ' AND ft.lastpost>%d';
             $term[] = $time;
         }
 
         if ($params['topic_sortid'] > 0) {
-            $sql .= ' AND sortid=%d';
+            $sql .= ' AND ft.sortid=%d';
             $term[] = $params['topic_sortid'];
         }
 
         if ($params['topic_typeid'] > 0) {
-            $sql .= ' AND typeid=%d';
+            $sql .= ' AND ft.typeid=%d';
             $term[] = $params['topic_typeid'];            
         }
 
@@ -565,7 +611,7 @@ class DzForumThread extends DiscuzAR {
             foreach ($authoridArr as $authorid) {
                 $tmp = array_merge($tmp, $authorid);
             }
-            $sql .= ' AND authorid IN (%n)';
+            $sql .= ' AND ft.authorid IN (%n)';
             $term[] = $tmp;
         }   
 
@@ -586,8 +632,8 @@ class DzForumThread extends DiscuzAR {
     public static function getByFidData($fids, $offset, $limit, $params=array(), $longitude='', $latitude='', $radius=100000) {
         global $_G;
         $select = ' *';
-        $table = ' %t';
-        $where = ' 1 AND fid IN (%n)';
+        $table = ' %t ft';
+        $where = ' 1 AND ft.fid IN (%n)';
 
         // 用户收藏的板块
         if (in_array('favoriteForum', $params['other_filter'])) {
@@ -596,6 +642,12 @@ class DzForumThread extends DiscuzAR {
         }
 
         $term = array('forum_thread', $fids);
+
+        if (!empty($params['topic_picrequired'])) {
+            $table = '%t ft INNER JOIN %t fp ON ft.tid = fp.tid';
+            $where .= ' AND fp.first=1 AND fp.attachment=%d';
+            $term = array('forum_thread', 'forum_post', $fids, self::PIC_ATTACHMENT);
+        }
 
         if ($params['topic_orderby'] == 'distance') {
             $range = self::getRange($longitude, $latitude, $radius);
@@ -612,7 +664,7 @@ class DzForumThread extends DiscuzAR {
                 AND aus.ukey=%s
                 AND aus.uvalue=%s
                 AND ft.authorid!=%s
-                AND fid IN (%n)
+                AND ft.fid IN (%n)
             ';
 
             $term = array(
@@ -629,6 +681,46 @@ class DzForumThread extends DiscuzAR {
                 $_G['uid'],
                 $fids
             );
+
+            if (!empty($params['topic_picrequired'])) {
+                $table = '
+                    %t hsu 
+                    INNER JOIN %t ft ON hsu.object_id=ft.tid
+                    INNER JOIN %t aus ON ft.authorid=aus.uid 
+                    INNER JOIN %t fp ON ft.tid=fp.tid
+                ';
+
+                $where = '
+                    hsu.type=%s 
+                    AND hsu.longitude BETWEEN %s AND %s
+                    AND hsu.latitude BETWEEN %s AND %s
+                    AND aus.ukey=%s
+                    AND aus.uvalue=%s
+                    AND ft.authorid!=%s
+                    AND ft.fid IN (%n)
+                    AND fp.first = 1
+                    AND fp.attachment = %d
+                ';
+
+                $term = array(
+                    'home_surrounding_user',
+                    'forum_thread',
+                    'appbyme_user_setting',
+                    'forum_post',
+                    SurroundingInfo::TYPE_TOPIC,
+                    $range['longitude']['min'],
+                    $range['longitude']['max'],
+                    $range['latitude']['min'],
+                    $range['latitude']['max'],
+                    AppbymeUserSetting::KEY_GPS_LOCATION,
+                    AppbymeUserSetting::VALUE_GPS_LOCATION_ON,
+                    $_G['uid'],
+                    $fids,
+                    self::PIC_ATTACHMENT
+                );
+            }
+
+
         }
 
         $sql = 'SELECT '. $select . '
@@ -637,47 +729,47 @@ class DzForumThread extends DiscuzAR {
                 ;
 
         if (!empty($params['topic_digest'])) {
-            $sql .= ' AND digest IN (%n)';
+            $sql .= ' AND ft.digest IN (%n)';
             $term[] =  $params['topic_digest'];
         }
 
         if (!empty($params['topic_stick'])) {
-            $sql .= ' AND displayorder IN (%n)';
+            $sql .= ' AND ft.displayorder IN (%n)';
             $term[] = $params['topic_stick'];
         } else {
-            $sql .= ' AND displayorder>=%s';
+            $sql .= ' AND ft.displayorder>=%s';
             $term[] = self::DISPLAY_ORDER_NORMAL;
         }
 
         if (!empty($params['topic_special'])) {
-           $sql .= ' AND special IN (%n)';
+           $sql .= ' AND ft.special IN (%n)';
            $term[] = $params['topic_special'];
         }
 
-        if (!empty($params['topic_picrequired'])) {
-            $sql .= ' AND attachment=%d';
-            $term[] = self::PIC_ATTACHMENT;
-        }
+        // if (!empty($params['topic_picrequired'])) {
+        //     $sql .= ' AND ft.attachment=%d';
+        //     $term[] = self::PIC_ATTACHMENT;
+        // }
 
         if ($params['topic_postdateline'] > 0) {
             $time = time() - $params['topic_postdateline'];
-            $sql .= ' AND dateline>%d';
+            $sql .= ' AND ft.dateline>%d';
             $term[] = $time;
         }
 
         if ($params['topic_lastpost'] > 0) {
             $time = time() - $params['topic_lastpost'];
-            $sql .= ' AND lastpost>%d';
+            $sql .= ' AND ft.lastpost>%d';
             $term[] = $time;
         }
 
         if ($params['topic_sortid'] > 0) {
-            $sql .= ' AND sortid=%d';
+            $sql .= ' AND ft.sortid=%d';
             $term[] = $params['topic_sortid'];
         }
 
         if ($params['topic_typeid'] > 0) {
-            $sql .= ' AND typeid=%d';
+            $sql .= ' AND ft.typeid=%d';
             $term[] = $params['topic_typeid'];            
         }
 
@@ -701,18 +793,18 @@ class DzForumThread extends DiscuzAR {
             foreach ($authoridArr as $authorid) {
                 $tmp = array_merge($tmp, $authorid);
             }
-            $sql .= ' AND authorid IN (%n)';
+            $sql .= ' AND ft.authorid IN (%n)';
             $term[] = $tmp;
         }
 
         if (isset($params['topic_orderby'])) {
-            $orderBy = ' ORDER BY ' . $params['topic_orderby'] . ' DESC';
+            $orderBy = ' ORDER BY ft.' . $params['topic_orderby'] . ' DESC';
             if ($params['topic_orderby'] == 'distance') {
                 $orderBy = ' ORDER BY distance ASC';    
             }
             $sql .= $orderBy;
         } else {
-            $sql .= ' ORDER BY dateline DESC';
+            $sql .= ' ORDER BY ft.dateline DESC';
         }
 
         $sql .= ' LIMIT %d, %d';
