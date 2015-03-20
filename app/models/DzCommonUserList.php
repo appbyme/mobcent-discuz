@@ -416,14 +416,26 @@ class DzCommonUserList extends DiscuzAR {
     }
 
 //////////////////////////////////////////////////////////////////
-    // 用户好友列表默认排序
-    public static function _getPostFuidListByDefault($uid) {
+    // @好友列表
+    public static function _getPostFuidListByAT($uid) {
+
         return DbUtils::getDzDbUtils(true)->queryColumn('
             SELECT fuid
             FROM %t 
             WHERE uid = %d
             ',
             array('home_friend', $uid)
+        );
+    }
+    // 用户好友列表默认排序
+    public static function _getPostFuidListByDefault($uid, $page, $pageSize) {
+        return DbUtils::getDzDbUtils(true)->queryColumn('
+            SELECT fuid
+            FROM %t 
+            WHERE uid = %d
+            LIMIT %d, %d
+            ',
+            array('home_friend', $uid, $pageSize*($page-1), $pageSize)
         );
     }
 

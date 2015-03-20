@@ -18,7 +18,7 @@ class AtUserListAction extends CAction {
         
         $uid = $this->getController()->uid;
 
-        $params = array('type' => 'friend', 'orderBy' => 'dateline', 'page' => 0, 'uid' => $uid);
+        $params = array('type' => 'friend', 'orderBy' => 'at', 'page' => 0, 'uid' => $uid);
         $friend = $this->_getForWardInfo($params);
 
         $params = array('type' => 'follow', 'orderBy' => 'dateline', 'page '=> 0, 'uid' => $uid);

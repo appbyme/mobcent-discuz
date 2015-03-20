@@ -22,6 +22,7 @@ class UserListAction extends CAction {
             case 'followed': $sortType = 'follower';break;
             case 'distance': $sortType = 'range';break;
             case 'dateline': $sortType = 'default';break;
+            case 'at':$sortType = 'at';break;
             default:break;
         }
 
@@ -238,6 +239,9 @@ class UserListAction extends CAction {
                 break;
             case 'range':
                 return DzCommonUserList::_getPostFuidListByRange($uid, $page, $pageSize, $longitude, $latitude, $radius);
+                break;
+            case 'at':
+                return DzCommonUserList::_getPostFuidListByAT($uid);
                 break;
             default:
                 break;
