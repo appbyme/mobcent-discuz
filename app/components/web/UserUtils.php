@@ -823,4 +823,55 @@ class UserUtils {
 
         return Webutils::doAppAPNsHelper($uid, $payload);
     }
+
+    public static function checkMobileCode($res, $mobile, $code) {
+        // 验证注册时候手机号是否可以用
+        if (!self::checkMobileRepeat($mobile)) {
+            // return WebUtils::makeErrorInfo_oldVersion($res, 'mobcent_mobile_not');
+            return array('rs' => 0, 'errcode' => 'mobcent_mobile_not');
+        }
+        // 验证手机号和code是否匹配
+        $codeMobile = AppbymeSendsms::getBindByMobileCode($mobile, $code);
+        if (!$codeMobile) {
+            // return WebUtils::makeErrorInfo_oldVersion($res, 'mobcent_code_error');
+            return array('rs' => 0, 'errcode' => 'mobcent_code_error');
+
+        }
+        // 验证验证码是否过期
+        if (time() - $codeMobile['time'] > 2 * 60) {
+            // return WebUtils::makeErrorInfo_oldVersion($res, 'mobcent_code_overdue');
+            return array('rs' => 0, 'errcode' => 'mobcent_code_overdue');
+        }
+        return $res;
+    }
+
+    // 判断手机号码是否已经绑定过
+    public static function checkMobile($mobile) {
+        return AppbymeSendsms::checkMobile($mobile);
+    }
+
+    // 验证手机格式
+    public static function checkMobileFormat($mobile) {
+        if(!$mobile){
+            return false;
+        }
+        if(!preg_match('/^1(3|5|8|7)\d{9}$/',$mobile)){ 
+            return false;
+        }
+        return true;
+    }
+
+    // 验证手机号码是否可以用
+    public static function checkMobileRepeat($mobile) {
+        $mobileFormat = self::checkMobileFormat($mobile);
+        if (!$mobileFormat) {
+            return false;
+        }
+        // 验证手机是否已经绑定过
+        $mobileRegisterInfo = UserUtils::checkMobile($mobile);
+        if ($mobileRegisterInfo) {
+            return false;
+        }
+        return true;
+    }
 }

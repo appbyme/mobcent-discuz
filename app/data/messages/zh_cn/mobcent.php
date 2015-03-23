@@ -180,8 +180,12 @@ return array(
 
     // 手机验证绑定
     'mobcent_mobile_empty' => WebUtils::t('09000001:手机号码为空！'),
-    'mobcent_mobile_error' => WebUtils::t('09000002:输入的手机号有误！'),
-    'mobcent_mobile_repeat' => WebUtils::t('09000003:此手机号已被注册'),
-    'mobcent_result_error' => WebUtils::t('09000004:非法请求'),
+    'mobcent_mobile_error' => WebUtils::t('09000002:输入的手机号码有误！'),
+    'mobcent_mobile_repeat' => WebUtils::t('09000003:此手机号码已被注册'),
+    'mobcent_result_error' => WebUtils::t('09000004:非法请求！'),
+    'mobcent_mobile_not' => WebUtils::t('09000005:手机号码为空或者不可用'),
+    'mobcent_code_error' => WebUtils::t('09000006:验证码输入错误'),
+    'mobcent_code_overdue' => WebUtils::t('09000007:手机验证码已过有效期'),
+    'mobcent_yun_config_error' => WebUtils::t('09000008:请在插件配置正确的参数！'),
 
 );

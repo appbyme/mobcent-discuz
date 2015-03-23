@@ -18,6 +18,8 @@ class AppController extends MobcentController
             'moduleconfig' => 'application.controllers.app.ModuleConfigAction',
             'servernotify' => 'application.controllers.app.ServerNotifyAction',
             'serverupload' => 'application.controllers.app.ServerUploadAction',
+            'getcode' => 'application.controllers.app.GetCodeAction',
+            'checkmobilecode' => 'application.controllers.app.CheckMobileCodeAction',
         );
     }
 
@@ -28,6 +30,8 @@ class AppController extends MobcentController
             'moduleconfig' => false,
             'servernotify' => false,
             'serverupload' => false,
+            'getcode' => false,
+            'checkmobilecode' => false
         );
     }
 }
