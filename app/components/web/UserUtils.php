@@ -838,7 +838,7 @@ class UserUtils {
 
         }
         // 验证验证码是否过期
-        if (time() - $codeMobile['time'] > 2 * 60) {
+        if (time() - $codeMobile['time'] > 5 * 60) {
             // return WebUtils::makeErrorInfo_oldVersion($res, 'mobcent_code_overdue');
             return array('rs' => 0, 'errcode' => 'mobcent_code_overdue');
         }

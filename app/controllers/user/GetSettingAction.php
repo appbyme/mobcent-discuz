@@ -91,6 +91,7 @@ class GetSettingAction extends MobcentAction {
             'qqconnect' => $this->_isQQConnect(),
             'dsu_paulsign' => $this->_isDsuPaulsign(),
             'wxconnect' => $this->_isWechatConnect(),
+            'isMobileRegisterValidation' => $this->_isMobileRegisterValidation(),
         );
         return $plugin;
     }
@@ -174,7 +175,13 @@ class GetSettingAction extends MobcentAction {
         $config = WebUtils::getDzPluginAppbymeAppConfig('mobile_allow_wxlogin');
         return !($config !== false && $config == 0);
     }
-    
+
+    // 是否开启注册手机验证
+    private function _isMobileRegisterValidation () {
+        $config = WebUtils::getDzPluginAppbymeAppConfig('mobcent_register_validation');
+        return !($config !== false && $config == 0);
+    }
+
     private function _getUserSetting() {
         global $_G;
         $res = array(
