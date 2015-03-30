@@ -14,9 +14,14 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 // Mobcent::setErrors();
 class ForumListAction extends MobcentAction {
 
-    public function run($fid=0) {
+    public function run($fid=0, $type='') {
         global $_G;
-        $key = CacheUtils::getForumListKey(array($fid, $_G['groupid']));
+        if ($type == 'rec') {
+            $res = $this->getResult(array('fid' => $fid, 'type' => $type));
+            echo WebUtils::outputWebApi($res, '', true);
+        }
+        
+        $key = CacheUtils::getForumListKey(array($fid, $_G['groupid'], $type));
         $this->runWithCache($key, array('fid' => $fid));
     }
 
@@ -36,7 +41,16 @@ class ForumListAction extends MobcentAction {
         $res = $this->initWebApiArray();
 
         $fid = (int)$params['fid'];
-        $res['list'] = $this->_getForumList($fid);
+        $type = $params['type'];
+        // $res['list'] = $this->_getForumList($fid);
+
+        $forumList = $this->_getForumList($fid, $type);
+        if ($type == 'rec') {
+            $res['focusBoard'] = $forumList['focusBoard'];
+            $res['recommendedBoard'] = $forumList['recommendedBoard'];  // 推荐板块
+        } else {
+            $res['list'] = $forumList;
+        }
 
         $res['online_user_num'] = 0;
         $res['td_visitors'] = 0;
@@ -44,10 +58,14 @@ class ForumListAction extends MobcentAction {
         return $res;
     }
 
-    private function _getForumList($fid) {
+    private function _getForumList($fid, $type) {
         require_once libfile('function/forumlist');
 
         $forumList = array();
+
+        // 关注的板块
+        $focusBoardIds = $this->_getFocusBoard();
+        $params = array('focusBoardIds' => $focusBoardIds);
 
         // 子版块
         if ($fid > 0) {
@@ -57,7 +75,7 @@ class ForumListAction extends MobcentAction {
             $tempForum['board_category_type'] = 1;
             $forums = ForumUtils::getForumSubList($fid);
             foreach ($forums as $forum) {
-                $tempForum['board_list'][] = $this->_getForumInfo($forum);
+                $tempForum['board_list'][] = $this->_getForumInfo($forum, $params);
             }
             $forumList[] = $tempForum;
         } else {
@@ -72,7 +90,7 @@ class ForumListAction extends MobcentAction {
 
                 $forums = ForumUtils::getForumList($group['fid']);
                 foreach ($forums as $forum) {
-                    $tempGroup['board_list'][] = $this->_getForumInfo($forum);
+                    $tempGroup['board_list'][] = $this->_getForumInfo($forum, $params);
                 }
                 $forumList[] = $tempGroup;
             }
@@ -100,10 +118,34 @@ class ForumListAction extends MobcentAction {
         }
         $forumList = $tempGroupList;
 
+        if ($type == 'rec') {
+            // 推荐板块 按照总帖子进行排序
+            $recommendedBoard = $topicTotalNum = $focusBoard = array();
+            if ($fid == 0) {       
+                foreach ($forumList as $k => $v) {
+                    $board = $forumList[$k]['board_list'];
+                    $recommendedBoard = array_merge($recommendedBoard, $board);
+                }
+
+                foreach($recommendedBoard as $k => $v ) {
+                    $topicTotalNum[] = $v['topic_total_num'];
+                    if (in_array($v['board_id'], $focusBoardIds)) {
+                        $focusBoard[] = $v;
+                    }
+                }
+                array_multisort($topicTotalNum, SORT_DESC, $recommendedBoard);
+
+                $recommendedBoard = array_slice($recommendedBoard, 0, 5);
+            }
+
+            return array('forumList' => $forumList, 'focusBoard' => $focusBoard, 'recommendedBoard' => $recommendedBoard);
+        }
+
         return $forumList;
     }
 
-    private function _getForumInfo($forum) {
+    private function _getForumInfo($forum, $params=array()) {
+        extract($params);
         $fid = (int)$forum['fid'];
         $forum = array_merge($forum, DzForumForum::getForumFieldByFid($fid));
 
@@ -149,6 +191,7 @@ class ForumListAction extends MobcentAction {
         $forumInfo['td_posts_num'] = $todayPosts;
         $forumInfo['topic_total_num'] = $threads;
         $forumInfo['posts_total_num'] = $posts;
+        $forumInfo['is_focus'] = in_array($fid, $focusBoardIds) ? 1 : 0 ;
 
         return $forumInfo;
     }
@@ -159,6 +202,22 @@ class ForumListAction extends MobcentAction {
         $forum['lastpost'] = count($forum['lastpost']) != 4 ? $lastpost : $forum['lastpost'];
         list($lastpost['tid'], $lastpost['subject'], $lastpost['dateline'], $lastpost['author']) = $forum['lastpost'];
         return $lastpost['dateline'];
+    }
+
+    private function _getFocusBoard() {
+        global $_G;
+        $focusBoardIds = array();
+        if (!empty($_G['uid'])) {
+            $offset = 0;
+            $max = 10;
+            $idtype = 'fid';
+            $focusBoard = C::t('home_favorite')->fetch_all_by_uid_idtype($_G['uid'], $idtype, 0, $offset, $pageSize);
+
+            foreach ($focusBoard as $v) {
+                $focusBoardIds[] = $v['id'];
+            }
+        }
+        return $focusBoardIds;
     }
 
 }

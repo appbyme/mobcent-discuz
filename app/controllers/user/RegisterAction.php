@@ -25,12 +25,12 @@ class RegisterAction extends MobcentAction{
     private function _register($res, $username, $password, $email, $mobile, $code) {
         // 是否开启注册手机验证
         $isRegisterValidation = WebUtils::getDzPluginAppbymeAppConfig('mobcent_register_validation');
-        // if ($isRegisterValidation) {
-        //     $checkInfo = UserUtils::checkMobileCode($res, $mobile, $code);
-        //     if ($checkInfo['rs'] == 0) {
-        //         return $this->makeErrorInfo($res, $checkInfo['errcode']);
-        //     }
-        // }
+        if ($isRegisterValidation) {
+            $checkInfo = UserUtils::checkMobileCode($res, $mobile, $code);
+            if ($checkInfo['rs'] == 0) {
+                return $this->makeErrorInfo($res, $checkInfo['errcode']);
+            }
+        }
 
         $regInfo = UserUtils::register($username, $password, $email);
         if ($regInfo['errcode']) {

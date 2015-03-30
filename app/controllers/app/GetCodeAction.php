@@ -115,6 +115,7 @@ class GetCodeAction extends MobcentAction {
              }
 
              if($result->statusCode!=0) {
+                 $res['rs'] = 0;
                  $res['head']['alert'] = 1;
                  $res['errcode'] = $res['head']['errCode'] = $result->statusCode;
                  $res['head']['errInfo'] = $result->statusMsg;

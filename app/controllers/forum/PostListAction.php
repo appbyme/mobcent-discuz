@@ -116,6 +116,7 @@ class PostListAction extends MobcentAction {
         $res = $this->_getPostInfos($res, $topic, $page, $pageSize, $order, $authorId, $params);
 
         $res['forumName'] = WebUtils::emptyHtml($_G['forum']['name']);
+        $res['boardId'] = (int)$_G['forum']['fid'];
         $res['forumTopicUrl'] = Yii::app()->getController()->dzRootUrl . "/forum.php?mod=viewthread&tid=" . $tid;
         $res['img_url'] = '';
         $res['icon_url'] = '';
