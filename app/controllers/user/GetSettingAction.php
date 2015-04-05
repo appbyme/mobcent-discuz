@@ -91,7 +91,9 @@ class GetSettingAction extends MobcentAction {
             'qqconnect' => $this->_isQQConnect(),
             'dsu_paulsign' => $this->_isDsuPaulsign(),
             'wxconnect' => $this->_isWechatConnect(),
-            'isMobileRegisterValidation' => $this->_isMobileRegisterValidation(),
+            'isMobileRegisterValidation' => (int)$this->_isMobileRegisterValidation(),
+            'isInviteActivity' => (int)$this->_isInviteActivity(),
+            'activityId' => (int)$this->_getActivityId(),
         );
         return $plugin;
     }
@@ -180,6 +182,17 @@ class GetSettingAction extends MobcentAction {
     private function _isMobileRegisterValidation () {
         $config = WebUtils::getDzPluginAppbymeAppConfig('mobcent_register_validation');
         return !($config !== false && $config == 0);
+    }
+
+    // 是否开启邀请活动
+    private function _isInviteActivity() {
+        $config = WebUtils::getDzPluginAppbymeAppConfig('appbyme_invite_activity');
+        return !($config !== false && $config == 0);
+    }
+
+    private function _getActivityId() {
+        $activityId = WebUtils::getDzPluginAppbymeAppConfig('invite_activity_id');
+        return $activityId;
     }
 
     private function _getUserSetting() {

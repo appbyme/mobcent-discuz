@@ -188,4 +188,16 @@ return array(
     'mobcent_code_overdue' => WebUtils::t('09000007:手机验证码已过有效期'),
     'mobcent_yun_config_error' => WebUtils::t('09000008:请在插件配置正确的参数！'),
 
+    // 活动
+    'mobcent_user_error' => WebUtils::t('10000001:用户信息验证失败！'),
+    'mobcent_exch_code_error' => WebUtils::t('10000002:请输入正确的验证码！'),
+    'mobcent_exchange_type_error' => WebUtils::t('10000003:兑换类型有误！'),
+    'mobcent_exchange_error' => WebUtils::t('10000003:兑换失败！'),
+    'mobcent_invite_user_ed' => WebUtils::t('10000004:当前用户已经兑换过！'),
+    'mobcent_invite_device_ed' => WebUtils::t('10000005:当前设备已经兑换过！'),
+    'mobcent_activity_no_start' => WebUtils::t('10000006:活动没有开始！'),
+    'mobcent_activity_end' => WebUtils::t('10000007:活动已经结束！'),
+    'mobcent_exchange_min' => WebUtils::t('10000008:没有超过最低兑换金额！'),
+    'mobcent_check_code_self' => WebUtils::t('10000009:输入的兑换码是自己的！'),
+
 );

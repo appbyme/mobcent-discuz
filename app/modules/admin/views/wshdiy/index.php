@@ -62,6 +62,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
                     <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/app/web/index.php?r=admin/wshdiy">微生活管理</a></li>
                 </ul>
             </li>
+            <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/app/web/index.php?r=admin/activity" >微营销</a></li>
             <li><a href="<?php echo $this->dzRootUrl; ?>/admin.php" target="_blank">Discuz!管理中心</a></li>
             <li><a href="<?php echo $this->dzRootUrl; ?>/plugin.php?id=appbyme_app:download" target="_blank">应用下载</a></li>
             <li><a href="<?php echo $this->dzRootUrl; ?>/mobcent/requirements/index.php" target="_blank">配置需求</a></li>

@@ -27,6 +27,10 @@ class CacheUtils {
         return self::_getCacheKey('newslist', $params);
     }
 
+    public static function getActivityInviteKey($params) {
+        return self::_getCacheKey('activity', $params);
+    }
+
     public static function addThumbTaskList($image) {
         $thumbTaskList = CacheUtils::getDzPluginCache('thumb_task_list', true);
         $maxCount = WebUtils::getDzPluginAppbymeAppConfig('image_thumb_task_max_length');

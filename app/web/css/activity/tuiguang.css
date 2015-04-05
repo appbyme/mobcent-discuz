@@ -1,0 +1,50 @@
+ .form-group {
+    margin-bottom: 5px;
+ }
+.form-group input[type=text] {
+    width: 225px;
+    font-size: 12px;
+}
+.form-group select {
+    width: 225px;
+    font-size: 12px;
+}
+.form-group textarea {
+    width: 225px;
+    font-size: 12px;
+}
+
+.form-group input[type=number] {
+    width: 225px;
+}
+
+.form-group label {
+    padding-right: 0px;
+}
+label {
+    font-weight:100;
+}
+
+/* 邀请注册管理 */
+.activ-list {
+    /*width: 500px;*/
+    height: 430px;
+    /*background:#e3e3e3;*/
+    margin: 0px 0px 0px 10px;
+}
+
+.activ {
+    width: 100px;
+    height: 100px;
+    /*background: green;*/
+    float: left;
+}
+
+.activ img {
+    width: 70px;
+    height: 70px;
+}
+
+.reward-edit {
+    font-size: 12px;
+}
