@@ -14,7 +14,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 class AppbymeActivityInviteUser extends DiscuzAR {
 
     public static function insertUser($data) {
-        return DbUtils::getDzDbUtils(true)->insert('appbyme_activity_Invite_user', $data);
+        return DbUtils::getDzDbUtils(true)->insert('appbyme_activity_invite_user', $data);
     }
 
     public static function getExchangeInfo($uid) {
@@ -23,7 +23,7 @@ class AppbymeActivityInviteUser extends DiscuzAR {
             FROM %t
             WHERE uid=%d
             ',
-            array('appbyme_activity_Invite_user', $uid)
+            array('appbyme_activity_invite_user', $uid)
         );
     }
 
@@ -35,7 +35,7 @@ class AppbymeActivityInviteUser extends DiscuzAR {
             WHERE device=%s
 
             ',
-            array('appbyme_activity_Invite_user', $device)
+            array('appbyme_activity_invite_user', $device)
         );
     }
 
@@ -46,7 +46,7 @@ class AppbymeActivityInviteUser extends DiscuzAR {
             FROM %t
             WHERE exchange_num=%s
             ',
-            array('appbyme_activity_Invite_user', $code)
+            array('appbyme_activity_invite_user', $code)
         );    
     }
 
@@ -58,7 +58,7 @@ class AppbymeActivityInviteUser extends DiscuzAR {
             WHERE uid=%d
             AND exchange_num=%s
             ',
-            array('appbyme_activity_Invite_user', $uid, $code)
+            array('appbyme_activity_invite_user', $uid, $code)
         );        
     }
     // 兑换码验证成功之后
@@ -77,13 +77,13 @@ class AppbymeActivityInviteUser extends DiscuzAR {
         $sql2 .= 'available_reward=available_reward+'.$config['invite_reward'];
         $sql2 .= ' WHERE uid=%d';
 
-        DbUtils::getDzDbUtils(true)->query($sql1, array('appbyme_activity_Invite_user', $code));
-        DbUtils::getDzDbUtils(true)->query($sql2, array('appbyme_activity_Invite_user', $uid));
+        DbUtils::getDzDbUtils(true)->query($sql1, array('appbyme_activity_invite_user', $code));
+        DbUtils::getDzDbUtils(true)->query($sql2, array('appbyme_activity_invite_user', $uid));
     }
 
     // 兑换
     public static function inviteExchange($uid, $data) {
-        return DbUtils::getDzDbUtils(true)->update('appbyme_activity_Invite_user', $data, array('uid'=> $uid));
+        return DbUtils::getDzDbUtils(true)->update('appbyme_activity_invite_user', $data, array('uid'=> $uid));
     }
 
     // 执行兑换
@@ -91,18 +91,18 @@ class AppbymeActivityInviteUser extends DiscuzAR {
         $updateSql = 'UPDATE %t SET available_reward=available_reward-'.$exchangeNum.',';
         $updateSql .= 'exchange_status=0, exchange_type=%s';
         $updateSql .= ' WHERE uid=%d';
-        return DbUtils::getDzDbUtils(true)->query($updateSql, array('appbyme_activity_Invite_user', '', $uid));
+        return DbUtils::getDzDbUtils(true)->query($updateSql, array('appbyme_activity_invite_user', '', $uid));
     }
 
     // 标记用户
     public function flagUser($uid, $data) {
-        return DbUtils::getDzDbUtils(true)->update('appbyme_activity_Invite_user', $data, array('uid'=> $uid));
+        return DbUtils::getDzDbUtils(true)->update('appbyme_activity_invite_user', $data, array('uid'=> $uid));
     }
 
     // 统计
     public static function search($type, $username, $page, $pageSize, $rootUrl) {
 
-        $countArr = array('appbyme_activity_Invite_user');
+        $countArr = array('appbyme_activity_invite_user');
         $countSql = 'SELECT count(*) AS count FROM %t WHERE 1';
         if ($type !== 'all') {
             $countSql .= ' AND exchange_type=%s';
@@ -122,7 +122,7 @@ class AppbymeActivityInviteUser extends DiscuzAR {
         }
 
         $offset = ($page - 1) * $pageSize;
-        $searchArr = array('appbyme_activity_Invite_user');
+        $searchArr = array('appbyme_activity_invite_user');
         $sql = 'SELECT * FROM %t WHERE 1';
         if ($type !== 'all') {
             $sql .= ' AND exchange_type=%s';

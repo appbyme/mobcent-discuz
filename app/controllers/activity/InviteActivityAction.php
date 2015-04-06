@@ -38,7 +38,7 @@ class InviteActivityAction extends MobcentAction {
         if ($accessToken !== '' && $accessSecret !== '') {
             $uid = AppbymeUserAccess::getUserIdByAccess($accessToken, $accessSecret);
             if ($uid) {
-                // 当前登录用户参加活动信息|appbyme_activity_Invite_user
+                // 当前登录用户参加活动信息|appbyme_activity_invite_user
                 $exchangeInfo = AppbymeActivityInviteUser::getExchangeInfo($uid);
                 if ($exchangeInfo) {
                     $checkInvite = ActivityUtils::checkInvite($config, $uid, $device);
@@ -93,8 +93,23 @@ class InviteActivityAction extends MobcentAction {
     }
 
     // 生成一个唯一的
-    public function getUniqueNum($uid) {
-        return date('md') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT).$uid;
+    public function getUniqueNum($unique, $maxLen=9) {
+        // return date('md') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT).$uid;
+        $uniqueLen = strlen($unique);
+
+        if ($uniqueLen < $maxLen) {
+            $len = $maxLen - $uniqueLen;
+        } else {
+            return $unique;
+        }
+
+        $randArr = range(0, 9);
+        $tmpNum = '';
+        for ($i = 0; $i < $len; $i++) {
+            $tmpNum .= $randArr[array_rand($randArr)];
+        }
+
+        return $tmpNum.$unique;
     }
 
 }
