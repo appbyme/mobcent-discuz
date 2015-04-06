@@ -90,6 +90,7 @@ class InviteActivityAction extends MobcentAction {
         $res['body']['exchangeMin'] = (int)$config['exchange_min'];
         $res['body']['exchangeStatus'] = (int)$exchangeInfo['exchange_status'];
         $res['body']['virtualName'] = (string)$config['virtual_name'];
+        $res['body']['exchangeRatio'] = (string)$config['exchange_ratio'];
         $res['body']['rewardSum'] = (int)$exchangeInfo['reward_sum'];
         $res['body']['availableReward'] = (int)$exchangeInfo['available_reward'];
         return $res;

@@ -72,9 +72,9 @@ class AppbymeActivityInviteUser extends DiscuzAR {
         $sql1 .= ' WHERE exchange_num=%s';
 
         $sql2 = 'UPDATE %t SET';
-        $sql2 .= ' joining=1,';
-        $sql2 .= 'reward_sum=reward_sum+'.$config['invite_reward'].',';
-        $sql2 .= 'available_reward=available_reward+'.$config['invite_reward'];
+        $sql2 .= ' joining=1';
+        // $sql2 .= 'reward_sum=reward_sum+'.$config['invite_reward'].',';
+        // $sql2 .= 'available_reward=available_reward+'.$config['invite_reward'];
         $sql2 .= ' WHERE uid=%d';
 
         DbUtils::getDzDbUtils(true)->query($sql1, array('appbyme_activity_invite_user', $code));
