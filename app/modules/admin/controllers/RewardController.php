@@ -53,7 +53,7 @@ class RewardController extends AdminController{
                 'first_reward' => $firstReward,
                 'invite_reward' => $inviteReward,
                 'exchange_min' => $exchangeMin,
-                'exchange_type' => $exchangeType,
+                // 'exchange_type' => $exchangeType,
                 'virtual_name' => $virtualName,
                 'exchange_ratio' => $exchangeRatio,
                 'limit_user' => $limitUser,
@@ -79,7 +79,7 @@ class RewardController extends AdminController{
             $firstReward = isset($_POST['firstReward']) ? $_POST['firstReward'] : '';
             $inviteReward = isset($_POST['inviteReward']) ? $_POST['inviteReward'] : '';
             $exchangeMin = isset($_POST['exchangeMin']) ? $_POST['exchangeMin'] : '';
-            $exchangeType = isset($_POST['exchangeType']) ? $_POST['exchangeType'] : '';
+            // $exchangeType = isset($_POST['exchangeType']) ? $_POST['exchangeType'] : '';
             $virtualName = isset($_POST['virtualName']) ? $_POST['virtualName'] : '';
             $exchangeRatio = isset($_POST['exchangeRatio']) ? $_POST['exchangeRatio'] : '';
             $limitUser = isset($_POST['limitUser']) ? $_POST['limitUser'] : '';
@@ -99,7 +99,7 @@ class RewardController extends AdminController{
                 'first_reward' => $firstReward,
                 'invite_reward' => $inviteReward,
                 'exchange_min' => $exchangeMin,
-                'exchange_type' => $exchangeType,
+                // 'exchange_type' => $exchangeType,
                 'virtual_name' => $virtualName,
                 'exchange_ratio' => $exchangeRatio,
                 'limit_user' => $limitUser,
