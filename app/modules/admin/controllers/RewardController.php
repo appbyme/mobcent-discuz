@@ -20,7 +20,7 @@ class RewardController extends AdminController{
             $firstReward = isset($_POST['firstReward']) ? $_POST['firstReward'] : '';
             $inviteReward = isset($_POST['inviteReward']) ? $_POST['inviteReward'] : '';
             $exchangeMin = isset($_POST['exchangeMin']) ? $_POST['exchangeMin'] : '';
-            $exchangeType = isset($_POST['exchangeType']) ? $_POST['exchangeType'] : '';
+            // $exchangeType = isset($_POST['exchangeType']) ? $_POST['exchangeType'] : '';
             $virtualName = isset($_POST['virtualName']) ? $_POST['virtualName'] : '';
             $exchangeRatio = isset($_POST['exchangeRatio']) ? $_POST['exchangeRatio'] : '';
             $limitUser = isset($_POST['limitUser']) ? $_POST['limitUser'] : '';

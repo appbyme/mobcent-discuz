@@ -30,8 +30,8 @@ class InviteActivityAction extends MobcentAction {
         }
 
         $res['body']['sponsor'] = (string)$config['sponsor'];
-        $res['body']['startTime'] = (string)$config['start_time'];
-        $res['body']['stopTime'] = (string)$config['stop_time'];
+        $res['body']['startTime'] = (string)$config['start_time'].'000';
+        $res['body']['stopTime'] = (string)$config['stop_time'].'000';
         $res['body']['firstReward'] = (int)$config['first_reward'];
         $res['body']['inviteReward'] = (int)$config['invite_reward'];
         $res['body']['isShowCheck'] = 0;
@@ -89,7 +89,7 @@ class InviteActivityAction extends MobcentAction {
 
         $res['body']['exchangeMin'] = (int)$config['exchange_min'];
         $res['body']['exchangeStatus'] = (int)$exchangeInfo['exchange_status'];
-        $res['body']['exchangeType'] = (string)$exchangeInfo['exchange_type'];
+        $res['body']['virtualName'] = (string)$config['virtual_name'];
         $res['body']['rewardSum'] = (int)$exchangeInfo['reward_sum'];
         $res['body']['availableReward'] = (int)$exchangeInfo['available_reward'];
         return $res;
