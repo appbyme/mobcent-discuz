@@ -25,6 +25,9 @@ class InviteActivityAction extends MobcentAction {
 
         // 获取邀请注册活动的配置
         $config = ActivityUtils::getInviteConfig($activityId);
+        if (empty($config) || !$config['is_run'] ) {
+            return $this->makeErrorInfo($res, 'mobcent_activity_invalid');
+        }
 
         $res['body']['sponsor'] = (string)$config['sponsor'];
         $res['body']['startTime'] = (string)$config['start_time'];

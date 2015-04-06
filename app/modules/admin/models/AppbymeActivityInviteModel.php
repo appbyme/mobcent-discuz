@@ -13,10 +13,10 @@ class AppbymeActivityInviteModel extends DiscuzAR{
     public static function getActivityInviteById($activityId) {
         return DbUtils::getDzDbUtils(true)->queryRow('
             SELECT *
-            FROM %t
+            FROM %t INNER JOIN %t
             WHERE activity_id=%d
             ',
-            array('appbyme_activity_invite', $activityId)
+            array('appbyme_activity','appbyme_activity_invite', $activityId)
         );
     }
 
