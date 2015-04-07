@@ -11,7 +11,7 @@ if (!defined('IN_DISCUZ') || !defined('IN_APPBYME')) {
 }
 
 class InviteActivityAction extends MobcentAction {
-    public function run($act='init', $accessToken='8d5478c77477933169ab8cfde10b5', $accessSecret='77dc053dd95eb6f24cb82637cb695', $device='', $activityId=1) {
+    public function run($act='init', $accessToken='', $accessSecret='', $device='', $activityId=1) {
         $res = $this->initWebApiArray();
         if ($act == 'init') {
             $res = $this->_inviteActiv($res, $accessToken, $accessSecret, $device, $activityId);
