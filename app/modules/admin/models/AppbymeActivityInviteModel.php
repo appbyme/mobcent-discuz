@@ -9,7 +9,7 @@ class AppbymeActivityInviteModel extends DiscuzAR{
     public static function insertActivityInvite($data) {
         return DbUtils::getDzDbUtils(true)->insert('appbyme_activity_invite', $data);
     }
-
+    
     public static function getActivityInviteById($activityId) {
         return DbUtils::getDzDbUtils(true)->queryRow('
             SELECT *
