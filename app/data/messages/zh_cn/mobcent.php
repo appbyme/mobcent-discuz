@@ -200,5 +200,6 @@ return array(
     'mobcent_exchange_min' => WebUtils::t('10000008:没有超过最低兑换金额！'),
     'mobcent_check_code_self' => WebUtils::t('10000009:输入的兑换码是自己的！'),
     'mobcent_activity_invalid' => WebUtils::t('10000010:活动无效，或者已经关闭！'),
+    'mobcent_exchange_status' => WebUtils::t('10000011:兑换正在进行，请不要重复兑换！'),
 
 );
