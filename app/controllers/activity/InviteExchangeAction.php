@@ -32,11 +32,13 @@ class InviteExchangeAction extends MobcentAction {
         // 兑换金额是否超过最低兑换值
         $exchangeInfo = AppbymeActivityInviteUser::getExchangeInfo($_G['uid']);
 
+        // 是否已经在申请的状态
         if ($exchangeInfo['exchange_status']) {
             return $this->makeErrorInfo($res, 'mobcent_exchange_status');
         }
 
-        if ($exchangeInfo['available_reward'] < $config['exchange_min'] && $type='mobile') {
+        // 只有兑换手机话费才去进行最小兑换值验证
+        if ($exchangeInfo['available_reward'] < $config['exchange_min'] && $type == 'mobile') {
             return $this->makeErrorInfo($res, 'mobcent_exchange_min');
         }
 

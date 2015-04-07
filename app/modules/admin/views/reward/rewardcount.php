@@ -79,7 +79,7 @@
                 <?php
                     $type = '无';
                     if (in_array($list['exchange_type'], array('mobile', 'forum'))) {
-                        $type = $list['exchange_type'] = 'mobile' ? 手机话费 : 虚拟货币;
+                        $type = $list['exchange_type'] == 'mobile' ? 手机话费 : 虚拟货币;
                     }
                     echo $type;
                 ?>
