@@ -29,6 +29,7 @@ class RewardController extends AdminController{
             $limitDays = isset($_POST['limitDays']) ? $_POST['limitDays'] : '';
             $limitNum = isset($_POST['limitNum']) ? $_POST['limitNum'] : '';
             $activityRule = isset($_POST['activityRule']) ? $_POST['activityRule'] : '';
+            $shareAppUrl = isset($_POST['shareAppUrl']) ? $_POST['shareAppUrl'] : '';
 
             if ($limitDays == '') {
                 $limitDays = abs($startTime - $stopTime)/3600/24;
@@ -62,6 +63,7 @@ class RewardController extends AdminController{
                 'limit_days' => $limitDays,
                 'limit_num' => $limitNum,
                 'activity_rule' => $activityRule,
+                'share_appurl' => $shareAppUrl,
             );
 
             AppbymeActivityInviteModel::insertActivityInvite($insertRewardInvite);
@@ -87,6 +89,8 @@ class RewardController extends AdminController{
             $limitTime = isset($_POST['limitTime']) ? $_POST['limitTime'] : '';
             $limitDays = isset($_POST['limitDays']) ? $_POST['limitDays'] : '';
             $limitNum = isset($_POST['limitNum']) ? $_POST['limitNum'] : '';
+            $activityRule = isset($_POST['activityRule']) ? $_POST['activityRule'] : '';
+            $shareAppUrl = isset($_POST['shareAppUrl']) ? $_POST['shareAppUrl'] : '';
 
             if ($limitDays == '') {
                 $limitDays = abs($startTime - $stopTime)/3600/24;
@@ -107,6 +111,8 @@ class RewardController extends AdminController{
                 'limit_time' => $limitTime,
                 'limit_days' => $limitDays,
                 'limit_num' => $limitNum,
+                'activity_rule' => $activityRule,
+                'share_appurl' => $shareAppUrl,
             );
             $activityId = $_POST['activityId'];
             AppbymeActivityInviteModel::updateActivityInvite($activityId, $updateRewardInvite);
