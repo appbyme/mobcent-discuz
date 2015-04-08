@@ -98,13 +98,12 @@
                         </div>
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="" class="col-sm-2 control-label">分享下载地址:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="shareAppUrl" autocomplete="off" value="<?php echo isset($inviteInfo['share_appurl'])?$inviteInfo['share_appurl']:'' ?>">
-                            <span id="helpBlock" class="help-block">输入APP下载地址，格式为http://xxx</span>
+                            <p class="form-control-static"><?php echo isset($inviteInfo['share_appurl'])?$inviteInfo['share_appurl']:'' ?></p>
                         </div>
-                    </div>                    
+                    </div>                   
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">防作弊限制:</label>
