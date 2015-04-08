@@ -37,6 +37,7 @@ class InviteActivityAction extends MobcentAction {
         $res['body']['isShowCheck'] = 0;
         $res['body']['exchangeNum'] = '';
         $res['body']['activityRule'] = (string)$config['activity_rule'];
+        $res['body']['shareAppUrl'] = (string)$config['share_appurl'];
 
         if ($accessToken !== '' && $accessSecret !== '') {
             $uid = AppbymeUserAccess::getUserIdByAccess($accessToken, $accessSecret);
