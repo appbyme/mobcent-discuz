@@ -48,14 +48,14 @@ class RewardController extends AdminController{
 
             $insertRewardInvite = array(
                 'activity_id' => $activityId,
-                'sponsor' => $sponsor,
+                'sponsor' => WebUtils::t($sponsor),
                 'start_time' => $startTime,
                 'stop_time' => $stopTime, 
                 'first_reward' => $firstReward,
                 'invite_reward' => $inviteReward,
                 'exchange_min' => $exchangeMin,
                 // 'exchange_type' => $exchangeType,
-                'virtual_name' => $virtualName,
+                'virtual_name' => WebUtils::t($virtualName),
                 'exchange_ratio' => $exchangeRatio,
                 'limit_user' => $limitUser,
                 'limit_device' => $limitDevice,
@@ -97,14 +97,14 @@ class RewardController extends AdminController{
             }
 
             $updateRewardInvite = array(
-                'sponsor' => $sponsor,
+                'sponsor' => WebUtils::t($sponsor),
                 'start_time' => $startTime,
                 'stop_time' => $stopTime, 
                 'first_reward' => $firstReward,
                 'invite_reward' => $inviteReward,
                 'exchange_min' => $exchangeMin,
                 // 'exchange_type' => $exchangeType,
-                'virtual_name' => $virtualName,
+                'virtual_name' => WebUtils::t($virtualName),
                 'exchange_ratio' => $exchangeRatio,
                 'limit_user' => $limitUser,
                 'limit_device' => $limitDevice,

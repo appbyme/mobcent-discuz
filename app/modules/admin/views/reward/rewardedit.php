@@ -25,7 +25,7 @@
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">主办方：</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="sponsor" required autofocus autocomplete="off" value="<?php echo isset($inviteInfo['sponsor'])?$inviteInfo['sponsor']:'' ?>">
+                            <input type="text" class="form-control" name="sponsor" required autofocus autocomplete="off" value="<?php echo isset($inviteInfo['sponsor'])?WebUtils::u($inviteInfo['sponsor']):'' ?>">
                             <span id="helpBlock" class="help-block"><small>将在客户端显示</small></span>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                     <div class="form-group ">
                         <label for="" class="col-sm-2 control-label">兑换虚拟货币名称:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="virtualName" autocomplete="off" value="<?php echo isset($inviteInfo['virtual_name'])?$inviteInfo['virtual_name']:'' ?>">
+                            <input type="text" class="form-control" name="virtualName" autocomplete="off" value="<?php echo isset($inviteInfo['virtual_name'])?WebUtils::u($inviteInfo['virtual_name']):'' ?>">
                             <span id="helpBlock" class="help-block">
                             参与活动得到的奖励能兑换那种论坛虚拟币，比如金币、威望或者是其他自定义的货币名称
                             </span>

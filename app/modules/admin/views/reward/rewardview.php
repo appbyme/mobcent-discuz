@@ -31,7 +31,7 @@
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">主办方：</label>
                         <div class="col-sm-10">
-                            <p class="form-control-static"><?php echo isset($inviteInfo['sponsor'])?$inviteInfo['sponsor']:'' ?></p>
+                            <p class="form-control-static"><?php echo isset($inviteInfo['sponsor'])?WebUtils::u($inviteInfo['sponsor']):'' ?></p>
                         </div>
                     </div>
 
@@ -80,7 +80,7 @@
                     <div class="form-group ">
                         <label for="" class="col-sm-2 control-label">兑换虚拟货币名称:</label>
                         <div class="col-sm-10">
-                            <p class="form-control-static"><?php echo isset($inviteInfo['virtual_name'])?$inviteInfo['virtual_name']:'' ?></p>
+                            <p class="form-control-static"><?php echo isset($inviteInfo['virtual_name'])?WebUtils::u($inviteInfo['virtual_name']):'' ?></p>
                         </div>
                     </div>
 
